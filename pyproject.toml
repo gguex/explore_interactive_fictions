@@ -19,3 +19,12 @@ dev = [
     "mypy>=2.1.0",
     "ruff>=0.15.14",
 ]
+
+[tool.ruff.lint]
+# E/F: Règles de base, I: Tri des imports, ANN: Force la présence des types hints
+select = ["E", "F", "I", "ANN"]
+ignore = ["ANN101", "ANN102", "ANN401"] # Ignore self, cls et l'obligation de Any
+
+[tool.mypy]
+disallow_untyped_defs = true # Interdit de valider une fonction non typée dans src/
+ignore_missing_imports = true # Évite les alertes sur les librairies tierces sans types
