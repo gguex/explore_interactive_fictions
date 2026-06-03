@@ -86,6 +86,8 @@ def parse_gamebook(html_dir: str, book_prefix: str, output_dir: str) -> None:
             health_mod -= int(damage_match.group(1))
         if healing_match:
             health_mod += int(healing_match.group(1))
+        if health_mod < 0:
+            absorbing_status = "potential_death"
 
         # Extract images
         images: list[str] = []
