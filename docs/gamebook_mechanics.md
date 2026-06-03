@@ -36,5 +36,3 @@ We focus on modelling the following, by decreasing order of importance :
 ### Endurance Dynamics (Health State Expansion)
 *   **What it is:** Health management and death by attrition (including combat abstraction).
 *   **How to model:** We use **State Space Expansion**. A node becomes a tuple $(Node\_ID, EP)$. Moving to a trap shifts the state horizontally to the new node, but vertically down the EP axis. Reaching $EP \le 0$ routes to the global `Death` state. Combat is compressed into a probabilistic transition block, projecting multiple downward edges based on the expected EP loss distribution for an "average" player.
-
-Sur cette base, peux-tu me donner le markdown (entouré par ````) du schéma des tables de données. Petit correctif par rapport à ton dernier schéma : la colonne "is_absorbing" devrait peut-être modélisée avec "absorbing_type", avec modalité "NA" (pas abosbant), "win", "lose" ou "potential" (si combat ou perte d'endurance). Est-ce que cela te semble mieux ? Amélorie cette idée et 
