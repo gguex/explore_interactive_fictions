@@ -61,6 +61,9 @@ task: "Extract narrative transitions and edges from gamebook paragraphs."
 benchmark:
   filename: corpus_val_gold.json
 
+generation:
+  max_new_tokens: 1500
+
 fields:
   - name: edges
     type: array
@@ -153,8 +156,6 @@ source .venv/bin/activate
 dcsr-llm extract \
   --model-name Qwen/Qwen2.5-7B-Instruct \
   --corpus-name corpus_val \
-  --corpus-format json \
-  --result-format jsonl \
   --config-file-name config_extract_benchmark \
   --preprompt-file-name preprompt_corpus \
   --think-mode off
