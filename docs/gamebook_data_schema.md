@@ -45,3 +45,22 @@ This table models the transitions connecting the nodes. It explicitly separates 
 | `stochastic_trigger` | String | The exact raw text or range triggering this edge (e.g., `0-4`, `even_number`). Leave empty if not stochastic. |
 | `condition_type` | Category | The generalized type of lock on this edge:<br> - `none`: Freely accessible.<br> - `skill`: Requires a specific discipline/spell.<br> - `stat_check`: Based on a numeric threshold (Health, Luck, etc.).<br> - `combat_victory`: Requires defeating the enemies in this node.<br> - `combat_evasion`: Represents fleeing from the combat in this node.<br> - `item`: **[FUTURE-PROOFING]** Requires a specific object. |
 | `condition_value` | String | The specific requirement (e.g., `Sixth Sense`, `<10`). Leave empty for combat outcomes. |
+
+--- 
+
+## 4. Ehanced Edges Table (`LWXX_e_edges.csv`)
+
+This table models the transitions connecting the nodes after processed by LLM. It explicitly separates text-based conditions from stochastic triggers. 
+
+| Column Name | Data Type | Description / Modalities |
+| :--- | :--- | :--- |
+| `source_id` | String | The originating `node_id`. |
+| `target_id` | String | The destination `node_id`. |
+| `edge_text` | Text | The exact raw text of the choice presented to the player. |
+| `transition_type` | Category | Defines the nature of the link:<br> - `explicit_choice`: Standard player decision.<br> - `forced`: Automatic progression.<br> - `stochastic`: Based on a random roll.<br> - `conditional`: Blocked by a specific requirement. |
+| `stochastic_trigger` | String | The exact raw text or range triggering this edge (e.g., `0-4`). Leave empty if not stochastic. |
+| `condition_type` | Category | The lock on this edge: `none`, `skill`, `stat_check`, `combat_victory`, `combat_evasion`, `item`. |
+| `condition_value` | String | The specific requirement (e.g., `Sixth Sense`). |
+| `semantic_risk_level` | Integer | (1-5) Axis of risk. 1 = Prudence/Evasion, 5 = Suicidal/Frontal attack. (Null if not `explicit_choice`). |
+| `semantic_moral_stance` | Integer | (1-5) Axis of morality. 1 = Selfish/Amoral, 5 = Noble/Altruistic. (Null if not `explicit_choice`). |
+| `semantic_cognitive_approach` | Integer | (1-5) Axis of cognition. 1 = Impulsive/Physical, 5 = Analytical/Cunning. (Null if not `explicit_choice`). |

@@ -26,29 +26,98 @@ L'outil `dcsr-llm` exige d'être exécuté depuis son dossier racine. Pour garde
 Ce fichier contient les instructions pour le LLM. Il définit le rôle de l'IA et les règles strictes de classification des choix.
 
 ```text
+[SYSTEM PROMPT]
 You are an expert data analyst specializing in interactive fiction and gamebook network topology.
 Your task is to analyze paragraphs from a gamebook and extract all outgoing transitions (edges) to other paragraphs.
 
-For each transition identified (often enclosed in <choice> tags), you must extract the properties according to this exact strict typology:
+You must output ONLY a valid JSON array containing one object per identified transition (enclosed in <choice> tags). Do not add any conversational text. The JSON array must match this exact schema:
 
-1. target_id: The destination paragraph number.
-2. edge_text: The exact raw text of the choice presented to the player.
+[
+  {
+    "target_id": string,
+    "edge_text": string,
+    "transition_type": "explicit_choice" | "forced" | "stochastic" | "conditional",
+    "stochastic_value": string | null,
+    "condition_value": string | null, 
+    "semantic_risk_level": 1 | 2 | 3 | 4 | 5 | null,
+    "semantic_moral_stance": 1 | 2 | 3 | 4 | 5 | null,
+    "semantic_cognitive_approach": 1 | 2 | 3 | 4 | 5 | null
+  }
+]
+
+With the following meaning:
+1. target_id: The destination paragraph number (as a string).
+2. edge_text: The exact raw text of the choice presented to the player (between <choice> tags).
 3. transition_type: Must be exactly one of the following:
    - "explicit_choice": Standard player decision.
    - "forced": Automatic progression with no alternatives.
-   - "stochastic": Based on a random roll (Dice or Random Number Table).
-   - "conditional": Blocked by a specific requirement or combat outcome.
-4. stochastic_trigger: The exact raw text or range triggering this edge (e.g., "5 or above"). Output null if not stochastic.
-5. condition_type: Must be exactly one of the following:
-   - "none": Freely accessible or strictly stochastic.
-   - "skill": Requires a specific discipline/spell.
-   - "stat_check": Based on a numeric threshold.
-   - "combat_victory": Requires defeating enemies.
-   - "combat_evasion": Represents fleeing from combat.
-   - "item": Requires a specific object.
-6. condition_value: The specific requirement (e.g., "Sixth Sense"). Output null for combat outcomes or if condition_type is "none".
+   - "stochastic": Based on a random roll (e.g., the Random Number Table).
+   - "conditional": Blocked by a specific requirement (skill, stat, or item) or combat outcome.
+4. stochastic_value: If transition_type="stochastic", the exact raw text or range triggering this edge (e.g., "5 or above"). Output null if not stochastic.
+5. condition_value: If transition_type="conditional", the exact raw text describing the condition (e.g., "If you have the golden key"). Output null if not conditional.
+6. semantic_risk_level: If transition_type="explicit_choice", the subjective risk level of taking this choice. From 1="very careful choice" to 5="reckless choice". Output null otherwise.
+7. semantic_moral_stance: If transition_type="explicit_choice", the subjective moral stance of taking this choice. From 1="selfish choice" to 5="Noble or altruistic choice". Output null otherwise.
+8. semantic_cognitive_approach: If transition_type="explicit_choice", the cognitive level of taking this choice. From 1="instinctive/physical choice" to 5="well-thought/analytical choice". Output null otherwise.
 
 Ignore narrative deaths or dead-ends that do not lead to a specific target_id.
+
+[EXAMPLES (Few-Shot)]
+
+
+```
+
+Option 2 :
+
+```text 
+[SYSTEM PROMPT]
+You are an expert data extraction algorithm specializing in interactive fiction and gamebooks. 
+Your task is to analyze a specific choice (Edge) presented to a player, using the narrative context (Node) to determine the mechanical rules of that transition.
+
+You must output ONLY a valid JSON object matching this schema:
+{
+  "transition_type": "explicit_choice" | "forced" | "stochastic" | "conditional",
+  "stochastic_trigger": string or null,
+  "condition_type": "none" | "skill" | "stat_check" | "combat_victory" | "combat_evasion" | "item",
+  "condition_value": string or null
+}
+
+[EXAMPLES (Few-Shot)]
+Input: 
+Node Context: "You have ridden into the tangle of trees... Pick a number from the Random Number Table."
+Edge Text: "If it is below 5, your horse has suddenly plunged into thick mud..."
+Output:
+{
+  "transition_type": "stochastic",
+  "stochastic_trigger": "below 5",
+  "condition_type": "none",
+  "condition_value": null
+}
+
+Input:
+Node Context: "Anxious to leave this evil tomb, you examine the door for a latch."
+Edge Text: "If you have the Kai Discipline of Mind Over Matter, turn to 151."
+Output:
+{
+  "transition_type": "conditional",
+  "stochastic_trigger": null,
+  "condition_type": "skill",
+  "condition_value": "Mind Over Matter"
+}
+
+Input:
+Node Context: "Suddenly, you are faced by two snarling Giaks intent on your death."
+Edge Text: "If you win, you may explore the cave further by turning to 33."
+Output:
+{
+  "transition_type": "conditional",
+  "stochastic_trigger": null,
+  "condition_type": "combat_victory",
+  "condition_value": null
+}
+
+[USER INPUT]
+Node Context: {insérer le texte du noeud ici}
+Edge Text: {insérer le texte de l'arête ici}
 ```
 
 ### B. Le Schéma de sortie (`config_extract_benchmark.yaml` / `config_extract.yaml`)
@@ -70,7 +139,7 @@ fields:
     description: >
       A list of all outgoing transitions connecting this node to other nodes.
       Each element in the array MUST be an object containing exactly these keys:
-      - 'target_id' (string): The destination node_id.
+      - 'target_id' (int): The destination node_id.
       - 'edge_text' (string): The exact raw text of the choice presented to the player.
       - 'transition_type' (string): Must be exactly explicit_choice, forced, stochastic, or conditional.
       - 'stochastic_trigger' (string): The exact raw text triggering this edge, or null if not stochastic.
