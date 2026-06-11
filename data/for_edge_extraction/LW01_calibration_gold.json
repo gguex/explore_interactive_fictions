@@ -1,0 +1,670 @@
+[
+  {
+    "id": "1",
+    "output": {
+      "edges": [
+        {
+          "source_id": "1",
+          "target_id": "141",
+          "edge_text": "If you wish to use your Kai Discipline of Sixth Sense, turn to 141.",
+          "transition_type": "conditional",
+          "realisation_value": "If you wish to use your Kai Discipline of Sixth Sense",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 4
+        },
+        {
+          "source_id": "1",
+          "target_id": "85",
+          "edge_text": "If you wish to take the right path into the wood, turn to 85.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 4
+        },
+        {
+          "source_id": "1",
+          "target_id": "275",
+          "edge_text": "If you wish to follow the left track, turn to 275.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 4
+        }
+      ]
+    }
+  },
+  {
+    "id": "2",
+    "output": {
+      "edges": [
+        {
+          "source_id": "2",
+          "target_id": "343",
+          "edge_text": "If you have picked a number 0–4, turn to 343.",
+          "transition_type": "stochastic",
+          "realisation_value": "If you have picked a number 0–4",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        },
+        {
+          "source_id": "2",
+          "target_id": "276",
+          "edge_text": "If you have picked a number 5–9, turn to 276.",
+          "transition_type": "stochastic",
+          "realisation_value": "If you have picked a number 5–9",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "12",
+    "output": {
+      "edges": [
+        {
+          "source_id": "12",
+          "target_id": "262",
+          "edge_text": "If you have 10 Gold Crowns and wish to pay him, turn to 262.",
+          "transition_type": "conditional",
+          "realisation_value": "If you have 10 Gold Crowns and wish to pay him",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "12",
+          "target_id": "247",
+          "edge_text": "If you do not have enough Gold Crowns or do not wish to pay him, turn to 247.",
+          "transition_type": "conditional",
+          "realisation_value": "If you do not have enough Gold Crowns or do not wish to pay him",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "21",
+    "output": {
+      "edges": [
+        {
+          "source_id": "21",
+          "target_id": "189",
+          "edge_text": "If it is below 5, your horse has suddenly plunged into thick mud up to its belly. If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.",
+          "transition_type": "complex",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "21",
+          "target_id": "189",
+          "edge_text": "If you are stuck, pick another number from the Random Number Table. If this time the number is 7 or less, the mud engulfs you up to your armpits. Your horse gives one last despairing scream as its muzzle disappears into the bubbling mud. If you scored above 7, you drag yourself onto firm ground and turn to 189.",
+          "transition_type": "complex",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "21",
+          "target_id": "312",
+          "edge_text": "If not, then this is your last chance! If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim. Your life and your mission end here. But if you have picked a 9, turn to 312.",
+          "transition_type": "complex",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "23",
+    "output": {
+      "edges": [
+        {
+          "source_id": "23",
+          "target_id": "326",
+          "edge_text": "If you have a Golden Key and wish to use it, turn to 326.",
+          "transition_type": "conditional",
+          "realisation_value": "If you have a Golden Key and wish to use it",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 2
+        },
+        {
+          "source_id": "23",
+          "target_id": "151",
+          "edge_text": "If you have the Kai Discipline of Mind Over Matter, turn to 151.",
+          "transition_type": "conditional",
+          "realisation_value": "If you have the Kai Discipline of Mind Over Matter",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 2
+        },
+        {
+          "source_id": "23",
+          "target_id": "337",
+          "edge_text": "If you wish to remove the pin, turn to 337.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "reckless",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": "27",
+    "output": {
+      "edges": [
+        {
+          "source_id": "27",
+          "target_id": "250",
+          "edge_text": "If you choose to attack, turn to 250.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "reckless",
+          "semantic_morality": "neutral",
+          "semantic_action": "physical",
+          "parsing_confidence": 4
+        },
+        {
+          "source_id": "27",
+          "target_id": "52",
+          "edge_text": "If you choose to listen to what the voices say, turn to 52.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "cautious",
+          "semantic_morality": "neutral",
+          "semantic_action": "tactical",
+          "parsing_confidence": 4
+        }
+      ]
+    }
+  },
+  {
+    "id": "97",
+    "output": {
+      "edges": [
+        {
+          "source_id": "97",
+          "target_id": "255",
+          "edge_text": "If you wish to defend the fallen Prince, turn to 255.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "reckless",
+          "semantic_morality": "noble",
+          "semantic_action": "physical",
+          "parsing_confidence": 4
+        },
+        {
+          "source_id": "97",
+          "target_id": "306",
+          "edge_text": "If you wish to run into the forest, turn to 306.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "cautious",
+          "semantic_morality": "selfish",
+          "semantic_action": "neutral",
+          "parsing_confidence": 4
+        }
+      ]
+    }
+  },
+  {
+    "id": "104",
+    "output": {
+      "edges": [
+        {
+          "source_id": "104",
+          "target_id": "26",
+          "edge_text": "If you wish to turn north, go to 26.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 5
+        },
+        {
+          "source_id": "104",
+          "target_id": "100",
+          "edge_text": "If you wish to go south, turn to 100.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "125",
+    "output": {
+      "edges": [
+        {
+          "source_id": "125",
+          "target_id": "301",
+          "edge_text": "If you have the Kai Discipline of Tracking, turn to 301.",
+          "transition_type": "conditional",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "125",
+          "target_id": "301",
+          "edge_text": "If you wish to take the south path, turn to 27.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "125",
+          "target_id": "214",
+          "edge_text": "If you wish to take the west path, turn to 214.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "131",
+    "output": {
+      "edges": [
+        {
+          "source_id": "131",
+          "target_id": "241",
+          "edge_text": "If you wish to shout a warning to the wizard, turn to 241.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "tactical",
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "131",
+          "target_id": "55",
+          "edge_text": "If you wish to run forward and attack the Giak when he jumps, turn to 55.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "reckless",
+          "semantic_morality": "noble",
+          "semantic_action": "physical",
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "131",
+          "target_id": "302",
+          "edge_text": "If you wish to pick up a chunk of temple marble and throw it at the Giak’s head, turn to 302.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "noble",
+          "semantic_action": "physical",
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "131",
+          "target_id": "101",
+          "edge_text": "Or if you would rather turn and leave the battle area and run back into the woods, turn to 101.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "cautious",
+          "semantic_morality": "selfish",
+          "semantic_action": "neutral",
+          "parsing_confidence": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "153",
+    "output": {
+      "edges": [
+        {
+          "source_id": "153",
+          "target_id": "202",
+          "edge_text": "If you will try your luck by the highway, turn to 202.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "153",
+          "target_id": "135",
+          "edge_text": "If you feel that you stand a better chance of reaching the capital via the river then turn to 135.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "physical",
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "153",
+          "target_id": "329",
+          "edge_text": "Or if you are brave enough to risk the unknown perils of the Graveyard of the Ancients, turn to 329.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "reckless",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "203",
+    "output": {
+      "edges": [
+        {
+          "source_id": "203",
+          "target_id": "80",
+          "edge_text": "If you have 10 or more ENDURANCE points left, turn to 80.",
+          "transition_type": "conditional",
+          "realisation_value": "If you have 10 or more ENDURANCE points left",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        },
+        {
+          "source_id": "203",
+          "target_id": "344",
+          "edge_text": "If you now have less than 10 ENDURANCE points, turn to 344.",
+          "transition_type": "conditional",
+          "realisation_value": "If you now have less than 10 ENDURANCE points",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "220",
+    "output": {
+      "edges": [
+        {
+          "source_id": "220",
+          "target_id": "24",
+          "edge_text": "If you win, turn to 24.",
+          "transition_type": "conditional",
+          "realisation_value": "If you win",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 4
+        },
+        {
+          "source_id": "220",
+          "target_id": "234",
+          "edge_text": "If you wish to evade combat at any time during the fight, you can jump from the speeding caravan by turning to 234.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "reckless",
+          "semantic_morality": "neutral",
+          "semantic_action": "physical",
+          "parsing_confidence": 4
+        }
+      ]
+    }
+  },
+  {
+    "id": "227",
+    "output": {
+      "edges": [
+        {
+          "source_id": "227",
+          "target_id": "271",
+          "edge_text": "If you lose any ENDURANCE points in the combat, turn to 271.",
+          "transition_type": "complex",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "227",
+          "target_id": "348",
+          "edge_text": "If you kill it without losing any ENDURANCE points, turn to 348.",
+          "transition_type": "complex",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": "276",
+    "output": {
+      "edges": [
+        {
+          "source_id": "276",
+          "target_id": "213",
+          "edge_text": "Lose 1 ENDURANCE point and turn to 213.",
+          "transition_type": "forced",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "294",
+    "output": {
+      "edges": [
+        {
+          "source_id": "294",
+          "target_id": "230",
+          "edge_text": "If the number you pick is 0–2, turn to 230.",
+          "transition_type": "stochastic",
+          "realisation_value": "If the number you pick is 0–2",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        },
+        {
+          "source_id": "294",
+          "target_id": "190",
+          "edge_text": "If the number is 3–6, turn to 190.",
+          "transition_type": "stochastic",
+          "realisation_value": "If the number is 3–6",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        },
+        {
+          "source_id": "294",
+          "target_id": "321",
+          "edge_text": "If the number is 7–9, turn to 321.",
+          "transition_type": "stochastic",
+          "realisation_value": "If the number is 7–9",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "303",
+    "output": {
+      "edges": [
+        {
+          "source_id": "303",
+          "target_id": "237",
+          "edge_text": "If you have the Kai Discipline of Camouflage, turn to 237.",
+          "transition_type": "conditional",
+          "realisation_value": "If you have the Kai Discipline of Camouflage",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        },
+        {
+          "source_id": "303",
+          "target_id": "72",
+          "edge_text": "If you do not, turn to 72.",
+          "transition_type": "conditional",
+          "realisation_value": "If you do not",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "333",
+    "output": {
+      "edges": [
+        {
+          "source_id": "333",
+          "target_id": "131",
+          "edge_text": "Turn to 131.",
+          "transition_type": "forced",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        }
+      ]
+    }
+  },
+  {
+    "id": "334",
+    "output": {
+      "edges": [
+        {
+          "source_id": "334",
+          "target_id": "48",
+          "edge_text": "If you wish to use the Kai Discipline of Sixth Sense, turn to 48.",
+          "transition_type": "conditional",
+          "realisation_value": "If you wish to use the Kai Discipline of Sixth Sense",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 2
+        },
+        {
+          "source_id": "334",
+          "target_id": "73",
+          "edge_text": "If you wish to use the Kai Discipline of Camouflage and wait for them to pass, turn to 73.",
+          "transition_type": "conditional",
+          "realisation_value": "If you wish to use the Kai Discipline of Camouflage and wait for them to pass",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 2
+        },
+        {
+          "source_id": "334",
+          "target_id": "162",
+          "edge_text": "If you wish to approach them, turn to 162.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": "339",
+    "output": {
+      "edges": [
+        {
+          "source_id": "339",
+          "target_id": "94",
+          "edge_text": "If you kill him within 4 rounds of Combat, turn to 94.",
+          "transition_type": "complex",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "339",
+          "target_id": "203",
+          "edge_text": "If you are still fighting after 4 rounds of Combat, turn to 203.",
+          "transition_type": "complex",
+          "realisation_value": null,
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "339",
+          "target_id": "7",
+          "edge_text": "You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "cautious",
+          "semantic_morality": "neutral",
+          "semantic_action": "physical",
+          "parsing_confidence": 3
+        }
+      ]
+    }
+  }
+]

@@ -237,60 +237,6 @@ OUTPUT 339:
 ]
 ```
 
-Option 2 :
-
-```text 
-[SYSTEM PROMPT]
-You are an expert data extraction algorithm specializing in interactive fiction and gamebooks. 
-Your task is to analyze a specific choice (Edge) presented to a player, using the narrative context (Node) to determine the mechanical rules of that transition.
-
-You must output ONLY a valid JSON object matching this schema:
-{
-  "transition_type": "explicit_choice" | "forced" | "stochastic" | "conditional",
-  "stochastic_trigger": string or null,
-  "condition_type": "none" | "skill" | "stat_check" | "combat_victory" | "combat_evasion" | "item",
-  "condition_value": string or null
-}
-
-[EXAMPLES (Few-Shot)]
-Input: 
-Node Context: "You have ridden into the tangle of trees... Pick a number from the Random Number Table."
-Edge Text: "If it is below 5, your horse has suddenly plunged into thick mud..."
-Output:
-{
-  "transition_type": "stochastic",
-  "stochastic_trigger": "below 5",
-  "condition_type": "none",
-  "condition_value": null
-}
-
-Input:
-Node Context: "Anxious to leave this evil tomb, you examine the door for a latch."
-Edge Text: "If you have the Kai Discipline of Mind Over Matter, turn to 151."
-Output:
-{
-  "transition_type": "conditional",
-  "stochastic_trigger": null,
-  "condition_type": "skill",
-  "condition_value": "Mind Over Matter"
-}
-
-Input:
-Node Context: "Suddenly, you are faced by two snarling Giaks intent on your death."
-Edge Text: "If you win, you may explore the cave further by turning to 33."
-Output:
-{
-  "transition_type": "conditional",
-  "stochastic_trigger": null,
-  "condition_type": "combat_victory",
-  "condition_value": null
-}
-
-[USER INPUT]
-Node Context: {insérer le texte du noeud ici}
-Edge Text: {insérer le texte de l'arête ici}
-```
-
 ### B. Le Schéma de sortie (`config_extract_benchmark.yaml` / `config_extract.yaml`)
 Ce fichier YAML impose la structure JSON de sortie. 
 *Note : Pour la production (`config_extract.yaml`), supprimez simplement les deux premières lignes concernant le `benchmark`.*
@@ -310,12 +256,15 @@ fields:
     description: >
       A list of all outgoing transitions connecting this node to other nodes.
       Each element in the array MUST be an object containing exactly these keys:
-      - 'target_id' (int): The destination node_id.
-      - 'edge_text' (string): The exact raw text of the choice presented to the player.
-      - 'transition_type' (string): Must be exactly explicit_choice, forced, stochastic, or conditional.
-      - 'stochastic_trigger' (string): The exact raw text triggering this edge, or null if not stochastic.
-      - 'condition_type' (string): Must be exactly none, skill, stat_check, combat_victory, combat_evasion, or item.
-      - 'condition_value' (string): The specific requirement, or null if not applicable.
+      - 'source_id' (string): The source paragraph number.
+      - 'target_id' (string): The destination paragraph number.
+      - 'edge_text' (string): The exact raw text of the choice presented to the player (between <choice> tags).
+      - 'transition_type' (string): Must be exactly explicit_choice, forced, stochastic, conditional, or complex.
+      - 'realisation_value' (string | null): If transition_type is stochastic or conditional, the exact raw text triggering this edge. Otherwise, null.
+      - 'semantic_risk' (string | null): Must be cautious, neutral, reckless, or null.
+      - 'semantic_morality' (string | null): Must be selfish, neutral, noble, or null.
+      - 'semantic_action' (string | null): Must be physical, neutral, tactical, or null.
+      - 'parsing_confidence' (int): A confidence score from 1 (low) to 5 (certain).
 ```
 
 ## 3. Format des données
@@ -337,16 +286,19 @@ Utilisé uniquement lors de la phase de test pour évaluer le modèle. Il contie
 ```json
 [
   {
-    "id": "21",
+    "id": "339",
     "output": {
       "edges": [
         {
-          "target_id": "189",
-          "edge_text": "Texte du choix",
-          "transition_type": "stochastic",
-          "stochastic_trigger": "5 or above",
-          "condition_type": "none",
-          "condition_value": null
+          "source_id": "339",
+          "target_id": "7",
+          "edge_text": "You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "cautious",
+          "semantic_morality": "neutral",
+          "semantic_action": "physical",
+          "parsing_confidence": 3
         }
       ]
     }
