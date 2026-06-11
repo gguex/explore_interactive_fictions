@@ -75,7 +75,7 @@ def parse_for_edge_extraction(html_dir: str, book_prefix: str, output_dir: str) 
 
             if target_id is None:
                 warnings.warn(
-                    f"No valid 'sect' link found in paragraph in {file_path}. Skipping."
+                    f"No valid 'sect' link found in choice paragraph in {file_path}. Skipping."
                 )
 
             # Extract the choice text
