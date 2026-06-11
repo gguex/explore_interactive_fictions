@@ -44,7 +44,7 @@ You must output ONLY a valid JSON array containing one object per identified tra
     "semantic_moral_stance": 1 | 2 | 3 | 4 | 5 | null,
     "semantic_cognitive_approach": 1 | 2 | 3 | 4 | 5 | null,
     "parsing_confidence": 1 | 2 | 3 | 4 | 5,
-  }
+  },
 ]
 
 With the following meaning:
