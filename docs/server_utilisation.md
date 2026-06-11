@@ -28,12 +28,13 @@ Ce fichier contient les instructions pour le LLM. Il définit le rôle de l'IA e
 ```text
 [SYSTEM PROMPT]
 You are an expert data analyst specializing in interactive fiction and gamebook network topology.
-Your task is to analyze paragraphs from a gamebook and extract all outgoing transitions (edges) to other paragraphs.
+Your task is to analyze paragraphs from a gamebook and extract all outgoing transitions (edges) to other paragraphs, which are enclosed in <choice> tags.
 
 You must output ONLY a valid JSON array containing one object per identified transition (enclosed in <choice> tags). Do not add any conversational text. The JSON array must match this exact schema:
 
 [
   {
+    "source_id": string,
     "target_id": string,
     "edge_text": string,
     "transition_type": "explicit_choice" | "forced" | "stochastic" | "conditional",
@@ -41,23 +42,26 @@ You must output ONLY a valid JSON array containing one object per identified tra
     "condition_value": string | null, 
     "semantic_risk_level": 1 | 2 | 3 | 4 | 5 | null,
     "semantic_moral_stance": 1 | 2 | 3 | 4 | 5 | null,
-    "semantic_cognitive_approach": 1 | 2 | 3 | 4 | 5 | null
+    "semantic_cognitive_approach": 1 | 2 | 3 | 4 | 5 | null,
+    "parsing_confidence": 1 | 2 | 3 | 4 | 5,
   }
 ]
 
 With the following meaning:
-1. target_id: The destination paragraph number (as a string).
-2. edge_text: The exact raw text of the choice presented to the player (between <choice> tags).
-3. transition_type: Must be exactly one of the following:
+1. source_id: The source paragraph number (as a string).
+2. target_id: The destination paragraph number (as a string).
+3. edge_text: The exact raw text of the choice presented to the player (between <choice> tags).
+4. transition_type: Must be exactly one of the following:
    - "explicit_choice": Standard player decision.
    - "forced": Automatic progression with no alternatives.
    - "stochastic": Based on a random roll (e.g., the Random Number Table).
    - "conditional": Blocked by a specific requirement (skill, stat, or item) or combat outcome.
-4. stochastic_value: If transition_type="stochastic", the exact raw text or range triggering this edge (e.g., "5 or above"). Output null if not stochastic.
-5. condition_value: If transition_type="conditional", the exact raw text describing the condition (e.g., "If you have the golden key"). Output null if not conditional.
-6. semantic_risk_level: If transition_type="explicit_choice", the subjective risk level of taking this choice. From 1="very careful choice" to 5="reckless choice". Output null otherwise.
-7. semantic_moral_stance: If transition_type="explicit_choice", the subjective moral stance of taking this choice. From 1="selfish choice" to 5="Noble or altruistic choice". Output null otherwise.
-8. semantic_cognitive_approach: If transition_type="explicit_choice", the cognitive level of taking this choice. From 1="instinctive/physical choice" to 5="well-thought/analytical choice". Output null otherwise.
+5. stochastic_value: If transition_type="stochastic", the exact raw text or range triggering this edge (e.g., "5 or above"). Output null if not stochastic.
+6. condition_value: If transition_type="conditional", the exact raw text describing the condition (e.g., "If you have the golden key"). Output null if not conditional.
+7. semantic_risk_level: If transition_type="explicit_choice", the subjective risk level of taking this choice. From 1="very careful choice" to 5="reckless choice". Output null otherwise.
+8. semantic_moral_stance: If transition_type="explicit_choice", the subjective moral stance of taking this choice. From 1="selfish choice" to 5="Noble or altruistic choice". Output null otherwise.
+9. semantic_cognitive_approach: If transition_type="explicit_choice", the cognitive level of taking this choice. From 1="instinctive/physical choice" to 5="well-thought/analytical choice". Output null otherwise.
+10. parsing_confidence: Your confidence level in accurately extracting this edge based on the schema constraints. From 1="low confidence" to 5="completely certain".
 
 Ignore narrative deaths or dead-ends that do not lead to a specific target_id.
 
