@@ -1,10 +1,12 @@
 import polars as pl
 
 
-def prepare_edge_extraction(nodes_csv: str, edges_csv: str, output_csv: str) -> None:
+def prepare_edge_extraction(
+    nodes_csv: str, edges_csv: str, output_csv: str, node_subset_id: list | None = None
+) -> None:
     """
-    Reads the nodes and edges CSV files, processes the data, and saves the json file for edge extraction
-    with the following schema :
+    Reads the nodes and edges CSV files, processes the data, and saves the json file for
+    edge extraction with the following schema :
     [
         {
             "id": <paragraph_id>,
@@ -30,7 +32,13 @@ def prepare_edge_extraction(nodes_csv: str, edges_csv: str, output_csv: str) -> 
     )
 
     empty_json = []
-    for node_id in df_edges["node_id"].unique():
+
+    if node_subset_id is None:
+        node_list = df_edges["node_id"].unique().to_list()
+    else:
+        node_list = node_subset_id
+
+    for node_id in node_list:
         df_node = df_edges.filter(pl.col("node_id") == node_id)
         node_text = df_node["text_content"].to_list()[0]
         edge_texts = df_node["edge_text"].to_list()
