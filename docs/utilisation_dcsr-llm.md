@@ -1,23 +1,50 @@
-# Documentation : Extraction de Graphes Narratifs avec DCSR-LLM
+# Pipeline DCSR-LLM : Extraction de Graphes Narratifs (Gamebooks)
 
-Ce document décrit la procédure pour extraire automatiquement les choix et les transitions depuis les paragraphes d'un "Livre dont vous êtes le héros" vers un format structuré (JSON) en utilisant l'outil `dcsr-llm` et le modèle `Qwen/Qwen2.5-7B-Instruct`.
+Ce document centralise les procédures pour extraire automatiquement la topologie (choix et transitions) des paragraphes d'un livre interactif vers un format JSON structuré, en utilisant l'outil `dcsr-llm` sur le cluster Curnagl.
 
-## Créer un token sécurisé
+## 1. Environnement et Installation (Curnagl)
+
+### Initialisation de l'environnement virtuel
+
+À lancer depuis le nœud d'accès pour configurer l'espace de travail :
+```bash
+cd /scratch/$USER/dcsr-llm
+Sinteractive -m 20G -G 1
+module load python/3.11.14
+source .venv/bin/activate
+```
+
+### Installation des dépendances
+
+```bash
+pip install -U pip
+pip install -e ".[cuda]" --extra-index-url https://download.pytorch.org/whl/cu128
+pip install -e ".[dev]"
+pip install -e ".[tutorial]"
+```
+
+### Vérification 
+
+```bash
+dcsr-llm check-installation
+```
+
+## Configuration du Token Hugging Face (Modèles restreints)
 
 ```bash
 # 1. Crée le dossier de configuration
 mkdir -p ~/.config/dcsr-llm
-
 # 2. Sauvegarde ton token (sans guillemets ni espaces supplémentaires)
 printf "%s" "ton-token-ici" > ~/.config/dcsr-llm/hf_token
-
 # 3. Restreint les permissions de lecture à toi seul pour des raisons de sécurité
 chmod 600 ~/.config/dcsr-llm/hf_token
 ```
 
-## Install/Uninstall a model 
+## 2. Gestion des Modèles Locaux
 
-### Install
+À exécuter avec l'environnement virtuel `.venv` activé.
+
+### Télécharger un modèle
 
 ```bash
 cd /scratch/$USER/dcsr-llm
@@ -32,8 +59,9 @@ export HF_TOKEN="mon_token"
 dcsr-llm download --model-name nom-du-createur/nom-du-modele --use-hf-token
 ```
 
-### Uninstall
+### Supprimer un modèle (Nettoyage de l'espace)
 
+Il faut nettoyer à la fois le dossier du projet et le cache système de Hugging Face :
 ```bash
 cd /scratch/$USER/dcsr-llm
 rm -rf models/Qwen_Qwen3-8B
@@ -53,29 +81,92 @@ Tout désinstaller :
 rm -rf ~/.cache/huggingface/hub/*
 ```
 
+## 3. Architecture et Fichiers de Données
 
-## 1. Architecture du projet
+L'outil `dcsr-llm` s'exécute à la racine, mais l'architecture cible se base sur 4 fichiers clés séparés de la logique de code.
 
-L'outil `dcsr-llm` exige d'être exécuté depuis son dossier racine. Pour garder notre espace de travail propre, nous utilisons un dossier séparé (`mon_projet_livre`) et un script SLURM qui crée des liens symboliques temporaires vers l'outil.
+Corpus "dcsr-llm/data/extract/LW01_calibration.json"
+Corpus_gold "dcsr-llm/data/extract/LW01_calibration_gold.json"
+Config: "dcsr-llm/configs/LW01_calibration_config.yaml"
+Preprompt: "dcsr-llm/configs/LW01_calibration_prepompt"
 
-```text
-/scratch/utilisateur/
-├── dcsr-llm/                  <-- Dépôt Git de l'outil
-└── mon_projet_livre/          <-- Espace de travail du projet
-    ├── corpus_val.json        (Échantillon de test)
-    ├── corpus_val_gold.json   (Corrigé du test)
-    ├── corpus.json            (Données complètes de production)
-    ├── config_extract_benchmark.yaml
-    ├── config_extract.yaml
-    ├── preprompt_corpus
-    ├── run_extract.sh         (Script pour le test)
-    └── run_extract_full.sh    (Script pour la production)
+### Les Données (JSON)
+
+Doivent aller dans `dcsr-llm/data/extract/` :
+
+- `LW01_calibration.json` : Les paragraphes bruts d'entrée. Les choix sont encadrés par des balises <choice>...</choice>.
+
+```json
+[
+  {
+    "id": "21",
+    "text": "Le texte du paragraphe avec <choice>le premier choix</choice> et <choice>le second choix</choice>."
+  }
+]
 ```
 
-## 2. Description des fichiers de configuration
+- `LW01_calibration_gold.json` : La "vérité terrain" utilisée uniquement pour le benchmark. Structure exacte : identifiant id et objet output contenant les edges.
 
-### A. Le System Prompt (`preprompt_corpus`)
-Ce fichier contient les instructions pour le LLM. Il définit le rôle de l'IA et les règles strictes de classification des choix.
+```json
+[
+  {
+    "id": "339",
+    "output": {
+      "edges": [
+        {
+          "source_id": "339",
+          "target_id": "7",
+          "edge_text": "You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "cautious",
+          "semantic_morality": "neutral",
+          "semantic_action": "physical",
+          "parsing_confidence": 3
+        }
+      ]
+    }
+  }
+]
+```
+
+### La Configuration (YAML)
+
+Ce fichier va dans `dcsr-llm/configs/` : 
+
+- `LW01_calibration_config.yaml` : Dois contenir le paramètre `benchmark: filename: ...` si c'est un benchmark. Peut contenir des modifications des paramètres du modèles (par exemple : `generation: max_new_tokens: 1500`). 
+
+```yaml
+task: "Extract narrative transitions and edges from gamebook paragraphs."
+
+benchmark:
+  filename: LW01.calibration_gold.json
+
+generation:
+  max_new_tokens: 1500
+
+fields:
+  - name: edges
+    type: array
+    description: >
+      A list of all outgoing transitions connecting this node to other nodes.
+      Each element in the array MUST be an object containing exactly these keys:
+      - 'source_id' (string): The source paragraph number.
+      - 'target_id' (string): The destination paragraph number.
+      - 'edge_text' (string): The exact raw text of the choice presented to the player (between <choice> tags).
+      - 'transition_type' (string): Must be exactly explicit_choice, forced, stochastic, conditional, or complex.
+      - 'realisation_value' (string | null): If transition_type is stochastic or conditional, the exact raw text triggering this edge. Otherwise, null.
+      - 'semantic_risk' (string | null): Must be cautious, neutral, reckless, or null.
+      - 'semantic_morality' (string | null): Must be selfish, neutral, noble, or null.
+      - 'semantic_action' (string | null): Must be physical, neutral, tactical, or null.
+      - 'parsing_confidence' (int): A confidence score from 1 (low) to 5 (certain).
+```
+
+### Le Pré-prompt (TXT - non obligatoire)
+
+Ce fichier va dans `dcsr-llm/configs/` :
+
+- `LW01_calibration_prepompt` contient le System Prompt. C'est ici que l'on définit l'expertise (analyste de fiction interactive), le schéma JSON attendu (transition type, sémantique, etc.), les consignes strictes (gestion des null), et les exemples Few-Shot.
 
 ```text
 [SYSTEM PROMPT]
@@ -289,129 +380,9 @@ OUTPUT 339:
 ]
 ```
 
-### B. Le Schéma de sortie (`config_extract_benchmark.yaml` / `config_extract.yaml`)
-Ce fichier YAML impose la structure JSON de sortie. 
-*Note : Pour la production (`config_extract.yaml`), supprimez simplement les deux premières lignes concernant le `benchmark`.*
+## 4. Lancement : Script SLURM
 
-```yaml
-task: "Extract narrative transitions and edges from gamebook paragraphs."
-
-benchmark:
-  filename: LW01.calibration_gold.json
-
-generation:
-  max_new_tokens: 1500
-
-fields:
-  - name: edges
-    type: array
-    description: >
-      A list of all outgoing transitions connecting this node to other nodes.
-      Each element in the array MUST be an object containing exactly these keys:
-      - 'source_id' (string): The source paragraph number.
-      - 'target_id' (string): The destination paragraph number.
-      - 'edge_text' (string): The exact raw text of the choice presented to the player (between <choice> tags).
-      - 'transition_type' (string): Must be exactly explicit_choice, forced, stochastic, conditional, or complex.
-      - 'realisation_value' (string | null): If transition_type is stochastic or conditional, the exact raw text triggering this edge. Otherwise, null.
-      - 'semantic_risk' (string | null): Must be cautious, neutral, reckless, or null.
-      - 'semantic_morality' (string | null): Must be selfish, neutral, noble, or null.
-      - 'semantic_action' (string | null): Must be physical, neutral, tactical, or null.
-      - 'parsing_confidence' (int): A confidence score from 1 (low) to 5 (certain).
-```
-
-## 3. Format des données
-
-Les textes doivent être au format JSON. Les choix sont préalablement mis en évidence avec des balises `<choice>` pour aider le modèle.
-
-### Fichier d'entrée (`corpus_val.json` / `corpus.json`)
-```json
-[
-  {
-    "id": "21",
-    "text": "Le texte du paragraphe avec <choice>le premier choix</choice> et <choice>le second choix</choice>."
-  }
-]
-```
-
-### Fichier de validation ("Vérité Terrain") (`corpus_val_gold.json`)
-Utilisé uniquement lors de la phase de test pour évaluer le modèle. Il contient la sortie parfaite attendue.
-```json
-[
-  {
-    "id": "339",
-    "output": {
-      "edges": [
-        {
-          "source_id": "339",
-          "target_id": "7",
-          "edge_text": "You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",
-          "transition_type": "explicit_choice",
-          "realisation_value": null,
-          "semantic_risk": "cautious",
-          "semantic_morality": "neutral",
-          "semantic_action": "physical",
-          "parsing_confidence": 3
-        }
-      ]
-    }
-  }
-]
-```
-
-## 4. Script SLURM d'exécution (`run_extract.sh`)
-
-Ce script configure l'environnement sur Curnagl, crée les liens symboliques vers les dossiers de l'outil `dcsr-llm`, et lance l'extraction.
-
-```bash
-#SBATCH --mem 64G
-#SBATCH --time 1:00:00
-
-#SBATCH --partition gpu
-#SBATCH --gres gpu:1
-
-module purge
-module load python/3.11
-module load gcc
-module load cuda
-
-nvidia-smi
-
-# Définition des chemins
-PROJECT_DIR="/users/$USER/edge_extraction"
-DCSR_DIR="/users/$USER/dcsr-llm"
-
-# 1. Création de liens symboliques dans dcsr-llm vers vos fichiers
-# Cela permet de respecter l'arborescence attendue par l'outil sans déplacer vos fichiers
-mkdir -p "$DCSR_DIR/data/extract"
-mkdir -p "$DCSR_DIR/configs"
-
-ln -sf "$PROJECT_DIR/corpus_val.json" "$DCSR_DIR/data/extract/corpus_val.json"
-ln -sf "$PROJECT_DIR/corpus_val_gold.json" "$DCSR_DIR/data/extract/corpus_val_gold.json"
-ln -sf "$PROJECT_DIR/config_extract_benchmark.yaml" "$DCSR_DIR/configs/config_extract_benchmark.yaml"
-ln -sf "$PROJECT_DIR/preprompt_corpus" "$DCSR_DIR/configs/preprompt_corpus"
-
-# 2. On se déplace à la racine de l'outil (obligatoire)
-cd "$DCSR_DIR"
-
-# 3. Activation de l'environnement Python
-source .venv/bin/activate
-
-# 4. Lancement de l'extraction avec évaluation (benchmark)
-dcsr-llm extract \
-  --model-name Qwen/Qwen2.5-7B-Instruct \
-  --corpus-name corpus_val \
-  --config-file-name config_extract_benchmark \
-  --preprompt-file-name preprompt_corpus \
-  --think-mode off
-```
-
-Place des fichiers :
-
-Corpus "dcsr-llm/data/extract/LW01_calibration.json"
-Corpus_gold "dcsr-llm/data/extract/LW01_calibration_gold.json"
-Config: "dcsr-llm/configs/LW01_calibration_config.yaml"
-Preprompt: "dcsr-llm/configs/LW01_calibration_prepompt"
-
+Le script SLURM pour lancer les calculs. Il est dans `~/edge_extraction/` et doit être soumis avec `sbatch LW01_calibration.sh` :
 
 ```bash
 #!/bin/bash -l
@@ -422,10 +393,10 @@ Preprompt: "dcsr-llm/configs/LW01_calibration_prepompt"
 #SBATCH --output edge_extraction_%j.out
 #SBATCH --nodes 1
 #SBATCH --ntasks 1
-#SBATCH --cpus-per-task 12
-#SBATCH --mem 64G
+#SBATCH --cpus-per-task 32
+#SBATCH --mem 200G
 #SBATCH --time 12:00:00
-#SBATCH --partition gpu
+#SBATCH --partition gpu-h100
 #SBATCH --gres=gpu:1
 
 module purge
@@ -436,10 +407,9 @@ module load cuda
 cd /scratch/$USER/dcsr-llm
 source .venv/bin/activate
 
-# Lancement de l'extraction SANS l'option benchmark
 dcsr-llm extract \
   --model-name Qwen/Qwen3-8B \
-  --corpus-name LW01_calibration.json \
+  --corpus-name LW01_calibration \
   --config-file-name LW01_calibration_config \
   --preprompt-file-name LW01_calibration_prepompt \
   --think-mode off
@@ -448,12 +418,30 @@ dcsr-llm extract \
 ## 5. Méthodologie (Workflow)
 
 1. **Phase de Calibration (Benchmark) :**
-   - Annoter manuellement ~20 paragraphes dans `corpus_val.json` et leurs corrigés dans `corpus_val_gold.json`.
-   - Lancer `run_extract.sh`.
+   - Annoter manuellement ~20 paragraphes dans `LW01_calibration.json` et leurs corrigés dans `LW01_calibration_gold.json`.
+   - Lancer `LW01_calibration.sh`.
    - Analyser les erreurs dans le dossier `results/extract/`.
-   - Ajuster le fichier `preprompt_corpus` si le modèle se trompe systématiquement, puis relancer.
+   - Ajuster le fichier `LW01_calibration_prepompt` si le modèle se trompe systématiquement, puis relancer.
 
 2. **Phase de Production :**
-   - Placer l'ensemble des 350 paragraphes dans `corpus.json`.
-   - Utiliser `config_extract.yaml` (sans paramètre de benchmark).
+   - Placer l'ensemble des 350 paragraphes dans `LW01_full.json`.
+   - Utiliser `LW01_full_config.yaml` (sans paramètre de benchmark)
    - Lancer le script SLURM de production. Le résultat final sera un fichier JSON généré contenant l'ensemble du graphe narratif prêt à être exploité.
+
+
+## 6. Aide-mémoire SLURM 
+
+Trouver les jobs :
+```bash
+Squeue
+```
+
+Arrêter un job :
+```bash
+scancel <job_id>
+``` 
+
+Arrêter tout :
+```bash
+scancel -u $USER
+```
