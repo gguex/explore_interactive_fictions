@@ -445,3 +445,228 @@ Arrêter tout :
 ```bash
 scancel -u $USER
 ```
+
+
+## BONUS test YALM
+
+```yalm
+task: |
+  You are an expert data analyst specializing in interactive fiction and gamebook network topology.
+  Your task is to analyze paragraphs from "Lone Wolf" gamebook and extract all outgoing transitions (edges) to other paragraphs, which are strictly enclosed in <choice> tags.
+  Ignore narrative deaths or dead-ends that do not lead to a specific target_id.
+  You must output ONLY a valid JSON array. Do not add any conversational text before or after the JSON.
+
+benchmark:
+  filename: LW01.calibration_gold.json
+
+generation:
+  max_new_tokens: 2000
+
+fields:
+  - name: edges
+    type: array
+    description: |
+      A list of all outgoing transitions connecting this node to other nodes. 
+      Each element in the array MUST be an object containing exactly the following keys, strictly respecting these conditional rules:
+      
+      [FIELD DEFINITIONS & LOGICAL RULES]
+      1. source_id (string): The source paragraph number.
+      2. target_id (string): The destination paragraph number.
+      3. edge_text (string): The exact raw text of the choice presented to the player (between <choice> tags).
+      4. transition_type (string): You MUST choose EXACTLY ONE of these 5 categories:
+         - "explicit_choice" : Standard player decision.
+         - "forced"          : Automatic progression with no alternatives.
+         - "stochastic"      : A condition based on a random roll (e.g., Random Number Table).
+         - "conditional"     : A condition based on a Kai discipline, an object, endurance, or combat outcome.
+         - "complex"         : Combats or choices that do not fit the categories above.
+      
+      5. realisation_value (string | null):
+         - IF transition_type is "stochastic" or "conditional" -> Extract the exact raw text triggering it.
+         - IF transition_type is anything else -> You MUST output null.
+      
+      6. semantic_risk (string | null):
+         - IF transition_type is "explicit_choice" -> Evaluate as: "cautious", "neutral", or "reckless".
+         - IF transition_type is anything else -> You MUST output null.
+      
+      7. semantic_morality (string | null):
+         - IF transition_type is "explicit_choice" -> Evaluate as: "selfish", "neutral", or "noble".
+         - IF transition_type is anything else -> You MUST output null.
+      
+      8. semantic_action (string | null):
+         - IF transition_type is "explicit_choice" -> Evaluate as: "physical", "neutral", or "tactical".
+         - IF transition_type is anything else -> You MUST output null.
+      
+      9. parsing_confidence (int): Your confidence score from 1 (low) to 5 (certain).
+      
+      [EXAMPLES (Few-Shot)]
+      INPUT 1:
+      {
+          "id": 1,
+          "text": "You must make haste for you sense it is not safe to linger by the smoking remains of the ruined monastery. The black-winged beasts could return at any moment. You must set out for the Sommlending capital of Holmgard and tell the King the terrible news of the massacre: that the whole élite of Kai warriors, save yourself, have been slaughtered. Without the Kai Lords to lead her armies, Sommerlund will be at the mercy of their ancient enemy, the Darklords. Fighting back tears, you bid farewell to your dead kinsmen. Silently, you promise that their deaths will be avenged. You turn away from the ruins and carefully descend the steep track. At the foot of the hill, the path splits into two directions, both leading into a large wood. <choice>If you wish to use your Kai Discipline of Sixth Sense, turn to 141.</choice> <choice>If you wish to take the right path into the wood, turn to 85.</choice> <choice>If you wish to follow the left track, turn to 275.</choice>"
+      }
+
+      OUTPUT 1:
+      [
+        {
+          "source_id": "1",
+          "target_id": "141",
+          "edge_text": "If you wish to use your Kai Discipline of Sixth Sense, turn to 141.",
+          "transition_type": "conditional",
+          "realisation_value": "If you wish to use your Kai Discipline of Sixth Sense", 
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 4
+        },
+        {
+          "source_id": "1",
+          "target_id": "85",
+          "edge_text": "If you wish to take the right path into the wood, turn to 85.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 4
+        },
+        {
+          "source_id": "1",
+          "target_id": "275",
+          "edge_text": "If you wish to follow the left track, turn to 275.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "parsing_confidence": 4
+        }
+      ]
+
+      INPUT 2:
+      {
+          "id": 2,
+          "text": "As you dash through the thickening trees, the shouts of the Giaks begin to fade behind you. You have nearly outdistanced them completely, when you crash headlong into a tangle of low branches. Pick a number from the Random Number Table. <choice>If you have picked a number 0–4, turn to 343.</choice> <choice>If you have picked a number 5–9, turn to 276.</choice>"
+      }
+
+      OUTPUT 2:
+      [
+        {
+          "source_id": "2",
+          "target_id": "343",
+          "edge_text": "If you have picked a number 0–4, turn to 343.",
+          "transition_type": "stochastic",
+          "realisation_value": "If you have picked a number 0–4",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        },
+        {
+          "source_id": "2",
+          "target_id": "276",
+          "edge_text": "If you have picked a number 5–9, turn to 276.",
+          "transition_type": "stochastic",
+          "realisation_value": "If you have picked a number 5–9",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        }
+      ]
+
+      INPUT 97:
+      {
+          "id": 97,
+          "text": "Ahead of you, you can see a fierce battle raging across a stone bridge. The clash of steel and the cries of men and beasts echo through the forest. In the midst of the fighting, you see Prince Pelathar, the King’s son. He is in combat with a large grey Gourgaz who is wielding a black axe above his scaly head. Suddenly, the Prince falls wounded—a black arrow in his side. <choice>If you wish to defend the fallen Prince, turn to 255.</choice> <choice>If you wish to run into the forest, turn to 306.</choice>"
+      }
+
+      OUTPUT 97:
+      [
+        {
+          "source_id": "97",
+          "target_id": "255",
+          "edge_text": "If you wish to defend the fallen Prince, turn to 255.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null, 
+          "semantic_risk": "reckless",
+          "semantic_morality": "noble",
+          "semantic_action": "physical",
+          "parsing_confidence": 4
+        },
+        {
+          "source_id": "97",
+          "target_id": "306",
+          "edge_text": "If you wish to run into the forest, turn to 306.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null, 
+          "semantic_risk": "cautious",
+          "semantic_morality": "selfish",
+          "semantic_action": "neutral",
+          "parsing_confidence": 4
+        }
+      ]
+
+      INPUT 276:
+      {
+          "id": 276,
+          "text": "Reaching for your weapon you manage to hack your way through the tangle of wood and twisted branches to the clearer forest beyond. Your cloak is torn in several places and your right leg is badly bruised above the knee. <choice>Lose 1 ENDURANCE point and turn to 213.</choice>"
+      }
+
+      OUTPUT 276:
+      [
+        {
+          "source_id": "276",
+          "target_id": "213",
+          "edge_text": "Lose 1 ENDURANCE point and turn to 213.",
+          "transition_type": "forced",
+          "realisation_value": null, 
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 5
+        }
+      ]
+
+      INPUT 339:
+      {
+          "id": 339,
+          "text": "You quickly sidestep just as a long dagger shatters the glass top of the counter. A swarthy youth is attacking you and you must fight him. Robber: COMBAT SKILL 13   ENDURANCE 20 <choice>If you kill him within 4 rounds of Combat, turn to 94.</choice> <choice>If you are still fighting after 4 rounds of Combat, turn to 203.</choice> <choice>You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.</choice>"
+      }
+
+      OUTPUT 339:
+      [
+        {
+          "source_id": "339",
+          "target_id": "94",
+          "edge_text": "If you kill him within 4 rounds of Combat, turn to 94.",
+          "transition_type": "complex",
+          "realisation_value": null, 
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "339",
+          "target_id": "203",
+          "edge_text": "If you are still fighting after 4 rounds of Combat, turn to 203.",
+          "transition_type": "complex",
+          "realisation_value": null, 
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "parsing_confidence": 3
+        },
+        {
+          "source_id": "339",
+          "target_id": "7",
+          "edge_text": "You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "cautious",
+          "semantic_morality": "neutral",
+          "semantic_action": "physical",
+          "parsing_confidence": 3
+        }
+      ]
+```
