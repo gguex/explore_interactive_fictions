@@ -362,6 +362,8 @@ Preprompt: "dcsr-llm/configs/LW01_calibration_prepompt"
 
 
 ```bash
+#!/bin/bash -l
+
 #SBATCH --mail-type ALL 
 #SBATCH --mail-user guillaume.guex@unil.ch
 #SBATCH --job-name edge_extraction
@@ -372,7 +374,7 @@ Preprompt: "dcsr-llm/configs/LW01_calibration_prepompt"
 #SBATCH --mem 64G
 #SBATCH --time 12:00:00
 #SBATCH --partition gpu
-#SBATCH --gres gpu:1
+#SBATCH --gres=gpu:1
 
 module purge
 module load python/3.11.14
