@@ -143,7 +143,7 @@ benchmark:
   filename: LW01.calibration_gold.json
 
 generation:
-  max_new_tokens: 1500
+  max_new_tokens: 2000
 
 fields:
   - name: edges
@@ -394,7 +394,7 @@ Le script SLURM pour lancer les calculs. Il est dans `~/edge_extraction/` et doi
 #SBATCH --nodes 1
 #SBATCH --ntasks 1
 #SBATCH --cpus-per-task 32
-#SBATCH --mem 200G
+#SBATCH --mem 250G
 #SBATCH --time 12:00:00
 #SBATCH --partition gpu-h100
 #SBATCH --gres=gpu:1
@@ -408,10 +408,10 @@ cd /scratch/$USER/dcsr-llm
 source .venv/bin/activate
 
 dcsr-llm extract \
-  --model-name Qwen/Qwen3-8B \
+  --model-name Qwen/Qwen3.6-27B \
   --corpus-name LW01_calibration \
   --config-file-name LW01_calibration_config \
-  --preprompt-file-name LW01_calibration_prepompt \
+  --preprompt-file-name LW01_calibration_preprompt \
   --think-mode off
 ```
 
