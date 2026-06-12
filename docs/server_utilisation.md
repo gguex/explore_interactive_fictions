@@ -2,6 +2,58 @@
 
 Ce document décrit la procédure pour extraire automatiquement les choix et les transitions depuis les paragraphes d'un "Livre dont vous êtes le héros" vers un format structuré (JSON) en utilisant l'outil `dcsr-llm` et le modèle `Qwen/Qwen2.5-7B-Instruct`.
 
+## Créer un token sécurisé
+
+```bash
+# 1. Crée le dossier de configuration
+mkdir -p ~/.config/dcsr-llm
+
+# 2. Sauvegarde ton token (sans guillemets ni espaces supplémentaires)
+printf "%s" "ton-token-ici" > ~/.config/dcsr-llm/hf_token
+
+# 3. Restreint les permissions de lecture à toi seul pour des raisons de sécurité
+chmod 600 ~/.config/dcsr-llm/hf_token
+```
+
+## Install/Uninstall a model 
+
+### Install
+
+```bash
+cd /scratch/$USER/dcsr-llm
+source .venv/bin/activate
+
+dcsr-llm download --model-name Qwen/Qwen3-8B
+```
+
+Si un token est nécessaire :
+```bash
+export HF_TOKEN="mon_token"
+dcsr-llm download --model-name nom-du-createur/nom-du-modele --use-hf-token
+```
+
+### Uninstall
+
+```bash
+cd /scratch/$USER/dcsr-llm
+rm -rf models/Qwen_Qwen3-8B
+```
+
+```bash
+# 1. Liste les modèles présents dans ton cache pour vérifier leur nom exact
+ls ~/.cache/huggingface/hub/
+
+# 2. Supprime le dossier du modèle ciblé 
+# (Note : Hugging Face remplace le "/" par "--" dans les noms de dossiers)
+rm -rf ~/.cache/huggingface/hub/models--Qwen--Qwen3-8B
+```
+
+Tout désinstaller :
+```bash
+rm -rf ~/.cache/huggingface/hub/*
+```
+
+
 ## 1. Architecture du projet
 
 L'outil `dcsr-llm` exige d'être exécuté depuis son dossier racine. Pour garder notre espace de travail propre, nous utilisons un dossier séparé (`mon_projet_livre`) et un script SLURM qui crée des liens symboliques temporaires vers l'outil.
@@ -53,14 +105,14 @@ With the following meaning:
 4. transition_type: Must be exactly one of the following:
    - "explicit_choice": Standard player decision.
    - "forced": Automatic progression with no alternatives.
-   - "stochastic": Based on a random roll (e.g., the Random Number Table).
-   - "conditional": Blocked by a specific requirement (skill, stat, or item) or combat outcome.
+   - "stochastic": there is a condition based on a random roll (e.g., the Random Number Table).
+   - "conditional": there is a condition with a Kai discipline, an objet, the endurence level, or a combat outcome.
    - "complex": When choices in the paragraph do not enter the other categories.
-5. realisation_value: If transition_type= "stochastic" or "conditional", the exact raw text triggering this edge. Output null if not stochastic or conditional.
-6. semantic_risk: If transition_type="explicit_choice", the subjective risk level of taking this choice. If unclear, output "neutral". If not an explicit choice, output null.
-7. semantic_morality: If transition_type="explicit_choice", the subjective moral stance of taking this choice. If unclear, output "neutral". If not an explicit choice, output null.
-8. semantic_action: If transition_type="explicit_choice", the cognitive level of taking this choice. If unclear, output "neutral". If not an explicit choice, output null.
-9. parsing_confidence: Your confidence level in accurately extracting this edge based on the schema constraints. From 1="low confidence" to 5="completely certain".
+5. realisation_value: ONLY if transition_type is "stochastic" or "conditional", extract the exact raw text triggering it. CRITICAL: If the type is anything else, you MUST output null.
+6. semantic_risk: CRITICAL: If transition_type is NOT "explicit_choice", you MUST output null. Otherwise, evaluate the risk: cautious, neutral, or reckless.
+7. semantic_morality: CRITICAL: If transition_type is NOT "explicit_choice", you MUST output null. Otherwise, evaluate the morality: selfish, neutral, or noble.
+8. semantic_action: CRITICAL: If transition_type is NOT "explicit_choice", you MUST output null. Otherwise, evaluate the cognitive level: physical, neutral, or tactical.
+9. parsing_confidence: Your confidence level from 1 (low) to 5 (certain).
 
 Ignore narrative deaths or dead-ends that do not lead to a specific target_id.
 

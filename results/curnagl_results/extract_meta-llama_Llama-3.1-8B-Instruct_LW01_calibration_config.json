@@ -1,0 +1,117 @@
+{
+  "run_config": {
+    "command": "extract",
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "model_dir": "./models",
+    "result_dir": "./results/extract",
+    "corpus_dir": "./data/extract",
+    "corpus_name": "LW01_calibration",
+    "corpus_format": "json",
+    "max_docs": null,
+    "config_dir": "./configs",
+    "config_file_name": "LW01_calibration_config",
+    "preprompt_file_name": "LW01_calibration_prepompt",
+    "quantized": null,
+    "suffix": null,
+    "multimodal": false,
+    "image_order": "text-first",
+    "result_name_suffix": null,
+    "result_format": "json",
+    "think_mode": "off",
+    "device_map_mode": "gpu",
+    "precision": "auto",
+    "api_profile": null,
+    "api_base_url": null,
+    "api_mode": null,
+    "debug_prompt": false,
+    "force": false
+  },
+  "spec": {
+    "task": "Extract narrative transitions and edges from gamebook paragraphs.",
+    "output": {
+      "additional_properties": false,
+      "include_runtime_meta": true
+    },
+    "generation": {
+      "max_new_tokens": 1500,
+      "seed": 42
+    },
+    "validation": {
+      "strict": true,
+      "coerce_types": false,
+      "max_attempts": 2,
+      "on_invalid": "quarantine",
+      "keep_raw": true
+    },
+    "evidence": {
+      "mode": "none",
+      "style": "quote",
+      "required_fields": [],
+      "include_fields": "required",
+      "policy": "flag",
+      "max_chars": 240,
+      "max_matches": 1
+    },
+    "truncation": {
+      "max_input_tokens": null,
+      "max_input_words": null,
+      "mode": "none",
+      "head_ratio": 0.3
+    },
+    "prompting": {
+      "schema_placement": "system",
+      "instruction_language": "en"
+    },
+    "language": {
+      "detect": false,
+      "detector": "auto",
+      "fasttext_model_path": null,
+      "whitelist": []
+    },
+    "benchmark": {
+      "enabled": false,
+      "filename": "LW01_calibration_gold.json",
+      "method": "exact"
+    },
+    "fields": [
+      {
+        "name": "edges",
+        "type": "array",
+        "description": "A list of all outgoing transitions connecting this node to other nodes. Each element in the array MUST be an object containing exactly these keys: - 'source_id' (string): The source paragraph number. - 'target_id' (string): The destination paragraph number. - 'edge_text' (string): The exact raw text of the choice presented to the player (between <choice> tags). - 'transition_type' (string): Must be exactly explicit_choice, forced, stochastic, conditional, or complex. - 'realisation_value' (string | null): If transition_type is stochastic or conditional, the exact raw text triggering this edge. Otherwise, null. - 'semantic_risk' (string | null): Must be cautious, neutral, reckless, or null. - 'semantic_morality' (string | null): Must be selfish, neutral, noble, or null. - 'semantic_action' (string | null): Must be physical, neutral, tactical, or null. - 'parsing_confidence' (int): A confidence score from 1 (low) to 5 (certain).\n",
+        "constraints": {
+          "enum": null,
+          "regex": null,
+          "min": null,
+          "max": null,
+          "min_length": null,
+          "max_length": null
+        }
+      }
+    ]
+  },
+  "hashes": {
+    "preprompt_sha256": "f4bcb9e8d81bb28eef6b67a9fee96f6a6b4ee206647791f51817b6e53af06258",
+    "config_sha256": "065e16216159f52f90f5a7273e237ef90419b28e694425403a5fc2eef6bb6e32"
+  },
+  "prompt_profile": {
+    "doc_id": "1",
+    "instruction_language": "en",
+    "schema_placement": "system",
+    "base_system_tokens": 76,
+    "schema_tokens": 273,
+    "custom_preprompt_tokens": 0,
+    "think_tokens": 12,
+    "system_tokens": 362,
+    "document_text_tokens": 221,
+    "user_wrapper_tokens": 16,
+    "user_tokens": 236,
+    "rendered_prompt_tokens": 633,
+    "text_prompt_tokens": 633,
+    "image_tokens": 0,
+    "total_prompt_tokens": 633,
+    "raw_document_chars": 968,
+    "system_chars": 1611,
+    "user_chars": 1029,
+    "total_chars": 2640
+  }
+}

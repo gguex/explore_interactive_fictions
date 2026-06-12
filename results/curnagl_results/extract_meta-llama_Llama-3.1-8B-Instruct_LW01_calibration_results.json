@@ -1,0 +1,1056 @@
+{
+  "summary": {
+    "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+    "suffix": null,
+    "quantized": null,
+    "think_mode": "off",
+    "corpus_name": "LW01_calibration",
+    "config_file_name": "LW01_calibration_config",
+    "preprompt_file_name": "LW01_calibration_prepompt",
+    "max_new_tokens": 1500,
+    "temperature": 0.0,
+    "seed": 42,
+    "score": {
+      "total_documents": 20,
+      "written_results": 20,
+      "quarantined": 0,
+      "needs_review": 0
+    },
+    "durations": {
+      "data_prep": "115 ms",
+      "model_loading": "1m 45s",
+      "run": "2m 27s",
+      "total": "4m 12s"
+    },
+    "memory_peak": {
+      "backend": "cuda",
+      "peak_gb": 15.3
+    },
+    "prompt_profile": {
+      "doc_id": "1",
+      "instruction_language": "en",
+      "schema_placement": "system",
+      "base_system_tokens": 76,
+      "schema_tokens": 273,
+      "custom_preprompt_tokens": 0,
+      "think_tokens": 12,
+      "system_tokens": 362,
+      "document_text_tokens": 221,
+      "user_wrapper_tokens": 16,
+      "user_tokens": 236,
+      "rendered_prompt_tokens": 633,
+      "text_prompt_tokens": 633,
+      "image_tokens": 0,
+      "total_prompt_tokens": 633,
+      "raw_document_chars": 968,
+      "system_chars": 1611,
+      "user_chars": 1029,
+      "total_chars": 2640
+    }
+  },
+  "results": [
+    {
+      "id": "1",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "1",
+            "target_id": "141",
+            "edge_text": "If you wish to use your Kai Discipline of Sixth Sense, turn to 141.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "1",
+            "target_id": "85",
+            "edge_text": "If you wish to take the right path into the wood, turn to 85.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "1",
+            "target_id": "275",
+            "edge_text": "If you wish to follow the left track, turn to 275.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 169
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"1\",\n      \"target_id\": \"141\",\n      \"edge_text\": \"If you wish to use your Kai Discipline of Sixth Sense, turn to 141.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"1\",\n      \"target_id\": \"85\",\n      \"edge_text\": \"If you wish to take the right path into the wood, turn to 85.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"1\",\n      \"target_id\": \"275\",\n      \"edge_text\": \"If you wish to follow the left track, turn to 275.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "2",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "2",
+            "target_id": "343",
+            "edge_text": "If you have picked a number 0–4, turn to 343.",
+            "transition_type": "stochastic",
+            "realisation_value": "If you have picked a number 0–4",
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "2",
+            "target_id": "276",
+            "edge_text": "If you have picked a number 5–9, turn to 276.",
+            "transition_type": "stochastic",
+            "realisation_value": "If you have picked a number 5–9",
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 61
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"2\",\n      \"target_id\": \"343\",\n      \"edge_text\": \"If you have picked a number 0–4, turn to 343.\",\n      \"transition_type\": \"stochastic\",\n      \"realisation_value\": \"If you have picked a number 0–4\",\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"2\",\n      \"target_id\": \"276\",\n      \"edge_text\": \"If you have picked a number 5–9, turn to 276.\",\n      \"transition_type\": \"stochastic\",\n      \"realisation_value\": \"If you have picked a number 5–9\",\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "12",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "12",
+            "target_id": "262",
+            "edge_text": "If you have 10 Gold Crowns and wish to pay him, turn to 262.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "12",
+            "target_id": "247",
+            "edge_text": "If you do not have enough Gold Crowns or do not wish to pay him, turn to 247.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 79
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"12\",\n      \"target_id\": \"262\",\n      \"edge_text\": \"If you have 10 Gold Crowns and wish to pay him, turn to 262.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"12\",\n      \"target_id\": \"247\",\n      \"edge_text\": \"If you do not have enough Gold Crowns or do not wish to pay him, turn to 247.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "21",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "21",
+            "target_id": "189",
+            "edge_text": "If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.",
+            "transition_type": "stochastic",
+            "realisation_value": "5 or above",
+            "semantic_risk": "neutral",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "21",
+            "target_id": "189",
+            "edge_text": "If you scored above 7, you drag yourself onto firm ground and turn to 189.",
+            "transition_type": "stochastic",
+            "realisation_value": "7 or less",
+            "semantic_risk": "neutral",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "21",
+            "target_id": "312",
+            "edge_text": "But if you have picked a 9, turn to 312.",
+            "transition_type": "stochastic",
+            "realisation_value": "9",
+            "semantic_risk": "neutral",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "21",
+            "target_id": "189",
+            "edge_text": "If the number is below 5, your horse has suddenly plunged into thick mud up to its belly.",
+            "transition_type": "forced",
+            "realisation_value": null,
+            "semantic_risk": "cautious",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "21",
+            "target_id": "189",
+            "edge_text": "If you are stuck, pick another number from the Random Number Table.",
+            "transition_type": "forced",
+            "realisation_value": null,
+            "semantic_risk": "neutral",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "21",
+            "target_id": "189",
+            "edge_text": "If not, then this is your last chance!",
+            "transition_type": "forced",
+            "realisation_value": null,
+            "semantic_risk": "reckless",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "21",
+            "target_id": "189",
+            "edge_text": "If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim.",
+            "transition_type": "forced",
+            "realisation_value": null,
+            "semantic_risk": "reckless",
+            "semantic_morality": "selfish",
+            "semantic_action": "physical",
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "21",
+            "target_id": "189",
+            "edge_text": "If this time the number is 7 or less, the mud engulfs you up to your armpits.",
+            "transition_type": "stochastic",
+            "realisation_value": "7 or less",
+            "semantic_risk": "cautious",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 165
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"21\",\n      \"target_id\": \"189\",\n      \"edge_text\": \"If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.\",\n      \"transition_type\": \"stochastic\",\n      \"realisation_value\": \"5 or above\",\n      \"semantic_risk\": \"neutral\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"21\",\n      \"target_id\": \"189\",\n      \"edge_text\": \"If you scored above 7, you drag yourself onto firm ground and turn to 189.\",\n      \"transition_type\": \"stochastic\",\n      \"realisation_value\": \"7 or less\",\n      \"semantic_risk\": \"neutral\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"21\",\n      \"target_id\": \"312\",\n      \"edge_text\": \"But if you have picked a 9, turn to 312.\",\n      \"transition_type\": \"stochastic\",\n      \"realisation_value\": \"9\",\n      \"semantic_risk\": \"neutral\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"21\",\n      \"target_id\": \"189\",\n      \"edge_text\": \"If the number is below 5, your horse has suddenly plunged into thick mud up to its belly.\",\n      \"transition_type\": \"forced\",\n      \"realisation_value\": null,\n      \"semantic_risk\": \"cautious\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"21\",\n      \"target_id\": \"189\",\n      \"edge_text\": \"If you are stuck, pick another number from the Random Number Table.\",\n      \"transition_type\": \"forced\",\n      \"realisation_value\": null,\n      \"semantic_risk\": \"neutral\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"21\",\n      \"target_id\": \"189\",\n      \"edge_text\": \"If not, then this is your last chance!\",\n      \"transition_type\": \"forced\",\n      \"realisation_value\": null,\n      \"semantic_risk\": \"reckless\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"21\",\n      \"target_id\": \"189\",\n      \"edge_text\": \"If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim.\",\n      \"transition_type\": \"forced\",\n      \"realisation_value\": null,\n      \"semantic_risk\": \"reckless\",\n      \"semantic_morality\": \"selfish\",\n      \"semantic_action\": \"physical\",\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"21\",\n      \"target_id\": \"189\",\n      \"edge_text\": \"If this time the number is 7 or less, the mud engulfs you up to your armpits.\",\n      \"transition_type\": \"stochastic\",\n      \"realisation_value\": \"7 or less\",\n      \"semantic_risk\": \"cautious\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "23",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "23",
+            "target_id": "326",
+            "edge_text": "If you have a Golden Key and wish to use it, turn to 326.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "23",
+            "target_id": "151",
+            "edge_text": "If you have the Kai Discipline of Mind Over Matter, turn to 151.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "23",
+            "target_id": "337",
+            "edge_text": "If you wish to remove the pin, turn to 337.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 132
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"23\",\n      \"target_id\": \"326\",\n      \"edge_text\": \"If you have a Golden Key and wish to use it, turn to 326.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"23\",\n      \"target_id\": \"151\",\n      \"edge_text\": \"If you have the Kai Discipline of Mind Over Matter, turn to 151.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"23\",\n      \"target_id\": \"337\",\n      \"edge_text\": \"If you wish to remove the pin, turn to 337.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "27",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "27",
+            "target_id": "250",
+            "edge_text": "If you choose to attack, turn to 250.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "27",
+            "target_id": "52",
+            "edge_text": "If you choose to listen to what the voices say, turn to 52.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 68
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"27\",\n      \"target_id\": \"250\",\n      \"edge_text\": \"If you choose to attack, turn to 250.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"27\",\n      \"target_id\": \"52\",\n      \"edge_text\": \"If you choose to listen to what the voices say, turn to 52.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "97",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "97",
+            "target_id": "255",
+            "edge_text": "If you wish to defend the fallen Prince, turn to 255.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "97",
+            "target_id": "306",
+            "edge_text": "If you wish to run into the forest, turn to 306.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 93
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"97\",\n      \"target_id\": \"255\",\n      \"edge_text\": \"If you wish to defend the fallen Prince, turn to 255.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"97\",\n      \"target_id\": \"306\",\n      \"edge_text\": \"If you wish to run into the forest, turn to 306.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "104",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "104",
+            "target_id": "26",
+            "edge_text": "If you wish to turn north, go to 26.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "104",
+            "target_id": "100",
+            "edge_text": "If you wish to go south, turn to 100.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 64
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"104\",\n      \"target_id\": \"26\",\n      \"edge_text\": \"If you wish to turn north, go to 26.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"104\",\n      \"target_id\": \"100\",\n      \"edge_text\": \"If you wish to go south, turn to 100.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "125",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "125",
+            "target_id": "301",
+            "edge_text": "If you have the Kai Discipline of Tracking, turn to 301.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "125",
+            "target_id": "27",
+            "edge_text": "If you wish to take the south path, turn to 27.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "125",
+            "target_id": "214",
+            "edge_text": "If you wish to take the west path, turn to 214.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 100
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"125\",\n      \"target_id\": \"301\",\n      \"edge_text\": \"If you have the Kai Discipline of Tracking, turn to 301.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"125\",\n      \"target_id\": \"27\",\n      \"edge_text\": \"If you wish to take the south path, turn to 27.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"125\",\n      \"target_id\": \"214\",\n      \"edge_text\": \"If you wish to take the west path, turn to 214.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "131",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "131",
+            "target_id": "241",
+            "edge_text": "If you wish to shout a warning to the wizard, turn to 241.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "131",
+            "target_id": "55",
+            "edge_text": "If you wish to run forward and attack the Giak when he jumps, turn to 55.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "131",
+            "target_id": "302",
+            "edge_text": "If you wish to pick up a chunk of temple marble and throw it at the Giak’s head, turn to 302.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "131",
+            "target_id": "101",
+            "edge_text": "Or if you would rather turn and leave the battle area and run back into the woods, turn to 101.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 353
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\"edges\": [\n{\"source_id\": \"131\", \"target_id\": \"241\", \"edge_text\": \"If you wish to shout a warning to the wizard, turn to 241.\", \"transition_type\": \"explicit_choice\", \"realisation_value\": null, \"semantic_risk\": null, \"semantic_morality\": null, \"semantic_action\": null, \"parsing_confidence\": 5},\n{\"source_id\": \"131\", \"target_id\": \"55\", \"edge_text\": \"If you wish to run forward and attack the Giak when he jumps, turn to 55.\", \"transition_type\": \"explicit_choice\", \"realisation_value\": null, \"semantic_risk\": null, \"semantic_morality\": null, \"semantic_action\": null, \"parsing_confidence\": 5},\n{\"source_id\": \"131\", \"target_id\": \"302\", \"edge_text\": \"If you wish to pick up a chunk of temple marble and throw it at the Giak’s head, turn to 302.\", \"transition_type\": \"explicit_choice\", \"realisation_value\": null, \"semantic_risk\": null, \"semantic_morality\": null, \"semantic_action\": null, \"parsing_confidence\": 5},\n{\"source_id\": \"131\", \"target_id\": \"101\", \"edge_text\": \"Or if you would rather turn and leave the battle area and run back into the woods, turn to 101.\", \"transition_type\": \"explicit_choice\", \"realisation_value\": null, \"semantic_risk\": null, \"semantic_morality\": null, \"semantic_action\": null, \"parsing_confidence\": 5}\n]}"
+    },
+    {
+      "id": "153",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "153",
+            "target_id": "202",
+            "edge_text": "If you will try your luck by the highway, turn to 202.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "153",
+            "target_id": "135",
+            "edge_text": "If you feel that you stand a better chance of reaching the capital via the river then turn to 135.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "153",
+            "target_id": "329",
+            "edge_text": "Or if you are brave enough to risk the unknown perils of the Graveyard of the Ancients, turn to 329.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 248
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\"edges\": [\n  {\"source_id\": \"153\", \"target_id\": \"202\", \"edge_text\": \"If you will try your luck by the highway, turn to 202.\", \"transition_type\": \"explicit_choice\", \"realisation_value\": null, \"semantic_risk\": null, \"semantic_morality\": null, \"semantic_action\": null, \"parsing_confidence\": 5},\n  {\"source_id\": \"153\", \"target_id\": \"135\", \"edge_text\": \"If you feel that you stand a better chance of reaching the capital via the river then turn to 135.\", \"transition_type\": \"explicit_choice\", \"realisation_value\": null, \"semantic_risk\": null, \"semantic_morality\": null, \"semantic_action\": null, \"parsing_confidence\": 5},\n  {\"source_id\": \"153\", \"target_id\": \"329\", \"edge_text\": \"Or if you are brave enough to risk the unknown perils of the Graveyard of the Ancients, turn to 329.\", \"transition_type\": \"explicit_choice\", \"realisation_value\": null, \"semantic_risk\": null, \"semantic_morality\": null, \"semantic_action\": null, \"parsing_confidence\": 5}\n]}"
+    },
+    {
+      "id": "203",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "203",
+            "target_id": "80",
+            "edge_text": "If you have 10 or more ENDURANCE points left, turn to 80.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "203",
+            "target_id": "344",
+            "edge_text": "If you now have less than 10 ENDURANCE points, turn to 344.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 63
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"203\",\n      \"target_id\": \"80\",\n      \"edge_text\": \"If you have 10 or more ENDURANCE points left, turn to 80.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"203\",\n      \"target_id\": \"344\",\n      \"edge_text\": \"If you now have less than 10 ENDURANCE points, turn to 344.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "220",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "220",
+            "target_id": "24",
+            "edge_text": "If you win, turn to 24.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "220",
+            "target_id": "234",
+            "edge_text": "If you wish to evade combat at any time during the fight, you can jump from the speeding caravan by turning to 234.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 45
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"220\",\n      \"target_id\": \"24\",\n      \"edge_text\": \"If you win, turn to 24.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"220\",\n      \"target_id\": \"234\",\n      \"edge_text\": \"If you wish to evade combat at any time during the fight, you can jump from the speeding caravan by turning to 234.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "227",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "227",
+            "target_id": "271",
+            "edge_text": "If you lose any ENDURANCE points in the combat, turn to 271.",
+            "transition_type": "forced",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "227",
+            "target_id": "348",
+            "edge_text": "If you kill it without losing any ENDURANCE points, turn to 348.",
+            "transition_type": "forced",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 70
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"227\",\n      \"target_id\": \"271\",\n      \"edge_text\": \"If you lose any ENDURANCE points in the combat, turn to 271.\",\n      \"transition_type\": \"forced\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"227\",\n      \"target_id\": \"348\",\n      \"edge_text\": \"If you kill it without losing any ENDURANCE points, turn to 348.\",\n      \"transition_type\": \"forced\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "276",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "276",
+            "target_id": "213",
+            "edge_text": "Lose 1 ENDURANCE point and turn to 213.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 48
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"276\",\n      \"target_id\": \"213\",\n      \"edge_text\": \"Lose 1 ENDURANCE point and turn to 213.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "294",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "294",
+            "target_id": "230",
+            "edge_text": "If the number you pick is 0–2, turn to 230.",
+            "transition_type": "stochastic",
+            "realisation_value": "If the number you pick is 0–2",
+            "semantic_risk": "neutral",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "294",
+            "target_id": "190",
+            "edge_text": "If the number is 3–6, turn to 190.",
+            "transition_type": "stochastic",
+            "realisation_value": "If the number is 3–6",
+            "semantic_risk": "neutral",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "294",
+            "target_id": "321",
+            "edge_text": "If the number is 7–9, turn to 321.",
+            "transition_type": "stochastic",
+            "realisation_value": "If the number is 7–9",
+            "semantic_risk": "neutral",
+            "semantic_morality": "neutral",
+            "semantic_action": "neutral",
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 87
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"294\",\n      \"target_id\": \"230\",\n      \"edge_text\": \"If the number you pick is 0–2, turn to 230.\",\n      \"transition_type\": \"stochastic\",\n      \"realisation_value\": \"If the number you pick is 0–2\",\n      \"semantic_risk\": \"neutral\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"294\",\n      \"target_id\": \"190\",\n      \"edge_text\": \"If the number is 3–6, turn to 190.\",\n      \"transition_type\": \"stochastic\",\n      \"realisation_value\": \"If the number is 3–6\",\n      \"semantic_risk\": \"neutral\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"294\",\n      \"target_id\": \"321\",\n      \"edge_text\": \"If the number is 7–9, turn to 321.\",\n      \"transition_type\": \"stochastic\",\n      \"realisation_value\": \"If the number is 7–9\",\n      \"semantic_risk\": \"neutral\",\n      \"semantic_morality\": \"neutral\",\n      \"semantic_action\": \"neutral\",\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "303",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "303",
+            "target_id": "237",
+            "edge_text": "If you have the Kai Discipline of Camouflage, turn to 237.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "303",
+            "target_id": "72",
+            "edge_text": "If you do not, turn to 72.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 62
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"303\",\n      \"target_id\": \"237\",\n      \"edge_text\": \"If you have the Kai Discipline of Camouflage, turn to 237.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"303\",\n      \"target_id\": \"72\",\n      \"edge_text\": \"If you do not, turn to 72.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "333",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "333",
+            "target_id": "131",
+            "edge_text": "Turn to 131.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 168
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\"edges\": [{\"source_id\": \"333\", \"target_id\": \"131\", \"edge_text\": \"Turn to 131.\", \"transition_type\": \"explicit_choice\", \"realisation_value\": null, \"semantic_risk\": null, \"semantic_morality\": null, \"semantic_action\": null, \"parsing_confidence\": 5}]}"
+    },
+    {
+      "id": "334",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "334",
+            "target_id": "48",
+            "edge_text": "If you wish to use the Kai Discipline of Sixth Sense, turn to 48.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "334",
+            "target_id": "73",
+            "edge_text": "If you wish to use the Kai Discipline of Camouflage and wait for them to pass, turn to 73.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "334",
+            "target_id": "162",
+            "edge_text": "If you wish to approach them, turn to 162.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 71
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"334\",\n      \"target_id\": \"48\",\n      \"edge_text\": \"If you wish to use the Kai Discipline of Sixth Sense, turn to 48.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"334\",\n      \"target_id\": \"73\",\n      \"edge_text\": \"If you wish to use the Kai Discipline of Camouflage and wait for them to pass, turn to 73.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"334\",\n      \"target_id\": \"162\",\n      \"edge_text\": \"If you wish to approach them, turn to 162.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    },
+    {
+      "id": "339",
+      "needs_review": false,
+      "language_detected": null,
+      "lang_confidence": null,
+      "output": {
+        "edges": [
+          {
+            "source_id": "339",
+            "target_id": "94",
+            "edge_text": "If you kill him within 4 rounds of Combat, turn to 94.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "339",
+            "target_id": "203",
+            "edge_text": "If you are still fighting after 4 rounds of Combat, turn to 203.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          },
+          {
+            "source_id": "339",
+            "target_id": "7",
+            "edge_text": "You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "parsing_confidence": 5
+          }
+        ]
+      },
+      "evidence": {},
+      "trunc_meta": {
+        "applied": false,
+        "mode": "none",
+        "unit": "words",
+        "original_words": 77
+      },
+      "lang_meta": {
+        "enabled": false
+      },
+      "raw_output": "{\n  \"edges\": [\n    {\n      \"source_id\": \"339\",\n      \"target_id\": \"94\",\n      \"edge_text\": \"If you kill him within 4 rounds of Combat, turn to 94.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"339\",\n      \"target_id\": \"203\",\n      \"edge_text\": \"If you are still fighting after 4 rounds of Combat, turn to 203.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    },\n    {\n      \"source_id\": \"339\",\n      \"target_id\": \"7\",\n      \"edge_text\": \"You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.\",\n      \"transition_type\": \"explicit_choice\",\n      \"realisation_value\": null,\n      \"semantic_risk\": null,\n      \"semantic_morality\": null,\n      \"semantic_action\": null,\n      \"parsing_confidence\": 5\n    }\n  ]\n}"
+    }
+  ]
+}
