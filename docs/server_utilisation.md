@@ -245,7 +245,7 @@ Ce fichier YAML impose la structure JSON de sortie.
 task: "Extract narrative transitions and edges from gamebook paragraphs."
 
 benchmark:
-  filename: corpus_val_gold.json
+  filename: LW01.calibration_gold.json
 
 generation:
   max_new_tokens: 1500
@@ -350,6 +350,44 @@ dcsr-llm extract \
   --corpus-name corpus_val \
   --config-file-name config_extract_benchmark \
   --preprompt-file-name preprompt_corpus \
+  --think-mode off
+```
+
+Place des fichiers :
+
+Corpus "dcsr-llm/data/extract/LW01_calibration.json"
+Corpus_gold "dcsr-llm/data/extract/LW01_calibration_gold.json"
+Config: "dcsr-llm/configs/LW01_calibration_config.yaml"
+Preprompt: "dcsr-llm/configs/LW01_calibration_prepompt"
+
+
+```bash
+#SBATCH --mail-type ALL 
+#SBATCH --mail-user guillaume.guex@unil.ch
+#SBATCH --job-name edge_extraction
+#SBATCH --output edge_extraction_%j.out
+#SBATCH --nodes 1
+#SBATCH --ntasks 1
+#SBATCH --cpus-per-task 12
+#SBATCH --mem 64G
+#SBATCH --time 12:00:00
+#SBATCH --partition gpu
+#SBATCH --gres gpu:1
+
+module purge
+module load python/3.11.14
+module load gcc
+module load cuda
+
+cd /scratch/$USER/dcsr-llm
+source .venv/bin/activate
+
+# Lancement de l'extraction SANS l'option benchmark
+dcsr-llm extract \
+  --model-name Qwen/Qwen3-8B \
+  --corpus-name LW01_calibration.json \
+  --config-file-name LW01_calibration_config \
+  --preprompt-file-name LW01_calibration_prepompt \
   --think-mode off
 ```
 
