@@ -452,9 +452,8 @@ scancel -u $USER
 ```yalm
 task: |
   You are an expert data analyst specializing in interactive fiction and gamebook network topology.
-  Your task is to analyze paragraphs from "Lone Wolf" gamebook and extract all outgoing transitions (edges) to other paragraphs, which are strictly enclosed in <choice> tags.
-  Ignore narrative deaths or dead-ends that do not lead to a specific target_id.
-  You must output ONLY a valid JSON array. Do not add any conversational text before or after the JSON.
+  Your task is to analyze paragraphs from "Lone Wolf" gamebook and extract all outgoing transitions (edges) to other paragraphs, which are strictly enclosed in <choice> tags. If there is no <choice> tag, output an empty array in the edges field.
+  Return ONLY a single valid JSON object with the edges field containing an array of objects following the schema below. Do not add any conversational text before or after the JSON.
 
 benchmark:
   filename: LW01.calibration_gold.json
@@ -466,8 +465,8 @@ fields:
   - name: edges
     type: array
     description: |
-      A list of all outgoing transitions connecting this node to other nodes. 
-      Each element in the array MUST be an object containing exactly the following keys, strictly respecting these conditional rules:
+      An array of all outgoing transitions connecting this node to other nodes. 
+      Each element in the array MUST be an JSON object containing exactly the following keys, strictly respecting these conditional rules:
       
       [FIELD DEFINITIONS & LOGICAL RULES]
       1. source_id (string): The source paragraph number.
@@ -478,7 +477,7 @@ fields:
          - "forced"          : Automatic progression with no alternatives.
          - "stochastic"      : A condition based on a random roll (e.g., Random Number Table).
          - "conditional"     : A condition based on a Kai discipline, an object, endurance, or combat outcome.
-         - "complex"         : Combats or choices that do not fit the categories above.
+         - "complex"         : Combats or choices that do not fit the categories above. If there is a risk of death, put this category.
       
       5. realisation_value (string | null):
          - IF transition_type is "stochastic" or "conditional" -> Extract the exact raw text triggering it.
@@ -496,7 +495,10 @@ fields:
          - IF transition_type is "explicit_choice" -> Evaluate as: "physical", "neutral", or "tactical".
          - IF transition_type is anything else -> You MUST output null.
       
-      9. parsing_confidence (int): Your confidence score from 1 (low) to 5 (certain).
+      9. warnings (string | null): 
+         CRITICAL: 
+         - IF the extraction perfectly matches standard rules and there is no ambiguity, you MUST output null. 
+         - ONLY output a string explaining the issue IF the text is ambiguous, a choice seems broken, or if the paragraph has a very special structural feature.
       
       [EXAMPLES (Few-Shot)]
       INPUT 1:
@@ -505,7 +507,7 @@ fields:
           "text": "You must make haste for you sense it is not safe to linger by the smoking remains of the ruined monastery. The black-winged beasts could return at any moment. You must set out for the Sommlending capital of Holmgard and tell the King the terrible news of the massacre: that the whole élite of Kai warriors, save yourself, have been slaughtered. Without the Kai Lords to lead her armies, Sommerlund will be at the mercy of their ancient enemy, the Darklords. Fighting back tears, you bid farewell to your dead kinsmen. Silently, you promise that their deaths will be avenged. You turn away from the ruins and carefully descend the steep track. At the foot of the hill, the path splits into two directions, both leading into a large wood. <choice>If you wish to use your Kai Discipline of Sixth Sense, turn to 141.</choice> <choice>If you wish to take the right path into the wood, turn to 85.</choice> <choice>If you wish to follow the left track, turn to 275.</choice>"
       }
 
-      OUTPUT 1:
+      EDGES FIELD OUTPUT 1:
       [
         {
           "source_id": "1",
@@ -516,7 +518,7 @@ fields:
           "semantic_risk": null,
           "semantic_morality": null,
           "semantic_action": null,
-          "parsing_confidence": 4
+          "warnings": null
         },
         {
           "source_id": "1",
@@ -527,7 +529,7 @@ fields:
           "semantic_risk": "neutral",
           "semantic_morality": "neutral",
           "semantic_action": "neutral",
-          "parsing_confidence": 4
+          "warnings": null
         },
         {
           "source_id": "1",
@@ -538,7 +540,7 @@ fields:
           "semantic_risk": "neutral",
           "semantic_morality": "neutral",
           "semantic_action": "neutral",
-          "parsing_confidence": 4
+          "warnings": null
         }
       ]
 
@@ -548,7 +550,7 @@ fields:
           "text": "As you dash through the thickening trees, the shouts of the Giaks begin to fade behind you. You have nearly outdistanced them completely, when you crash headlong into a tangle of low branches. Pick a number from the Random Number Table. <choice>If you have picked a number 0–4, turn to 343.</choice> <choice>If you have picked a number 5–9, turn to 276.</choice>"
       }
 
-      OUTPUT 2:
+      EDGES FIELD OUTPUT 2:
       [
         {
           "source_id": "2",
@@ -559,7 +561,7 @@ fields:
           "semantic_risk": null,
           "semantic_morality": null,
           "semantic_action": null,
-          "parsing_confidence": 5
+          "warnings": null
         },
         {
           "source_id": "2",
@@ -570,7 +572,50 @@ fields:
           "semantic_risk": null,
           "semantic_morality": null,
           "semantic_action": null,
-          "parsing_confidence": 5
+          "warnings": null
+        }
+      ]
+
+      INPUT 21:
+      {
+          "id": 21,
+          "text": "You have ridden about two miles into the tangle of trees when the ground becomes very marshy. Pick a number from the Random Number Table. <choice>If it is below 5, your horse has suddenly plunged into thick mud up to its belly. If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.</choice> <choice>If you are stuck, pick another number from the Random Number Table. If this time the number is 7 or less, the mud engulfs you up to your armpits. Your horse gives one last despairing scream as its muzzle disappears into the bubbling mud. If you scored above 7, you drag yourself onto firm ground and turn to 189.</choice> <choice>If not, then this is your last chance! If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim. Your life and your mission end here. But if you have picked a 9, turn to 312.</choice>"
+      }
+
+      EDGES FIELD OUTPUT 21:
+      [
+        {
+          "source_id": "21",
+          "target_id": "189",
+          "edge_text": "If it is below 5, your horse has suddenly plunged into thick mud up to its belly. If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.",
+          "transition_type": "stochastic",
+          "realisation_value": null, 
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "warnings": null
+        },
+        {
+          "source_id": "21",
+          "target_id": "189",
+          "edge_text": "If you are stuck, pick another number from the Random Number Table. If this time the number is 7 or less, the mud engulfs you up to your armpits. Your horse gives one last despairing scream as its muzzle disappears into the bubbling mud. If you scored above 7, you drag yourself onto firm ground and turn to 189.",
+          "transition_type": "stochastic",
+          "realisation_value": null, 
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "warnings": "This choice is only possible if the first choice failed"
+        },
+        {
+          "source_id": "21",
+          "target_id": "312",
+          "edge_text": "If not, then this is your last chance! If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim. Your life and your mission end here. But if you have picked a 9, turn to 312.",
+          "transition_type": "stochastic",
+          "realisation_value": null, 
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "warnings": "This choice is only possible if the first choice failed. Contain an implicit dead end (death)"
         }
       ]
 
@@ -580,7 +625,7 @@ fields:
           "text": "Ahead of you, you can see a fierce battle raging across a stone bridge. The clash of steel and the cries of men and beasts echo through the forest. In the midst of the fighting, you see Prince Pelathar, the King’s son. He is in combat with a large grey Gourgaz who is wielding a black axe above his scaly head. Suddenly, the Prince falls wounded—a black arrow in his side. <choice>If you wish to defend the fallen Prince, turn to 255.</choice> <choice>If you wish to run into the forest, turn to 306.</choice>"
       }
 
-      OUTPUT 97:
+      EDGES FIELD OUTPUT 97:
       [
         {
           "source_id": "97",
@@ -591,7 +636,7 @@ fields:
           "semantic_risk": "reckless",
           "semantic_morality": "noble",
           "semantic_action": "physical",
-          "parsing_confidence": 4
+          "warnings": null
         },
         {
           "source_id": "97",
@@ -602,7 +647,7 @@ fields:
           "semantic_risk": "cautious",
           "semantic_morality": "selfish",
           "semantic_action": "neutral",
-          "parsing_confidence": 4
+          "warnings": null
         }
       ]
 
@@ -612,7 +657,7 @@ fields:
           "text": "Reaching for your weapon you manage to hack your way through the tangle of wood and twisted branches to the clearer forest beyond. Your cloak is torn in several places and your right leg is badly bruised above the knee. <choice>Lose 1 ENDURANCE point and turn to 213.</choice>"
       }
 
-      OUTPUT 276:
+      EDGES FIELD OUTPUT 276:
       [
         {
           "source_id": "276",
@@ -623,7 +668,7 @@ fields:
           "semantic_risk": null,
           "semantic_morality": null,
           "semantic_action": null,
-          "parsing_confidence": 5
+          "warnings": "Loss of 1 ENDURANCE point during the transition"
         }
       ]
 
@@ -633,29 +678,29 @@ fields:
           "text": "You quickly sidestep just as a long dagger shatters the glass top of the counter. A swarthy youth is attacking you and you must fight him. Robber: COMBAT SKILL 13   ENDURANCE 20 <choice>If you kill him within 4 rounds of Combat, turn to 94.</choice> <choice>If you are still fighting after 4 rounds of Combat, turn to 203.</choice> <choice>You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.</choice>"
       }
 
-      OUTPUT 339:
+      EDGES FIELD OUTPUT 339:
       [
         {
           "source_id": "339",
           "target_id": "94",
           "edge_text": "If you kill him within 4 rounds of Combat, turn to 94.",
-          "transition_type": "complex",
-          "realisation_value": null, 
+          "transition_type": "conditional",
+          "realisation_value": "If you kill him within 4 rounds of Combat", 
           "semantic_risk": null,
           "semantic_morality": null,
           "semantic_action": null,
-          "parsing_confidence": 3
+          "warnings": "Based on a rare condition : combat speed"
         },
         {
           "source_id": "339",
           "target_id": "203",
           "edge_text": "If you are still fighting after 4 rounds of Combat, turn to 203.",
-          "transition_type": "complex",
-          "realisation_value": null, 
+          "transition_type": "conditional",
+          "realisation_value": "If you are still fighting after 4 rounds of Combat", 
           "semantic_risk": null,
           "semantic_morality": null,
           "semantic_action": null,
-          "parsing_confidence": 3
+          "warnings": "Based on a rare condition : combat speed"
         },
         {
           "source_id": "339",
@@ -666,7 +711,7 @@ fields:
           "semantic_risk": "cautious",
           "semantic_morality": "neutral",
           "semantic_action": "physical",
-          "parsing_confidence": 3
+          "warnings": null
         }
       ]
 ```
