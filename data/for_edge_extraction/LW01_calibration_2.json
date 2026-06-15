@@ -1,0 +1,202 @@
+[
+  {
+    "id": "1",
+    "text": "You must make haste for you sense it is not safe to linger by the smoking remains of the ruined monastery. The black-winged beasts could return at any moment. You must set out for the Sommlending capital of Holmgard and tell the King the terrible news of the massacre: that the whole élite of Kai warriors, save yourself, have been slaughtered. Without the Kai Lords to lead her armies, Sommerlund will be at the mercy of their ancient enemy, the Darklords. Fighting back tears, you bid farewell to your dead kinsmen. Silently, you promise that their deaths will be avenged. You turn away from the ruins and carefully descend the steep track. At the foot of the hill, the path splits into two directions, both leading into a large wood. <choice>If you wish to use your Kai Discipline of Sixth Sense, turn to 141.</choice> <choice>If you wish to take the right path into the wood, turn to 85.</choice> <choice>If you wish to follow the left track, turn to 275.</choice>"
+  },
+  {
+    "id": "2",
+    "text": "As you dash through the thickening trees, the shouts of the Giaks begin to fade behind you. You have nearly outdistanced them completely, when you crash headlong into a tangle of low branches. Pick a number from the Random Number Table. <choice>If you have picked a number 0–4, turn to 343.</choice> <choice>If you have picked a number 5–9, turn to 276.</choice>"
+  },
+  {
+    "id": "5",
+    "text": "After about an hour of walking, the track slowly bears round to the east. You reach a shallow ford where a fast-flowing brook runs on a steep rocky course towards the south. Just beyond the ford is a junction where the track meets a wider path running north to south. Realizing that the north path will take you away from the capital, you turn right at the junction and head south. <choice>\nTurn to 111.</choice>"
+  },
+  {
+    "id": "6",
+    "text": "In the distance you can hear the sound of horses galloping nearer. You crouch behind a tree and wait as the riders come closer. They are the cavalry of the King’s Guard wearing the white uniforms of His Majesty’s army. <choice>If you wish to call them, turn to 183.</choice> <choice>If you wish to let them pass and then continue on your way through the forest, turn to 200.</choice>"
+  },
+  {
+    "id": "12",
+    "text": "The bodyguard looks at you with great suspicion and then slams the door shut. You can hear the sound of voices inside the caravan. Suddenly the door swings open and the face of a wealthy merchant appears. He demands 10 Gold Crowns as payment for the ride. <choice>If you have 10 Gold Crowns and wish to pay him, turn to 262.</choice> <choice>If you do not have enough Gold Crowns or do not wish to pay him, turn to 247.</choice>"
+  },
+  {
+    "id": "21",
+    "text": "You have ridden about two miles into the tangle of trees when the ground becomes very marshy. Pick a number from the Random Number Table. <choice>If it is below 5, your horse has suddenly plunged into thick mud up to its belly. If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.</choice> <choice>If you are stuck, pick another number from the Random Number Table. If this time the number is 7 or less, the mud engulfs you up to your armpits. Your horse gives one last despairing scream as its muzzle disappears into the bubbling mud. If you scored above 7, you drag yourself onto firm ground and turn to 189.</choice> <choice>If not, then this is your last chance! If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim. Your life and your mission end here. But if you have picked a 9, turn to 312.</choice>"
+  },
+  {
+    "id": "23",
+    "text": "The corridor soon widens into a large hall. At the far end, a stone staircase leads up to a huge door. Two black candles on either side of the stone steps dimly illuminate the chamber. You notice that no wax has melted, and as you get nearer you can feel that they give off no heat. Ancient engravings cover the stone surfaces of the walls. Anxious to leave this evil tomb, you examine the door for a latch. An ornate pin appears to lock the door, but there is also a keyhole in the lockplate. <choice>If you have a Golden Key and wish to use it, turn to 326.</choice> <choice>If you have the Kai Discipline of Mind Over Matter, turn to 151.</choice> <choice>If you wish to remove the pin, turn to 337.</choice>"
+  },
+  {
+    "id": "25",
+    "text": "You land with such a crash on the opposite roof, that the wind is knocked out of you and you lie flat on your back with your head in a spin. It takes a minute or so for you to realize that you’ve made it and are perfectly safe. When you are sure you are all right, you jump up and let out a shout for joy at your skill and daring. Quickly you find a way across the roof and climb down a long drainpipe to the street below. You see the large iron doors of the citadel open, and a wagon drawn by two large horses tries to leave. The horses are frightened by the noisy crowd and they both rear up, causing the wagon to smash a front wheel against the door. In the confusion, you see a chance to enter and quickly slip inside just as the guards slam the doors shut. <choice>\nTurn to 139.</choice>"
+  },
+  {
+    "id": "27",
+    "text": "You walk along this path for over an hour, carefully watching the sky above you in case the Kraan attack again. Up ahead, a large tree has fallen across the path. As you approach, you can hear voices coming from the other side of the massive trunk. <choice>If you choose to attack, turn to 250.</choice> <choice>If you choose to listen to what the voices say, turn to 52.</choice>"
+  },
+  {
+    "id": "32",
+    "text": "You have ridden about three miles when, in the distance, you spot the unmistakable silhouette of five large Doomwolves. Riding on their backs are Giaks. They seem to be going on ahead to where the path leads down into an open meadow. Suddenly, one of the Giaks leaves the others and begins to ride back along the path towards you. <choice>If you wish to hide in the undergrowth and let him pass, turn to 176.</choice> <choice>If you wish to fight him, turn to 340.</choice>"
+  },
+  {
+    "id": "68",
+    "text": "After a short walk, you reach a junction where a path crosses your present route heading from west to east. <choice>If you wish to turn west, go to 130.</choice> <choice>If you wish to head east, turn to 15.</choice>"
+  },
+  {
+    "id": "69",
+    "text": "You are very near a friendly village. <choice>Avoid the gallowbrush and turn to 272.</choice>"
+  },
+  {
+    "id": "71",
+    "text": "You are winded but not hurt. You have fallen fifteen feet or so through the roof of an underground tomb. The walls are sheer and you cannot climb them. An arched tunnel leads out of the tomb towards the east, in front of which lies the sarcophagus of some ancient noble. <choice>If you wish to use the Kai Discipline of Sixth Sense, turn to 65.</choice> <choice>If you wish to open the sarcophagus to see if it contains any treasure, turn to 242.</choice> <choice>If you wish to leave via the tunnel, turn to 104.</choice>"
+  },
+  {
+    "id": "74",
+    "text": "The Kraan and its riders land on the track barely ten feet from where you are hidden. The Giaks leap from the scaly backs of the Kraan and move towards you, their spears raised to strike. You have been seen. <choice>If you decide to fight them, turn to 138.</choice> <choice>If you decide to run deeper into the forest without delay, turn to 281.</choice>"
+  },
+  {
+    "id": "83",
+    "text": "You have run about a mile when three soldiers appear from beneath a small footbridge. They demand that you halt and drop your weapons and equipment. They are bloodstained and unshaven. Their leader is wearing the tunic of a soldier of the Toran garrison. <choice>If you possess the Kai Discipline of Sixth Sense, turn to 45.</choice> <choice>If you wish to do as they say, turn to 205.</choice> <choice>If you wish to prepare to fight them, turn to 180.</choice> <choice>If you demand to know what they want, turn to 232.</choice>"
+  },
+  {
+    "id": "87",
+    "text": "Focusing your powers on the lock, you try to visualize the inner mechanism. Gradually its image appears in your mind’s eye. It is old and corroded but it still functions. You are in danger of losing your concentration when a subtle click confirms that your effort has not been in vain. The pin is an easier task. Slowly it rises out of the lock and falls to the floor. The granite door swings towards you on hidden hinges and the grey half-light of the Graveyard floods into the tomb. The exit is overgrown with graveweed and you suffer many small cuts to your face and hands as you fight your way through to the surface. You are startled by a sudden noise. You turn to see the disembodied head of a corpse laughing at you. In blind panic, you race through the eerie necropolis towards the southern gate. <choice>\nTurn to 61.</choice>"
+  },
+  {
+    "id": "90",
+    "text": "Night falls and you are soon engulfed in total darkness. To press on would be useless, for you would be sure to lose your way. Tethering your horse to a tree, you pull your green Kai cloak about you and fall into a restless sleep. <choice>\nTurn to 18.</choice>"
+  },
+  {
+    "id": "95",
+    "text": "You soon stumble upon a narrow forest track running from north to south. <choice>If you wish to set off along the track towards the north, turn to 240.</choice> <choice>If you wish to go south instead, turn to 5.</choice>"
+  },
+  {
+    "id": "97",
+    "text": "Ahead of you, you can see a fierce battle raging across a stone bridge. The clash of steel and the cries of men and beasts echo through the forest. In the midst of the fighting, you see Prince Pelathar, the King’s son. He is in combat with a large grey Gourgaz who is wielding a black axe above his scaly head. Suddenly, the Prince falls wounded—a black arrow in his side. <choice>If you wish to defend the fallen Prince, turn to 255.</choice> <choice>If you wish to run into the forest, turn to 306.</choice>"
+  },
+  {
+    "id": "100",
+    "text": "The cold corridor suddenly makes an abrupt turning towards the east. You notice a greenish glow that lights the tunnel in the far distance. As you creep nearer you can see that the corridor opens out into a larger chamber. The strange light seems to emanate from a large bowl resting upon the top of a granite throne. On a plinth in front of the throne stands a statue. It looks like a winged serpent curved in the shape of an ‘S’. <choice>If you wish to sit on the throne, turn to 161.</choice> <choice>If you wish to examine the statue, turn to 133.</choice> <choice>If you wish to look for an exit from this chamber, turn to 257.</choice>"
+  },
+  {
+    "id": "103",
+    "text": "The overgrown path leads to a junction where another track branches off towards the east. <choice>If you wish to take this path, turn to 13.</choice> <choice>If you would rather continue towards the northeast, turn to 287.</choice>"
+  },
+  {
+    "id": "104",
+    "text": "The walls are dank and slimy. The stale air chokes you and cobwebs brush across your face. You can feel panic grip your stomach, as the tunnel gets darker and darker. You reach a junction where the tunnel meets a corridor leading from north to south. <choice>If you wish to turn north, go to 26.</choice> <choice>If you wish to go south, turn to 100.</choice>"
+  },
+  {
+    "id": "114",
+    "text": "You coax the horse to lie down and begin to cover him and yourself with branches and dead leaves. You hear the wings of the Kraan as it passes over the trees. It returns and circles above you, but soon retreats back across the lake. You decide to leave now, in case it returns with some of its friends. <choice>\nTurn to 239.</choice>"
+  },
+  {
+    "id": "124",
+    "text": "Inside the box you find 15 Gold Crowns and a Silver Key. If you wish to keep the key, remember to mark it on your Action Chart. <choice>You can continue to investigate the tunnel by turning to 211.</choice> <choice>Or you may leave and descend the hill by turning to 106.</choice>"
+  },
+  {
+    "id": "125",
+    "text": "The path opens out into a large clearing. You notice strange claw prints in the earth. Kraan have landed here. By the number of prints and by the size of the area disturbed, you judge that at least five of the foul creatures landed here in the last twelve hours. You see two exits on the far side of the clearing. One leads west, the other south. <choice>If you have the Kai Discipline of Tracking, turn to 301.</choice> <choice>If you wish to take the south path, turn to 27.</choice> <choice>If you wish to take the west path, turn to 214.</choice>"
+  },
+  {
+    "id": "128",
+    "text": "Carefully parting the dense foliage, you are horrified by the sight that meets you. In a small clearing ahead, three Giaks have tied a man to a wooden stake and are setting fire to a mass of brushwood bundled at his feet. You recognize his tunic as that of a Border Ranger, one of the King’s men who police the kingdom near the Durncrag Mountains of the west. He has been badly beaten and is nearly unconscious. <choice>If you have the Kai Discipline of Hunting, turn to 297.</choice> <choice>If you do not, you must attack the Giaks now in order to save the ranger’s life. Turn to 336.</choice>"
+  },
+  {
+    "id": "129",
+    "text": "You reach the main gates of the capital, and stare in awe at the height of the city’s walls. Two hundred feet high, the walls of Holmgard have withstood the ravages of both time and the Darklords. You and the officer race through the tunnel of the inner gatehouse, one hundred yards in length, and finally halt outside the doorway of the main watchtower. Great crowds of soldiers and civilians are running to and fro. <choice>If you wish to continue following the officer, turn to 3.</choice> <choice>If you feel that you stand a better chance of making your way to the King’s citadel on your own, turn to 144.</choice>"
+  },
+  {
+    "id": "131",
+    "text": "You have covered about a quarter of a mile when you hear shouting and a noise like thunderclaps ahead. Edging nearer, you soon make out a clearing that you recognize to be the site of the ruins of Raumas, an ancient forest temple. A war party of Giaks, some twenty-five to thirty strong, are attacking the ruins from all sides. Many more of the Giaks are dead or dying among the broken pillars of marble, but still they assault whatever is hidden inside. Suddenly, a bolt of blue lightning rips through the front rank of Giaks sending the armour-clad creatures tumbling in all directions. A Giak, taller than the others and dressed from head to foot in black chainmail, curses at his troops as he whips them forward with a barbed flail. With weapon ready, you move to the edge of the clearing, under cover of the thick foliage, and try to catch a glimpse of the defenders. To your amazement, the ruins are being defended by a young man no older than yourself. You recognize his sky-blue robes, embroidered with stars. He is a young theurgist of the Magicians’ Guild of Toran: an apprentice in magic. Five Giaks charge forward, their spears raised to stab the apprentice as he hurriedly retreats deeper into the ruins. You see him turn and raise his left hand just before a bolt of blue flame shoots from his fingertips into the snarling Giak soldiers. Close to where you are hidden, you see a Giak scuttle past and climb one of the pillars of the temple. He has a long curved dagger in his mouth and he is about to jump on the young wizard standing below. <choice>If you wish to shout a warning to the wizard, turn to 241.</choice> <choice>If you wish to run forward and attack the Giak when he jumps, turn to 55.</choice> <choice>If you wish to pick up a chunk of temple marble and throw it at the Giak’s head, turn to 302.</choice> <choice>Or if you would rather turn and leave the battle area and run back into the woods, turn to 101.</choice>"
+  },
+  {
+    "id": "144",
+    "text": "You fight your way through the press of bodies along the main street towards the citadel in the distance. City folk are rushing to and fro in the grip of panic, as the cries of Kraan are heard circling high above. In the crush, one item is stolen from your Backpack. If you no longer have a Backpack or if you have no Backpack Items, you lose a Weapon. Remember to take this off your Action Chart. A runaway horse and cart career past and knock you into a doorway. You are stunned and you lose 2 ENDURANCE points. As you stagger to your feet, the door bursts open and a decrepit old man attacks you with a meat cleaver. He is quite insane and you must fight him or take evasive action. <choice>If you choose to fight, turn to 63.</choice> <choice>If you wish to evade a fight, turn to 217.</choice>"
+  },
+  {
+    "id": "153",
+    "text": "Before you are the tall grey-white walls and glimmering spires of Holmgard, the city’s banners fluttering from the battlements in the fresh morning breeze. Stretching out towards the west, the River Eledil traces its course from the mountains of the Durncrag Range to the Holmgulf. But below the mountain peaks you can see a vast black army marching relentlessly on towards the capital. To your right you can see the highway heading off over the rolling plain towards Holmgard. At a gallop you could make the outer fieldworks of the city’s defences in less than an hour, but you would be in the open for most of the time and vulnerable to attack by Kraan. Directly ahead of you, a wide river drifts sluggishly towards the Eledil. If you abandoned your horse, you could swim towards the outer defences under cover of the river banks. Or there is a final alternative. To your left lies the Graveyard of the Ancients. These tombs and crumbling monuments to a forgotten age would conceal your approach but it is a forbidden area. Many are the unnamed horrors that lie there in restless sleep, waiting to consume the unwary trespasser. <choice>If you will try your luck by the highway, turn to 202.</choice> <choice>If you feel that you stand a better chance of reaching the capital via the river then turn to 135.</choice> <choice>Or if you are brave enough to risk the unknown perils of the Graveyard of the Ancients, turn to 329.</choice>"
+  },
+  {
+    "id": "155",
+    "text": "As you approach, the group of people stop talking. You can see by their expressions that they recognize your green Kai cloak. Slowly, one of the men extends his hand in friendship and says, ‘My Lord, we had heard a rumour that the Kai were destroyed. Heaven be praised that it is not so. We feared all was lost.’ You do not tell them of the destruction of the monastery, for they are refugees from Toran and have lost everything they owned. Their only hope now is that the Kai Lords will lead an army to victory. You learn that the northern port was attacked from both air and sea, and that the forces of the Darklords far outnumbered the King’s brave garrison. You reassure them that Sommerlund will not fall and wish them luck on their journey ahead. <choice>\nTurn to 70.</choice>"
+  },
+  {
+    "id": "175",
+    "text": "Waving your arms at the approaching cavalry, you recognize them to be Border Rangers of the King’s army, tough woodsmen who police the troubled western frontier of the kingdom. Your relief at seeing them soon fades when you realize that they are fleeing from a pack of Doomwolves with snarling Giak riders. Black arrows are dropping all around the rangers, as the vicious Doomwolves get nearer and nearer. <choice>If you possess the Kai Discipline of Camouflage, turn to 182.</choice> <choice>If you wish to take cover and hide, turn to 41.</choice> <choice>If you wish to make for the other bank, turn to 116.</choice>"
+  },
+  {
+    "id": "194",
+    "text": "You sprint towards the wagon. People are running everywhere in panic as the Kraan make their attack, carrying their poor victims off into the darkening sky. A large Kraan is hovering above the wagon and three snarling Giaks drop from its back onto the startled horses. You must fight them or leave the wagon and run to the safety of a nearby farmhouse. <choice>If you wish to fight the Giaks, turn to 208.</choice> <choice>If you wish to run to the farmhouse, turn to 148.</choice>"
+  },
+  {
+    "id": "203",
+    "text": "You suddenly feel a searing pain shoot through your chest as something explodes against you in a shower of red sparks. You lose 10 ENDURANCE points. Through the smoke, the Sage is preparing to throw more explosives at you. <choice>If you have 10 or more ENDURANCE points left, turn to 80.</choice> <choice>If you now have less than 10 ENDURANCE points, turn to 344.</choice>"
+  },
+  {
+    "id": "220",
+    "text": "The bodyguard unsheathes a scimitar and lunges for your head. Bodyguard: COMBAT SKILL 11   ENDURANCE 20 <choice>If you win, turn to 24.</choice> <choice>If you wish to evade combat at any time during the fight, you can jump from the speeding caravan by turning to 234.</choice>"
+  },
+  {
+    "id": "227",
+    "text": "You are now up to your waist in slimy water. The air is thick with small insects that sting your face and clog your nose. Something wraps itself around your leg. It is a Marshviper and you must fight it. Marshviper: COMBAT SKILL 16   ENDURANCE 6 <choice>If you lose any ENDURANCE points in the combat, turn to 271.</choice> <choice>If you kill it without losing any ENDURANCE points, turn to 348.</choice>"
+  },
+  {
+    "id": "245",
+    "text": "Arrows hit the water above you, and drop harmlessly past as you swim beneath the surface towards the opposite bank. Quickly you wade out of the river and dash for the trees. You are now out of range of the Giaks, who remount their Doomwolves and continue their chase. <choice>\nTurn to 190.</choice>"
+  },
+  {
+    "id": "248",
+    "text": "You reach the base of the hill and hurry into the forest. After only a few minutes you discover an old forest track. <choice>If you wish to follow this track north, turn to 44.</choice> <choice>If you wish to follow this track east, turn to 300.</choice>"
+  },
+  {
+    "id": "253",
+    "text": "The Doomwolves are soon on you and you must fight them one at a time. Doomwolf 1: COMBAT SKILL 13   ENDURANCE 24 Doomwolf 2: COMBAT SKILL 14   ENDURANCE 23 Doomwolf 3: COMBAT SKILL 14   ENDURANCE 22 Doomwolf 4: COMBAT SKILL 15   ENDURANCE 21 <choice>If you kill them all in battle, turn to 278.</choice>"
+  },
+  {
+    "id": "260",
+    "text": "Swimming towards the bank, you can see the ranger spread-eagled at the water’s edge. You reach him but only to find that he has broken his neck in the fall and is dead. Suddenly, two Giaks jump on you from above and you must fight them. You are unarmed and must fight the Giaks with your bare hands. Deduct 4 points from your COMBAT SKILL and fight them one at a time. Giak 1: COMBAT SKILL 11   ENDURANCE 18 Giak 2: COMBAT SKILL 12   ENDURANCE 17 <choice>If you win, turn to 156.</choice>"
+  },
+  {
+    "id": "276",
+    "text": "Reaching for your weapon you manage to hack your way through the tangle of wood and twisted branches to the clearer forest beyond. Your cloak is torn in several places and your right leg is badly bruised above the knee. <choice>Lose 1 ENDURANCE point and turn to 213.</choice>"
+  },
+  {
+    "id": "294",
+    "text": "Staying underwater for as long as you can, you finally surface to see the Giaks far behind you. You have lost your Weapon(s) and Backpack but at least you are still alive. You wade out of the muddy water and continue your journey under cover of the trees that line the right-hand bank. Pick a number from the Random Number Table. <choice>If the number you pick is 0–2, turn to 230.</choice> <choice>If the number is 3–6, turn to 190.</choice> <choice>If the number is 7–9, turn to 321.</choice>"
+  },
+  {
+    "id": "295",
+    "text": "You have continued your journey for about fifteen minutes when suddenly a black arrow whistles past your head and embeds itself in a tree. Instinctively you duck and draw your weapon. <choice>If you wish to remain where you are in order to try to spot the hidden archer, turn to 185.</choice> <choice>If you wish to run for the cover of denser undergrowth, turn to 92.</choice>"
+  },
+  {
+    "id": "299",
+    "text": "You soon realize that you are walking deeper into a wooded marsh. To continue in this direction will be slow and hazardous. <choice>If you wish to continue, turn to 227.</choice> <choice>If you wish to change direction and head towards firmer ground, turn to 95.</choice>"
+  },
+  {
+    "id": "303",
+    "text": "The forest here is sparse and hilly. It does not give much cover from an attack from the air. You move as quickly as you can from tree to tree, to avoid the Kraan but you can hear the sound of Doomwolves close behind. <choice>If you have the Kai Discipline of Camouflage, turn to 237.</choice> <choice>If you do not, turn to 72.</choice>"
+  },
+  {
+    "id": "331",
+    "text": "Surrounded by thorny briars and closely packed roots, you see the entrance of a tunnel disappearing into the hillside beyond. It is approximately seven feet in height and just over ten feet wide. As you get closer, you can feel a slight breeze coming from the inky blackness. If the other end of this tunnel emerges on the far side of the hill, it could save you many hours of difficult climbing. But it could also harbour unknown danger. <choice>If you wish to enter the tunnel, turn to 170.</choice> <choice>If you would prefer to climb the hillside, turn to 280.</choice>"
+  },
+  {
+    "id": "333",
+    "text": "You have cut your way through the thick undergrowth for nearly half an hour when you hear the beat of wings high above the trees. Looking up you can just make out the shape of a Kraan approaching from the north. It is one of the monsters that attacked the monastery and on its back are two grey-skinned creatures armed with long spears. These are Mountain Giaks—evil servants of the Darklords, full of hatred and malice. Many centuries ago, their ancestors were used by the Darklords to build the infernal city of Helgedad, which lies in the volcanic wastelands beyond the Durncrag range of mountains. The construction of the city was long and torturous and only the strongest of the Giaks survived the heat and poisonous atmosphere of Helgedad. Hidden by the trees, you freeze, keeping absolutely still as the Kraan passes overhead and disappears towards the south. When you are sure that it has gone, you move off once again into the forest. <choice>\nTurn to 131.</choice>"
+  },
+  {
+    "id": "334",
+    "text": "As the stream vanishes up into the rocky hillside, you can see on the track above four soldiers and their officer. They wear the uniform of the King’s army. <choice>If you wish to use the Kai Discipline of Sixth Sense, turn to 48.</choice> <choice>If you wish to use the Kai Discipline of Camouflage and wait for them to pass, turn to 73.</choice> <choice>If you wish to approach them, turn to 162.</choice>"
+  },
+  {
+    "id": "339",
+    "text": "You quickly sidestep just as a long dagger shatters the glass top of the counter. A swarthy youth is attacking you and you must fight him. Robber: COMBAT SKILL 13   ENDURANCE 20 <choice>If you kill him within 4 rounds of Combat, turn to 94.</choice> <choice>If you are still fighting after 4 rounds of Combat, turn to 203.</choice> <choice>You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.</choice>"
+  },
+  {
+    "id": "343",
+    "text": "You are held by the mass of tangled branches and roots. Eventually you free your right hand, grab your weapon, and hack your way slowly through the foliage to the clearer forest beyond. Your cloak is torn in several places and your left arm is cut and badly bruised above the elbow. <choice>Lose 2 ENDURANCE points and turn to 213.</choice>"
+  }
+]

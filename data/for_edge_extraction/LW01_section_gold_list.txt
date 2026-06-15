@@ -1,0 +1,50 @@
+1 ok
+2 ok
+5 ok
+6 ok
+12 ok
+21 ok
+23 ok
+25 ok
+27 ok
+32 ok
+68 ok
+69 ok
+71 ok
+74 ok
+83 ok (to observe)
+87 ok
+90 ok
+95 ok
+97 ok
+100 ok
+103 ok
+104 ok
+114 ok
+124 ok
+125 ok
+128 ok
+129 ok (to observe)
+131 ok
+144 ok
+153 ok
+155 ok
+175 ok (to observe)
+194 ok
+203 ok
+220 ok
+227 ok
+245 ok
+248 ok
+253 ok (to observe)
+260 ok (to observe)
+276 ok
+294 ok
+295 ok
+299 ok 
+303 ok
+331 ok 
+333 ok
+334 ok
+339 ok 
+343 ok (to observe)
