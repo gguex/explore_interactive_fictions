@@ -3,7 +3,7 @@ import json
 
 # 1. Configuration des chemins
 fichier_json = "data/for_edge_extraction/LW01_calibration_gold.json"
-fichier_csv = "data/for_edge_extraction/LW01_calibration_edges_gold.csv"  # Le nom de l'export voulu
+fichier_csv = "data/for_edge_extraction/LW01_calibration_edges_gold_new.csv"  # Le nom de l'export voulu
 
 # 2. Définition stricte des colonnes (ton schéma Pydantic)
 colonnes = [
