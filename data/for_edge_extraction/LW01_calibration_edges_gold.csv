@@ -6,9 +6,9 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 2,276,"If you have picked a number 5–9, turn to 276.",stochastic,If you have picked a number 5–9,,,,
 12,262,"If you have 10 Gold Crowns and wish to pay him, turn to 262.",conditional,If you have 10 Gold Crowns and wish to pay him,,,,
 12,247,"If you do not have enough Gold Crowns or do not wish to pay him, turn to 247.",conditional,If you do not have enough Gold Crowns or do not wish to pay him,,,,
-21,189,"If it is below 5, your horse has suddenly plunged into thick mud up to its belly. If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.",complex,,,,,
-21,189,"If you are stuck, pick another number from the Random Number Table. If this time the number is 7 or less, the mud engulfs you up to your armpits. Your horse gives one last despairing scream as its muzzle disappears into the bubbling mud. If you scored above 7, you drag yourself onto firm ground and turn to 189.",complex,,,,,This choice is only possible if the first choice failed
-21,312,"If not, then this is your last chance! If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim. Your life and your mission end here. But if you have picked a 9, turn to 312.",complex,,,,,This choice is only possible if the first choice failed. Contain an implicit dead end (death)
+21,189,"If it is below 5, your horse has suddenly plunged into thick mud up to its belly. If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.",stochastic,,,,,
+21,189,"If you are stuck, pick another number from the Random Number Table. If this time the number is 7 or less, the mud engulfs you up to your armpits. Your horse gives one last despairing scream as its muzzle disappears into the bubbling mud. If you scored above 7, you drag yourself onto firm ground and turn to 189.",stochastic,,,,,This choice is only possible if the first choice failed
+21,312,"If not, then this is your last chance! If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim. Your life and your mission end here. But if you have picked a 9, turn to 312.",stochastic,,,,,This choice is only possible if the first choice failed. Contain an implicit dead end (death)
 23,326,"If you have a Golden Key and wish to use it, turn to 326.",conditional,If you have a Golden Key and wish to use it,,,,
 23,151,"If you have the Kai Discipline of Mind Over Matter, turn to 151.",conditional,If you have the Kai Discipline of Mind Over Matter,,,,
 23,337,"If you wish to remove the pin, turn to 337.",explicit_choice,,reckless,neutral,neutral,
@@ -19,7 +19,7 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 104,26,"If you wish to turn north, go to 26.",explicit_choice,,neutral,neutral,neutral,
 104,100,"If you wish to go south, turn to 100.",explicit_choice,,neutral,neutral,neutral,
 125,301,"If you have the Kai Discipline of Tracking, turn to 301.",conditional,,,,,
-125,301,"If you wish to take the south path, turn to 27.",explicit_choice,,neutral,neutral,neutral,
+125,27,"If you wish to take the south path, turn to 27.",explicit_choice,,neutral,neutral,neutral,
 125,214,"If you wish to take the west path, turn to 214.",explicit_choice,,neutral,neutral,neutral,
 131,241,"If you wish to shout a warning to the wizard, turn to 241.",explicit_choice,,neutral,neutral,tactical,
 131,55,"If you wish to run forward and attack the Giak when he jumps, turn to 55.",explicit_choice,,reckless,noble,physical,
@@ -32,8 +32,8 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 203,344,"If you now have less than 10 ENDURANCE points, turn to 344.",conditional,If you now have less than 10 ENDURANCE points,,,,
 220,24,"If you win, turn to 24.",conditional,If you win,,,,
 220,234,"If you wish to evade combat at any time during the fight, you can jump from the speeding caravan by turning to 234.",explicit_choice,,reckless,neutral,physical,
-227,271,"If you lose any ENDURANCE points in the combat, turn to 271.",complex,,,,,
-227,348,"If you kill it without losing any ENDURANCE points, turn to 348.",complex,,,,,
+227,271,"If you lose any ENDURANCE points in the combat, turn to 271.",conditional,If you lose any ENDURANCE points in the combat,,,,
+227,348,"If you kill it without losing any ENDURANCE points, turn to 348.",conditional,If you kill it without losing any ENDURANCE points,,,,
 276,213,Lose 1 ENDURANCE point and turn to 213.,forced,,,,,Loss of 1 ENDURANCE point during the transition
 294,230,"If the number you pick is 0–2, turn to 230.",stochastic,If the number you pick is 0–2,,,,
 294,190,"If the number is 3–6, turn to 190.",stochastic,If the number is 3–6,,,,
@@ -44,6 +44,6 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 334,48,"If you wish to use the Kai Discipline of Sixth Sense, turn to 48.",conditional,If you wish to use the Kai Discipline of Sixth Sense,,,,
 334,73,"If you wish to use the Kai Discipline of Camouflage and wait for them to pass, turn to 73.",conditional,If you wish to use the Kai Discipline of Camouflage and wait for them to pass,,,,
 334,162,"If you wish to approach them, turn to 162.",explicit_choice,,neutral,neutral,neutral,
-339,94,"If you kill him within 4 rounds of Combat, turn to 94.",complex,,,,,Based on a rare condition : combat speed
-339,203,"If you are still fighting after 4 rounds of Combat, turn to 203.",complex,,,,,Based on a rare condition : combat speed
+339,94,"If you kill him within 4 rounds of Combat, turn to 94.",conditional,If you kill him within 4 rounds of Combat,,,,Based on a rare condition : combat speed
+339,203,"If you are still fighting after 4 rounds of Combat, turn to 203.",conditional,If you are still fighting after 4 rounds of Combat,,,,Based on a rare condition : combat speed
 339,7,"You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",explicit_choice,,cautious,neutral,physical,
