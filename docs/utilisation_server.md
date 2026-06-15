@@ -19,14 +19,32 @@ Ajouter ces lignes à la fin du fichier `~/.bashrc` :
 ```bash
 # Rediriger le cache des modèles lourds vers le scratch
 export HF_HOME="/scratch/$USER/.cache/huggingface"
+# ou HF_HOME="/scratch/$USER/dcsr-llm/models
 export UV_CACHE_DIR="/scratch/$USER/.cache/uv"
+export PIP_CACHE_DIR="/scratch/$USER/.cache/pip" 
 
 # Charger le token d'accès Hugging Face de manière sécurisée
 export HF_TOKEN=$(cat /users/$USER/.config/dcsr-llm/hf_token)
 ```
 *(Recharger le terminal avec `source ~/.bashrc` après l'ajout).*
 
-## 3. Workflow : Démarrer un Nouveau Projet
+## 3. Configuration de VS Code & Remote-SSH
+Pour travailler directement sur le cluster depuis ton interface locale :
+
+1. Ouvrir VS Code et cliquer sur l'icône verte en bas à gauche (`><`).
+2. Sélectionner **Connect to Host...** -> **Add New SSH Host...**
+3. Entrer la commande de connexion ciblant le nœud d'accès du cluster :
+   ```bash
+   ssh votre_identifiant@curnagl.dcsr.unil.ch
+   ```
+4. Une fois la connexion établie, cliquer sur **Open Folder** (Ouvrir le dossier).
+5. **CRUCIAL :** Toujours ouvrir le dossier situé dans ton espace sécurisé `/users/` (le Cerveau), par exemple :
+   ```text
+   /users/votre_identifiant/projects/mon_projet_graphe
+   ```
+   *Ne jamais ouvrir directement le dossier du scratch dans VS Code, car l'arborescence complète du projet (incluant le code et les raccourcis vers les données) doit être pilotée depuis l'espace sauvegardé.*
+
+## 4. Workflow : Démarrer un Nouveau Projet
 
 Voici la procédure standard à chaque nouvelle expérience (ex: `extraction_graphe`).
 
@@ -64,7 +82,7 @@ ln -s /scratch/$USER/extraction_graphe/data data
 ln -s /scratch/$USER/extraction_graphe/results results
 ```
 
-## 4. Règle d'or : Le `.gitignore`
+## 5. Règle d'or : Le `.gitignore`
 
 Pour éviter que Git n'essaie de versionner des giga-octets de données ou des environnements virtuels (même symlinkés), ton fichier `.gitignore` à la racine de `/users/$USER/projects/extraction_graphe/` **doit** contenir ceci :
 
@@ -86,7 +104,7 @@ models/
 .env
 ```
 
-## 5. Routine de Travail dans VS Code
+## 6. Routine de Travail dans VS Code
 
 1. **Ouvrir le dossier :** Dans VS Code (via Remote-SSH), ouvrir **uniquement** le dossier `/users/$USER/projects/extraction_graphe/`.
 2. **Sélectionner l'interpréteur :** VS Code détectera le dossier symlinké `.venv`. Choisir cet interpréteur Python. L'autocomplétion fonctionnera parfaitement.
@@ -103,7 +121,7 @@ models/
    python extract.py
    ```
 
-## 6. Que faire si le `/scratch/` est purgé par les administrateurs ?
+## 7. Que faire si le `/scratch/` est purgé par les administrateurs ?
 
 Pas de panique ! Puisque ton code source, ton script SLURM et ton fichier de dépendances (`pyproject.toml` ou `requirements.txt` via `uv`) sont sauvés dans `/users/` et sur GitHub :
 1. Tu recrées les dossiers `data/` et `results/` sur le scratch.
