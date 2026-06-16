@@ -1,0 +1,4 @@
+edge_id,champ,gold,llm,gravite
+23->337,semantic_risk,reckless,neutral,DOUCE
+220->234,semantic_risk,reckless,cautious,DOUCE
+100->133,semantic_action,tactical,neutral,DOUCE
