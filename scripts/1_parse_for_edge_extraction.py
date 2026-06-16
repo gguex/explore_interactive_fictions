@@ -95,7 +95,11 @@ def parse_for_edge_extraction(html_dir: str, book_prefix: str, output_dir: str) 
     df_nodes = pl.DataFrame(nodes_data)
 
     # Sort by node_id and source_node_id as int for better readability
-    df_nodes = df_nodes.sort("id")
+    df_nodes = (
+        df_nodes.with_columns(pl.col("id").cast(pl.Int64))
+        .sort(["id"])
+        .with_columns(pl.col("id").cast(pl.Utf8))
+    )
 
     # Make sure the output directory exists
     full_output_dir = os.path.join(output_dir, book_prefix)
