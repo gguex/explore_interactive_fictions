@@ -40,7 +40,7 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 97,306,"If you wish to run into the forest, turn to 306.",explicit_choice,,cautious,selfish,physical,
 100,161,"If you wish to sit on the throne, turn to 161.",explicit_choice,,reckless,neutral,neutral,
 100,133,"If you wish to examine the statue, turn to 133.",explicit_choice,,neutral,neutral,tactical,
-100,257,"If you wish to look for an exit from this chamber, turn to 257.",explicit_choice,,cautious,neutral,neutral,
+100,257,"If you wish to look for an exit from this chamber, turn to 257.",explicit_choice,,cautious,neutral,tactical,
 103,13,"If you wish to take this path, turn to 13.",explicit_choice,,neutral,neutral,neutral,
 103,287,"If you would rather continue towards the northeast, turn to 287.",explicit_choice,,neutral,neutral,neutral,
 104,26,"If you wish to turn north, go to 26.",explicit_choice,,neutral,neutral,neutral,
@@ -78,7 +78,7 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 227,348,"If you kill it without losing any ENDURANCE points, turn to 348.",conditional,If you kill it without losing any ENDURANCE points,,,,
 245,190,Turn to 190.,forced,,,,,
 248,44,"If you wish to follow this track north, turn to 44.",explicit_choice,,neutral,neutral,neutral,
-248 ,300,"If you wish to follow this track east, turn to 300.",explicit_choice,,neutral,neutral,neutral,
+248,300,"If you wish to follow this track east, turn to 300.",explicit_choice,,neutral,neutral,neutral,
 253,278,"If you kill them all in battle, turn to 278.",forced,,,,,
 260,156,"If you win, turn to 156.",forced,,,,,
 276,213,Lose 1 ENDURANCE point and turn to 213.,forced,,,,,Loss of 1 ENDURANCE point during the transition

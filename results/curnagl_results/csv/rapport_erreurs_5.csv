@@ -7,6 +7,5 @@ edge_id,champ,gold,llm,gravite
 331->280,semantic_risk,cautious,neutral,DOUCE
 23->337,semantic_action,neutral,physical,DOUCE
 71->242,semantic_action,neutral,tactical,DOUCE
-100->257,semantic_action,neutral,tactical,DOUCE
 129->144,semantic_action,neutral,tactical,DOUCE
 131->241,semantic_action,tactical,neutral,DOUCE

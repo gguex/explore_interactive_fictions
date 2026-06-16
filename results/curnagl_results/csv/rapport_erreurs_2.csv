@@ -19,6 +19,7 @@ edge_id,champ,gold,llm,gravite
 97->306,semantic_action,physical,neutral,DOUCE
 100->161,semantic_action,neutral,physical,DOUCE
 100->133,semantic_action,tactical,neutral,DOUCE
+100->257,semantic_action,tactical,neutral,DOUCE
 124->211,semantic_action,tactical,neutral,DOUCE
 131->241,semantic_action,tactical,neutral,DOUCE
 131->101,semantic_action,physical,neutral,DOUCE

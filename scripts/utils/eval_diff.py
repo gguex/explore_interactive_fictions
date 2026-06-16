@@ -43,7 +43,9 @@ def evaluer_graphes() -> None:
     print(f"Arêtes trouvées (LLM): {len(llm_edges)}")
     print(f"Arêtes communes (OK) : {len(arêtes_communes)}")
     print(f"Oublis (Faux Négatifs): {len(arêtes_manquantes)}")
+    print(f"Détails des oublis : {arêtes_manquantes}")
     print(f"Inventions (Faux Positifs): {len(arêtes_inventees)}")
+    print(f"Détails des inventions : {arêtes_inventees}")
 
     # 3. Analyse détaillée via Jointure Vectorisée
     # On lie les deux tables sur les arêtes communes. Les colonnes du LLM auront le suffixe "_llm"
