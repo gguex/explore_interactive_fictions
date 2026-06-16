@@ -1,4 +1,9 @@
 edge_id,champ,gold,llm,gravite
 23->337,semantic_risk,reckless,neutral,DOUCE
 220->234,semantic_risk,reckless,cautious,DOUCE
+129->144,semantic_morality,neutral,selfish,DOUCE
+6->183,semantic_action,neutral,tactical,DOUCE
+6->200,semantic_action,tactical,neutral,DOUCE
+97->306,semantic_action,physical,neutral,DOUCE
 100->133,semantic_action,tactical,neutral,DOUCE
+339->7,semantic_action,tactical,physical,DOUCE

@@ -10,10 +10,11 @@ edge_id,champ,gold,llm,gravite
 220->234,semantic_risk,reckless,cautious,DOUCE
 334->162,semantic_risk,neutral,reckless,DOUCE
 71->242,semantic_morality,selfish,neutral,DOUCE
-129->144,semantic_morality,selfish,neutral,DOUCE
-6->183,semantic_action,tactical,physical,DOUCE
+6->183,semantic_action,neutral,physical,DOUCE
+6->200,semantic_action,tactical,neutral,DOUCE
 27->52,semantic_action,tactical,neutral,DOUCE
 32->176,semantic_action,tactical,neutral,DOUCE
+97->306,semantic_action,physical,neutral,DOUCE
 100->161,semantic_action,neutral,physical,DOUCE
 100->133,semantic_action,tactical,neutral,DOUCE
 124->211,semantic_action,tactical,neutral,DOUCE
@@ -24,3 +25,4 @@ edge_id,champ,gold,llm,gravite
 175->41,semantic_action,tactical,neutral,DOUCE
 295->185,semantic_action,tactical,physical,DOUCE
 334->162,semantic_action,neutral,physical,DOUCE
+339->7,semantic_action,tactical,physical,DOUCE

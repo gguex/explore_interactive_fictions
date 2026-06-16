@@ -5,8 +5,8 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 2,343,"If you have picked a number 0–4, turn to 343.",stochastic,If you have picked a number 0–4,,,,
 2,276,"If you have picked a number 5–9, turn to 276.",stochastic,If you have picked a number 5–9,,,,
 5,111,Turn to 111.,forced,,,,,
-6,183,"If you wish to call them, turn to 183.",explicit_choice,,reckless,neutral,tactical,
-6,200,"If you wish to let them pass and then continue on your way through the forest, turn to 200.",explicit_choice,,cautious,neutral,neutral,
+6,183,"If you wish to call them, turn to 183.",explicit_choice,,reckless,neutral,neutral,
+6,200,"If you wish to let them pass and then continue on your way through the forest, turn to 200.",explicit_choice,,cautious,neutral,tactical,
 12,262,"If you have 10 Gold Crowns and wish to pay him, turn to 262.",conditional,If you have 10 Gold Crowns and wish to pay him,,,,
 12,247,"If you do not have enough Gold Crowns or do not wish to pay him, turn to 247.",conditional,If you do not have enough Gold Crowns or do not wish to pay him,,,,
 21,189,"If it is below 5, your horse has suddenly plunged into thick mud up to its belly. If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.",stochastic,,,,,
@@ -37,7 +37,7 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 95,240,"If you wish to set off along the track towards the north, turn to 240.",explicit_choice,,neutral,neutral,neutral,
 95,5,"If you wish to go south instead, turn to 5.",explicit_choice,,neutral,neutral,neutral,
 97,255,"If you wish to defend the fallen Prince, turn to 255.",explicit_choice,,reckless,noble,physical,
-97,306,"If you wish to run into the forest, turn to 306.",explicit_choice,,cautious,selfish,neutral,
+97,306,"If you wish to run into the forest, turn to 306.",explicit_choice,,cautious,selfish,physical,
 100,161,"If you wish to sit on the throne, turn to 161.",explicit_choice,,reckless,neutral,neutral,
 100,133,"If you wish to examine the statue, turn to 133.",explicit_choice,,neutral,neutral,tactical,
 100,257,"If you wish to look for an exit from this chamber, turn to 257.",explicit_choice,,cautious,neutral,neutral,
@@ -54,7 +54,7 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 128,297,"If you have the Kai Discipline of Hunting, turn to 297.",conditional,If you have the Kai Discipline of Hunting,,,,
 128,336,"If you do not, you must attack the Giaks now in order to save the ranger’s life. Turn to 336.",conditional,If you do not,,,,
 129,3,"If you wish to continue following the officer, turn to 3.",explicit_choice,,cautious,neutral,neutral,
-129,144,"If you feel that you stand a better chance of making your way to the King’s citadel on your own, turn to 144.",explicit_choice,,reckless,selfish,neutral,
+129,144,"If you feel that you stand a better chance of making your way to the King’s citadel on your own, turn to 144.",explicit_choice,,reckless,neutral,neutral,
 131,241,"If you wish to shout a warning to the wizard, turn to 241.",explicit_choice,,cautious,noble,tactical,
 131,55,"If you wish to run forward and attack the Giak when he jumps, turn to 55.",explicit_choice,,reckless,noble,physical,
 131,302,"If you wish to pick up a chunk of temple marble and throw it at the Giak’s head, turn to 302.",explicit_choice,,neutral,noble,physical,
@@ -99,5 +99,5 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 334,162,"If you wish to approach them, turn to 162.",explicit_choice,,neutral,neutral,neutral,
 339,94,"If you kill him within 4 rounds of Combat, turn to 94.",conditional,If you kill him within 4 rounds of Combat,,,,Based on a rare condition : combat speed
 339,203,"If you are still fighting after 4 rounds of Combat, turn to 203.",conditional,If you are still fighting after 4 rounds of Combat,,,,Based on a rare condition : combat speed
-339,7,"You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",explicit_choice,,cautious,neutral,physical,
+339,7,"You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",explicit_choice,,cautious,neutral,tactical,
 343,213,Lose 2 ENDURANCE points and turn to 213.,forced,,,,,Loss of 2 ENDURANCE points during the transition
