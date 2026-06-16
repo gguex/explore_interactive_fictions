@@ -56,11 +56,10 @@ This table models the transitions connecting the nodes after processed by LLM. I
 | :--- | :--- | :--- |
 | `source_id` | String | The originating `node_id`. |
 | `target_id` | String | The destination `node_id`. |
-| `edge_text` | Text | The exact raw text of the choice presented to the player. |
-| `transition_type` | Category | Defines the nature of the link:<br> - `explicit_choice`: Standard player decision.<br> - `forced`: Automatic progression.<br> - `stochastic`: Based on a random roll.<br> - `conditional`: Blocked by a specific requirement. |
-| `stochastic_trigger` | String | The exact raw text or range triggering this edge (e.g., `0-4`). Leave empty if not stochastic. |
-| `condition_type` | Category | The lock on this edge: `none`, `skill`, `stat_check`, `combat_victory`, `combat_evasion`, `item`. |
-| `condition_value` | String | The specific requirement (e.g., `Sixth Sense`). |
-| `semantic_risk_level` | Integer | (1-5) Axis of risk. 1 = Prudence/Evasion, 5 = Suicidal/Frontal attack. (Null if not `explicit_choice`). |
-| `semantic_moral_stance` | Integer | (1-5) Axis of morality. 1 = Selfish/Amoral, 5 = Noble/Altruistic. (Null if not `explicit_choice`). |
-| `semantic_cognitive_approach` | Integer | (1-5) Axis of cognition. 1 = Impulsive/Physical, 5 = Analytical/Cunning. (Null if not `explicit_choice`). |
+| `edge_text` | String | The exact raw text of the choice presented to the player (between `<choice>` tags). |
+| `transition_type` | Category | Defines the nature of the link:<br> - `forced`: Automatic progression with no alternatives.<br> - `explicit_choice`: Standard player decision.<br> - `stochastic`: Based on a random roll.<br> - `conditional`: Based on a specific requirement (item, skill, stat).<br> - `complex`: Combats or unusual choices (e.g., risk of death). |
+| `realisation_value` | String / Null | The exact raw text triggering the outcome. **Requires** `transition_type` to be `stochastic` or `conditional`. Otherwise, `null`. |
+| `semantic_risk` | Category / Null | Axis of risk. Evaluated as `cautious`, `neutral`, or `reckless` via contrastive evaluation. **Requires** `transition_type` to be `explicit_choice`. Otherwise, `null`. |
+| `semantic_morality` | Category / Null | Axis of morality. Evaluated as `selfish`, `neutral`, or `noble` via contrastive evaluation. **Requires** `transition_type` to be `explicit_choice`. Otherwise, `null`. |
+| `semantic_action` | Category / Null | Axis of approach. Evaluated as `physical`, `neutral`, or `tactical` via contrastive evaluation. **Requires** `transition_type` to be `explicit_choice`. Otherwise, `null`. |
+| `warnings` | String / Null | Annotator comments. Used ONLY if the text is ambiguous, broken, or highly unusual. Otherwise, `null`. |
