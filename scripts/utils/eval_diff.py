@@ -2,8 +2,8 @@ import polars as pl
 
 # --- Configuration ---
 FICHIER_GOLD = "data/for_edge_extraction/LW01_calibration_edges_gold_2.csv"
-FICHIER_LLM = "results/curnagl_results/csv/LW01_calibration_edges_5.csv"
-FICHIER_RAPPORT = "results/curnagl_results/csv/rapport_erreurs_5.csv"
+FICHIER_LLM = "results/curnagl_results/csv/LW01_calibration_edges_final.csv"
+FICHIER_RAPPORT = "results/curnagl_results/csv/rapport_erreurs_final.csv"
 
 
 def evaluer_graphes() -> None:

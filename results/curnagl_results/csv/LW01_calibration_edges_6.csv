@@ -14,7 +14,7 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 21,312,"If not, then this is your last chance! If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim. Your life and your mission end here. But if you have picked a 9, turn to 312.",stochastic,,,,,This choice is only possible if the first choice failed. Contain an implicit dead end (death)
 23,326,"If you have a Golden Key and wish to use it, turn to 326.",conditional,If you have a Golden Key and wish to use it,,,,
 23,151,"If you have the Kai Discipline of Mind Over Matter, turn to 151.",conditional,If you have the Kai Discipline of Mind Over Matter,,,,
-23,337,"If you wish to remove the pin, turn to 337.",explicit_choice,,reckless,neutral,physical,
+23,337,"If you wish to remove the pin, turn to 337.",explicit_choice,,neutral,neutral,physical,
 25,139,Turn to 139.,forced,,,,,
 27,250,"If you choose to attack, turn to 250.",explicit_choice,,reckless,neutral,physical,
 27,52,"If you choose to listen to what the voices say, turn to 52.",explicit_choice,,cautious,neutral,tactical,
@@ -28,11 +28,11 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 71,104,"If you wish to leave via the tunnel, turn to 104.",explicit_choice,,cautious,neutral,neutral,
 74,138,"If you decide to fight them, turn to 138.",explicit_choice,,reckless,neutral,physical,
 74,281,"If you decide to run deeper into the forest without delay, turn to 281.",explicit_choice,,cautious,neutral,physical,
-83,45,"If you possess the Kai Discipline of Sixth Sense, turn to 45.",conditional,,,,,
+83,45,"If you possess the Kai Discipline of Sixth Sense, turn to 45.",conditional,If you possess the Kai Discipline of Sixth Sense,,,,
 83,205,"If you wish to do as they say, turn to 205.",explicit_choice,,cautious,neutral,neutral,
 83,180,"If you wish to prepare to fight them, turn to 180.",explicit_choice,,reckless,neutral,physical,
 83,232,"If you demand to know what they want, turn to 232.",explicit_choice,,neutral,neutral,neutral,
-87,61,Turn to 61.,forced,,,,,
+87,61,Turn to 61.,forced,,,,,Narrative describes suffering small cuts to face and hands during the transition
 90,18,Turn to 18.,forced,,,,,
 95,240,"If you wish to set off along the track towards the north, turn to 240.",explicit_choice,,neutral,neutral,neutral,
 95,5,"If you wish to go south instead, turn to 5.",explicit_choice,,neutral,neutral,neutral,
@@ -48,13 +48,13 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 114,239,Turn to 239.,forced,,,,,
 124,211,You can continue to investigate the tunnel by turning to 211.,explicit_choice,,reckless,neutral,tactical,
 124,106,Or you may leave and descend the hill by turning to 106.,explicit_choice,,cautious,neutral,neutral,
-125,301,"If you have the Kai Discipline of Tracking, turn to 301.",conditional,,,,,
+125,301,"If you have the Kai Discipline of Tracking, turn to 301.",conditional,If you have the Kai Discipline of Tracking,,,,
 125,27,"If you wish to take the south path, turn to 27.",explicit_choice,,neutral,neutral,neutral,
 125,214,"If you wish to take the west path, turn to 214.",explicit_choice,,neutral,neutral,neutral,
 128,297,"If you have the Kai Discipline of Hunting, turn to 297.",conditional,If you have the Kai Discipline of Hunting,,,,
-128,336,"If you do not, you must attack the Giaks now in order to save the ranger’s life. Turn to 336.",conditional,If you do not,,,,
+128,336,"If you do not, you must attack the Giaks now in order to save the ranger’s life. Turn to 336.",conditional,If you do not [have the Kai Discipline of Hunting],,,,
 129,3,"If you wish to continue following the officer, turn to 3.",explicit_choice,,cautious,neutral,neutral,
-129,144,"If you feel that you stand a better chance of making your way to the King’s citadel on your own, turn to 144.",explicit_choice,,reckless,selfish,neutral,
+129,144,"If you feel that you stand a better chance of making your way to the King’s citadel on your own, turn to 144.",explicit_choice,,reckless,selfish,tactical,
 131,241,"If you wish to shout a warning to the wizard, turn to 241.",explicit_choice,,cautious,noble,tactical,
 131,55,"If you wish to run forward and attack the Giak when he jumps, turn to 55.",explicit_choice,,reckless,noble,physical,
 131,302,"If you wish to pick up a chunk of temple marble and throw it at the Giak’s head, turn to 302.",explicit_choice,,neutral,noble,physical,
@@ -79,8 +79,8 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 245,190,Turn to 190.,forced,,,,,
 248,44,"If you wish to follow this track north, turn to 44.",explicit_choice,,neutral,neutral,neutral,
 248,300,"If you wish to follow this track east, turn to 300.",explicit_choice,,neutral,neutral,neutral,
-253,278,"If you kill them all in battle, turn to 278.",forced,,,,,
-260,156,"If you win, turn to 156.",forced,,,,,
+253,278,"If you kill them all in battle, turn to 278.",forced,,,,,"Combat sequence with multiple enemies. Only one outcome provided (victory), implying death is the implicit alternative not captured in a choice tag."
+260,156,"If you win, turn to 156.",forced,,,,,Combat with a penalty (-4 COMBAT SKILL) and only one outcome provided
 276,213,Lose 1 ENDURANCE point and turn to 213.,forced,,,,,Loss of 1 ENDURANCE point during the transition
 294,230,"If the number you pick is 0–2, turn to 230.",stochastic,If the number you pick is 0–2,,,,
 294,190,"If the number is 3–6, turn to 190.",stochastic,If the number is 3–6,,,,
@@ -95,8 +95,8 @@ source_id,target_id,edge_text,transition_type,realisation_value,semantic_risk,se
 331,280,"If you would prefer to climb the hillside, turn to 280.",explicit_choice,,cautious,neutral,physical,
 333,131,Turn to 131.,forced,,,,,
 334,48,"If you wish to use the Kai Discipline of Sixth Sense, turn to 48.",conditional,If you wish to use the Kai Discipline of Sixth Sense,,,,
-334,73,"If you wish to use the Kai Discipline of Camouflage and wait for them to pass, turn to 73.",conditional,If you wish to use the Kai Discipline of Camouflage and wait for them to pass,,,,
-334,162,"If you wish to approach them, turn to 162.",explicit_choice,,neutral,neutral,neutral,
+334,73,"If you wish to use the Kai Discipline of Camouflage and wait for them to pass, turn to 73.",conditional,If you wish to use the Kai Discipline of Camouflage,,,,
+334,162,"If you wish to approach them, turn to 162.",explicit_choice,,reckless,neutral,neutral,
 339,94,"If you kill him within 4 rounds of Combat, turn to 94.",conditional,If you kill him within 4 rounds of Combat,,,,Based on a rare condition : combat speed
 339,203,"If you are still fighting after 4 rounds of Combat, turn to 203.",conditional,If you are still fighting after 4 rounds of Combat,,,,Based on a rare condition : combat speed
 339,7,"You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",explicit_choice,,cautious,neutral,tactical,
