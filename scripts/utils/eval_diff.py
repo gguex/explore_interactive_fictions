@@ -1,7 +1,7 @@
 import polars as pl
 
 # --- Configuration ---
-FICHIER_GOLD = "data/for_edge_extraction/LW01_calibration_edges_gold_2.csv"
+FICHIER_GOLD = "data/for_edge_extraction/LW01_calibration_edges_gold.csv"
 FICHIER_LLM = "results/curnagl_results/csv/LW01_calibration_edges_final.csv"
 FICHIER_RAPPORT = "results/curnagl_results/csv/rapport_erreurs_final.csv"
 
@@ -14,7 +14,8 @@ def evaluer_graphes() -> None:
     df_gold = pl.read_csv(FICHIER_GOLD)
     df_llm = pl.read_csv(FICHIER_LLM)
 
-    # Création de l'ID unique (source -> target). On cast en String pour éviter les conflits
+    # Création de l'ID unique (source -> target).
+    # On cast en String pour éviter les conflits
     df_gold = df_gold.with_columns(
         (
             pl.col("source_id").cast(pl.String)
@@ -48,13 +49,15 @@ def evaluer_graphes() -> None:
     print(f"Détails des inventions : {arêtes_inventees}")
 
     # 3. Analyse détaillée via Jointure Vectorisée
-    # On lie les deux tables sur les arêtes communes. Les colonnes du LLM auront le suffixe "_llm"
+    # On lie les deux tables sur les arêtes communes.
+    # Les colonnes du LLM auront le suffixe "_llm"
     df_common = df_gold.join(df_llm, on="edge_id", suffix="_llm")
 
     liste_erreurs = []
 
     # --- A. Erreurs de Type (Gravité Moyenne) ---
-    # On filtre les lignes où les types diffèrent, et on sélectionne les colonnes pour le rapport
+    # On filtre les lignes où les types diffèrent,
+    # et on sélectionne les colonnes pour le rapport
     df_erreurs_type = df_common.filter(
         pl.col("transition_type") != pl.col("transition_type_llm")
     ).select(
@@ -74,7 +77,8 @@ def evaluer_graphes() -> None:
 
     champs_semantiques = ["semantic_risk", "semantic_morality", "semantic_action"]
     for champ in champs_semantiques:
-        # On garde les lignes où le Gold n'est pas vide ET où les valeurs sont différentes
+        # On garde les lignes où le Gold n'est pas vide
+        # ET où les valeurs sont différentes
         df_err_sem = df_type_valide.filter(
             pl.col(champ).is_not_null() & (pl.col(champ) != pl.col(f"{champ}_llm"))
         ).select(

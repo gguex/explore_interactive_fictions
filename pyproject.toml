@@ -22,6 +22,10 @@ dev = [
     "ruff>=0.15.14",
 ]
 
+[tool.ruff]
+# Le code archivé est conservé pour l'historique, on ne le lint pas
+extend-exclude = ["**/archives/**"]
+
 [tool.ruff.lint]
 # E/F: Règles de base, I: Tri des imports, ANN: Force la présence des types hints
 select = ["E", "F", "I", "ANN"]

@@ -1,14 +1,15 @@
-import os
-import json
 import csv
+import json
+import os
+from typing import Iterator
 
 # 1. Correctifs d'infrastructure HPC
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 os.environ["VLLM_GDN_PREFILL_BACKEND"] = "triton"
 
+from schemas import ExtractionResult
 from vllm import LLM, SamplingParams
 from vllm.sampling_params import StructuredOutputsParams
-from schemas import ExtractionResult
 
 # Variable des fichiers
 SYSTEM_PROMPT_FILE = "system_prompt_final.txt"
@@ -17,7 +18,7 @@ OUTPUT_CSV_FILE = "results/LW01_edge_extraction.csv"
 BATCH_SIZE = 50
 
 # Fonction utilitaire pour découper le corpus en sous-lots
-def decouper_en_lots(liste, taille_lot):
+def decouper_en_lots(liste: list, taille_lot: int) -> Iterator[list]:
     for i in range(0, len(liste), taille_lot):
         yield liste[i:i + taille_lot]
 
@@ -28,7 +29,8 @@ if __name__ == "__main__":
     # ==========================================
     fichier_csv = OUTPUT_CSV_FILE
     
-    # Définition des colonnes du CSV (doivent correspondre aux clés de ton Edge Pydantic)
+    # Définition des colonnes du CSV
+    # (doivent correspondre aux clés de ton Edge Pydantic)
     colonnes = [
         "source_id", "target_id", "edge_text", "transition_type", 
         "realisation_value", "semantic_risk", "semantic_morality", 
@@ -72,9 +74,13 @@ if __name__ == "__main__":
     # ==========================================
     # D. BOUCLE D'EXTRACTION PAR LOTS & ECRITURE STREAMEE
     # ==========================================
-    print(f"Démarrage de l'extraction de {len(corpus)} paragraphes par lots de {BATCH_SIZE}...")
-    
-    # On ouvre le CSV en mode 'a' (append). Le fichier reste ouvert pendant toute la boucle.
+    print(
+        f"Démarrage de l'extraction de {len(corpus)} paragraphes "
+        f"par lots de {BATCH_SIZE}..."
+    )
+
+    # On ouvre le CSV en mode 'a' (append).
+    # Le fichier reste ouvert pendant toute la boucle.
     with open(fichier_csv, mode="a", newline="", encoding="utf-8") as f_csv:
         writer = csv.DictWriter(f_csv, fieldnames=colonnes)
         
@@ -92,11 +98,17 @@ if __name__ == "__main__":
             prompts_du_lot = []
             for paragraphe in lot:
                 texte_input = json.dumps(paragraphe, ensure_ascii=False)
-                prompt_formatte = f"<|im_start|>system\n{SYSTEM_PROMPT}<|im_end|>\n<|im_start|>user\n{texte_input}<|im_end|>\n<|im_start|>assistant\n"
+                prompt_formatte = (
+                    f"<|im_start|>system\n{SYSTEM_PROMPT}<|im_end|>\n"
+                    f"<|im_start|>user\n{texte_input}<|im_end|>\n"
+                    f"<|im_start|>assistant\n"
+                )
                 prompts_du_lot.append(prompt_formatte)
             
             # 2. Inférence vLLM en parallèle sur tout le lot
-            print(f"\n[Lot {num_lot}] Traitement de {len(prompts_du_lot)} paragraphes...")
+            print(
+                f"\n[Lot {num_lot}] Traitement de {len(prompts_du_lot)} paragraphes..."
+            )
             outputs = llm.generate(prompts_du_lot, sampling_params)
             
             # 3. Extraction et écriture immédiate dans le CSV
@@ -107,17 +119,21 @@ if __name__ == "__main__":
                 
                 for edge in edges:
                     # writer.writerow accepte directement un dictionnaire Python.
-                    # Comme notre schéma Pydantic a exactement les mêmes clés que nos colonnes,
-                    # le dictionnaire s'insère parfaitement dans le tableur.
+                    # Comme notre schéma Pydantic a exactement les mêmes clés que
+                    # nos colonnes, le dictionnaire s'insère parfaitement.
                     writer.writerow(edge)
                     arêtes_extraites_ce_lot += 1
             
             # 4. LE RECOIN CRUCIAL : flush()
-            # Par défaut, Linux garde les écritures en mémoire tampon. Cette ligne force 
-            # physiquement le serveur à écrire le lot sur le disque GPFS du scratch.
+            # Par défaut, Linux garde les écritures en mémoire tampon. Cette ligne
+            # force physiquement le serveur à écrire le lot sur le disque GPFS.
             f_csv.flush() 
             
             compteur_paragraphes += len(lot)
-            print(f"[Lot {num_lot}] Sauvegardé. ({compteur_paragraphes}/{len(corpus)} paragraphes traités, +{arêtes_extraites_ce_lot} arêtes)")
+            print(
+                f"[Lot {num_lot}] Sauvegardé. "
+                f"({compteur_paragraphes}/{len(corpus)} paragraphes traités, "
+                f"+{arêtes_extraites_ce_lot} arêtes)"
+            )
 
     print(f"\n✅ Extraction globale terminée ! Le fichier {fichier_csv} est à jour.")

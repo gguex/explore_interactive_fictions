@@ -11,7 +11,7 @@ Il s'agit donc de faire un petit nettoyage de la manière suivante :
 
    1. (fait, 14.07.2026) Dans un premier temps, on revoit ce qu'on va faire globalement. On prend du recule et on note le plan global dans `docs/gamebook_global_plan.md` 
    2. (fait, 14.07.2026) On nettoye toutes les notes pour qu'elle soient propres : `gamebook_data_schema.md` réécrit autour du pipeline actuel (ancien schéma d'arêtes → `docs/archives/legacy_edges_schema.md`), `gamebook_mechanics.md` aligné sur le plan global, `utilisation_dcsr-llm.md` archivé (pipeline remplacé par `cluster_scripts/`).
-   3. On met à jour les scripts, on archive et on nettoye le repo.
+   3. (fait, 14.07.2026) On met à jour les scripts, on archive et on nettoye le repo : partie "nodes" de `2_parse_simple_gamebook.py` extraite dans `scripts/2_parse_nodes.py` (l'original et `gold_json_to_csv.py` → `scripts/archives/`), `1_parse_for_edge_extraction.py` nettoyé (JSON indenté reproductible), chemins de `eval_diff.py` corrigés, `LW01_edges.csv` (ancien schéma) archivé, README réécrit. Sorties régénérées et vérifiées identiques.
 
 Cela nous permettra de repartir sur des bonnes bases.
 

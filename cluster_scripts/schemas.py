@@ -1,11 +1,15 @@
 from typing import List, Literal, Optional
-from pydantic import BaseModel, Field
+
+from pydantic import BaseModel
+
 
 class Edge(BaseModel):
     source_id: str
     target_id: str
     edge_text: str
-    transition_type: Literal["explicit_choice", "forced", "stochastic", "conditional", "complex"]
+    transition_type: Literal[
+        "explicit_choice", "forced", "stochastic", "conditional", "complex"
+    ]
     realisation_value: Optional[str]
     semantic_risk: Optional[Literal["cautious", "neutral", "reckless"]]
     semantic_morality: Optional[Literal["selfish", "neutral", "noble"]]

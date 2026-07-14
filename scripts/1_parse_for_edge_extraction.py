@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import warnings
@@ -51,7 +52,7 @@ def parse_for_edge_extraction(html_dir: str, book_prefix: str, output_dir: str) 
             link = choice_p.find_all("a")
 
             # No link : continue with a warning
-            if not link or all("href" not in l.attrs for l in link):
+            if not link or all("href" not in tag.attrs for tag in link):
                 print(link)
                 warnings.warn(
                     f"No valid link found in choice paragraph in {file_path}. Skipping."
@@ -61,10 +62,10 @@ def parse_for_edge_extraction(html_dir: str, book_prefix: str, output_dir: str) 
             # Extract the target node ID from the link
             target_id = None
             if len(link) > 1:
-                for l in link:
-                    if "href" in l.attrs and "sect" in l["href"]:
+                for tag in link:
+                    if "href" in tag.attrs and "sect" in tag["href"]:
                         target_id = (
-                            str(l["href"]).replace("sect", "").replace(".htm", "")
+                            str(tag["href"]).replace("sect", "").replace(".htm", "")
                         )
                         break
             else:
@@ -75,7 +76,8 @@ def parse_for_edge_extraction(html_dir: str, book_prefix: str, output_dir: str) 
 
             if target_id is None:
                 warnings.warn(
-                    f"No valid 'sect' link found in choice paragraph in {file_path}. Skipping."
+                    f"No valid 'sect' link found in choice paragraph in {file_path}. "
+                    "Skipping."
                 )
 
             # Extract the choice text
@@ -110,12 +112,14 @@ def parse_for_edge_extraction(html_dir: str, book_prefix: str, output_dir: str) 
         full_output_dir, f"{book_prefix}_for_edges_extraction.json"
     )
 
-    df_nodes.write_json(nodes_json_path)
+    # Indented JSON: readable and diff-friendly (write_json outputs a single line)
+    with open(nodes_json_path, "w", encoding="utf-8") as f:
+        json.dump(df_nodes.to_dicts(), f, ensure_ascii=False, indent=2)
 
 
-# Test the function with a sample HTML directory, book prefix, and output directory
-parse_for_edge_extraction(
-    html_dir="data/raw/LW01/sections",
-    book_prefix="LW01",
-    output_dir="data/processed/nodes_edges/",
-)
+if __name__ == "__main__":
+    parse_for_edge_extraction(
+        html_dir="data/raw/LW01/sections",
+        book_prefix="LW01",
+        output_dir="data/processed/nodes_edges/",
+    )
