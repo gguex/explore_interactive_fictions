@@ -102,3 +102,8 @@ Used to calibrate the LLM extraction prompt against a manually annotated gold st
 Evaluation: `scripts/utils/eval_diff.py` compares a cluster output against the gold and
 writes an error report (`rapport_erreurs_*.csv`, one row per divergence with a
 `gravite` level).
+
+Quality control of a full extraction: `scripts/utils/qc_extraction.py` checks the final
+edges table against the tagged corpus and the nodes table (completeness vs `<choice>`
+tags, ID validity, absorbing states, schema-rule coherence, label distributions,
+reachability) and prints a summary report.
