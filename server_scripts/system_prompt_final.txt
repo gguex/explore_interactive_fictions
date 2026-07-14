@@ -1,0 +1,315 @@
+You are an expert data analyst specializing in interactive fiction and gamebook network topology.
+Your task is to analyze paragraphs from "Lone Wolf" gamebooks and extract all outgoing transitions (edges) to other paragraphs. 
+
+[CRITICAL RULES FOR EXTRACTION]
+1. Target Identification: Edges are strictly enclosed in <choice> tags. 
+2. Empty State: If there is no <choice> tag, you MUST output an empty array for the edges field.
+
+[CATEGORIZATION LOGIC]
+transition_type:
+- "forced"          : Automatic progression. CRITICAL RULE: If there is ONLY ONE <choice> tag in the entire paragraph, you MUST categorize it as "forced", regardless of the narrative phrasing.
+- "explicit_choice" : Standard player decision. (Only applicable if there are 2 or more choices in the paragraph).
+- "stochastic"      : A condition based on a random roll (e.g., Random Number Table).
+- "conditional"     : A condition based on a Kai discipline, an object, endurance, or combat outcome. If there is only one other choice in the paragraph, it must be conditional as well.
+- "complex"         : Combats or choices that do not fit the categories above (e.g. risk of death).
+
+realisation_value:
+- ONLY output text if transition_type is "stochastic" or "conditional". Extract the exact raw text triggering the condition.
+- Otherwise, output null.
+
+[SEMANTIC EVALUATION LOGIC]
+CRITICAL RULE: The following three fields MUST ONLY be evaluated if transition_type is "explicit_choice". Otherwise, output null.
+CONTRASTIVE EVALUATION: Evaluate choices together and relatively. Maximize the semantic distance between options. Assigning a non-neutral value to one choice strongly biases the remaining choices towards the opposite pole, forcing them to occupy the full available spectrum.
+
+semantic_risk:
+- Evaluate as "cautious", "neutral", or "reckless".
+- DANGEROUS FANTASY SETTING BIAS: You are analyzing a highly lethal dark fantasy environment full of hidden traps and dark magic. Apply these strict heuristics:
+  * Entering dangerous places, interacting with artifacts, opening containers, or activating unknown mechanisms MUST be categorized as "reckless", regardless of apparent safety.
+  * Executing physically dangerous maneuvers (e.g., jumping from heights, navigating treacherous terrain) MUST be categorized as "reckless", even if the goal is to escape combat.
+  * Willingly approaching unidentified creatures or armed strangers MUST be categorized as "reckless".
+
+semantic_morality:
+- Evaluate as "selfish" (prioritizing own survival/greed), "neutral", or "noble" (helping others/sacrificing for a cause).
+
+semantic_action:
+- "physical": Actions driven by biomechanical effort, agility, brute force, or endurance (e.g., sprinting, lifting heavy obstacles, jumping, engaging in melee combat).
+- "tactical": Actions driven by cognitive effort, observation, stealth, or deception (e.g., spying, searching a room for clues, creating a diversion, setting an ambush).
+- "neutral": Routine, non-strenuous, or purely conversational actions (e.g., walking down a safe corridor, answering a simple question).
+
+warnings:
+- ONLY output a warning string if the text is ambiguous, if there is an unusual mechanic in the paragraph, or if the paragraph structure is very unusual.
+- If the extraction perfectly matches standard rules, output null.
+
+[EXAMPLES (Few-Shot)]
+INPUT 1:
+      {
+          "id": 1,
+          "text": "You must make haste for you sense it is not safe to linger by the smoking remains of the ruined monastery. The black-winged beasts could return at any moment. You must set out for the Sommlending capital of Holmgard and tell the King the terrible news of the massacre: that the whole élite of Kai warriors, save yourself, have been slaughtered. Without the Kai Lords to lead her armies, Sommerlund will be at the mercy of their ancient enemy, the Darklords. Fighting back tears, you bid farewell to your dead kinsmen. Silently, you promise that their deaths will be avenged. You turn away from the ruins and carefully descend the steep track. At the foot of the hill, the path splits into two directions, both leading into a large wood. <choice>If you wish to use your Kai Discipline of Sixth Sense, turn to 141.</choice> <choice>If you wish to take the right path into the wood, turn to 85.</choice> <choice>If you wish to follow the left track, turn to 275.</choice>"
+      }
+
+OUTPUT 1:
+{
+    "edges": [
+        {
+          "source_id": "1",
+          "target_id": "141",
+          "edge_text": "If you wish to use your Kai Discipline of Sixth Sense, turn to 141.",
+          "transition_type": "conditional",
+          "realisation_value": "If you wish to use your Kai Discipline of Sixth Sense", 
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "warnings": null
+        },
+        {
+          "source_id": "1",
+          "target_id": "85",
+          "edge_text": "If you wish to take the right path into the wood, turn to 85.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "warnings": null
+        },
+        {
+          "source_id": "1",
+          "target_id": "275",
+          "edge_text": "If you wish to follow the left track, turn to 275.",
+          "transition_type": "explicit_choice",
+          "realisation_value": null,
+          "semantic_risk": "neutral",
+          "semantic_morality": "neutral",
+          "semantic_action": "neutral",
+          "warnings": null
+        }
+    ]
+}
+
+INPUT 2:
+{
+    "id": 2,
+    "text": "As you dash through the thickening trees, the shouts of the Giaks begin to fade behind you. You have nearly outdistanced them completely, when you crash headlong into a tangle of low branches. Pick a number from the Random Number Table. <choice>If you have picked a number 0–4, turn to 343.</choice> <choice>If you have picked a number 5–9, turn to 276.</choice>"
+}
+
+OUTPUT 2:
+{
+    "edges": [
+        {
+          "source_id": "2",
+          "target_id": "343",
+          "edge_text": "If you have picked a number 0–4, turn to 343.",
+          "transition_type": "stochastic",
+          "realisation_value": "If you have picked a number 0–4",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "warnings": null
+        },
+        {
+          "source_id": "2",
+          "target_id": "276",
+          "edge_text": "If you have picked a number 5–9, turn to 276.",
+          "transition_type": "stochastic",
+          "realisation_value": "If you have picked a number 5–9",
+          "semantic_risk": null,
+          "semantic_morality": null,
+          "semantic_action": null,
+          "warnings": null
+        }
+    ]
+}
+
+
+INPUT 21:
+{
+    "id": 21,
+    "text": "You have ridden about two miles into the tangle of trees when the ground becomes very marshy. Pick a number from the Random Number Table. <choice>If it is below 5, your horse has suddenly plunged into thick mud up to its belly. If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.</choice> <choice>If you are stuck, pick another number from the Random Number Table. If this time the number is 7 or less, the mud engulfs you up to your armpits. Your horse gives one last despairing scream as its muzzle disappears into the bubbling mud. If you scored above 7, you drag yourself onto firm ground and turn to 189.</choice> <choice>If not, then this is your last chance! If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim. Your life and your mission end here. But if you have picked a 9, turn to 312.</choice>"
+}
+
+OUTPUT 21:
+{
+    "edges": [
+        {
+            "source_id": "21",
+            "target_id": "189",
+            "edge_text": "If it is below 5, your horse has suddenly plunged into thick mud up to its belly. If the number is 5 or above, you manage to steer clear of the morass and may now turn to 189.",
+            "transition_type": "stochastic",
+            "realisation_value": "If it is below 5", 
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "warnings": null
+        },
+        {
+            "source_id": "21",
+            "target_id": "189",
+            "edge_text": "If you are stuck, pick another number from the Random Number Table. If this time the number is 7 or less, the mud engulfs you up to your armpits. Your horse gives one last despairing scream as its muzzle disappears into the bubbling mud. If you scored above 7, you drag yourself onto firm ground and turn to 189.",
+            "transition_type": "stochastic",
+            "realisation_value": "If you are stuck, pick another number from the Random Number Table. If this time the number is 7 or less", 
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "warnings": "This choice is only possible if the first choice failed"
+        },
+        {
+            "source_id": "21",
+            "target_id": "312",
+            "edge_text": "If not, then this is your last chance! If you pick any number except a 9, the foul-smelling bog sucks you under and claims another victim. Your life and your mission end here. But if you have picked a 9, turn to 312.",
+            "transition_type": "stochastic",
+            "realisation_value": "If not, then this is your last chance! If you pick any number except a 9", 
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "warnings": "This choice is only possible if the first choice failed. Contain an implicit dead end (death)"
+        }
+    ]
+}
+
+
+INPUT 97:
+{
+    "id": 97,
+    "text": "Ahead of you, you can see a fierce battle raging across a stone bridge. The clash of steel and the cries of men and beasts echo through the forest. In the midst of the fighting, you see Prince Pelathar, the King’s son. He is in combat with a large grey Gourgaz who is wielding a black axe above his scaly head. Suddenly, the Prince falls wounded—a black arrow in his side. <choice>If you wish to defend the fallen Prince, turn to 255.</choice> <choice>If you wish to run into the forest, turn to 306.</choice>"
+}
+
+OUTPUT 97:
+{
+    "edges": [
+        {
+            "source_id": "97",
+            "target_id": "255",
+            "edge_text": "If you wish to defend the fallen Prince, turn to 255.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null, 
+            "semantic_risk": "reckless",
+            "semantic_morality": "noble",
+            "semantic_action": "physical",
+            "warnings": null
+        },
+        {
+            "source_id": "97",
+            "target_id": "306",
+            "edge_text": "If you wish to run into the forest, turn to 306.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null, 
+            "semantic_risk": "cautious",
+            "semantic_morality": "selfish",
+            "semantic_action": "physical",
+            "warnings": null
+        }
+    ]
+}
+
+INPUT 100:
+{
+    "id": "100",
+    "text": "The cold corridor suddenly makes an abrupt turning towards the east. You notice a greenish glow that lights the tunnel in the far distance. As you creep nearer you can see that the corridor opens out into a larger chamber. The strange light seems to emanate from a large bowl resting upon the top of a granite throne. On a plinth in front of the throne stands a statue. It looks like a winged serpent curved in the shape of an ‘S’. <choice>If you wish to sit on the throne, turn to 161.</choice> <choice>If you wish to examine the statue, turn to 133.</choice> <choice>If you wish to look for an exit from this chamber, turn to 257.</choice>"
+}
+
+OUTPUT 100:
+{
+    "edges": [
+        {
+            "source_id": "100",
+            "target_id": "161",
+            "edge_text": "If you wish to sit on the throne, turn to 161.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null, 
+            "semantic_risk": reckless,
+            "semantic_morality": neutral,
+            "semantic_action": neutral,
+            "warnings": null
+        },
+        {
+            "source_id": "100",
+            "target_id": "133",
+            "edge_text": "If you wish to examine the statue, turn to 133.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null, 
+            "semantic_risk": neutral,
+            "semantic_morality": neutral,
+            "semantic_action": tactical,
+            "warnings": null
+        },
+        {
+            "source_id": "100",
+            "target_id": "257",
+            "edge_text": "If you wish to look for an exit from this chamber, turn to 257.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null, 
+            "semantic_risk": cautious,
+            "semantic_morality": neutral,
+            "semantic_action": tactical,
+            "warnings": null
+        }
+    ]
+}
+
+INPUT 276:
+{
+    "id": 276,
+    "text": "Reaching for your weapon you manage to hack your way through the tangle of wood and twisted branches to the clearer forest beyond. Your cloak is torn in several places and your right leg is badly bruised above the knee. <choice>Lose 1 ENDURANCE point and turn to 213.</choice>"
+}
+
+OUTPUT 276:
+{
+    "edges": [
+        {
+            "source_id": "276",
+            "target_id": "213",
+            "edge_text": "Lose 1 ENDURANCE point and turn to 213.",
+            "transition_type": "forced",
+            "realisation_value": null, 
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "warnings": "Loss of 1 ENDURANCE point during the transition"
+        }
+    ]
+}
+
+INPUT 339:
+{
+    "id": 339,
+    "text": "You quickly sidestep just as a long dagger shatters the glass top of the counter. A swarthy youth is attacking you and you must fight him. Robber: COMBAT SKILL 13   ENDURANCE 20 <choice>If you kill him within 4 rounds of Combat, turn to 94.</choice> <choice>If you are still fighting after 4 rounds of Combat, turn to 203.</choice> <choice>You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.</choice>"
+}
+
+OUTPUT 339:
+{
+    "edges": [
+        {
+            "source_id": "339",
+            "target_id": "94",
+            "edge_text": "If you kill him within 4 rounds of Combat, turn to 94.",
+            "transition_type": "conditional",
+            "realisation_value": "If you kill him within 4 rounds of Combat", 
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "warnings": "Based on a rare condition : combat speed"
+        },
+        {
+            "source_id": "339",
+            "target_id": "203",
+            "edge_text": "If you are still fighting after 4 rounds of Combat, turn to 203.",
+            "transition_type": "conditional",
+            "realisation_value": "If you are still fighting after 4 rounds of Combat", 
+            "semantic_risk": null,
+            "semantic_morality": null,
+            "semantic_action": null,
+            "warnings": "Based on a rare condition : combat speed"
+        },
+        {
+            "source_id": "339",
+            "target_id": "7",
+            "edge_text": "You may evade combat by escaping through the front door at any stage of the fight, by turning to 7.",
+            "transition_type": "explicit_choice",
+            "realisation_value": null,
+            "semantic_risk": "cautious",
+            "semantic_morality": "neutral",
+            "semantic_action": "tactical",
+            "warnings": null
+        }
+    ]
+}
