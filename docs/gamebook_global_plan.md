@@ -38,11 +38,16 @@ Produire, à partir des HTML de Project Aon, les tables `LW01_nodes.csv` et
 - [x] Calibration du prompt d'extraction sur le cluster (Qwen3.6-27B + vLLM, sorties structurées) :
       6 itérations, de ~35 divergences à **4 divergences "douces"** (axes sémantiques uniquement,
       aucune erreur structurelle). Historique dans `results/curnagl_results/`.
-- [ ] **Extraction complète** des ~350 sections de LW01 sur le cluster → `LW01_e_edges.csv`.
-- [ ] **Contrôle qualité** : complétude (chaque `<choice>` → une arête, cibles dans 1–350),
-      cohérence des types, relecture d'un échantillon hors calibration.
-- [ ] Table des nœuds définitive (reprendre la partie "nodes" de `scripts/2_parse_simple_gamebook.py`,
-      abandonner sa partie "edges").
+- [x] **Extraction complète** des 350 sections de LW01 sur le cluster → 556 arêtes,
+      `LW01_e_edges.csv` (brut dans `results/curnagl_results/csv/LW01_edges_extraction.csv`).
+- [x] **Contrôle qualité** (14.07.2026) : zéro écart balises `<choice>` ↔ arêtes, IDs valides,
+      graphe entièrement atteignable depuis la section 1, 17 nœuds absorbants cohérents avec
+      `LW01_nodes.csv`, zéro violation des règles du schéma. Notes pour la phase 2 : la
+      catégorie `complex` n'est jamais utilisée (combats = `forced`/`conditional` + warning) ;
+      les morts implicites (défaites de combat, échecs RNT fatals) ne sont pas des arêtes et
+      devront être réinjectées via l'expansion EP (53 warnings les signalent).
+- [x] Table des nœuds définitive (`scripts/2_parse_nodes.py`, partie "nodes" de l'ancien
+      `2_parse_simple_gamebook.py`).
 
 ### Phase 2 — Modélisation : graphe, mécaniques et Bag-of-Paths
 
@@ -276,8 +281,10 @@ composites P7/P8.
 
 À vérifier après l'extraction complète (~350 sections) :
 
-1. Fréquences des étiquettes par axe sur tout le livre (le creux de morality se
-   confirme-t-il ?).
+1. ✔ (14.07.2026) Fréquences sur tout le livre (291 `explicit_choice`) : risk
+   95/84/112 et action 101/126/64 équilibrés ; **morality 11 noble / 262 neutral /
+   18 selfish — le creux se confirme** (10 % non neutre). La stratégie de figures
+   P1/P2 + P7/P8 est maintenue.
 2. Corrélations entre axes (si `reckless` ≈ `physical`, certains profils sont redondants).
 3. Courbe d'**adhésion effective** : masse de probabilité espérée sur les choix préférés
    en fonction de θ — sert à choisir la grille de θ de manière non arbitraire.

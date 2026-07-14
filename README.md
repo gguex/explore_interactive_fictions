@@ -36,8 +36,10 @@ results/         cluster outputs and calibration history
 
 ## Pipeline status (July 2026)
 
-1. **Extraction** (phase 1, nearly done): prompt calibrated on Qwen3.6-27B down to
-   4 soft divergences vs the gold standard; full-book extraction still to run.
+1. **Extraction** (phase 1, done): prompt calibrated on Qwen3.6-27B (4 soft divergences
+   vs the gold standard), full book extracted (556 edges, `LW01_e_edges.csv`) and
+   quality-checked (complete vs `<choice>` tags, fully reachable graph, zero schema
+   violations).
 2. **Modeling** (phase 2, to do): weighted graph with (Node, EP) state expansion,
    player profiles, Bag-of-Paths.
 3. **Indices & analyses** (phase 3, to do): structural indices, path sampling,
