@@ -117,5 +117,5 @@ def parse_for_edge_extraction(html_dir: str, book_prefix: str, output_dir: str) 
 parse_for_edge_extraction(
     html_dir="data/raw/LW01/sections",
     book_prefix="LW01",
-    output_dir="data/processed/nodes_edges_csv/",
+    output_dir="data/processed/nodes_edges/",
 )

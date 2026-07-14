@@ -54,7 +54,7 @@ def prepare_edge_extraction(
 
 # Test the function
 prepare_edge_extraction(
-    nodes_csv="data/processed/nodes_edges_csv/LW01/LW01_nodes.csv",
-    edges_csv="data/processed/nodes_edges_csv/LW01/LW01_edges.csv",
-    output_csv="data/processed/nodes_edges_csv/LW01/LW01_for_edge_extraction.json",
+    nodes_csv="data/processed/nodes_edges/LW01/LW01_nodes.csv",
+    edges_csv="data/processed/nodes_edges/LW01/LW01_edges.csv",
+    output_csv="data/processed/nodes_edges/LW01/LW01_for_edge_extraction.json",
 )

@@ -191,5 +191,5 @@ def parse_gamebook(html_dir: str, book_prefix: str, output_dir: str) -> None:
 parse_gamebook(
     html_dir="data/raw/LW01/sections",
     book_prefix="LW01",
-    output_dir="data/processed/nodes_edges_csv/",
+    output_dir="data/processed/nodes_edges/",
 )

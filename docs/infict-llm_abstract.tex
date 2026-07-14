@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+
+\usepackage[review]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{natbib}
+
+
+\title{Refining the Computational Analysis of Interactive Fiction: A Hybrid Framework using Bag-of-Paths Formalism and LLMs \\ \vspace{0.3cm} \\
+Extended Abstract}
+
+\author{Guillaume Guex \\
+  Department of Language and Information Sciences, University of Lausanne \\
+  \texttt{guillaume.guex@unil.ch}}
+  
+\begin{document}
+\maketitle
+
+The computational study of \emph{interactive fiction} \citep{aarseth_cybertext_1997, montfort_twisty_2005} generally involves extracting a directed graph where nodes represent narrative units (e.g. paragraphs in gamebooks) and edges represent the choices offered to the player \citep{riedl_interactive_2013, metrailler_etude_2025}. From there, mathematical tools can be applied to understand the global narrative structure. For instance, the \emph{Bag-of-Paths formalism} \citep{francoisse_bag--paths_2017, guex_covariance_2021} allows us to define a probability distribution over all possible paths, corresponding to unique storylines, based on a "temperature" parameter (balancing between random choices and efficiency). This approach enables the computation of exact metrics in closed form, such as the probability of encountering a specific paragraph, the correlation between node presences (indicating linked narrative events), and the most probable paths through the entire story.\\
+
+However, the Bag-of-Paths formalism deals strictly with the \emph{topology} or the \emph{structure} of the book. It treats the work as a skeleton, missing one of the most important components of interactive fiction: the \emph{narrative content}. Consequently, three aspects remain difficult to analyze using this mathematical approach alone: (1) the nature of the transition (is the choice difficult, dangerous, or evident?); (2) the narrative relationship between correlated paragraphs; and (3) the global narrative resulting from a particular path (does the resulting story make sense?). \\
+
+The current submission proposes to refine the Bag-of-Paths approach using Large Language Models (LLMs) to address these three cases. Indeed, the large volume of textual elements to analyze, comprising local choices, node pairs, and thousands of potential generated stories, makes a comprehensive close reading labor-intensive and time-consuming, even for a single book. To overcome this scalability issue, we automate the analysis using a pipeline of structured prompts designed to enforce specific output formats (e.g., JSON), ensuring that semantic features are extracted consistently for the mathematical model \cite{wang_slot_2025}. We therefore employ LLMs at the three levels described above as follows:
+
+\begin{enumerate}
+	\item Instead of assuming uniform probabilities at each node, we use LLMs to analyze choice texts and characterize transitions (e.g., danger level, moral implications). These scores can be used to build various transition probabilities within the Bag-of-Paths formalism, allowing us to simulate specific playstyles (e.g., prudent vs. reckless).
+	
+	\item We compare the structural correlation of nodes with their semantical similarity computed by LLMs. This allows us to detect "narrative coherence" or "dissonance", identifying instances where the graph forces a connection between semantically related or unrelated events.
+	
+	\item Finally, we generate a set of representative paths according to the probability model and and use the LLMs as an "AI critic" to assess the story as a whole. This step moves beyond local transition analysis to construct global indices, evaluating whether the generated stories actually yield a coherent and compelling narrative experience.
+\end{enumerate}
+
+We apply this framework to the first books of the \emph{Lone Wolf series} by Joe Dever \cite{dever_flight_1991}, using the open data provided by Project Aon\footnote{\url{https://www.projectaon.org}}. We demonstrate that this hybrid approach allows constructing new indices which capture, for instance, the difficulty of the adventure, the feeling of freedom, or narrative coherence better than standard graph metrics. The long-term goal is to establish a robust framework for the "distant reading" of branching narratives, bridging the gap between topology and semantics.
+
+% Bibliography entries for the entire Anthology, followed by custom entries
+%\bibliography{custom,anthology-overleaf-1,anthology-overleaf-2}
+
+\bibliography{infict_llm}
+
+\end{document}
