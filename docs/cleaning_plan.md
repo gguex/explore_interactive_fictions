@@ -9,8 +9,8 @@ générale reste la même.
 Pour le moment, du travail a été effectué, mais plusieurs fichiers de notes ne sont plus à jour et le code est un peu en désordre. 
 Il s'agit donc de faire un petit nettoyage de la manière suivante :
 
-   1. Dans un premier temps, on revoit ce qu'on va faire globalement. On prend du recule et on note le plan global dans `docs/gamebook_global_plan.md` 
-   2. On nettoye toutes les notes pour qu'elle soient propres.
+   1. (fait, 14.07.2026) Dans un premier temps, on revoit ce qu'on va faire globalement. On prend du recule et on note le plan global dans `docs/gamebook_global_plan.md` 
+   2. (fait, 14.07.2026) On nettoye toutes les notes pour qu'elle soient propres : `gamebook_data_schema.md` réécrit autour du pipeline actuel (ancien schéma d'arêtes → `docs/archives/legacy_edges_schema.md`), `gamebook_mechanics.md` aligné sur le plan global, `utilisation_dcsr-llm.md` archivé (pipeline remplacé par `cluster_scripts/`).
    3. On met à jour les scripts, on archive et on nettoye le repo.
 
 Cela nous permettra de repartir sur des bonnes bases.

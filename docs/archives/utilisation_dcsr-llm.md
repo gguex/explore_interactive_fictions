@@ -1,4 +1,12 @@
-# Pipeline DCSR-LLM : Extraction de Graphes Narratifs (Gamebooks)
+# [ARCHIVÉ] Pipeline DCSR-LLM : Extraction de Graphes Narratifs (Gamebooks)
+
+> **Statut : remplacé (juillet 2026).** Ce document décrit le workflow avec l'outil
+> `dcsr-llm`, utilisé pour les premières itérations de calibration (résultats dans
+> `results/curnagl_results/dscr-llm_json/`). Le pipeline actuel utilise directement
+> vLLM avec sorties structurées : voir `cluster_scripts/` (`extract.py`, `schemas.py`,
+> `system_prompt_final.txt`). Les prompts et schémas ci-dessous sont périmés
+> (`parsing_confidence` a été remplacé par `warnings`, et la logique de catégorisation
+> a évolué — la référence est `docs/gamebook_data_schema.md`).
 
 Ce document centralise les procédures pour extraire automatiquement la topologie (choix et transitions) des paragraphes d'un livre interactif vers un format JSON structuré, en utilisant l'outil `dcsr-llm` sur le cluster Curnagl.
 

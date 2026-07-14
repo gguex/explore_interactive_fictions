@@ -1,5 +1,10 @@
 # Research Note: Gamebook Mechanics & Graph Modeling Strategy
 
+> **Status (14.07.2026): the modeling strategy of §2 is adopted** — including the full
+> (Node, EP) state space expansion — see `docs/gamebook_global_plan.md` §2 for the
+> decision and its fallback plan, and §7 of the same document for the player profiles
+> built on top of this model.
+
 ## 1. Exhaustive List of Lone Wolf Game Mechanics
 
 The *Lone Wolf* series relies on a complex set of rules. Below is a comprehensive list of these mechanics:

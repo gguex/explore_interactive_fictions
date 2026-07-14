@@ -1,23 +1,57 @@
 # Data Schema: Gamebook Graph Extraction
 
-## 1. File Naming Convention
+> Reference for all data files produced by phase 1 (extraction).
+> See `docs/gamebook_global_plan.md` for the overall pipeline and
+> `docs/gamebook_mechanics.md` for the modeling choices.
+> The legacy edges schema (pre-LLM extraction) is archived in
+> `docs/archives/legacy_edges_schema.md`.
 
-To ensure consistency across multiple books and processing stages, files must follow this strict naming convention:
-`[SeriesCode][BookNumber]_[DataType].csv`
+## 1. Pipeline and File Naming Convention
 
-* `SeriesCode`: E.g., `LW` for Lone Wolf, `FF` for Fighting Fantasy.
-* `BookNumber`: Two digits, e.g., `01`, `02`.
-* `DataType`: `nodes` (for paragraphs) or `edges` (for transitions).
+```
+data/raw/LWXX/sections/sect*.htm          (Project Aon HTML, one file per paragraph)
+        │
+        │  scripts/1_parse_for_edge_extraction.py
+        ▼
+data/processed/nodes_edges/LWXX/LWXX_for_edges_extraction.json   (paragraphs with <choice> tags)
+        │
+        │  cluster: cluster_scripts/extract.py (vLLM + structured outputs)
+        ▼
+data/processed/nodes_edges/LWXX/LWXX_e_edges.csv                 (enhanced edges table, §3)
 
-**Examples:**
-* `LW01_nodes.csv` (Flight from the Dark - Paragraphs)
-* `LW01_edges.csv` (Flight from the Dark - Links)
+data/raw/LWXX/sections/sect*.htm
+        │
+        │  scripts/2_parse_nodes.py (to be refactored from the node part of
+        ▼  the legacy scripts/2_parse_simple_gamebook.py)
+data/processed/nodes_edges/LWXX/LWXX_nodes.csv                   (nodes table, §2)
+```
+
+File naming: `[SeriesCode][BookNumber]_[DataType].[ext]`
+
+* `SeriesCode`: e.g., `LW` for Lone Wolf, `FF` for Fighting Fantasy.
+* `BookNumber`: two digits, e.g., `01`, `02`.
+* `DataType`: `nodes`, `e_edges`, `for_edges_extraction`, `calibration*` (see §4).
+
+### Intermediate JSON (`LWXX_for_edges_extraction.json`)
+
+A list of paragraph objects. Choice texts are kept inline, wrapped in `<choice>` tags,
+so the LLM sees each choice in its narrative context:
+
+```json
+[
+  {
+    "id": "1",
+    "text": "Narrative text of the paragraph... <choice>If you wish to..., turn to 85.</choice> <choice>...</choice>"
+  }
+]
+```
 
 ---
 
 ## 2. Nodes Table (`LWXX_nodes.csv`)
 
-This table models the static properties of each paragraph. It strictly captures what is written on the page, handling multiple entities via JSON-like strings to avoid column bloat.
+Models the static properties of each paragraph. It strictly captures what is written on
+the page, handling multiple entities via JSON-like strings to avoid column bloat.
 
 | Column Name | Data Type | Description / Modalities |
 | :--- | :--- | :--- |
@@ -32,34 +66,39 @@ This table models the static properties of each paragraph. It strictly captures 
 
 ---
 
-## 3. Edges Table (`LWXX_edges.csv`)
+## 3. Enhanced Edges Table (`LWXX_e_edges.csv`)
 
-This table models the transitions connecting the nodes. It explicitly separates text-based conditions from stochastic triggers. 
-
-| Column Name | Data Type | Description / Modalities |
-| :--- | :--- | :--- |
-| `source_id` | String | The originating `node_id`. |
-| `target_id` | String | The destination `node_id`. |
-| `edge_text` | Text | The exact raw text of the choice presented to the player. |
-| `transition_type` | Category | Defines the nature of the link:<br> - `explicit_choice`: Standard player decision.<br> - `forced`: Automatic progression ("Turn to...").<br> - `stochastic`: Based on a random roll (Dice or RNT).<br> - `conditional`: Blocked by a specific requirement or combat outcome. |
-| `stochastic_trigger` | String | The exact raw text or range triggering this edge (e.g., `0-4`, `even_number`). Leave empty if not stochastic. |
-| `condition_type` | Category | The generalized type of lock on this edge:<br> - `none`: Freely accessible.<br> - `skill`: Requires a specific discipline/spell.<br> - `stat_check`: Based on a numeric threshold (Health, Luck, etc.).<br> - `combat_victory`: Requires defeating the enemies in this node.<br> - `combat_evasion`: Represents fleeing from the combat in this node.<br> - `item`: **[FUTURE-PROOFING]** Requires a specific object. |
-| `condition_value` | String | The specific requirement (e.g., `Sixth Sense`, `<10`). Leave empty for combat outcomes. |
-
---- 
-
-## 4. Ehanced Edges Table (`LWXX_e_edges.csv`)
-
-This table models the transitions connecting the nodes after processed by LLM. It explicitly separates text-based conditions from stochastic triggers. 
+The reference edges table, produced by the LLM extraction on the cluster
+(`cluster_scripts/extract.py` + `system_prompt_final.txt`, structured outputs enforced by
+`cluster_scripts/schemas.py`). One row per outgoing transition.
 
 | Column Name | Data Type | Description / Modalities |
 | :--- | :--- | :--- |
 | `source_id` | String | The originating `node_id`. |
 | `target_id` | String | The destination `node_id`. |
 | `edge_text` | String | The exact raw text of the choice presented to the player (between `<choice>` tags). |
-| `transition_type` | Category | Defines the nature of the link:<br> - `forced`: Automatic progression with no alternatives.<br> - `explicit_choice`: Standard player decision.<br> - `stochastic`: Based on a random roll.<br> - `conditional`: Based on a specific requirement (item, skill, stat).<br> - `complex`: Combats or unusual choices (e.g., risk of death). |
+| `transition_type` | Category | Defines the nature of the link:<br> - `forced`: Automatic progression with no alternatives.<br> - `explicit_choice`: Standard player decision.<br> - `stochastic`: Based on a random roll.<br> - `conditional`: Based on a specific requirement (item, skill, stat, combat outcome).<br> - `complex`: Combats or unusual choices (e.g., risk of death). |
 | `realisation_value` | String / Null | The exact raw text triggering the outcome. **Requires** `transition_type` to be `stochastic` or `conditional`. Otherwise, `null`. |
 | `semantic_risk` | Category / Null | Axis of risk. Evaluated as `cautious`, `neutral`, or `reckless` via contrastive evaluation. **Requires** `transition_type` to be `explicit_choice`. Otherwise, `null`. |
 | `semantic_morality` | Category / Null | Axis of morality. Evaluated as `selfish`, `neutral`, or `noble` via contrastive evaluation. **Requires** `transition_type` to be `explicit_choice`. Otherwise, `null`. |
 | `semantic_action` | Category / Null | Axis of approach. Evaluated as `physical`, `neutral`, or `tactical` via contrastive evaluation. **Requires** `transition_type` to be `explicit_choice`. Otherwise, `null`. |
 | `warnings` | String / Null | Annotator comments. Used ONLY if the text is ambiguous, broken, or highly unusual. Otherwise, `null`. |
+
+The semantic axes feed the player profiles defined in
+`docs/gamebook_global_plan.md` §7.
+
+---
+
+## 4. Calibration Files (`data/for_edge_extraction/`)
+
+Used to calibrate the LLM extraction prompt against a manually annotated gold standard
+(see the calibration history in `results/curnagl_results/`).
+
+| File | Content |
+| :--- | :--- |
+| `LWXX_calibration.json` | Manually selected subset of paragraphs, same format as the intermediate JSON (§1). |
+| `LWXX_calibration_edges_gold.csv` | Manually annotated gold edges for this subset, same schema as `LWXX_e_edges.csv` (§3). |
+
+Evaluation: `scripts/utils/eval_diff.py` compares a cluster output against the gold and
+writes an error report (`rapport_erreurs_*.csv`, one row per divergence with a
+`gravite` level).
