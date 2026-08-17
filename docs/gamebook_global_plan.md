@@ -1,290 +1,208 @@
-# Plan global — Analyse computationnelle des fictions interactives (COMHUM2026)
+# Plan global — Distant reading des fictions interactives
 
-> Document de référence du projet. Mis à jour le 14.07.2026.
-> Voir `docs/infict-llm_abstract.tex` pour l'abstract accepté.
+> Document de référence à partir du 13.08.2026. Les documents antérieurs sont conservés
+> dans [`docs/archives/`](archives/). L'avancement est consigné dans
+> [`progress_log.md`](progress_log.md). La représentation retenue est spécifiée dans
+> [`graph_model.md`](graph_model.md).
 
-## 1. Objectif et livrables
+## 1. Question de recherche
 
-Construire un cadre hybride **Bag-of-Paths (BoP) + LLMs** pour l'analyse "distante" des
-fictions interactives, appliqué au premier livre de la série *Lone Wolf* (Project Aon).
+**Comment étudier les fictions interactives par des méthodes de distant reading, en
+combinant l'analyse structurelle — notamment le formalisme Bag-of-Paths (BoP) — et
+l'analyse sémantique par les LLM ?**
 
-Deux livrables, dans l'ordre :
+Le cadre doit relier trois échelles : les transitions locales, l'organisation globale du
+graphe et les histoires produites par ses chemins.
 
-1. **Présentation COMHUM2026** (échéance : ~1–2 mois).
-2. **Article** développant la présentation (peut inclure les extensions écartées ci-dessous).
+## 2. Objectif et périmètre
 
-## 2. Décisions de périmètre (14.07.2026)
+L'objectif est une méthode applicable à plusieurs formes de récits à embranchements.
+*Lone Wolf 01* (LW01) est le premier cas d'étude, pas le modèle universel.
 
-| Question | Décision | Conséquence |
+Deux livrables sont visés :
+
+1. une présentation COMHUM2026 démontrant le cadre sur LW01 ;
+2. un article approfondissant la méthode et sa validation sur d'autres corpus.
+
+La simulation détaillée des ressources persistantes est retirée du socle. Les combats et
+autres mécaniques sont représentés par leurs conséquences, exactes ou paramétrées, sans
+simuler leurs règles internes. Ce choix réduit les hypothèses propres à *Lone Wolf* et
+rend la méthode transférable.
+
+## 3. Principes de modélisation
+
+### 3.1 Niveaux indépendants
+
+| Niveau | Information représentée | Rôle |
 | :--- | :--- | :--- |
-| Corpus | **LW01 uniquement** pour la présentation | Pas de re-validation LLM sur d'autres livres ; le pipeline reste générique (préfixes `LWXX`). |
-| Mécaniques | **Expansion d'état (Node, EP) complète** | Endurance, combats et évasion modélisés selon `docs/gamebook_mechanics.md` ; c'est le gros morceau de la phase 2. |
-| Axes LLM | **(1) Playstyles** et **(3) Critique IA** pour la présentation | L'axe (2) corrélation structurelle vs similarité sémantique est reporté à l'article. |
+| L0 — Topologie | Unités narratives, transitions, débuts et fins | Socle obligatoire pour toute fiction à embranchements. |
+| L1 — Agentivité | Choix du joueur, transitions automatiques, conditions d'accès | Distingue ce que décide le joueur de ce que le système impose. |
+| L2 — Incertitude | Résultats probabilistes, exacts ou paramétrés | Représente le hasard sans imposer une mécanique particulière. |
+| L3 — État | Variables persistantes : santé, objets, compétences, relations, etc. | Extension optionnelle lorsque l'analyse l'exige. |
 
-**Risque assumé :** l'expansion EP complète dans un délai de 1–2 mois est ambitieuse.
-Plan de repli si le BoP sur graphe étendu pose problème : revenir au graphe topologique
-simple (nœud = paragraphe) où les combats deviennent des probabilités de mort sur les
-arêtes, et garder l'expansion EP pour l'article.
+Le cœur du projet porte sur L0–L2. L3 reste une extension non implémentée pour la
+présentation. Le périmètre de chaque mécanique est justifié dans
+[`graph_model.md`](graph_model.md#4-traitement-des-mécaniques-de-lone-wolf).
 
-## 3. Les trois phases de recherche
+### 3.2 Graphe minimal
 
-### Phase 1 — Extraction des données (quasi terminée)
+La représentation par défaut est un **multigraphe dirigé** :
 
-Produire, à partir des HTML de Project Aon, les tables `LW01_nodes.csv` et
-`LW01_e_edges.csv` (schémas dans `docs/gamebook_data_schema.md`).
+- un nœud représente une unité narrative ou une fin ;
+- une arête représente une transition possible ;
+- plusieurs arêtes entre deux nœuds restent possibles si elles correspondent à des
+  actions différentes.
 
-- [x] Parsing HTML des nœuds avec choix balisés `<choice>` (`scripts/1_parse_for_edge_extraction.py`).
-- [x] Jeu de calibration manuel (gold) : `data/for_edge_extraction/LW01_calibration*.{json,csv}`.
-- [x] Calibration du prompt d'extraction sur le cluster (Qwen3.6-27B + vLLM, sorties structurées) :
-      6 itérations, de ~35 divergences à **4 divergences "douces"** (axes sémantiques uniquement,
-      aucune erreur structurelle). Historique dans `results/curnagl_results/`.
-- [x] **Extraction complète** des 350 sections de LW01 sur le cluster → 556 arêtes,
-      `LW01_e_edges.csv` (brut dans `results/curnagl_results/csv/LW01_edges_extraction.csv`).
-- [x] **Contrôle qualité** (14.07.2026) : zéro écart balises `<choice>` ↔ arêtes, IDs valides,
-      graphe entièrement atteignable depuis la section 1, 17 nœuds absorbants cohérents avec
-      `LW01_nodes.csv`, zéro violation des règles du schéma. Notes pour la phase 2 : la
-      catégorie `complex` n'est jamais utilisée (combats = `forced`/`conditional` + warning) ;
-      les morts implicites (défaites de combat, échecs RNT fatals) ne sont pas des arêtes et
-      devront être réinjectées via l'expansion EP (53 warnings les signalent).
-- [x] Table des nœuds définitive (`scripts/2_parse_nodes.py`, partie "nodes" de l'ancien
-      `2_parse_simple_gamebook.py`).
+Le modèle canonique sépare les nœuds, les actions et leurs conséquences. Une arête peut
+porter le contrôle de l'action, sa disponibilité, ses annotations et sa probabilité.
 
-### Phase 2 — Modélisation : graphe, mécaniques et Bag-of-Paths
+Une transition déterministe reste une arête directe. Un **nœud virtuel de résolution**
+n'est ajouté que lorsqu'une même action peut produire plusieurs conséquences. Ce choix
+évite un graphe biparti systématique tout en séparant, lorsque nécessaire, la décision du
+joueur du résultat de cette décision.
 
-Construire le graphe pondéré sur lequel les calculs sont possibles.
+```text
+cas simple :     unité A ── action ──▶ unité B
 
-1. **Graphe de base** : probabilités de transition par nœud —
-   `forced` = 1 ; `explicit_choice` = uniforme (baseline) ; `stochastic` = probabilité exacte
-   dérivée de la plage RNT (`realisation_value`) ; `conditional` (skill gates) = probabilité
-   du "joueur statistique moyen" (p = proportion de disciplines choisies).
-2. **Expansion EP** : état = (paragraphe, points d'endurance). Dégâts/soins statiques déplacent
-   l'EP ; EP ≤ 0 route vers l'état absorbant `Death`. Les combats sont compressés en blocs
-   probabilistes (distribution des pertes d'EP calculée depuis le ratio de CS et la table RNT),
-   avec l'évasion comme arête de sortie alternative.
-3. **Playstyles (axe LLM 1)** — décision méthodologique (14.07.2026) :
-   - **Playstyle = fonction de coût** sur les arêtes `explicit_choice`, dérivée des axes
-     sémantiques (`semantic_risk`, `semantic_morality`, `semantic_action`). P. ex. pour le
-     joueur *prudent* : `cautious` = 0, `neutral` = 1, `reckless` = 2 (symétrique pour le
-     téméraire, le noble, l'égoïste, etc.). Les transitions mécaniques (`forced`,
-     `stochastic`, `conditional`) gardent leur probabilité de référence : ce ne sont pas
-     des choix du joueur.
-   - **θ = degré d'adhésion au playstyle** : θ = 0 donne le lecteur aléatoire uniforme,
-     θ grand le joueur caricatural. Chaque playstyle définit donc une *famille continue*
-     de lecteurs, pas un point.
-   - Méthodologie reproductible : une grille fixe (playstyles × valeurs de θ), chaque
-     indice devient une **courbe en fonction de θ, par playstyle**.
-   - Les profils explorés sont définis en **section 7**.
-4. **Bag-of-Paths** : implémentation du formalisme (matrice fondamentale) sur le graphe étendu,
-   avec le paramètre de température θ. Vérifications numériques (absorption, normalisation).
-
-### Phase 3 — Indices et analyses
-
-Grille de lecture générale : percevoir le livre à trois échelles — **micro** (les arêtes,
-phase 1), **méso** (nœuds et régions, indices BoP), **macro** (histoires complètes,
-chemins + LLM). Le catalogue complet des indices est en **section 6** ; on retient ici le
-noyau pour la présentation.
-
-1. **Indices structurels retenus** (courbes en θ, par playstyle) :
-   - *Probabilité de survie/victoire* (I1) — question associée : jouer prudemment
-     augmente-t-il vraiment la survie dans ce livre ?
-   - *Fonction de hasard narrative* (I2) — la courbe de danger du livre.
-   - *Entropie des trajectoires* (I4) — le "sentiment de liberté" et sa décroissance en θ.
-   - *Probabilité de visite, couverture espérée et rejouabilité* (I7).
-   - *Carte de divergence entre playstyles* (I10) — la "réactivité" du livre.
-   - Produit final : une **"fiche du livre"** (courbe de danger, profil d'EP, carte des
-     régions, divergences entre playstyles), transposable telle quelle à d'autres livres.
-2. **Sélection des chemins à analyser** — méthodologie à deux étages :
-   - *Étage A — chemins archétypaux* (déterministes, ~5–8) : chemin le plus probable par
-     (playstyle, θ élevé), plus les conditionnements *sachant la victoire* et *sachant la
-     mort* (la "tragédie typique"). Zéro aléa ; pour l'analyse rapprochée en présentation.
-   - *Étage B — échantillon statistique* (N ≈ 200–500, graine fixée) : tirage i.i.d.
-     stratifié par issue. N choisi par critère de stabilité (bootstrap). Réduction en
-     **k ≈ 10 familles d'histoires** par k-médoïdes sur distance de Jaccard (nœuds
-     visités) — "les k histoires que ce livre raconte".
-   - Grâce à l'expansion EP, un chemin tiré est une **vraie partie** : on interpole les
-     événements mécaniques dans le texte concaténé ("tu perds 4 EP contre le Gourgaz")
-     pour que le critique perçoive la tension.
-3. **Critique IA (axe LLM 3)** — trois modes d'intervention du LLM :
-   - *Embeddings* (déterministes, cheap) : distance pour le clustering de l'étage B ;
-     dispersion sémantique des histoires (diversité narrative réelle, à comparer à
-     l'entropie topologique) ; dérive sémantique le long d'un chemin (proxy de cohérence).
-   - *Critique structuré* : même infrastructure que la phase 1 (vLLM, sorties structurées,
-     prompt versionné, température 0). Grille : cohérence causale, arc de tension,
-     motivation, rythme, qualité de la fin. **Comparaisons par paires** (ordre randomisé)
-     plutôt que notes absolues, agrégées en échelle Bradley–Terry — sur un sous-ensemble
-     pour la présentation, complet pour l'article. Boucle de calibration identique à la
-     phase 1 : gold manuel (~10–15 histoires), mesure d'accord, itérations de prompt.
-   - *Résumés structurés* (support, pas indice) : pour les slides et comme représentation
-     intermédiaire si nécessaire.
-   - Contrainte pratique : une histoire ≈ 5–10k mots → augmenter `max_model_len`
-     (8192 actuellement) sur le cluster.
-4. **Croisement structure × sémantique** — le cœur de l'argument hybride : corréler, sur
-   l'échantillon B, les indices structurels par chemin (longueur, danger cumulé, EP minimal
-   atteint, playstyle générateur) avec les scores du critique. Figure clé visée : tension
-   structurelle (profil d'EP) vs tension perçue par le LLM.
-5. *(Article, pas présentation)* Axe LLM 2 : corrélation structurelle des nœuds vs
-   similarité sémantique (fondé sur I9).
-
-### Phase 4 — Présentation
-
-- Figures clés : visualisation du graphe (et du graphe étendu), courbes indices vs θ,
-  comparaison des playstyles, exemples d'histoires générées + verdicts du critique IA.
-- Slides : problème → formalisme BoP → limites (topologie seule) → apport des LLM aux
-  niveaux 1 et 3 → résultats LW01 → perspectives (axe 2, autres livres).
-
-## 4. Calendrier indicatif (8 semaines)
-
-| Semaines | Contenu |
-| :--- | :--- |
-| S1 | Nettoyage du repo (cf. `docs/cleaning_plan.md`) + extraction complète LW01 + contrôle qualité. |
-| S2–S4 | Phase 2 : graphe de base, expansion EP, playstyles, BoP. Point de décision fin S4 : si l'expansion EP bloque, activer le plan de repli. |
-| S5–S6 | Phase 3 : indices structurels, comparaisons de playstyles, protocole et exécution de la critique IA. |
-| S7–S8 | Figures, slides, marge de sécurité. |
-
-## 5. Organisation cible du repo
-
-```
-docs/            notes de référence (ce plan, schéma de données, mécaniques, abstract)
-scripts/         pipeline numéroté : 1_parse..., 2_build_graph..., 3_bop..., ...
-scripts/utils/   outils transverses (éval, conversions)
-cluster_scripts/ scripts d'extraction LLM (Curnagl)
-data/raw/        HTML Project Aon (non versionné si volumineux)
-data/processed/  tables nodes/edges finales
-results/         sorties de calculs et de calibration
-*/archives/      tout ce qui est conservé pour historique mais plus actif
+cas composé :    unité A ── action ──▶ [résolution]
+                                      ├── p ──▶ unité B
+                                      └── 1-p ▶ fin C
 ```
 
-## 6. Catalogue des indices constructibles
+Les nœuds virtuels sont générés au moment du calcul ; ils ne sont pas annotés manuellement
+dans les données sources et n'ajoutent ni contenu ni coût narratif.
 
-Liste complète des indices identifiés (discussion du 14.07.2026). Ceux marqués
-**[présentation]** forment le noyau ; les autres sont des extensions pour l'article.
-Tous se déclinent en courbes (θ, playstyle).
+### 3.3 Disponibilité, décision et conséquence
 
-### Difficulté et survie (exploitent l'expansion EP)
+Dans un scénario de calcul explicite, le modèle distingue trois opérations :
 
-- **I1 — Probabilité de survie/victoire** **[présentation]** : probabilité d'absorption
-  en `win` vs `death`, par playstyle et θ. Croisement éventuel des courbes entre
-  playstyles = résultat en soi.
-- **I2 — Fonction de hasard narrative** **[présentation]** : probabilité de mourir *à*
-  chaque paragraphe (ou tranche de progression). La "courbe de danger" du livre : pics de
-  mortalité, boss final vs mort distribuée.
-- **I3 — Profil d'endurance** : distribution de l'EP conditionnée au passage en chaque
-  nœud. Courbe de tension objective : usure progressive vs récupération avant le final.
-  (Utilisé dans la "fiche du livre" et le croisement de phase 3.)
+1. déterminer les actions disponibles dans le scénario étudié ;
+2. choisir une action selon une politique de joueur ;
+3. résoudre ses conséquences éventuelles.
 
-### Liberté et agentivité
+Pour une action `a` au nœud `i`, la transition vers `j` peut ainsi se décomposer en :
 
-- **I4 — Entropie des trajectoires** **[présentation]** : calculable exactement pour une
-  chaîne absorbante (Σᵢ nᵢ·Hᵢ : visites espérées × entropie locale). Le "sentiment de
-  liberté" ; sa décroissance en θ mesure ce qu'un tempérament affirmé coûte en variété.
-- **I5 — Pertinence des choix (agentivité)** : pour chaque nœud de décision, divergence
-  entre les distributions de chemins futurs conditionnées à chaque option (ou information
-  mutuelle option ↔ issue finale). Détecte les **faux choix** (reconvergence immédiate)
-  vs les choix pivots. Indice potentiellement inédit — bon candidat pour l'article.
-- **I6 — Frontière survie–liberté** : en variant θ, courbe survie vs entropie. Le livre
-  comme objet de game design : combien de liberté sacrifier pour survivre ?
-
-### Structure et contenu
-
-- **I7 — Visite, couverture, rejouabilité** **[présentation]** : probabilité de visite de
-  chaque nœud (colonne vertébrale vs contenu rare) ; couverture espérée (fraction du texte
-  vue en une lecture) ; chevauchement espéré entre deux lectures indépendantes =
-  **indice de rejouabilité**.
-- **I8 — Betweenness BoP et goulots** : les "scènes obligatoires". À croiser avec les
-  dominateurs du graphe (nœuds par lesquels tout chemin gagnant passe) : l'un
-  probabiliste, l'autre logique.
-- **I9 — Covariance/corrélation de présence entre nœuds** (formalisme BoP 2021) : les
-  clusters de nœuds co-présents = **régions narratives**. Fondation de l'axe LLM 2
-  (article).
-
-### Comparatif inter-playstyles
-
-- **I10 — Cartes et divergence entre playstyles** **[présentation]** : différence de
-  probabilité de visite entre deux playstyles projetée sur le graphe ("où vit le prudent /
-  où vit le téméraire") ; en global, divergence de Jensen-Shannon entre distributions de
-  chemins = **réactivité du livre** (différencie-t-il réellement les tempéraments ?).
-
-### Indices sémantiques et hybrides (côté LLM)
-
-- **I11 — Dispersion sémantique des histoires** : spread des embeddings des histoires
-  échantillonnées = diversité narrative réelle, à confronter à l'entropie topologique I4
-  (un livre peut être topologiquement libre mais sémantiquement répétitif).
-- **I12 — Dérive sémantique le long d'un chemin** : cosinus moyen entre nœuds consécutifs
-  vs paires aléatoires ; proxy de cohérence à coût nul.
-- **I13 — Scores du critique IA** : cohérence causale, arc de tension, motivation, rythme,
-  qualité de la fin — par comparaisons par paires agrégées (Bradley–Terry).
-  **[présentation]** sur un sous-ensemble, complet pour l'article.
-- **I14 — Indices croisés structure × sémantique** **[présentation]** : corrélations entre
-  indices structurels par chemin et scores I13 (la structure prédit-elle la qualité
-  narrative ?).
-
-## 7. Profils de joueurs ("playstyles caricaturaux")
-
-### 7.1 Formalisation
-
-Un profil `p` est défini par : un **pôle préféré** sur un ou plusieurs axes, et des
-**poids** `w_axe ≥ 0` avec `Σ w_axe = 1`. Le coût d'une arête `explicit_choice` `e`,
-étiquetée `ℓ_axe(e)` sur chaque axe, est :
-
-```
-c_p(e) = Σ_axe  w_axe · κ(ℓ_axe(e))      avec κ = 0 si pôle préféré,
-                                               κ = 1 si neutral,
-                                               κ = 2 si pôle opposé
+```text
+P(j | i) = P(a choisie | i, actions disponibles)
+           × P(j | i, a choisie)
 ```
 
-Propriétés :
+Cette factorisation empêche de confondre la préférence du joueur avec la réussite d'une
+action. Une condition est résolue par le scénario, pas transformée en probabilité. Une
+probabilité mécanique inconnue reste un paramètre soumis à une analyse de sensibilité ;
+elle n'est pas fixée arbitrairement à 0,5.
 
-- Les coûts de **tous** les profils vivent dans `[0, 2]` → une même valeur de θ est
-  comparable d'un profil à l'autre.
-- Re-pondération : à chaque nœud, `P(e) ∝ P_ref(e) · exp(−θ · c_p(e))` **au sein de la
-  masse de probabilité des choix libres** ; les arêtes mécaniques (`forced`, `stochastic`,
-  `conditional`) ne sont jamais re-pondérées.
-- θ = 0 redonne le lecteur aléatoire uniforme quel que soit le profil (= la baseline).
+### 3.4 Caractéristiques sémantiques et playstyles
 
-### 7.2 Les profils retenus
+Le principe général est qu'une action peut recevoir des caractéristiques sémantiques,
+dont une politique de joueur peut favoriser certaines valeurs.
 
-**Six profils purs** (poids 1 sur un axe, 0 ailleurs) — trois paires antagonistes :
+Les axes `risk`, `morality` et `action` déjà extraits pour LW01 sont conservés tels quels.
+Ils constituent une application au corpus, pas une ontologie universelle. Un autre corpus
+peut employer d'autres axes ou ne pas utiliser de playstyles. Cette souplesse évite de
+faire dépendre le moteur de catégories propres à une œuvre.
 
-| # | Profil | Axe | Pôle préféré (κ=0) | Pôle évité (κ=2) |
-| :--- | :--- | :--- | :--- | :--- |
-| P1 | Le Prudent | risk | `cautious` | `reckless` |
-| P2 | Le Téméraire | risk | `reckless` | `cautious` |
-| P3 | Le Chevaleresque | morality | `noble` | `selfish` |
-| P4 | Le Mercenaire | morality | `selfish` | `noble` |
-| P5 | Le Guerrier | action | `physical` | `tactical` |
-| P6 | Le Rusé | action | `tactical` | `physical` |
+### 3.5 Rôle de Bag-of-Paths
 
-**Deux profils composites** (poids ⅓ sur chaque axe), antagonistes sur les trois axes —
-la divergence P7↔P8 (I10) est donc maximale par construction :
+Le graphe compilé fournira à BoP une matrice de transition de référence `P_ref`, les
+caractéristiques nécessaires à une matrice de coûts et une distinction entre nœuds
+narratifs, virtuels et terminaux. Il faudra encore distinguer :
 
-| # | Profil | risk | morality | action | Lecture narrative |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| P7 | Le Héros | `reckless` | `noble` | `physical` | Fonce, se sacrifie, combat de front. |
-| P8 | Le Survivant | `cautious` | `selfish` | `tactical` | Veut juste finir le livre vivant. |
+- une politique locale décrivant les décisions d'un joueur ;
+- une pondération globale des chemins par leur coût dans BoP.
 
-**P0 — Le Lecteur aléatoire** (θ = 0) sert de référence à tous les indices.
+Ces deux formulations ne seront ni confondues ni supposées équivalentes sans démonstration.
+Les coûts techniques des nœuds virtuels seront nuls. Les indices BoP seront choisis dans
+une étape dédiée ; le présent plan ne les présuppose pas.
 
-### 7.3 Constat empirique et précautions (calibration, 14.07.2026)
+## 4. Conservation de la phase 1
 
-Distribution des étiquettes sur le jeu de calibration (59 `explicit_choice`) :
+La phase d'extraction existante reste inchangée : HTML, JSON intermédiaire, tables de
+nœuds et d'arêtes, annotations LLM, jeu gold, prompts, résultats de calibration et contrôle
+qualité demeurent les sources de référence.
 
-| Axe | Pôle A | neutral | Pôle B | Verdict |
-| :--- | :--- | :--- | :--- | :--- |
-| risk | cautious : 20 | 18 | reckless : 21 | Équilibré — axe fort. |
-| action | physical : 22 | 23 | tactical : 14 | Équilibré — axe fort. |
-| morality | noble : 5 | 49 | selfish : 5 | **Très creux** — ~17 % de choix non neutres. |
+Le nouveau modèle sera construit par une **couche d'adaptation** au-dessus des tables
+existantes. Elle traduira les catégories actuelles (`forced`, `explicit_choice`,
+`stochastic`, `conditional`) vers les objets `nodes`, `actions` et `outcomes`, sans
+réécrire l'extraction validée. Les conditions, combats, avertissements et fins implicites
+seront revus avec une provenance explicite.
 
-Conséquence : P3/P4 se distingueront peu du lecteur aléatoire. On les calcule quand même
-(coût nul), mais les figures de la présentation se concentrent sur **P1/P2 et P7/P8** ;
-P3–P6 et d'autres composites passent dans l'article. La moralité reste présente via les
-composites P7/P8.
+## 5. Étapes de travail
 
-À vérifier après l'extraction complète (~350 sections) :
+### Phase 1 — Extraction LW01 — terminée
 
-1. ✔ (14.07.2026) Fréquences sur tout le livre (291 `explicit_choice`) : risk
-   95/84/112 et action 101/126/64 équilibrés ; **morality 11 noble / 262 neutral /
-   18 selfish — le creux se confirme** (10 % non neutre). La stratégie de figures
-   P1/P2 + P7/P8 est maintenue.
-2. Corrélations entre axes (si `reckless` ≈ `physical`, certains profils sont redondants).
-3. Courbe d'**adhésion effective** : masse de probabilité espérée sur les choix préférés
-   en fonction de θ — sert à choisir la grille de θ de manière non arbitraire.
+- Corpus de 350 sections et table de 556 arêtes.
+- Annotation structurelle et sémantique par LLM, calibrée sur un jeu gold.
+- Contrôle de complétude, de schéma et d'atteignabilité.
+- Scripts, données et résultats conservés sans modification.
+
+### Phase 2 — Adaptation et compilation
+
+1. appliquer la spécification de [`graph_model.md`](graph_model.md) ;
+2. construire et relire la table d'adaptation LW01 ;
+3. produire les tables canoniques `nodes`, `actions`, `outcomes` ;
+4. compiler une baseline et des scénarios de sensibilité ;
+5. exporter le graphe, `P_ref`, l'interface de coûts et les contrôles.
+
+La couche d'adaptation est la première implémentation : elle garde les hypothèses visibles
+et testables sans modifier la phase 1.
+
+### Phase 3 — Modèle probabiliste et playstyles
+
+1. analyser et valider la baseline sans préférence sémantique ;
+2. définir les politiques locales fondées sur les annotations existantes ;
+3. vérifier normalisation, absorption, cycles et sensibilité aux paramètres ;
+4. comparer les comportements produits par les profils.
+
+La baseline permet de séparer l'effet du graphe de celui des hypothèses comportementales.
+
+### Phase 4 — BoP et indices
+
+1. préciser la question à laquelle BoP doit répondre ;
+2. comparer la formulation BoP à la chaîne probabiliste locale ;
+3. retenir un petit ensemble d'indices interprétables ;
+4. vérifier les formules sur des graphes artificiels avant LW01.
+
+Le choix des indices vient après le modèle afin d'éviter d'adapter artificiellement les
+données à des mesures prédéfinies.
+
+### Phase 5 — Histoires et analyse LLM
+
+1. sélectionner ou échantillonner des chemins représentatifs ;
+2. reconstruire leur texte avec une provenance complète ;
+3. analyser leur cohérence et leurs propriétés narratives avec un protocole LLM calibré ;
+4. confronter les résultats sémantiques aux résultats structurels.
+
+### Phase 6 — Validation de la généralisabilité
+
+Appliquer au moins L0–L1 à un second corpus de nature différente. Une validation limitée
+mais réelle est préférable à une généralisabilité seulement déclarée.
+
+## 6. Critères de qualité
+
+- **Simplicité** : aucune structure complexe sans cas concret qui la nécessite.
+- **Généralisabilité** : le cœur ne contient aucune règle propre à *Lone Wolf*.
+- **Traçabilité** : données sources, conversions, hypothèses et paramètres restent séparés.
+- **Reproductibilité** : configuration, graines, sorties et contrôles sont versionnés.
+- **Testabilité** : chaque niveau est validé isolément sur des exemples minimaux.
+- **Interprétabilité** : chaque probabilité et chaque indice répond à une question explicite.
+
+## 7. Questions ouvertes immédiates
+
+1. Quel rôle précis attribuer à BoP par rapport à la chaîne de Markov locale ?
+2. Quels indices BoP répondent directement à la question de recherche ?
+3. Quelles valeurs et quels scénarios retenir pour les probabilités inconnues de LW01 ?
+4. Quel second corpus permettra de tester L0–L1 à faible coût ?
+
+Ces questions doivent être tranchées et justifiées avant le développement correspondant.
+
+## 8. Documentation du projet
+
+- `gamebook_global_plan.md` : objectifs, modèle retenu et feuille de route actuelle ;
+- `graph_model.md` : spécification L0–L3, périmètre mécanique et compilation du graphe ;
+- `progress_log.md` : journal chronologique append-only ;
+- futurs documents méthodologiques : indices BoP et protocole d'analyse LLM ;
+- `archives/` : documents remplacés, conservés pour l'historique.
+
+Le plan décrit l'état courant de la méthode ; le journal conserve l'évolution qui y a
+conduit.

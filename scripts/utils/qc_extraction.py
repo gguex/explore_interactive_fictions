@@ -1,8 +1,8 @@
 """Bilan de contrôle qualité d'une extraction complète d'arêtes (LLM).
 
-Vérifie la table finale des arêtes (schéma "enhanced", cf.
-docs/gamebook_data_schema.md §3) contre le corpus balisé et la table des
-nœuds, puis affiche un bilan : complétude, validité des IDs, états
+Vérifie la table finale des arêtes (schéma "enhanced", cf. §3 de
+docs/archives/gamebook_data_schema_2026-07-14.md) contre le corpus balisé et
+la table des nœuds, puis affiche un bilan : complétude, validité des IDs, états
 absorbants, cohérence des règles du schéma, distributions, atteignabilité.
 """
 
