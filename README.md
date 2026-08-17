@@ -14,7 +14,7 @@ narrative analysis.
 | Document | Content |
 | :--- | :--- |
 | `docs/gamebook_global_plan.md` | **Current reference plan**: research question, generic model, decisions and roadmap. |
-| `docs/graph_model.md` | Adopted L0–L3 graph model, mechanics scope and compilation process. |
+| `docs/graph_model.md` | Adopted direct multigraph model, mechanics scope and compilation process. |
 | `docs/progress_log.md` | Append-only progress journal and current project status. |
 | `docs/infict-llm_abstract.tex` | Accepted COMHUM2026 extended abstract. |
 | `docs/cluster_help/` | HPC (Curnagl) workflow notes. |
@@ -40,9 +40,9 @@ results/         cluster outputs and calibration history
    vs the gold standard), full book extracted (556 edges, `LW01_e_edges.csv`) and
    quality-checked (complete vs `<choice>` tags, fully reachable graph, zero schema
    violations).
-2. **Graph modeling** (phase 2, specified, to implement): generic L0–L2 graph,
-   adaptation tables, probabilistic baseline and player policies. Detailed Lone Wolf
-   state mechanics are optional extensions rather than part of the core model.
+2. **Graph modeling** (phase 2, specified, to implement): narrative nodes, synthetic
+   terminals when needed, and direct probabilistic multiedges grouped by `action_id`.
+   Detailed Lone Wolf state mechanics are optional extensions rather than core features.
 3. **BoP and analyses** (later phases): select justified structural indices, sample
    representative paths and develop the LLM critic protocol.
 

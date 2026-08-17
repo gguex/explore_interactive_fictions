@@ -1,293 +1,261 @@
 # Modélisation en graphe retenue
 
-> **Décision méthodologique du 13.08.2026.** Ce document fixe la représentation utilisée
-> après la phase 1. Il complète le [plan global](gamebook_global_plan.md) et remplace, pour
-> la suite du projet, la stratégie spécifique à *Lone Wolf* décrite dans
-> [l'ancienne note sur les mécaniques](archives/gamebook_mechanics_2026-07-14.md).
+> **Décision méthodologique du 17.08.2026.** Ce document fixe la représentation utilisée
+> après la phase 1. Il remplace la [première spécification](archives/graph_model_2026-08-13.md),
+> devenue trop complexe, et complète le [plan global](gamebook_global_plan.md).
 
 ## 1. Objectif
 
-Construire, à partir d'une fiction interactive, un graphe probabiliste qui :
+Construire un graphe probabiliste qui :
 
-- distingue les décisions du joueur des conséquences imposées par le système ;
-- reste simple pour les récits sans mécanique complexe ;
-- peut représenter le hasard sans simuler toutes les règles d'une œuvre ;
-- fournit une matrice de référence et des coûts utilisables par Bag-of-Paths (BoP) ;
-- conserve la provenance de chaque transformation depuis les données extraites.
+- représente directement les parcours entre unités narratives ;
+- distingue décisions du joueur, conditions et conséquences mécaniques ;
+- reste applicable aux récits sans système de jeu élaboré ;
+- fournit probabilités et coûts nécessaires à Bag-of-Paths (BoP) ;
+- conserve la provenance des données de phase 1.
 
-LW01 sert de cas d'étude. Aucune règle propre à *Lone Wolf* ne doit être nécessaire au
-moteur générique.
+LW01 est le premier cas d'étude, pas le modèle universel.
 
-## 2. Les quatre niveaux
+## 2. Les niveaux L0–L3
 
-Les niveaux sont cumulatifs mais indépendants : un corpus peut s'arrêter au niveau dont
-il a besoin.
-
-### L0 — Topologie narrative
-
-L0 décrit ce qui peut succéder à quoi :
-
-- nœuds narratifs ;
-- transitions dirigées ;
-- nœuds initiaux ;
-- fins et catégories de fins, lorsqu'elles existent.
-
-L0 est obligatoire. Il ne suppose ni joueur probabiliste, ni hasard, ni état interne.
-
-### L1 — Agentivité et disponibilité
-
-L1 distingue :
-
-- les **actions du joueur** ;
-- les **transitions automatiques** du système ;
-- les conditions qui rendent une action disponible.
-
-Une condition n'est pas une probabilité. Elle est résolue par un scénario explicite :
-par exemple, un personnage possède ou non une compétence. Plusieurs scénarios peuvent
-être comparés lorsque l'information est inconnue.
-
-L1 peut aussi porter des caractéristiques sémantiques sur les actions. Pour LW01, les
-axes déjà extraits (`risk`, `morality`, `action`) sont conservés, sans être imposés aux
-autres corpus.
-
-### L2 — Incertitude et conséquences
-
-L2 décrit les conséquences d'une action ou d'une transition automatique :
-
-- une conséquence unique de probabilité 1 ;
-- plusieurs conséquences de probabilités exactes ;
-- plusieurs conséquences dépendant de paramètres déclarés.
-
-Une probabilité inconnue n'est jamais remplacée implicitement par 0,5. Elle devient un
-paramètre, étudié sur plusieurs valeurs ou scénarios.
-
-### L3 — État persistant
-
-L3 représente les variables mémorisées au cours d'une partie : santé, inventaire,
-compétences, monnaie, relations, drapeaux narratifs, etc. Une représentation exacte
-demanderait des états du type `(nœud narratif, état du joueur)`.
-
-L3 est une extension, pas le socle du projet. Elle peut faire croître le graphe de manière
-combinatoire et impose des règles propres à chaque œuvre. Elle n'est donc pas implémentée
-pour la présentation COMHUM2026.
-
-## 3. Objets du modèle
-
-### 3.1 Représentation canonique
-
-Avant compilation, le modèle contient trois tables logiques :
-
-| Objet | Rôle | Champs minimaux |
+| Niveau | Information | Statut |
 | :--- | :--- | :--- |
-| Nœud | Unité narrative ou fin | identifiant, type, catégorie terminale, provenance |
-| Action | Ce que choisit le joueur ou déclenche le système | source, contrôle, disponibilité, caractéristiques, provenance |
-| Conséquence | Résultat d'une action | action, cible, probabilité exacte ou paramètre, provenance |
+| **L0 — Topologie** | Unités narratives, transitions, entrées et fins. | Socle obligatoire. |
+| **L1 — Agentivité** | Actions du joueur, transitions automatiques, conditions de disponibilité et caractéristiques sémantiques. | Inclus dans le modèle central. |
+| **L2 — Incertitude** | Conséquences déterministes, probabilités exactes ou paramètres inconnus. | Inclus dans le modèle central. |
+| **L3 — État persistant** | Santé, inventaire, compétences acquises, monnaie, relations et autres variables mémorisées. | Extension non implémentée. |
 
-Une action possède au moins une conséquence. Cette représentation sépare la probabilité
-de **choisir** une action de la probabilité d'en obtenir un **résultat**.
+L0–L2 suffisent pour comparer la structure, les choix et les distributions de chemins.
+L3 demanderait des états `(unité narrative, état du joueur)`, ferait croître le graphe et
+introduirait des règles propres à chaque œuvre. Il est donc exclu du périmètre actuel.
 
-### 3.2 Graphe compilé
+## 3. Graphe retenu
 
-Le graphe de calcul est un multigraphe dirigé. Le cas simple reste direct :
+### 3.1 Nœuds
+
+Le graphe contient seulement :
+
+- les **nœuds narratifs** issus du corpus ;
+- des **terminaux synthétiques** lorsque le texte implique une issue sans paragraphe
+  cible, par exemple `Death` ou `Failure`.
+
+Aucun nœud intermédiaire n'est créé pour un tirage, un combat ou une autre résolution.
+Un chemin du graphe reste ainsi une suite de passages effectivement lus, suivie
+éventuellement d'une issue synthétique.
+
+### 3.2 Multiarêtes
+
+Le graphe est un **multigraphe dirigé**. Chaque arête représente une conséquence possible
+d'une action ou d'une transition automatique.
+
+Champs minimaux de la table `model_edges` :
+
+| Champ | Rôle |
+| :--- | :--- |
+| `edge_id` | Identifiant stable de la conséquence. |
+| `action_id` | Regroupe les conséquences produites par une même action. |
+| `source_id`, `target_id` | Origine et destination narratives ou terminales. |
+| `control` | `player` ou `system`. |
+| `availability` | Condition résolue par le scénario, ou `always`. |
+| `probability_kind` | `deterministic`, `exact` ou `parameter`. |
+| `probability_value` | Probabilité exacte si elle est connue. |
+| `probability_parameter` | Nom du paramètre si elle est inconnue. |
+| caractéristiques sémantiques | Axes disponibles pour l'action. |
+| `source_refs` | Provenance dans les données et le texte. |
+
+Les caractéristiques et le coût d'une action sont répétés sur ses différentes
+conséquences. `action_id` permet de les reconnaître comme une seule décision.
+
+### 3.3 Exemples
+
+Transition déterministe :
 
 ```text
-unité A ── action déterministe ──▶ unité B
+10 ── action=route, q=1 ──▶ 20
 ```
 
-Un nœud virtuel de résolution est créé seulement si une même action possède plusieurs
-conséquences :
+Tirage automatique :
 
 ```text
-unité A ── action ──▶ [résolution de l'action]
-                       ├── q ──▶ unité B
-                       └── 1-q ▶ fin C
+10 ── action=roll, q=0,5 ──▶ 20
+10 ── action=roll, q=0,5 ──▶ 30
 ```
 
-Les nœuds virtuels sont générés automatiquement. Ils ne contiennent aucun texte narratif
-et n'ajoutent aucun coût narratif. Cette construction évite un graphe biparti généralisé
-tout en empêchant de confondre choix et réussite.
+Combat abstrait :
 
-Les actions parallèles entre deux mêmes nœuds restent distinctes dans le multigraphe.
-Lors du passage à une matrice, leurs poids sont additionnés ; la représentation par
-arêtes conserve leur identité et leurs annotations.
+```text
+10 ── action=fight, q ─────▶ 20
+10 ── action=fight, 1-q ───▶ Death
+```
 
-### 3.3 Politique et probabilités
+Combat avec évasion :
 
-Dans un scénario `s`, soit `A_s(i)` l'ensemble des actions disponibles au nœud `i`.
-Une politique locale `π_s(a | i)` distribue la masse entre ces actions :
+```text
+10 ── action=fight, q ─────▶ 20
+10 ── action=fight, 1-q ───▶ Death
+10 ── action=escape, 1 ─────▶ 30
+```
+
+Ces représentations séparent les actions grâce à `action_id`, sans ajouter de nœud
+technique.
+
+## 4. Disponibilité, décision et conséquence
+
+Pour un scénario `s`, soit `A_s(i)` l'ensemble des actions disponibles au nœud `i`.
+La politique locale `π_s(a | i)` distribue la probabilité entre ces actions :
 
 ```text
 Σ π_s(a | i) = 1  pour a dans A_s(i)
 ```
 
-La baseline est uniforme entre les actions du joueur disponibles. Une transition
-automatique unique reçoit une masse de 1. Les playstyles modifieront ensuite cette
-politique à partir des caractéristiques sémantiques.
-
-Pour chaque action `a`, les conséquences ont une distribution `q_s(j | i, a)` :
+Pour une action `a`, les arêtes qui partagent son `action_id` décrivent ses conséquences :
 
 ```text
-Σ q_s(j | i, a) = 1
-P_s(j | i) = Σ π_s(a | i) × q_s(j | i, a)
+Σ q_s(e | a) = 1
+P_ref(e) = π_s(a | i) × q_s(e | a)
 ```
 
-Le scénario regroupe toutes les hypothèses : actions disponibles, paramètres de réussite
-et politique. Il rend les choix de modélisation reproductibles et comparables.
+La baseline distribue uniformément la masse entre les actions du joueur disponibles.
+Une transition automatique unique reçoit une masse de 1.
 
-## 4. Traitement des mécaniques de *Lone Wolf*
+Une condition n'est pas transformée en probabilité : le scénario rend l'action
+disponible ou indisponible. Une probabilité mécanique inconnue devient un paramètre
+explicite et fait l'objet d'une analyse de sensibilité.
 
-Toutes les mécaniques recensées dans l'ancienne note sont prises en compte ci-dessous.
-« Non modélisé » signifie que l'information peut être conservée comme métadonnée, mais
-qu'elle ne modifie pas le graphe probabiliste du socle L0–L2.
+## 5. Justification de la simplification
+
+Le corpus LW01 contient 556 paragraphes de choix. Aucun ne contient plusieurs liens de
+section dans un même paragraphe de choix. Les 19 paragraphes stochastiques ne mélangent
+pas choix libre et tirage : le livre sépare déjà l'essentiel des décisions et des
+résolutions.
+
+Les [règles de combat de Project Aon](https://www.projectaon.org/en/ReadersHandbook/KaiCombat)
+et leur [exemple appliqué à LW01](https://www.projectaon.org/en/ReadersHandbook/ExampleCombat)
+confirment que le combat est un sous-processus mécanique. Le modèle en conserve les
+issues narratives sans transformer ses rounds en nœuds du récit.
+
+Même lorsqu'une action possède plusieurs conséquences, la multiplication
+`π_s(a | i) × q_s(e | a)` donne directement le poids de chaque arête. Un nœud
+intermédiaire n'ajouterait aucune information, mais compliquerait la longueur des chemins,
+les probabilités de visite et leur interprétation narrative.
+
+Les terminaux synthétiques restent nécessaires pour fermer une distribution lorsqu'une
+issue, notamment une mort mécanique, n'a pas de paragraphe cible.
+
+## 6. Traitement des mécaniques de *Lone Wolf*
 
 | Mécanique | Décision | Représentation et justification |
 | :--- | :--- | :--- |
-| Topologie et fins | **Modélisées — L0** | Les paragraphes, liens et fins constituent le phénomène commun aux fictions à embranchements. Les fins explicites restent des nœuds terminaux distincts. Une fin mécanique implicite peut cibler un nœud terminal virtuel catégorisé. |
-| Table de hasard (RNT) | **Modélisée — L2** | Les plages 0–9 donnent des probabilités exactes. Une séquence de tirages purement mécanique peut être réduite à sa distribution finale ou compilée avec des résolutions virtuelles. Ce mécanisme se généralise à tout dé ou tirage aléatoire. |
-| Combat | **Modélisé abstraitement — L2** | Un combat devient une action ou une transition automatique avec des conséquences telles que victoire, défaite ou autre sortie. La probabilité de victoire est un paramètre si elle n'est pas directement calculable. Les rounds, le ratio de Combat Skill et la table de combat ne sont pas simulés : ils sont spécifiques à LW et exigeraient L3. |
-| Évasion d'un combat | **Modélisée abstraitement — L1/L2** | L'évasion est une action du joueur menant à une sortie, éventuellement avec une probabilité de succès paramétrée. Le nombre de rounds requis et les dégâts subis avant la fuite ne sont pas simulés, car ils dépendent de l'état de combat. |
-| Endurance, dégâts et soins | **Non modélisés — L3** | Ils nécessiteraient une expansion `(nœud, endurance)` et influencent plusieurs transitions futures. Leur coût et leur spécificité dépassent le besoin du modèle général. Les morts explicitement écrites et les issues fatales abstraites restent représentées. |
-| Disciplines et compétences | **Modélisées comme disponibilité — L1** | Une compétence active ou désactive une action dans un scénario. Elle n'est pas remplacée par une probabilité moyenne indépendante. Ce modèle se généralise aux capacités, statistiques et drapeaux choisis avant la partie. |
-| Objets de quête, clés et verrous | **Condition conservée, dépendance exacte non modélisée — L1/L3** | Le lien conditionnel est identifié. Sans inventaire persistant, on compare des scénarios permissifs/restrictifs ou on exclut le lien de certains calculs. Garantir qu'un objet a réellement été acquis demanderait L3. Cette limite doit être signalée dans les résultats. |
-| Inventaire et capacité du sac | **Non modélisés — L3** | Les objets possédés, emplacements et abandons produiraient un espace d'états combinatoire et très dépendant du système de jeu. |
-| Monnaie | **Non modélisée — L3** | Accumulation et dépenses sont des variables persistantes comparables à l'inventaire. Les modéliser n'apporterait rien au socle généralisable. |
-| Repas et survie | **Non modélisés — L3** | Les repas combinent ressource, compétence et endurance. Leur effet est conservé comme métadonnée, mais ne modifie pas le graphe du socle. |
-| Modificateurs d'équipement | **Non modélisés — L3** | Leur effet sur les statistiques et les combats est absorbé par les paramètres de résultat des scénarios. Une simulation exacte serait spécifique à l'œuvre. |
-| Énigmes et liens cachés | **Modélisés topologiquement si la cible est identifiable — L0/L1** | Un lien implicite vérifiable est ajouté par une annotation complémentaire avec provenance manuelle. Sa résolution peut être traitée comme une disponibilité de scénario. Aucune cible ne doit être inventée lorsque le texte ne permet pas de la déterminer. |
+| Topologie et fins | **Modélisées — L0** | Les paragraphes et liens sont le socle commun. Les fins écrites restent distinctes ; une issue implicite peut viser un terminal synthétique. |
+| Table de hasard (RNT) | **Modélisée — L2** | Les plages 0–9 produisent des multiarêtes de probabilités exactes regroupées par `action_id`. Une séquence purement mécanique est réduite à sa distribution finale. |
+| Combat | **Modélisé abstraitement — L2** | Victoire, défaite et autres sorties deviennent des arêtes directes d'une même action. La probabilité est paramétrée. Les rounds, Combat Skill et tables de combat ne sont pas simulés, car ils exigeraient L3 et sont spécifiques à LW. |
+| Évasion | **Modélisée abstraitement — L1/L2** | L'évasion est une action distincte. Sa destination est directe ; son éventuel risque devient une distribution paramétrée. Le détail des rounds et dégâts est exclu. |
+| Endurance, dégâts et soins | **Non modélisés — L3** | Ils demanderaient une expansion d'état et influenceraient les transitions futures. Les issues fatales restent toutefois représentées. |
+| Disciplines et compétences | **Disponibilité — L1** | Une compétence active ou désactive une action dans un scénario. Elle n'est pas remplacée par une probabilité moyenne indépendante. |
+| Objets de quête, clés et verrous | **Condition conservée — L1/L3** | L'action conditionnelle est identifiée. Sans inventaire persistant, des scénarios permissifs et restrictifs donnent des bornes ; une cohérence exacte demanderait L3. |
+| Inventaire et capacité du sac | **Non modélisés — L3** | Leur espace d'états est combinatoire et très propre au système de jeu. |
+| Monnaie | **Non modélisée — L3** | Accumulation et dépenses sont des variables persistantes comparables à l'inventaire. |
+| Repas et survie | **Non modélisés — L3** | Ils combinent ressource, compétence et endurance. Leur présence peut rester une métadonnée. |
+| Modificateurs d'équipement | **Non modélisés — L3** | Leur effet éventuel est absorbé par les paramètres des conséquences. Une simulation exacte serait spécifique à l'œuvre. |
+| Énigmes et liens cachés | **Modélisés si la cible est vérifiable — L0/L1** | Le lien est ajouté avec une provenance manuelle. Sa résolution peut être une disponibilité de scénario ; aucune cible n'est inventée. |
 
-Cette sélection conserve trois propriétés communes à de nombreux corpus : choix,
-conditions et incertitude. Elle écarte la simulation des ressources persistantes, qui est
-coûteuse, difficile à extraire et rarement comparable entre œuvres.
+Le modèle retient donc les propriétés transférables — topologie, agentivité, conditions et
+incertitude — sans devenir un simulateur des règles de *Lone Wolf*.
 
-## 5. Compatibilité avec Bag-of-Paths
+## 7. Compatibilité avec Bag-of-Paths
 
-Pour chaque scénario, le compilateur produit :
+Pour chaque scénario, le compilateur produit une matrice de référence `P_ref` et les
+caractéristiques permettant de construire une matrice de coûts `C`.
 
-- une indexation stable des nœuds ;
-- une matrice de transition de référence `P_ref` ;
-- les caractéristiques d'arêtes permettant de construire une matrice de coûts `C` ;
-- la liste des nœuds initiaux, terminaux, narratifs et virtuels.
-
-Pour une température `θ`, la matrice BoP pourra prendre la forme :
+Pour des arêtes parallèles entre `i` et `j` :
 
 ```text
-W = P_ref ⊙ exp(-θ C)
+W_ij = Σ_{e:i→j} P_ref(e) × exp(-θ C(e))
 ```
 
-Les choix précis de `C` et des indices BoP ne sont pas fixés ici. La séparation suivante
-est toutefois obligatoire :
+Toutes les conséquences d'une même action partagent le même coût d'action. Les
+transitions automatiques ne reçoivent pas une préférence de joueur. Un éventuel coût de
+longueur compte un passage narratif, ce qui est direct puisque le graphe ne contient pas
+de nœuds de résolution.
 
-- le coût d'un playstyle porte sur l'arête correspondant à l'action du joueur ;
-- une conséquence mécanique et un nœud virtuel ont un coût sémantique nul ;
-- un coût de longueur compte une transition narrative, pas le nombre d'arêtes techniques ;
-- les transitions automatiques ne reçoivent pas artificiellement une préférence de joueur.
+Les choix exacts de `C`, de `θ` et des indices BoP restent à définir. Avant le calcul, il
+faudra vérifier la normalisation, l'absorption et le rayon spectral de la partie
+transitoire de `W`.
 
-Le multigraphe reste la source de vérité. Pour des arêtes parallèles, la matrice agrège les
-poids `P_ref(e) × exp(-θ C(e))` entre la même paire de nœuds.
+## 8. Compilation depuis la phase 1
 
-Les indices portant sur le récit seront calculés sur les nœuds narratifs ou reprojetés
-sur eux. Les nœuds virtuels ne doivent pas être comptés comme des scènes, des choix
-supplémentaires ou de la longueur narrative.
+La phase 1 reste immuable. Une couche d'adaptation produit deux tables :
 
-Avant tout calcul, il faudra vérifier la normalisation, l'absorption et le rayon spectral
-de la partie transitoire de `W`. Les nœuds terminaux pourront être exportés sans arête
-sortante pour BoP et avec une boucle de probabilité 1 pour les outils de chaînes de Markov.
-
-## 6. Compilation depuis la phase 1
-
-La phase 1 reste immuable. La compilation ajoute une couche distincte et traçable.
+- `model_nodes`, dérivée des nœuds narratifs et complétée par les terminaux synthétiques ;
+- `model_edges`, dérivée des arêtes et complétée par les conséquences implicites.
 
 ### Étape 1 — Charger et valider
 
-Entrées :
-
-- `LW01_nodes.csv` ;
-- `LW01_e_edges.csv` ;
-- le JSON balisé et les textes HTML pour les audits ciblés.
-
-Le contrôle qualité existant est exécuté avant chaque compilation. Un identifiant stable,
-dérivé du contenu et de son occurrence, est attribué à chaque arête source sans modifier
-son CSV.
+Charger `LW01_nodes.csv`, `LW01_e_edges.csv`, le JSON balisé et, pour les audits ciblés,
+les HTML. Exécuter le contrôle qualité existant et attribuer un `edge_id` stable sans
+modifier les données sources.
 
 ### Étape 2 — Appliquer les conversions sûres
 
-| Type de phase 1 | Conversion provisoire |
+| Type de phase 1 | Conversion initiale |
 | :--- | :--- |
-| `forced` | Action système, conséquence déterministe. |
-| `explicit_choice` | Action joueur, conséquence déterministe, annotations conservées. |
-| `stochastic` | Conséquences d'une même résolution aléatoire, à grouper et probabiliser. |
-| `conditional` | Cas à classifier : condition de disponibilité ou conséquence mécanique. |
-| `complex` | Revue manuelle obligatoire ; cette catégorie est absente de LW01. |
+| `forced` | Arête système déterministe. |
+| `explicit_choice` | Action joueur déterministe, annotations conservées. |
+| `stochastic` | Arêtes d'une même action système, probabilités à calculer. |
+| `conditional` | Revue : disponibilité d'action ou conséquence mécanique. |
+| `complex` | Revue obligatoire ; cette catégorie est absente de LW01. |
 
-Ces règles sont provisoires parce qu'un combat forcé peut avoir été extrait comme
-`forced`, et « si vous gagnez » comme `conditional`. Le type actuel ne suffit donc pas à
-compiler tous les cas sans audit.
+### Étape 3 — Construire la table d'adaptation
 
-### Étape 3 — Construire une table d'adaptation
+Une table versionnée, séparée de la phase 1, fournit seulement les informations manquantes
+ou corrigées :
 
-Une table versionnée, séparée des données de phase 1, décrit uniquement les exceptions et
-informations nécessaires au modèle :
-
-- regroupement en `action_id` ;
+- `action_id` ;
 - rôle joueur/système ;
-- type et référence de disponibilité ;
-- regroupement des conséquences ;
-- probabilité exacte ou nom du paramètre ;
-- fin implicite éventuelle ;
+- disponibilité ;
+- probabilité exacte ou paramètre ;
+- conséquence terminale implicite ;
 - provenance et justification.
 
-La revue porte en priorité sur les arêtes `conditional`, les avertissements, les nœuds de
-combat et les éventuels liens cachés. Une décision manuelle est autorisée, mais jamais
-sans référence au texte source.
+La revue porte en priorité sur les arêtes `conditional`, les warnings, les combats et les
+liens cachés. Une décision manuelle doit toujours citer le texte source.
 
-### Étape 4 — Produire les tables canoniques
+### Étape 4 — Produire `model_nodes` et `model_edges`
 
-Le convertisseur fusionne les règles sûres et la table d'adaptation pour produire des
-tables `nodes`, `actions` et `outcomes`. Il doit refuser de continuer si une condition ou
-une probabilité nécessaire reste silencieusement indéterminée.
+Le convertisseur fusionne les règles sûres et la table d'adaptation. Il échoue si une
+condition nécessaire n'est pas classée, si une probabilité n'a ni valeur ni paramètre, ou
+si une décision manuelle n'a pas de provenance.
 
-### Étape 5 — Résoudre un scénario
+### Étape 5 — Compiler un scénario
 
-Un fichier de configuration fixe :
-
-- les disponibilités statiques, notamment les compétences ;
-- le traitement des conditions dépendant d'un état non modélisé ;
-- les paramètres de combat, d'évasion ou de résolution d'énigme ;
-- la politique de décision, uniforme pour la baseline puis liée aux playstyles.
-
-Plusieurs configurations constituent une analyse de sensibilité, pas plusieurs versions
-des données.
-
-### Étape 6 — Compiler le graphe et les matrices
-
-Le compilateur :
+La configuration fixe disponibilités, paramètres et politique. Le compilateur :
 
 1. retire les actions indisponibles ;
-2. normalise la politique entre les actions restantes ;
-3. crée les seuls nœuds virtuels nécessaires ;
-4. affecte les probabilités de conséquence ;
-5. exporte le multigraphe, `P_ref`, les caractéristiques de coûts et un manifeste complet.
+2. normalise la politique entre les `action_id` restants ;
+3. normalise les conséquences de chaque action ;
+4. calcule `P_ref(e) = π_s(a | i) × q_s(e | a)` ;
+5. agrège les multiarêtes pour les matrices ;
+6. exporte graphe, matrices et manifeste du scénario.
 
-### Étape 7 — Valider
+### Étape 6 — Valider
 
 Les contrôles minimaux sont :
 
-- une provenance de phase 1 ou d'adaptation pour chaque objet ;
-- une somme de 1 pour chaque politique et chaque distribution de conséquences ;
-- aucune condition ni probabilité non résolue dans un scénario compilé ;
-- des nœuds terminaux sans sortie dans la représentation BoP ;
+- provenance de chaque nœud et arête ;
+- somme de 1 entre actions disponibles puis entre conséquences d'une action ;
+- aucune condition ou probabilité silencieusement irrésolue ;
+- terminaux sans sortie pour BoP ;
 - atteignabilité et absorption depuis chaque entrée ;
 - rayon spectral compatible avec la matrice fondamentale ;
-- coût nul et absence de contenu pour les nœuds virtuels ;
-- résultats connus sur de petits graphes artificiels.
+- résultats connus sur de petits multigraphes artificiels.
 
-## 7. Produits attendus de la phase 2
+## 9. Produits attendus de la phase 2
 
-1. une table d'adaptation LW01 relue ;
-2. les tables canoniques `nodes`, `actions`, `outcomes` ;
-3. au moins une configuration baseline et des scénarios de sensibilité ;
-4. un graphe compilé avec sa provenance ;
+1. le schéma de `model_nodes` et `model_edges` ;
+2. une table d'adaptation LW01 relue ;
+3. une baseline et des scénarios de sensibilité ;
+4. un multigraphe compilé avec sa provenance ;
 5. `P_ref`, l'interface de coûts et les tests de validation ;
 6. un rapport des mécaniques volontairement non représentées.
 
-Ce socle doit être terminé avant de sélectionner les indices BoP.
+Ce socle doit être validé avant l'implémentation des indices BoP.

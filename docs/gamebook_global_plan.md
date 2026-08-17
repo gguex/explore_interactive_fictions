@@ -1,177 +1,161 @@
 # Plan global — Distant reading des fictions interactives
 
-> Document de référence à partir du 13.08.2026. Les documents antérieurs sont conservés
-> dans [`docs/archives/`](archives/). L'avancement est consigné dans
-> [`progress_log.md`](progress_log.md). La représentation retenue est spécifiée dans
-> [`graph_model.md`](graph_model.md).
+> Document de référence mis à jour le 17.08.2026. La modélisation retenue est définie
+> dans [`graph_model.md`](graph_model.md), l'avancement dans
+> [`progress_log.md`](progress_log.md), et les documents remplacés dans
+> [`archives/`](archives/).
 
 ## 1. Question de recherche
 
 **Comment étudier les fictions interactives par des méthodes de distant reading, en
-combinant l'analyse structurelle — notamment le formalisme Bag-of-Paths (BoP) — et
-l'analyse sémantique par les LLM ?**
+combinant l'analyse structurelle — notamment Bag-of-Paths (BoP) — et l'analyse
+sémantique par les LLM ?**
 
-Le cadre doit relier trois échelles : les transitions locales, l'organisation globale du
-graphe et les histoires produites par ses chemins.
+Le cadre relie trois échelles : transitions locales, organisation du graphe et histoires
+produites par les chemins.
 
 ## 2. Objectif et périmètre
 
-L'objectif est une méthode applicable à plusieurs formes de récits à embranchements.
-*Lone Wolf 01* (LW01) est le premier cas d'étude, pas le modèle universel.
+La méthode doit s'appliquer à plusieurs formes de récits à embranchements. *Lone Wolf 01*
+(LW01) est le premier cas d'étude, pas le modèle universel.
 
 Deux livrables sont visés :
 
 1. une présentation COMHUM2026 démontrant le cadre sur LW01 ;
 2. un article approfondissant la méthode et sa validation sur d'autres corpus.
 
-La simulation détaillée des ressources persistantes est retirée du socle. Les combats et
-autres mécaniques sont représentés par leurs conséquences, exactes ou paramétrées, sans
-simuler leurs règles internes. Ce choix réduit les hypothèses propres à *Lone Wolf* et
-rend la méthode transférable.
+Le projet représente les effets narratifs des mécaniques sans simuler leurs règles
+internes. Les ressources persistantes, trop spécifiques et coûteuses, restent des
+extensions facultatives.
 
-## 3. Principes de modélisation
+## 3. Décisions de modélisation
 
-### 3.1 Niveaux indépendants
+### 3.1 Niveaux L0–L3
 
-| Niveau | Information représentée | Rôle |
+| Niveau | Information | Décision |
 | :--- | :--- | :--- |
-| L0 — Topologie | Unités narratives, transitions, débuts et fins | Socle obligatoire pour toute fiction à embranchements. |
-| L1 — Agentivité | Choix du joueur, transitions automatiques, conditions d'accès | Distingue ce que décide le joueur de ce que le système impose. |
-| L2 — Incertitude | Résultats probabilistes, exacts ou paramétrés | Représente le hasard sans imposer une mécanique particulière. |
-| L3 — État | Variables persistantes : santé, objets, compétences, relations, etc. | Extension optionnelle lorsque l'analyse l'exige. |
+| L0 — Topologie | Unités narratives, liens, entrées et fins. | Socle obligatoire. |
+| L1 — Agentivité | Actions, transitions automatiques, disponibilités et caractéristiques sémantiques. | Inclus. |
+| L2 — Incertitude | Conséquences déterministes, probabilités exactes ou paramètres. | Inclus. |
+| L3 — État persistant | Santé, inventaire, monnaie, relations et autres variables mémorisées. | Non implémenté. |
 
-Le cœur du projet porte sur L0–L2. L3 reste une extension non implémentée pour la
-présentation. Le périmètre de chaque mécanique est justifié dans
-[`graph_model.md`](graph_model.md#4-traitement-des-mécaniques-de-lone-wolf).
+L0–L2 suffisent pour comparer structures, politiques de choix et distributions de
+chemins. L3 ferait croître le graphe et imposerait les règles particulières de chaque
+œuvre ; il est donc hors du périmètre actuel.
 
-### 3.2 Graphe minimal
+### 3.2 Multigraphe direct
 
-La représentation par défaut est un **multigraphe dirigé** :
+Le graphe contient :
 
-- un nœud représente une unité narrative ou une fin ;
-- une arête représente une transition possible ;
-- plusieurs arêtes entre deux nœuds restent possibles si elles correspondent à des
-  actions différentes.
+- les nœuds narratifs du corpus ;
+- quelques terminaux synthétiques pour les issues sans paragraphe cible ;
+- des multiarêtes directes entre ces nœuds.
 
-Le modèle canonique sépare les nœuds, les actions et leurs conséquences. Une arête peut
-porter le contrôle de l'action, sa disponibilité, ses annotations et sa probabilité.
-
-Une transition déterministe reste une arête directe. Un **nœud virtuel de résolution**
-n'est ajouté que lorsqu'une même action peut produire plusieurs conséquences. Ce choix
-évite un graphe biparti systématique tout en séparant, lorsque nécessaire, la décision du
-joueur du résultat de cette décision.
+Aucun nœud intermédiaire n'est créé pour les tirages, combats ou résolutions. Plusieurs
+conséquences d'une même action partagent un `action_id` :
 
 ```text
-cas simple :     unité A ── action ──▶ unité B
-
-cas composé :    unité A ── action ──▶ [résolution]
-                                      ├── p ──▶ unité B
-                                      └── 1-p ▶ fin C
+10 ── action=fight, q ─────▶ 20
+10 ── action=fight, 1-q ───▶ Death
+10 ── action=escape, 1 ─────▶ 30
 ```
 
-Les nœuds virtuels sont générés au moment du calcul ; ils ne sont pas annotés manuellement
-dans les données sources et n'ajoutent ni contenu ni coût narratif.
+Ce choix conserve des chemins composés uniquement de passages réellement lus, simplifie
+les indices narratifs et suffit pour le calcul matriciel.
 
-### 3.3 Disponibilité, décision et conséquence
+### 3.3 Politique et conséquences
 
-Dans un scénario de calcul explicite, le modèle distingue trois opérations :
-
-1. déterminer les actions disponibles dans le scénario étudié ;
-2. choisir une action selon une politique de joueur ;
-3. résoudre ses conséquences éventuelles.
-
-Pour une action `a` au nœud `i`, la transition vers `j` peut ainsi se décomposer en :
+Un scénario détermine d'abord les actions disponibles. Une politique `π_s(a | i)` choisit
+entre elles, puis `q_s(e | a)` distribue les conséquences de l'action :
 
 ```text
-P(j | i) = P(a choisie | i, actions disponibles)
-           × P(j | i, a choisie)
+P_ref(e) = π_s(a | i) × q_s(e | a)
 ```
 
-Cette factorisation empêche de confondre la préférence du joueur avec la réussite d'une
-action. Une condition est résolue par le scénario, pas transformée en probabilité. Une
-probabilité mécanique inconnue reste un paramètre soumis à une analyse de sensibilité ;
-elle n'est pas fixée arbitrairement à 0,5.
+Une condition n'est pas une probabilité : elle active ou désactive une action. Une
+probabilité inconnue reste un paramètre explicite soumis à une analyse de sensibilité.
 
-### 3.4 Caractéristiques sémantiques et playstyles
+### 3.4 Mécaniques
 
-Le principe général est qu'une action peut recevoir des caractéristiques sémantiques,
-dont une politique de joueur peut favoriser certaines valeurs.
+- Topologie, fins, choix, conditions et hasard sont modélisés dans L0–L2.
+- Les combats et évasions sont réduits à leurs conséquences directes, exactes ou
+  paramétrées.
+- Les compétences déterminent la disponibilité dans un scénario.
+- Les dépendances exactes à l'endurance, aux objets, à l'inventaire, à la monnaie, aux
+  repas et à l'équipement relèvent de L3 et ne sont pas simulées.
+- Les liens cachés ne sont ajoutés que si leur cible est vérifiable et documentée.
 
-Les axes `risk`, `morality` et `action` déjà extraits pour LW01 sont conservés tels quels.
-Ils constituent une application au corpus, pas une ontologie universelle. Un autre corpus
-peut employer d'autres axes ou ne pas utiliser de playstyles. Cette souplesse évite de
-faire dépendre le moteur de catégories propres à une œuvre.
+Ces décisions sont détaillées et justifiées dans
+[`graph_model.md`](graph_model.md#6-traitement-des-mécaniques-de-lone-wolf).
 
-### 3.5 Rôle de Bag-of-Paths
+### 3.5 Sémantique et playstyles
 
-Le graphe compilé fournira à BoP une matrice de transition de référence `P_ref`, les
-caractéristiques nécessaires à une matrice de coûts et une distinction entre nœuds
-narratifs, virtuels et terminaux. Il faudra encore distinguer :
+Les axes `risk`, `morality` et `action` déjà extraits pour LW01 sont conservés. Ils sont
+propres au cas d'étude et ne constituent pas une ontologie universelle. Un autre corpus
+peut employer d'autres axes ou aucun playstyle.
 
-- une politique locale décrivant les décisions d'un joueur ;
-- une pondération globale des chemins par leur coût dans BoP.
+### 3.6 Interface Bag-of-Paths
 
-Ces deux formulations ne seront ni confondues ni supposées équivalentes sans démonstration.
-Les coûts techniques des nœuds virtuels seront nuls. Les indices BoP seront choisis dans
-une étape dédiée ; le présent plan ne les présuppose pas.
+Pour chaque scénario, le compilateur fournit `P_ref` et les caractéristiques nécessaires
+à une matrice de coûts `C`. Pour les multiarêtes entre `i` et `j` :
+
+```text
+W_ij = Σ_{e:i→j} P_ref(e) × exp(-θ C(e))
+```
+
+Les conséquences d'une même action partagent son coût. Le rôle exact de `θ`, la relation
+entre politique locale et pondération globale, et les indices BoP seront définis dans une
+étape dédiée.
 
 ## 4. Conservation de la phase 1
 
-La phase d'extraction existante reste inchangée : HTML, JSON intermédiaire, tables de
-nœuds et d'arêtes, annotations LLM, jeu gold, prompts, résultats de calibration et contrôle
-qualité demeurent les sources de référence.
+La phase 1 reste immuable : HTML, JSON balisé, tables de nœuds et d'arêtes, annotations
+LLM, gold, prompts, résultats et contrôles demeurent les sources de référence.
 
-Le nouveau modèle sera construit par une **couche d'adaptation** au-dessus des tables
-existantes. Elle traduira les catégories actuelles (`forced`, `explicit_choice`,
-`stochastic`, `conditional`) vers les objets `nodes`, `actions` et `outcomes`, sans
-réécrire l'extraction validée. Les conditions, combats, avertissements et fins implicites
-seront revus avec une provenance explicite.
+Une couche d'adaptation séparée convertira ces données en :
+
+- `model_nodes` : nœuds narratifs et terminaux synthétiques ;
+- `model_edges` : multiarêtes probabilistes regroupées par `action_id`.
+
+Les conditions, warnings, combats et fins implicites seront revus avec une provenance
+explicite, sans corriger silencieusement les données extraites.
 
 ## 5. Étapes de travail
 
 ### Phase 1 — Extraction LW01 — terminée
 
-- Corpus de 350 sections et table de 556 arêtes.
-- Annotation structurelle et sémantique par LLM, calibrée sur un jeu gold.
-- Contrôle de complétude, de schéma et d'atteignabilité.
-- Scripts, données et résultats conservés sans modification.
+- 350 sections et 556 arêtes.
+- Annotation structurelle et sémantique calibrée sur un jeu gold.
+- Complétude, schéma et atteignabilité contrôlés.
 
 ### Phase 2 — Adaptation et compilation
 
-1. appliquer la spécification de [`graph_model.md`](graph_model.md) ;
-2. construire et relire la table d'adaptation LW01 ;
-3. produire les tables canoniques `nodes`, `actions`, `outcomes` ;
-4. compiler une baseline et des scénarios de sensibilité ;
-5. exporter le graphe, `P_ref`, l'interface de coûts et les contrôles.
-
-La couche d'adaptation est la première implémentation : elle garde les hypothèses visibles
-et testables sans modifier la phase 1.
+1. fixer le schéma de `model_nodes` et `model_edges` ;
+2. générer puis relire la table d'adaptation LW01 ;
+3. traiter probabilités RNT, conditions, combats et issues implicites ;
+4. produire une baseline et des scénarios de sensibilité ;
+5. exporter le multigraphe, `P_ref`, l'interface de coûts et les validations.
 
 ### Phase 3 — Modèle probabiliste et playstyles
 
-1. analyser et valider la baseline sans préférence sémantique ;
+1. analyser la baseline uniforme ;
 2. définir les politiques locales fondées sur les annotations existantes ;
-3. vérifier normalisation, absorption, cycles et sensibilité aux paramètres ;
+3. vérifier normalisation, absorption, cycles et sensibilité ;
 4. comparer les comportements produits par les profils.
-
-La baseline permet de séparer l'effet du graphe de celui des hypothèses comportementales.
 
 ### Phase 4 — BoP et indices
 
-1. préciser la question à laquelle BoP doit répondre ;
-2. comparer la formulation BoP à la chaîne probabiliste locale ;
+1. préciser les questions auxquelles BoP doit répondre ;
+2. distinguer les résultats de chaîne de Markov des résultats proprement BoP ;
 3. retenir un petit ensemble d'indices interprétables ;
-4. vérifier les formules sur des graphes artificiels avant LW01.
-
-Le choix des indices vient après le modèle afin d'éviter d'adapter artificiellement les
-données à des mesures prédéfinies.
+4. valider les formules sur des graphes artificiels avant LW01.
 
 ### Phase 5 — Histoires et analyse LLM
 
 1. sélectionner ou échantillonner des chemins représentatifs ;
-2. reconstruire leur texte avec une provenance complète ;
-3. analyser leur cohérence et leurs propriétés narratives avec un protocole LLM calibré ;
-4. confronter les résultats sémantiques aux résultats structurels.
+2. reconstruire leur texte avec sa provenance ;
+3. développer un protocole de critique LLM calibré ;
+4. confronter résultats structurels et sémantiques.
 
 ### Phase 6 — Validation de la généralisabilité
 
@@ -180,29 +164,23 @@ mais réelle est préférable à une généralisabilité seulement déclarée.
 
 ## 6. Critères de qualité
 
-- **Simplicité** : aucune structure complexe sans cas concret qui la nécessite.
-- **Généralisabilité** : le cœur ne contient aucune règle propre à *Lone Wolf*.
-- **Traçabilité** : données sources, conversions, hypothèses et paramètres restent séparés.
-- **Reproductibilité** : configuration, graines, sorties et contrôles sont versionnés.
-- **Testabilité** : chaque niveau est validé isolément sur des exemples minimaux.
-- **Interprétabilité** : chaque probabilité et chaque indice répond à une question explicite.
+- **Simplicité** : aucune structure sans nécessité empirique.
+- **Généralisabilité** : aucune règle *Lone Wolf* dans le moteur central.
+- **Traçabilité** : sources, adaptations, scénarios et résultats séparés.
+- **Reproductibilité** : configurations, paramètres, graines et sorties versionnés.
+- **Testabilité** : chaque niveau validé sur des exemples minimaux.
+- **Interprétabilité** : chaque probabilité et indice répond à une question explicite.
 
-## 7. Questions ouvertes immédiates
+## 7. Questions ouvertes
 
-1. Quel rôle précis attribuer à BoP par rapport à la chaîne de Markov locale ?
+1. Quel rôle précis attribuer à BoP par rapport à la politique locale ?
 2. Quels indices BoP répondent directement à la question de recherche ?
-3. Quelles valeurs et quels scénarios retenir pour les probabilités inconnues de LW01 ?
+3. Quels scénarios retenir pour les paramètres inconnus de LW01 ?
 4. Quel second corpus permettra de tester L0–L1 à faible coût ?
 
-Ces questions doivent être tranchées et justifiées avant le développement correspondant.
+## 8. Documentation active
 
-## 8. Documentation du projet
-
-- `gamebook_global_plan.md` : objectifs, modèle retenu et feuille de route actuelle ;
-- `graph_model.md` : spécification L0–L3, périmètre mécanique et compilation du graphe ;
+- `gamebook_global_plan.md` : objectifs, décisions et feuille de route ;
+- `graph_model.md` : spécification du multigraphe et compilation ;
 - `progress_log.md` : journal chronologique append-only ;
-- futurs documents méthodologiques : indices BoP et protocole d'analyse LLM ;
-- `archives/` : documents remplacés, conservés pour l'historique.
-
-Le plan décrit l'état courant de la méthode ; le journal conserve l'évolution qui y a
-conduit.
+- `archives/` : documents et décisions remplacés.

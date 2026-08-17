@@ -4,7 +4,7 @@
 > précédentes. Une correction factuelle ultérieure doit être consignée dans une nouvelle
 > entrée.
 
-## État synthétique au 13.08.2026
+## État synthétique au 17.08.2026
 
 | Chantier | État | Résultat actuel |
 | :--- | :--- | :--- |
@@ -13,7 +13,7 @@
 | Extraction des arêtes | Terminée | `LW01_e_edges.csv`, 556 arêtes. |
 | Calibration LLM | Terminée | Structure validée ; le rapport final versionné contient 3 divergences sémantiques douces. |
 | Contrôle qualité | Terminé | Choix complets, IDs valides, 350 nœuds atteignables, 17 fins explicites. |
-| Spécification du graphe | Terminée | L0–L3, périmètre des mécaniques et compilation définis dans `graph_model.md`. |
+| Spécification du graphe | Terminée | Multigraphe direct L0–L2, `model_nodes` et `model_edges`, sans nœuds intermédiaires. |
 | Modèle probabiliste | À implémenter | Aucun graphe de calcul ni matrice encore produits. |
 | Bag-of-Paths et indices | À définir | Rôle méthodologique et indices non arrêtés. |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
@@ -87,8 +87,27 @@
 - Définition du pipeline de compilation depuis la phase 1, qui reste inchangée : règles
   sûres, table d'adaptation auditée, tables canoniques, scénarios, graphe et validations.
 
+### 17.08.2026 — Simplification de la modélisation
+
+- Vérification des règles de *Lone Wolf* sur Project Aon et de la structure des 556 choix
+  du corpus local.
+- Constat qu'aucun paragraphe de choix ne contient plusieurs liens de section et qu'aucun
+  paragraphe stochastique ne mélange choix libre et tirage : le livre fournit déjà
+  l'essentiel du découpage nécessaire.
+- Abandon des nœuds intermédiaires de résolution, qui compliquaient longueurs, visites et
+  interprétation des chemins sans apporter d'information narrative.
+- Conservation des seuls terminaux synthétiques nécessaires aux issues implicites.
+- Remplacement des tables séparées `nodes`, `actions`, `outcomes` par `model_nodes` et
+  `model_edges`.
+- Adoption de `action_id` pour regrouper les conséquences d'une même action dans le
+  multigraphe.
+- Définition du poids direct d'une arête :
+  `P_ref(e) = π_s(a | i) × q_s(e | a)`.
+- Archivage de la première spécification dans
+  `docs/archives/graph_model_2026-08-13.md` et réécriture de la documentation active.
+
 ## Prochaine étape
 
-Construire la table d'adaptation LW01 et les tables canoniques prévues par
-`graph_model.md`. Le choix des indices BoP peut être mené en parallèle à partir de cette
-spécification désormais stable.
+Fixer le schéma exact de `model_nodes` et `model_edges`, puis générer la table
+d'adaptation LW01. Le choix des indices BoP peut être mené en parallèle à partir de cette
+spécification simplifiée.
