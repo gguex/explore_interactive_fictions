@@ -4,7 +4,7 @@
 > précédentes. Une correction factuelle ultérieure doit être consignée dans une nouvelle
 > entrée.
 
-## État synthétique au 17.08.2026
+## État synthétique au 18.08.2026
 
 | Chantier | État | Résultat actuel |
 | :--- | :--- | :--- |
@@ -13,9 +13,10 @@
 | Extraction des arêtes | Terminée | `LW01_e_edges.csv`, 556 arêtes. |
 | Calibration LLM | Terminée | Structure validée ; le rapport final versionné contient 3 divergences sémantiques douces. |
 | Contrôle qualité | Terminé | Choix complets, IDs valides, 350 nœuds atteignables, 17 fins explicites. |
-| Spécification du graphe | Terminée | Multigraphe direct L0–L2, `model_nodes` et `model_edges`, sans nœuds intermédiaires. |
-| Modèle probabiliste | À implémenter | Aucun graphe de calcul ni matrice encore produits. |
-| Bag-of-Paths et indices | À définir | Rôle méthodologique et indices non arrêtés. |
+| Spécification du graphe | Terminée | Multigraphe direct L0–L2 pondéré par \(W\), sans nœud intermédiaire ni formalisme « action–conséquence ». |
+| Audit pour la phase 2 | Terminé | Conversions automatiques recensées et file initiale de 18 paragraphes à superviser. |
+| Modèle probabiliste | Planifié, à implémenter | Recette détaillée ; aucun `model_edges` ni matrice \(W\) encore produit. |
+| Bag-of-Paths et indices | Différé | Première analyse fixée à la borne RW ; indices à choisir après validation de \(W\). |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
 
 ## Historique
@@ -106,8 +107,45 @@
 - Archivage de la première spécification dans
   `docs/archives/graph_model_2026-08-13.md` et réécriture de la documentation active.
 
+### 18.08.2026 — Adoption de la pondération directe par \(W\)
+
+- Abandon du formalisme « action–conséquence » encore conservé dans la spécification du
+  17.08.2026.
+- Suppression de `action_id`, de la décomposition `π × q` et des objets intermédiaires de
+  décision ou de résolution.
+- Adoption d'un poids final directement porté par chaque arête, puis agrégation des
+  multiarêtes par `W_ij = Σ w_e`.
+- Décision de travailler d'abord uniquement à la borne Random Walk de BoP afin d'étudier
+  un flux moyen d'aventures ; la matrice de coûts `C` et la borne SP sont écartées de la
+  phase actuelle.
+- Maintien des seuls terminaux synthétiques nécessaires aux issues sans paragraphe cible,
+  notamment les morts implicites de combat.
+- Adoption de deux traitements à comparer pour les disciplines Kai : matrice moyenne
+  avec probabilité marginale `5/10`, et moyenne des flux sur les 252 configurations
+  cohérentes de cinq disciplines.
+- Les combats restent abstraits ; victoire, défaite et évasion reçoivent directement
+  leurs poids dans \(W\).
+
+### 18.08.2026 — Audit d'implémentation depuis la phase 1
+
+- Confirmation des 350 nœuds, 556 arêtes, 17 fins écrites et de l'atteignabilité complète
+  du corpus.
+- Constat que la topologie peut être entièrement reprise automatiquement.
+- Identification de 140 transitions forcées non combattantes, 283 arêtes de choix
+  explicite non combattantes, 39 arêtes RNT simples et 18 combats compilables par des
+  règles génériques.
+- Identification de 41 arêtes Kai dans 32 paragraphes ; 30 paragraphes suivent une règle
+  standard et les §23 et 334 demandent un traitement particulier.
+- Identification d'une file initiale de 18 paragraphes à superviser : §9, 12, 21, 23,
+  43, 112, 169, 173, 180, 191, 203, 208, 220, 227, 229, 231, 334 et 339.
+- Constat que `health_modifier`, `special_mechanic` et `items_granted` ne sont pas assez
+  exhaustifs pour modéliser L3 ; ces mécaniques restent exclues et signalées.
+- Réécriture de `gamebook_global_plan.md` et `graph_model.md` selon le modèle \(W\)
+  direct.
+
 ## Prochaine étape
 
-Fixer le schéma exact de `model_nodes` et `model_edges`, puis générer la table
-d'adaptation LW01. Le choix des indices BoP peut être mené en parallèle à partir de cette
-spécification simplifiée.
+Commencer la recette de `graph_model.md` : écrire les schémas minimaux et les graphes de
+test, puis créer le script d'audit qui attribue les identifiants stables et génère les
+premières règles automatiques. Les indices BoP et les trajectoires restent volontairement
+hors de ce chantier.
