@@ -1,3 +1,6 @@
+
+## Rappel : La table des edges après l'étape 1
+
 | Column Name | Data Type | Description / Modalities |
 | :--- | :--- | :--- |
 | `source_id` | String | The originating `node_id`. |
@@ -10,6 +13,7 @@
 | `semantic_action` | Category / Null | Axis of approach. Evaluated as `physical`, `neutral`, or `tactical` via contrastive evaluation. **Requires** `transition_type` to be `explicit_choice`. Otherwise, `null`. |
 | `warnings` | String / Null | Annotator comments. Used ONLY if the text is ambiguous, broken, or highly unusual. Otherwise, `null`. |
 
+## Modélisation du graphe
 
 On a les `transition_type` suivants : 
 
@@ -27,3 +31,25 @@ QUESTIONS À RESOUDRE :
 3. (Touche aux autres questions) Dans le modèle BoP, à quoi correpsondent les deux bornes SP et RW ? Doit-on utiliser le modèle BoP qu'avec la borne RW ? (totalement possible car chaîne absorbante et $(I - W)^(-1)$ converge)
 4. Quels sont les noeuds qui ne sont pas modélisés par les décisions prises ci-dessus ?
 5. Quelle doit-être la procédure pour passer de la table des edges à une table permettant de créer le graphe ? Comment trier et anoter les cas particuliers afin d'automatiser complétement la suite du processus.  
+
+## Indices BoP
+
+QUESTIONS À RESOUDRE : 
+
+1. Quels indices BoP doit-on utiliser ? Quels indices locaux et quels indices globaux ?
+2. Qu'est-ce qu'ils disent sur la fiction interactive ?
+3. Comment comparer des profils de joueurs ? 
+4. Si l'on inclus la modélisation des profils dans les disciplines Kai et dans le combat, peut-on trouver un profil "idéal" pour gagner le livre ? 
+
+## Histoires types
+
+QUESTIONS À RESOUDRE : 
+
+1. Comment sélectionner les trajectoires à analyser ? 
+2. Quels méthodologie utiliser pour analyser les trajectoires ? Je vois pour le momement deux approches : les embeddings ou l'utiliser d'un prompt pour json structuré. Est-ce qu'il existe qu'autres possibilités ?  
+3. Dois-je utiliser un modèle local ou un LLM "frontière" ? 
+4. Que tirer de cette analyse et comment coupler les résultats de cette partie avec la partie précéendante ? 
+
+## Après tout cela
+
+Comment faire pour avoir une présentation de 20 minutes convaincante ? Quels aspects aborder et que tirer de ce cheminement de recherche ?
