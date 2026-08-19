@@ -4,7 +4,7 @@
 > précédentes. Une correction factuelle ultérieure doit être consignée dans une nouvelle
 > entrée.
 
-## État synthétique au 18.08.2026
+## État synthétique au 19.08.2026
 
 | Chantier | État | Résultat actuel |
 | :--- | :--- | :--- |
@@ -15,7 +15,7 @@
 | Contrôle qualité | Terminé | Choix complets, IDs valides, 350 nœuds atteignables, 17 fins explicites. |
 | Spécification du graphe | Terminée | Multigraphe direct L0–L2 pondéré par \(W\), sans nœud intermédiaire ni formalisme « action–conséquence ». |
 | Audit pour la phase 2 | Terminé | Conversions automatiques recensées et file initiale de 18 paragraphes à superviser. |
-| Modèle probabiliste | Planifié, à implémenter | Recette détaillée ; aucun `model_edges` ni matrice \(W\) encore produit. |
+| Modèle probabiliste | Planifié, à implémenter | Recette ramenée à deux scripts et une annotation manuelle ; aucun `model_edges` ni matrice \(W\) encore produit. |
 | Bag-of-Paths et indices | Différé | Première analyse fixée à la borne RW ; indices à choisir après validation de \(W\). |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
 
@@ -143,9 +143,23 @@
 - Réécriture de `gamebook_global_plan.md` et `graph_model.md` selon le modèle \(W\)
   direct.
 
+### 19.08.2026 — Simplification de la recette
+
+- Abandon de l'approche applicative fondée sur des schémas stricts, quinze étapes et une
+  batterie de tests.
+- Adoption d'un processus de recherche court : conversion automatique, annotation des
+  exceptions, puis compilation et contrôles intégrés.
+- Regroupement des transformations automatiques dans `scripts/3_prepare_graph.py` et de
+  la fusion/compilation dans `scripts/4_compile_graph.py`.
+- Décision de superviser un paragraphe particulier dans son ensemble plutôt que de
+  gérer des surcharges partielles complexes.
+- Ajout d'un tableau « cas de figure / traitement » réutilisable directement dans la
+  présentation.
+- Conservation de la file connue de 18 paragraphes et réduction des validations à quatre
+  contrôles essentiels sur les données réelles.
+
 ## Prochaine étape
 
-Commencer la recette de `graph_model.md` : écrire les schémas minimaux et les graphes de
-test, puis créer le script d'audit qui attribue les identifiants stables et génère les
-premières règles automatiques. Les indices BoP et les trajectoires restent volontairement
-hors de ce chantier.
+Écrire `scripts/3_prepare_graph.py` : traiter les cas ordinaires du tableau de
+`graph_model.md`, produire `auto_edges.csv` et générer `review_queue.csv`. Les indices
+BoP et les trajectoires restent volontairement hors de ce chantier.

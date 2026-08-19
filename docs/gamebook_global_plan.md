@@ -149,7 +149,7 @@ Une couche dérivée produira :
 - `model_nodes` : nœuds narratifs et terminaux synthétiques ;
 - `model_edges` : arêtes directes avec règle de pondération et provenance ;
 - une petite table de supervision contenant uniquement les exceptions ;
-- une matrice \(W\) et un manifeste pour chaque profil et scénario.
+- une matrice \(W\) pour chaque profil et scénario retenu.
 
 Aucune correction ne sera appliquée silencieusement aux données de phase 1.
 
@@ -161,36 +161,27 @@ Aucune correction ne sera appliquée silencieusement aux données de phase 1.
 - annotation structurelle et sémantique calibrée sur un jeu gold ;
 - complétude, validité des identifiants et atteignabilité contrôlées.
 
-### Phase 2 — Adaptation des données — prochaine phase
+### Phase 2 — Construire le graphe et \(W\) — prochaine phase
 
-1. créer le schéma minimal de `model_nodes` et `model_edges` ;
-2. automatiser les conversions sûres depuis `nodes` et `edges` ;
-3. générer une file de supervision pour les cas ambigus ;
-4. annoter les exceptions LW01 sans modifier la phase 1 ;
-5. valider la couverture et la provenance de chaque transition.
+1. lancer un script qui traite tous les cas ordinaires et produit une file d'exceptions ;
+2. annoter les 18 paragraphes particuliers et renseigner un petit fichier de scénarios ;
+3. lancer un second script qui fusionne les résultats, compile les scénarios de \(W\) et
+   effectue quatre contrôles simples.
 
 La recette exacte est donnée dans
-[`graph_model.md`](graph_model.md#9-plan-dimplémentation--recette).
+[`graph_model.md`](graph_model.md#9-recette-courte).
 
-### Phase 3 — Compilation et validation de \(W\)
-
-1. produire une marche uniforme de référence ;
-2. produire les matrices associées aux profils sémantiques ;
-3. comparer le modèle Kai moyen aux 252 configurations exactes ;
-4. tester plusieurs probabilités de défaite au combat ;
-5. vérifier normalisation, absorption, cycles et stabilité des flux.
-
-### Phase 4 — Indices BoP — différée
+### Phase 3 — Indices BoP — différée
 
 Définir les indices seulement après validation de \(W\). Cette phase précisera les
 questions interprétatives, les formules et les tests sur graphes artificiels.
 
-### Phase 5 — Étude des trajectoires — différée
+### Phase 4 — Étude des trajectoires — différée
 
 Définir ensuite la sélection des trajectoires et leur analyse sémantique par LLM ou par
 d'autres méthodes.
 
-### Phase 6 — Généralisation
+### Phase 5 — Généralisation
 
 Appliquer au moins L0–L1 à un second corpus différent afin de distinguer les règles
 générales des adaptations propres à LW01.
@@ -200,7 +191,7 @@ générales des adaptations propres à LW01.
 - **Simplicité** : aucune structure intermédiaire sans nécessité empirique.
 - **Généralisabilité** : aucune règle *Lone Wolf* dans le moteur central.
 - **Traçabilité** : données sources, adaptations, scénarios et sorties séparés.
-- **Reproductibilité** : paramètres et matrices versionnés.
+- **Reproductibilité** : scripts, supervision et paramètres versionnés.
 - **Supervision explicite** : tout cas non reconnu bloque la compilation.
 - **Interprétabilité** : chaque poids de \(W\) possède une règle et une provenance.
 
@@ -216,7 +207,7 @@ Les questions suivantes ne doivent pas bloquer l'implémentation du graphe :
 ## 9. Documentation active
 
 - `gamebook_global_plan.md` : objectifs, décisions et phases ;
-- `graph_model.md` : spécification de \(W\), audit LW01 et recette d'implémentation ;
+- `graph_model.md` : spécification de \(W\), inventaire des cas et recette courte ;
 - `progress_log.md` : journal chronologique ;
 - `notes.md` : questions de travail non encore intégrées ;
 - `archives/` : documents et décisions remplacés.

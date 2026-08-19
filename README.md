@@ -41,8 +41,9 @@ results/         cluster outputs and calibration history
    quality-checked (complete vs `<choice>` tags, fully reachable graph, zero schema
    violations).
 2. **Graph modeling** (phase 2, specified, to implement): narrative nodes, synthetic
-   terminals when needed, and direct probabilistic multiedges grouped by `action_id`.
-   Detailed Lone Wolf state mechanics are optional extensions rather than core features.
+   terminals when needed, and direct probabilistic multiedges aggregated in `W`, without
+   an action/consequence layer. The planned workflow uses one automatic conversion
+   script, a short supervised-exception table, and one compilation script.
 3. **BoP and analyses** (later phases): select justified structural indices, sample
    representative paths and develop the LLM critic protocol.
 

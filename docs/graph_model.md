@@ -293,287 +293,170 @@ rounds et des dommages restent exclus.
 Le modèle conserve dans ses métadonnées les mécaniques exclues afin que leur absence ne
 soit jamais confondue avec une absence dans l'œuvre.
 
-## 7. Audit des données LW01
+## 7. Cas de figure à traiter
 
-La phase 1 contient 350 nœuds et 556 arêtes. Les 556 balises `<choice>` ont toutes une
-arête, tous les identifiants sont valides et les 350 nœuds sont atteignables depuis le
-§1. Les comptes ci-dessous peuvent se recouvrir lorsqu'un paragraphe combine plusieurs
-mécanismes.
+La phase 1 contient 350 nœuds et 556 arêtes. Sa topologie est déjà contrôlée. Le code de
+conversion raisonne **par paragraphe source**, car un même paragraphe peut combiner un
+combat, un choix et une condition. Il applique la première règle compatible avec la
+combinaison complète ; s'il ne reconnaît pas cette combinaison, il envoie le paragraphe
+entier en supervision et n'en conserve aucune transition partielle dans le brouillon
+automatique.
 
-| Mécanisme | Données observées | Traitement automatique |
+### 7.1 Tableau synthétique pour la présentation
+
+Ce tableau est conçu pour tenir sur une slide et expliquer le passage des données de
+phase 1 au graphe.
+
+| Cas de figure | Traitement |
+| :--- | :--- |
+| Fin narrative | Nœud absorbant. |
+| Transition imposée | Arête de poids 1. |
+| Choix du joueur | Affinités du profil, puis normalisation des arêtes sortantes. |
+| Tirage aléatoire | Conversion des résultats possibles en probabilités. |
+| Compétence ou autre condition | Disponibilité moyenne ou scénario explicite. |
+| Combat | Victoire $1-d$, défaite $d$ vers `Death_implicit`. |
+| Paragraphe mixte | Composition directe des probabilités si la règle est simple ; sinon supervision. |
+| État persistant non modélisé | Métadonnée conservée ; hypothèse signalée ou supervision si la destination en dépend. |
+
+### 7.2 Inventaire détaillé de LW01
+
+| Cas dans LW01 | Traitement par le code | Cas supervisés |
 | :--- | :--- | :--- |
-| Terminaux écrits | 16 morts et 1 victoire | Création de nœuds absorbants. |
-| Transitions forcées non combattantes | 140 arêtes, dont 117 sans warning et 23 avec une mécanique L3 ou particulière | Poids 1 ; mécanique exclue conservée comme métadonnée. |
-| Choix explicites non combattants | 283 arêtes | Calcul d'une affinité de profil puis normalisation directe au nœud. |
-| RNT simple | 39 arêtes dans 18 paragraphes | Extraction des intervalles sur 0–9 et calcul exact des poids. |
-| Disciplines Kai | 41 arêtes dans 32 paragraphes | Extraction du nom ; compilation moyenne ou par configuration. Trente paragraphes sont standards. |
-| Combats simples | 18 paragraphes sur 29 | Ajout de la mort implicite et application du paramètre de défaite ; composition avec le RNT au §17. |
-| Objets ou monnaie | 7 arêtes dans 4 paragraphes | Type détecté automatiquement ; disponibilité fixée par scénario. |
-| Seuil d'Endurance | 2 arêtes au §203 | Type détecté ; poids non déductible sans paramètre supervisé. |
+| 16 morts et 1 victoire écrites | Marquer les nœuds absorbants. | Aucun. |
+| 140 transitions forcées hors combat | Poids 1 ; ignorer les effets L3 sans effet sur la destination. | Warning incompris seulement. |
+| 283 arêtes de choix hors combat | Copier les axes sémantiques et normaliser selon le profil. | Choix appartenant à un paragraphe mixte non reconnu. |
+| RNT simple : 39 arêtes dans 18 paragraphes | Parser les intervalles sur 0–9 et calculer la probabilité. | Aucun. |
+| RNT successifs | Ne pas deviner la composition. | §21 : §189 = 0,60 ; §312 = 0,04 ; mort = 0,36. |
+| Plusieurs arêtes vers la même cible | Conserver les arêtes séparées, puis additionner leurs poids dans \(W_{ij}\). | §21 est déjà supervisé à cause de ses tirages successifs. |
+| Discipline Kai standard : 30 paragraphes | Modèle moyen $5/10$ ou disponibilité selon la configuration Kai. | Aucun. |
+| Plusieurs conditions ou disciplines | Détecter la catégorie, puis envoyer le paragraphe entier à la file. | §23 et 334. |
+| Objet ou monnaie | Détecter la condition ; utiliser les variantes restrictive et permissive. | §9, 12, 23 et 173. |
+| Seuil d'Endurance | Détecter sans inventer sa probabilité. | §203. |
+| Combat simple : 17 paragraphes | Succès $1-d_s(i)$ ; mort implicite $d_s(i)$. | Aucun. |
+| Combat suivi d'un RNT | Multiplier les probabilités du RNT par $1-d_s(i)$ ; ajouter la mort. | Aucun : §17 est automatique. |
+| Combat suivi de choix après victoire | Détecter le combat, puis annoter les choix et composer les poids. | §112, 208 et 229. |
+| Combat avec évasion | Décrire directement combat, mort et évasion. | §43, 169, 180, 191 et 220. |
+| Combat dépendant de sa durée | Décrire les issues avant/après quatre rounds et l'évasion. | §231 et 339. |
+| Combat avec/sans perte d'Endurance | Décrire les deux victoires et la mort. | §227. |
+| Cas inconnu ou incohérent | Ne produire aucun poids ; ajouter le paragraphe à la file. | Aucun cas connu supplémentaire. |
 
-### 7.1 Limites des colonnes de nœuds
+Les comptes se recouvrent pour les paragraphes mixtes. La file connue contient donc 18
+paragraphes distincts : §9, 12, 21, 23, 43, 112, 169, 173, 180, 191, 203, 208, 220,
+227, 229, 231, 334 et 339.
 
-La topologie est fiable, mais certaines colonnes mécaniques ne sont pas exhaustives :
+La colonne `enemies`, non `potential_death`, identifie les combats. Les colonnes
+`health_modifier`, `special_mechanic` et `items_granted` ne sont pas assez exhaustives
+pour prouver l'absence d'une mécanique. Un warning clairement lié à une mécanique L3
+exclue est simplement conservé ; tout warning incompris part en supervision.
 
-- `enemies` contient 29 paragraphes et 39 ennemis structurés ;
-- `health_modifier` ne contient que 7 valeurs non nulles alors que le texte décrit
-  davantage de pertes et de soins ;
-- `special_mechanic` est vide ;
-- `items_granted` est vide.
+## 8. Fichiers produits
 
-Le compilateur peut donc utiliser `enemies` pour reconnaître les combats, mais il ne doit
-pas déduire l'absence d'une mécanique L3 à partir des autres colonnes vides.
-
-### 7.2 Cas exigeant une supervision
-
-La file initiale contient 18 paragraphes distincts :
-
-| Cas | Paragraphes | Annotation nécessaire |
-| :--- | :--- | :--- |
-| Tirages successifs | §21 | Distribution aplatie : §189 = 0,60 ; §312 = 0,04 ; mort = 0,36. |
-| Objet, monnaie ou condition multiple | §9, 12, 23, 173 | Règle restrictive et permissive ; au §23, articulation avec Mind Over Matter. |
-| Plusieurs disciplines | §334 | Règle de départage si Sixth Sense et Camouflage sont toutes deux possédées. |
-| Seuil d'Endurance | §203 | Paramètre pour les deux branches, ou exclusion documentée. |
-| Choix après victoire | §112, 208, 229 | Annotations sémantiques des transitions qui ne les possèdent pas. |
-| Combat et évasion | §43, 169, 180, 191, 220 | Formule directe et paramètre de propension à continuer le combat. |
-| Durée du combat et évasion | §231, 339 | Poids des issues avant/après quatre rounds, évasion et mort. |
-| Victoire avec ou sans dégâts | §227 | Poids de la victoire sans perte, avec perte et de la mort. |
-
-Les 53 warnings présents sur 48 paragraphes ne doivent pas tous devenir des corrections
-manuelles. Le code les classe d'abord en `ignored_endurance`, `ignored_inventory`,
-`combat_detected`, `review_required` ou `unclassified_warning`. Seules les deux dernières
-catégories bloquent la compilation.
-
-## 8. Données dérivées attendues
-
-La phase 1 reste inchangée. La phase 2 produit :
+Les données de phase 1 restent inchangées. Le processus utilise seulement :
 
 ```text
+# Brouillon automatique
+data/processed/graph/LW01/auto_edges.csv
+data/processed/graph/LW01/review_queue.csv
+
+# Annotation humaine
+data/for_graph_model/LW01_supervision.csv
+data/for_graph_model/LW01_scenarios.json
+
+# Résultat final
 data/processed/graph/LW01/model_nodes.csv
 data/processed/graph/LW01/model_edges.csv
-data/processed/graph/LW01/review_queue.csv
-data/processed/graph/LW01/matrices/<scenario>/W.*
-data/processed/graph/LW01/matrices/<scenario>/manifest.json
+data/processed/graph/LW01/W_<scenario>.csv
+data/processed/graph/LW01/conversion_report.csv
 ```
 
-Les annotations humaines sont conservées séparément, par exemple dans :
+`LW01_supervision.csv` reste volontairement simple : `source_id`, `target_id`,
+`transition_kind`, règle ou expression du poids, trois annotations sémantiques et une
+note de justification. Pour un paragraphe supervisé, ses lignes décrivent **toutes** les
+transitions sortantes finales, y compris une mort implicite éventuelle. Cela évite une
+fusion partielle difficile à contrôler.
 
-```text
-data/for_graph_model/LW01_supervision.csv
+`LW01_scenarios.json` rassemble dans un seul petit fichier les affinités de profil, les
+probabilités de défaite, le traitement Kai et les variantes restrictive/permissive des
+ressources. Les 252 configurations Kai sont générées par le code, pas écrites à la main.
+
+## 9. Recette courte
+
+### A — Lancer la conversion automatique
+
+Écrire puis lancer un seul script :
+
+```bash
+uv run python scripts/3_prepare_graph.py
 ```
 
-Un fichier dérivé peut toujours être régénéré à partir de la phase 1, de la supervision
-et de la configuration du scénario.
+Le script :
 
-## 9. Plan d'implémentation — recette
+1. charge `LW01_nodes.csv` et `LW01_e_edges.csv` et réutilise le contrôle qualité
+   existant ;
+2. groupe les arêtes par paragraphe source ;
+3. applique les traitements du tableau §7.2 avec quelques fonctions simples
+   (`forced`, `choice`, `rnt`, `kai`, `combat`, `mixed`) ;
+4. écrit les transitions reconnues dans `auto_edges.csv` ;
+5. écrit les paragraphes non entièrement reconnus dans `review_queue.csv`, avec leur
+   texte, leurs arêtes actuelles, le cas détecté et la raison du blocage.
 
-### Étape 1 — Écrire les schémas et les tests minimaux
+Le script doit retrouver les 18 paragraphes connus, mais la règle générale reste : toute
+combinaison inconnue rejoint automatiquement la file. Une source est donc soit entièrement
+automatique, soit entièrement supervisée. Il ne faut ni architecture de validation
+séparée, ni batterie de tests avant de travailler sur les données réelles.
 
-1. Créer un module décrivant strictement les colonnes de `model_nodes`, `model_edges` et
-   de la supervision.
-2. Interdire explicitement `action_id`, les nœuds intermédiaires et les poids sans règle
-   ni provenance.
-3. Écrire de petits jeux de test contenant : une transition forcée, un choix à deux
-   branches, un RNT, une discipline, un combat et deux arêtes parallèles.
-4. Tester dès cette étape l'agrégation $W_{ij}=\sum_e w_e$.
+### B — Annoter les exceptions
 
-**Sortie attendue :** contrats de données stables et tests unitaires rouges tant que le
-compilateur n'existe pas.
+1. Ouvrir `review_queue.csv` et les textes des paragraphes indiqués.
+2. Remplir `LW01_supervision.csv` avec une ligne par transition finale.
+3. Renseigner dans `LW01_scenarios.json` les quelques paramètres nécessaires aux
+   matrices demandées.
+4. Pour chaque paragraphe, vérifier que les lignes manuelles décrivent toute sa
+   distribution sortante, et ajouter une courte justification.
+5. Versionner ces deux petits fichiers : ils constituent la trace des décisions.
 
-### Étape 2 — Écrire le script d'audit de la phase 1
+Les probabilités déjà déductibles sont écrites comme constantes, par exemple celles du
+§21. Les choix dépendant d'un profil, d'un combat ou d'un état non simulé reçoivent une
+expression paramétrée, pas une valeur arbitraire.
 
-1. Charger `LW01_nodes.csv` et `LW01_e_edges.csv` sans les modifier.
-2. Réutiliser les contrôles de `scripts/utils/qc_extraction.py`.
-3. Vérifier les 350 nœuds, 556 arêtes, identifiants, fins et atteignabilité.
-4. Attribuer un `edge_id` stable de la forme
-   `LW01:<source>:<target>:<ordinal>`.
-5. Produire un rapport machine lisible ; arrêter le programme si la topologie diffère du
-   corpus balisé.
+### C — Compiler le graphe et vérifier le résultat
 
-**Sortie attendue :** un audit reproductible et la liste stable des arêtes sources.
+Écrire puis lancer :
 
-### Étape 3 — Transformer les transitions forcées et les fins
+```bash
+uv run python scripts/4_compile_graph.py
+```
 
-1. Copier les 350 nœuds narratifs dans `model_nodes`.
-2. Marquer les 16 morts et la victoire comme absorbantes.
-3. Ajouter `Death_implicit` comme terminal synthétique commun aux morts sans paragraphe
-   cible, qu'elles proviennent d'un combat ou d'un autre mécanisme.
-4. Pour chaque arête `forced` dont le nœud source n'a pas d'ennemi, écrire une ligne
-   `weight_rule=constant`, `weight_value=1`.
-5. Classer les warnings liés à l'Endurance, aux objets ou à l'équipement comme mécaniques
-   exclues, sans modifier le poids.
+Ce second script :
 
-**Sortie attendue :** les 140 transitions forcées non combattantes compilables.
+1. concatène `auto_edges.csv` et les paragraphes entièrement décrits dans
+   `LW01_supervision.csv` ;
+2. évalue les poids pour le scénario demandé, agrège les arêtes parallèles et construit
+   $W$ ;
+3. produit `model_nodes.csv`, `model_edges.csv`, $W$ et un rapport donnant le nombre de
+   cas automatiques et supervisés.
 
-### Étape 4 — Transformer les choix explicites ordinaires
+Quatre contrôles intégrés suffisent pour cette étude :
 
-1. Sélectionner les 283 arêtes `explicit_choice` dont le nœud source n'est pas un combat.
-2. Copier leurs trois annotations sémantiques.
-3. Attribuer `weight_rule=profile_normalized`.
-4. Écrire d'abord une configuration uniforme donnant la même affinité à toutes les
-   transitions concernées.
-5. Tester que la somme des poids vaut 1 à chaque nœud ne contenant que des choix
-   ordinaires.
+- chaque arête de phase 1 est classée ou rattachée à un paragraphe supervisé ;
+- aucune entrée de la file de supervision ne reste sans annotation ;
+- les cibles existent et les poids sont finis et positifs ou nuls ;
+- chaque ligne non terminale de $W$ somme à 1 et chaque terminal possède sa boucle 1.
 
-**Sortie attendue :** une marche uniforme fonctionnelle avant toute définition fine des
-profils.
-
-### Étape 5 — Écrire le parseur des tirages RNT
-
-1. Reconnaître les formes `0–4`, `5–9`, `below 5`, `5 or above`, `4 or lower`, etc.
-2. Convertir chaque condition en ensemble d'entiers de 0 à 9.
-3. Vérifier, par paragraphe, l'absence de chevauchement et la couverture complète des dix
-   valeurs.
-4. Écrire `weight_rule=constant` avec la probabilité calculée pour les 39 arêtes simples.
-5. Envoyer automatiquement le §21 dans la file de supervision au lieu d'essayer de
-   deviner sa séquence.
-
-**Sortie attendue :** 18 paragraphes RNT compilés automatiquement et un cas bloqué bien
-identifié.
-
-### Étape 6 — Écrire les deux traitements des disciplines
-
-1. Détecter `Kai Discipline` et extraire le nom canonique de la discipline.
-2. Relier les formulations négatives comme `If not` à la discipline citée dans la même
-   source.
-3. Pour le modèle moyen, écrire une règle `kai_mean` utilisant $5/10$ et distribuant le
-   reste entre les autres transitions.
-4. Pour le modèle exact, générer les 252 configurations et écrire une règle `kai_build`
-   activée selon chaque configuration.
-5. Envoyer les §23 et 334 dans la supervision.
-6. Tester sur deux occurrences successives d'une même discipline que le modèle moyen et
-   la moyenne exacte produisent bien des résultats différents.
-
-**Sortie attendue :** 30 paragraphes Kai standards compilables dans les deux variantes.
-
-### Étape 7 — Écrire le transformateur des combats simples
-
-1. Identifier un combat uniquement par `enemies` non vide, jamais par
-   `potential_death` seul.
-2. Pour les 17 combats avec une unique transition de victoire, remplacer le poids 1 par
-   `1-d_s(i)` et ajouter une arête vers `Death_implicit` de poids `d_s(i)`.
-3. Pour le §17, multiplier les trois poids RNT par `1-d_s(17)` et ajouter la mort de poids
-   `d_s(17)`.
-4. Conserver les statistiques et modificateurs de combat comme métadonnées sans les
-   interpréter.
-5. Envoyer les 11 autres paragraphes de combat dans la supervision.
-
-**Sortie attendue :** 18 combats compilés automatiquement et 11 cas spéciaux bloqués.
-
-### Étape 8 — Classer les autres conditions
-
-1. Détecter les objets et la monnaie aux §9, 12, 23 et 173.
-2. Préparer deux configurations : `restrictive`, où la transition conditionnelle est
-   indisponible, et `permissive`, où elle est disponible.
-3. Détecter le seuil d'Endurance du §203 et lui attribuer un paramètre explicite plutôt
-   qu'une valeur inventée.
-4. Marquer toutes les autres mécaniques L3 comme `ignored_metadata`.
-5. Bloquer toute condition non classée.
-
-**Sortie attendue :** aucune condition silencieusement interprétée.
-
-### Étape 9 — Rédiger manuellement la table de supervision
-
-Pour chacun des 18 paragraphes listés en §7.2 :
-
-1. recopier `source_id`, `target_id` et la citation pertinente ;
-2. indiquer la catégorie corrigée ;
-3. écrire la règle ou l'expression directe du poids ;
-4. compléter les annotations sémantiques manquantes, notamment après victoire ;
-5. indiquer la justification et l'auteur de la validation ;
-6. marquer la ligne `reviewed` seulement après une seconde lecture du paragraphe.
-
-Le §21 reçoit les constantes $0{,}60$, $0{,}04$ et $0{,}36$. Les autres cas reçoivent
-des expressions paramétrées plutôt que des nombres arbitraires.
-
-**Sortie attendue :** `LW01_supervision.csv`, court, lisible et versionné.
-
-### Étape 10 — Fusionner règles automatiques et supervision
-
-1. Construire `model_edges` depuis les règles automatiques.
-2. Appliquer la supervision comme surcharge explicite, sans modifier les CSV de phase 1.
-3. Refuser une surcharge sans provenance ou visant une arête inconnue.
-4. Refuser toute ligne encore marquée `blocked`, `review_required` ou
-   `unclassified_warning`.
-5. Produire un rapport donnant, pour chaque arête, sa règle finale et son origine.
-
-**Sortie attendue :** `model_nodes.csv` et `model_edges.csv` complets, mais encore
-paramétrés.
-
-### Étape 11 — Écrire les configurations de scénarios
-
-Créer des fichiers de configuration séparés pour :
-
-1. la marche uniforme ;
-2. chaque profil sémantique ;
-3. le traitement Kai moyen ;
-4. chacune des 252 configurations Kai ;
-5. les valeurs basse, centrale et haute de défaite au combat ;
-6. les variantes restrictive et permissive des objets ;
-7. les paramètres des combats spéciaux et du §203.
-
-Le compilateur doit échouer si une valeur nécessaire manque. Les valeurs numériques de
-combat devront être justifiées avant d'être inscrites dans ces fichiers.
-
-**Sortie attendue :** des scénarios explicites, comparables et reproductibles.
-
-### Étape 12 — Compiler les poids et la matrice $W$
-
-Pour chaque scénario :
-
-1. évaluer directement `weight_value` ou `weight_expression` sur chaque arête ;
-2. normaliser les transitions de choix lorsque la règle le demande ;
-3. vérifier que tous les poids sont finis et positifs ou nuls ;
-4. agréger les arêtes parallèles dans $W_{ij}$ ;
-5. ajouter les boucles absorbantes dans la matrice complète ;
-6. extraire $Q$, la sous-matrice transitoire ;
-7. enregistrer $W$, la liste ordonnée des nœuds et le manifeste du scénario.
-
-**Sortie attendue :** une matrice $W$ traçable pour chaque scénario.
-
-### Étape 13 — Valider chaque matrice
-
-1. Vérifier $W_{ij}\geq0$.
-2. Vérifier une somme de ligne égale à 1 à la tolérance numérique près.
-3. Vérifier que seuls les terminaux ont une boucle absorbante.
-4. Vérifier que toute masse peut atteindre un terminal depuis le §1.
-5. Vérifier $\rho(Q)<1$, puis calculer $(I-Q)^{-1}$.
-6. Comparer les visites et flux analytiques à une simulation Monte-Carlo sur les petits
-   graphes de test, puis sur LW01.
-7. Vérifier que toute arête de phase 1 est soit modélisée, soit explicitement exclue.
-
-**Sortie attendue :** un rapport de validation bloquant en cas d'erreur.
-
-### Étape 14 — Comparer les deux modèles Kai
-
-1. Calculer le flux issu de la matrice moyenne Kai.
-2. Calculer séparément les flux des 252 configurations.
-3. Moyenner ces 252 flux.
-4. Mesurer les différences par nœud, par arête et par probabilité d'absorption.
-5. Décider, sur cette base, si l'approximation moyenne est suffisante pour l'analyse
-   principale.
-
-**Sortie attendue :** une décision empirique documentée, et non une préférence de
-principe.
-
-### Étape 15 — Geler la phase de modélisation
-
-1. Versionner schémas, supervision, configurations, tests et rapports.
-2. Documenter les paramètres retenus et les mécaniques exclues.
-3. Produire une matrice de référence et les scénarios de sensibilité validés.
-4. Ne commencer le choix des indices BoP qu'après réussite de tous les contrôles.
+On n'ajoute un petit test ciblé que si un parseur délicat le justifie, par exemple pour
+les intervalles RNT. Une infrastructure générale de schémas, de tests et de rapports de
+validation n'est pas un objectif de ce projet.
 
 ## 10. Critères de fin de la phase
 
-La modélisation du graphe est terminée lorsque :
+La phase est terminée lorsque :
 
-- chaque transition possède une règle directe de poids et une provenance ;
-- aucune structure « action–conséquence » ne subsiste dans les données dérivées ;
-- les 18 cas supervisés sont validés ;
-- les matrices $W$ sont normalisées et absorbantes ;
-- le calcul de $(I-Q)^{-1}$ est stable ;
-- les flux analytiques concordent avec les simulations ;
-- la comparaison des deux traitements Kai est produite ;
-- les mécaniques exclues sont recensées dans le manifeste.
+- les deux scripts reproduisent le graphe depuis la phase 1 et la supervision ;
+- les 556 arêtes sources sont toutes prises en compte et chaque arête synthétique est
+  identifiable ;
+- les 18 paragraphes particuliers sont explicitement annotés ;
+- les contrôles simples de $W$ passent ;
+- `conversion_report.csv` fournit directement les nombres utiles à la slide.
 
-Les indices BoP et l'étude des trajectoires commencent seulement après ce jalon.
+La comparaison des deux traitements Kai peut alors être faite avec les mêmes scripts.
+Les indices BoP et l'étude des trajectoires commencent après ce jalon.
