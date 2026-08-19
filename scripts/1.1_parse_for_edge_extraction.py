@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import re
@@ -117,9 +118,24 @@ def parse_for_edge_extraction(html_dir: str, book_prefix: str, output_dir: str) 
         json.dump(df_nodes.to_dicts(), f, ensure_ascii=False, indent=2)
 
 
-if __name__ == "__main__":
-    parse_for_edge_extraction(
-        html_dir="data/raw/LW01/sections",
-        book_prefix="LW01",
-        output_dir="data/processed/nodes_edges/",
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Prepare one Lone Wolf book for LLM edge extraction."
     )
+    parser.add_argument(
+        "--book",
+        default="LW01",
+        help="Book identifier used in data/raw/<BOOK>/sections (default: LW01).",
+    )
+    args = parser.parse_args()
+    book_id = str(args.book)
+
+    parse_for_edge_extraction(
+        html_dir=f"data/raw/{book_id}/sections",
+        book_prefix=book_id,
+        output_dir="data/processed/nodes_edges",
+    )
+
+
+if __name__ == "__main__":
+    main()

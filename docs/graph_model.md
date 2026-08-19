@@ -185,6 +185,8 @@ w_e^{(p)}=\frac{r_p(e)}{\sum_{e'}r_p(e')}.
 $$
 
 Le profil de référence utilise $r_p(e)=1$ et produit une distribution uniforme.
+Dans les expressions du pré-graphe, `choice_share(i, j)` désigne cette part normalisée
+pour l'arête $i\rightarrow j$ parmi les choix encore disponibles.
 
 ### 5.3 Tirage aléatoire
 
@@ -207,6 +209,12 @@ Deux profils ou familles de profils seront comparés :
 
 Les règles restent inscrites symboliquement dans le pré-graphe. Les matrices sont
 compilées séparément, puis les flux des 252 configurations peuvent être moyennés.
+La notation `kai_available("Discipline")` vaut $0{,}5$ pour le profil moyen et 0 ou 1
+pour une configuration déterminée. Lorsqu'elle vaut 1, la route Kai est prise ; sinon,
+la masse restante est répartie entre les autres choix avec `choice_share`.
+Le convertisseur détecte le nom écrit après « Discipline of » sans maintenir une liste
+fermée : les disciplines Kai, Magnakai et Grand Master des autres livres utilisent donc
+la même règle.
 
 ### 5.5 Combat
 
@@ -333,22 +341,22 @@ La phase 1 reste inchangée. La phase 2 utilise :
 
 ```text
 # Brouillon automatique
-data/processed/pregraph/LW01/auto_edges.csv
-data/processed/pregraph/LW01/review_queue.csv
+data/processed/pregraph/<BOOK_ID>/auto_edges.csv
+data/processed/pregraph/<BOOK_ID>/review_queue.csv
 
 # Tableau créé vide puis annoté
-data/for_graph_model/LW01_supervision.csv
+data/for_graph_model/<BOOK_ID>_supervision.csv
 
 # Résultat de la phase 2
-data/processed/pregraph/LW01/pregraph_nodes.csv
-data/processed/pregraph/LW01/pregraph_edges.csv
-data/processed/pregraph/LW01/conversion_report.csv
+data/processed/pregraph/<BOOK_ID>/pregraph_nodes.csv
+data/processed/pregraph/<BOOK_ID>/pregraph_edges.csv
+data/processed/pregraph/<BOOK_ID>/conversion_report.csv
 ```
 
 ### 8.1 Tableau d'annotation
 
-L'étape A crée `LW01_supervision.csv` avec son en-tête et aucune ligne. Ce fichier
-n'est jamais écrasé s'il contient déjà des annotations.
+L'étape A crée `<BOOK_ID>_supervision.csv` avec son en-tête et aucune ligne. Ce
+fichier n'est jamais écrasé s'il existe déjà.
 
 ```text
 source_id,target_id,transition_kind,weight_rule,weight_value,weight_expression,condition_kind,condition_value,semantic_risk,semantic_morality,semantic_action,note
@@ -402,7 +410,7 @@ profil en phase 3.
 Écrire puis lancer :
 
 ```bash
-uv run python scripts/2.1_prepare_pregraph.py
+uv run python scripts/2.1_prepare_pregraph.py --book LW01
 ```
 
 Le script :
@@ -412,15 +420,23 @@ Le script :
 3. transforme les cas entièrement reconnus dans `auto_edges.csv` ;
 4. écrit les sources non reconnues dans `review_queue.csv`, avec leur texte, leurs
    arêtes et la raison du blocage ;
-5. crée `LW01_supervision.csv` vide avec les colonnes du §8.1.
+5. crée `<BOOK_ID>_supervision.csv` vide avec les colonnes du §8.1.
 
-Le script doit retrouver les 18 paragraphes connus. Toute combinaison nouvelle rejoint
-la file au lieu d'être interprétée silencieusement.
+Le script de production ne connaît aucune liste d'exceptions. Toute combinaison non
+reconnue rejoint la file au lieu d'être interprétée silencieusement. Après son exécution,
+un contrôle léger peut être lancé :
+
+```bash
+uv run python scripts/tests/test_2_1_prepare_pregraph.py --book LW01
+```
+
+Il vérifie la couverture des arêtes, les règles élémentaires, les fins explicites et,
+pour LW01 seulement, la liste des 18 paragraphes déjà auditée.
 
 ### B — Annoter les exceptions
 
 1. Ouvrir `review_queue.csv` et relire le texte de chaque source.
-2. Ajouter dans `LW01_supervision.csv` une ligne par transition finale.
+2. Ajouter dans `<BOOK_ID>_supervision.csv` une ligne par transition finale.
 3. Décrire toute la distribution sortante de chaque source, pas seulement la transition
    corrigée.
 4. Utiliser une constante seulement si elle est déductible du texte.
@@ -436,7 +452,7 @@ représentées et qu'aucune règle requise n'est vide.
 Écrire puis lancer :
 
 ```bash
-uv run python scripts/2.2_finalize_pregraph.py
+uv run python scripts/2.2_finalize_pregraph.py --book LW01
 ```
 
 Le script :

@@ -153,6 +153,23 @@ La phase 2 crée une couche dérivée :
 
 Aucune correction n'est appliquée aux fichiers de phase 1.
 
+### 5.1 Chaîne commune aux livres *Lone Wolf*
+
+Tous les scripts numérotés utilisent `--book <BOOK_ID>` et la même convention :
+
+```text
+data/raw/<BOOK_ID>/sections/
+data/processed/nodes_edges/<BOOK_ID>/<BOOK_ID>_nodes.csv
+data/processed/nodes_edges/<BOOK_ID>/<BOOK_ID>_e_edges.csv
+data/processed/pregraph/<BOOK_ID>/
+data/for_graph_model/<BOOK_ID>_supervision.csv
+```
+
+La chaîne de production ne contient ni identifiants de paragraphes ni volumes attendus
+propres à LW01. Les attentes connues pour un corpus sont isolées dans `scripts/tests/`.
+La généralisation à d'autres familles de fictions pourra ensuite adapter les parseurs de
+phase 1 sans modifier le principe du pré-graphe.
+
 ## 6. Feuille de route
 
 Les scripts du pipeline suivent la convention `<phase>.<ordre>_<action>.py`. Leur nom
@@ -163,14 +180,18 @@ indique ainsi directement leur place dans cette feuille de route.
 - 350 sections et 556 arêtes ;
 - annotation structurelle et sémantique calibrée ;
 - complétude, identifiants et atteignabilité contrôlés.
-- scripts : `1.1_parse_for_edge_extraction.py` et `1.2_parse_node.py`.
+- scripts : `1.1_parse_for_edge_extraction.py --book <BOOK_ID>` et
+  `1.2_parse_node.py --book <BOOK_ID>`.
 
 ### Phase 2 — Construire le pré-graphe — prochaine phase
 
-1. lancer `2.1_prepare_pregraph.py`, qui traite les cas ordinaires, produit la file
-   d'exceptions et crée le tableau d'annotation vide ;
+Les deux scripts sont écrits mais n'ont pas encore été exécutés.
+
+1. lancer `2.1_prepare_pregraph.py --book <BOOK_ID>`, qui traite les cas ordinaires,
+   produit la file d'exceptions et crée le tableau d'annotation vide ;
 2. remplir ce tableau pour les 18 paragraphes particuliers ;
-3. lancer `2.2_finalize_pregraph.py`, qui finalise et contrôle le pré-graphe.
+3. lancer `2.2_finalize_pregraph.py --book <BOOK_ID>`, qui finalise et contrôle le
+   pré-graphe.
 
 La recette est donnée dans
 [`graph_model.md`](graph_model.md#9-recette-courte-de-la-phase-2).

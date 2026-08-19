@@ -15,7 +15,7 @@
 | Contrôle qualité | Terminé | Choix complets, IDs valides, 350 nœuds atteignables, 17 fins explicites. |
 | Spécification du pré-graphe | Terminée | Multigraphe direct L0–L2 indépendant des profils, avec les deux issues `Death` et `Win`. |
 | Audit pour la phase 2 | Terminé | Conversions automatiques recensées et file initiale de 18 paragraphes à superviser. |
-| Construction du pré-graphe | Planifiée, à implémenter | Deux scripts courts encadrent une annotation manuelle ; aucun pré-graphe encore produit. |
+| Construction du pré-graphe | En cours | Les deux scripts sont écrits mais non exécutés ; aucun pré-graphe encore produit. |
 | Compilation de \(W\) | Phase 3 planifiée | Une matrice par profil ; les probabilités de victoire au combat restent libres. |
 | Bag-of-Paths et indices | Différé | Première analyse fixée à la borne RW ; indices à choisir après validation de \(W\). |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
@@ -183,9 +183,33 @@
   `scripts/1.2_parse_node.py`.
 - Alignement des scripts projetés des phases 2 et 3 sur la même convention.
 
+### 19.08.2026 — Implémentation des scripts de phase 2
+
+- Ajout de `scripts/2.1_prepare_pregraph.py` : conversion des cas ordinaires, ajout des
+  issues de combat et des pré-terminaux, production de la file de supervision et création
+  non destructive du tableau d'annotation.
+- Ajout de `scripts/2.2_finalize_pregraph.py` : contrôle de la couverture de la
+  supervision, fusion des arêtes, création des deux tables du pré-graphe et du rapport de
+  conversion.
+- Vérification statique de la qualité du code. À la demande du chercheur, les scripts
+  n'ont pas été exécutés et aucun fichier de données de phase 2 n'a encore été produit.
+
+### 19.08.2026 — Séparation production / contrôles par corpus
+
+- Paramétrage de tous les scripts numérotés des phases 1 et 2 avec
+  `--book <BOOK_ID>` et adoption d'une convention de chemins commune aux livres
+  *Lone Wolf*.
+- Retrait de la liste des 18 paragraphes LW01 du script de production 2.1 : les
+  exceptions sont uniquement détectées à partir de la structure des données.
+- Remplacement de la liste fermée des dix disciplines Kai par une détection textuelle
+  commune aux disciplines Kai, Magnakai et Grand Master.
+- Création de `scripts/tests/test_2_1_prepare_pregraph.py`, qui contient le contrôle
+  propre à LW01 et quelques invariants généraux de la préparation.
+- Aucun script de production ni contrôle sur les données n'a été exécuté.
+
 ## Prochaine étape
 
-Écrire `scripts/2.1_prepare_pregraph.py` : traiter les cas ordinaires, ajouter `Death` et
-`Win`, produire `auto_edges.csv` et `review_queue.csv`, puis créer le tableau
-`LW01_supervision.csv` vide. Les indices BoP et les trajectoires restent volontairement
-hors de ce chantier.
+Lancer `scripts/2.1_prepare_pregraph.py --book LW01`, puis le contrôle de phase 2.1.
+Examiner la file obtenue, remplir `LW01_supervision.csv`, puis lancer
+`scripts/2.2_finalize_pregraph.py --book LW01`. Les indices BoP et les trajectoires
+restent volontairement hors de ce chantier.

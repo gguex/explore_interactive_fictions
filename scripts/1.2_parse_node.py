@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import re
@@ -124,9 +125,24 @@ def parse_nodes(html_dir: str, book_prefix: str, output_dir: str) -> None:
     df_nodes.write_csv(nodes_csv_path)
 
 
-if __name__ == "__main__":
-    parse_nodes(
-        html_dir="data/raw/LW01/sections",
-        book_prefix="LW01",
-        output_dir="data/processed/nodes_edges/",
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Extract the node table for one Lone Wolf book."
     )
+    parser.add_argument(
+        "--book",
+        default="LW01",
+        help="Book identifier used in data/raw/<BOOK>/sections (default: LW01).",
+    )
+    args = parser.parse_args()
+    book_id = str(args.book)
+
+    parse_nodes(
+        html_dir=f"data/raw/{book_id}/sections",
+        book_prefix=book_id,
+        output_dir="data/processed/nodes_edges",
+    )
+
+
+if __name__ == "__main__":
+    main()
