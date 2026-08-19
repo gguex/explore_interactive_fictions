@@ -1,3 +1,8 @@
+# Notes de travail historiques
+
+> Ces questions ont précédé les décisions actées dans `gamebook_global_plan.md` et
+> `graph_model.md`. Elles sont conservées comme trace de réflexion et ne constituent pas
+> la spécification actuelle.
 
 ## Rappel : La table des edges après l'étape 1
 

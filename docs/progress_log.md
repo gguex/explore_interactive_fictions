@@ -13,9 +13,10 @@
 | Extraction des arêtes | Terminée | `LW01_e_edges.csv`, 556 arêtes. |
 | Calibration LLM | Terminée | Structure validée ; le rapport final versionné contient 3 divergences sémantiques douces. |
 | Contrôle qualité | Terminé | Choix complets, IDs valides, 350 nœuds atteignables, 17 fins explicites. |
-| Spécification du graphe | Terminée | Multigraphe direct L0–L2 pondéré par \(W\), sans nœud intermédiaire ni formalisme « action–conséquence ». |
+| Spécification du pré-graphe | Terminée | Multigraphe direct L0–L2 indépendant des profils, avec les deux issues `Death` et `Win`. |
 | Audit pour la phase 2 | Terminé | Conversions automatiques recensées et file initiale de 18 paragraphes à superviser. |
-| Modèle probabiliste | Planifié, à implémenter | Recette ramenée à deux scripts et une annotation manuelle ; aucun `model_edges` ni matrice \(W\) encore produit. |
+| Construction du pré-graphe | Planifiée, à implémenter | Deux scripts courts encadrent une annotation manuelle ; aucun pré-graphe encore produit. |
+| Compilation de \(W\) | Phase 3 planifiée | Une matrice par profil ; les probabilités de victoire au combat restent libres. |
 | Bag-of-Paths et indices | Différé | Première analyse fixée à la borne RW ; indices à choisir après validation de \(W\). |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
 
@@ -158,8 +159,24 @@
 - Conservation de la file connue de 18 paragraphes et réduction des validations à quatre
   contrôles essentiels sur les données réelles.
 
+### 19.08.2026 — Séparation du pré-graphe et des profils
+
+- Décision que la phase 2 produit un pré-graphe indépendant des profils et non une
+  matrice de marche.
+- Adoption de deux nœuds d'issue uniques, `Death` et `Win`, seuls nœuds absorbants ; les
+  17 fins narratives deviennent des pré-terminaux reliés à leur issue.
+- Abandon des autres terminaux techniques ; les morts implicites pointent directement
+  vers `Death`.
+- Définition précise du tableau `LW01_supervision.csv`, créé vide avec son en-tête par
+  `scripts/3_prepare_pregraph.py`, puis consommé automatiquement lors de la finalisation.
+- La phase 3 compile le pré-graphe pour plusieurs profils. Chaque profil fournit
+  notamment ses affinités, ses disciplines et ses probabilités de victoire au combat.
+- Remplacement des scripts précédemment projetés par `3_prepare_pregraph.py`,
+  `4_finalize_pregraph.py` et, en phase 3, `5_compile_w.py`.
+
 ## Prochaine étape
 
-Écrire `scripts/3_prepare_graph.py` : traiter les cas ordinaires du tableau de
-`graph_model.md`, produire `auto_edges.csv` et générer `review_queue.csv`. Les indices
-BoP et les trajectoires restent volontairement hors de ce chantier.
+Écrire `scripts/3_prepare_pregraph.py` : traiter les cas ordinaires, ajouter `Death` et
+`Win`, produire `auto_edges.csv` et `review_queue.csv`, puis créer le tableau
+`LW01_supervision.csv` vide. Les indices BoP et les trajectoires restent volontairement
+hors de ce chantier.
