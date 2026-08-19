@@ -24,7 +24,7 @@ narrative analysis.
 
 ```
 docs/            current plan, progress journal, abstract and archived documentation
-scripts/         local pipeline: 1_parse_for_edge_extraction.py, 2_parse_nodes.py
+scripts/         local pipeline: 1.1_parse_for_edge_extraction.py, 1.2_parse_node.py
 scripts/utils/   cross-cutting tools (eval_diff.py: gold vs LLM comparison)
 cluster_scripts/ LLM edge extraction on the cluster (vLLM + structured outputs)
 data/raw/        Project Aon HTML sections
@@ -55,6 +55,6 @@ Python project managed with [uv](https://docs.astral.sh/uv/):
 
 ```bash
 uv sync
-uv run python scripts/1_parse_for_edge_extraction.py
-uv run python scripts/2_parse_nodes.py
+uv run python scripts/1.1_parse_for_edge_extraction.py
+uv run python scripts/1.2_parse_node.py
 ```

@@ -40,7 +40,7 @@
 
 - Reprise du périmètre de recherche et rédaction d'un premier plan global.
 - Réorganisation du dépôt et archivage des scripts devenus inactifs.
-- Séparation du parseur de nœuds dans `scripts/2_parse_nodes.py`.
+- Séparation du parseur de nœuds, désormais nommé `scripts/1.2_parse_node.py`.
 - Régénération des sorties et vérification de leur stabilité.
 - Extraction complète des 350 sections de LW01 : 556 arêtes.
 - Ajout de `scripts/utils/qc_extraction.py`.
@@ -150,8 +150,8 @@
   batterie de tests.
 - Adoption d'un processus de recherche court : conversion automatique, annotation des
   exceptions, puis compilation et contrôles intégrés.
-- Regroupement des transformations automatiques dans `scripts/3_prepare_graph.py` et de
-  la fusion/compilation dans `scripts/4_compile_graph.py`.
+- Regroupement alors projeté des transformations automatiques et de la
+  fusion/compilation en deux scripts.
 - Décision de superviser un paragraphe particulier dans son ensemble plutôt que de
   gérer des surcharges partielles complexes.
 - Ajout d'un tableau « cas de figure / traitement » réutilisable directement dans la
@@ -168,15 +168,24 @@
 - Abandon des autres terminaux techniques ; les morts implicites pointent directement
   vers `Death`.
 - Définition précise du tableau `LW01_supervision.csv`, créé vide avec son en-tête par
-  `scripts/3_prepare_pregraph.py`, puis consommé automatiquement lors de la finalisation.
+  `scripts/2.1_prepare_pregraph.py`, puis consommé automatiquement lors de la
+  finalisation.
 - La phase 3 compile le pré-graphe pour plusieurs profils. Chaque profil fournit
   notamment ses affinités, ses disciplines et ses probabilités de victoire au combat.
-- Remplacement des scripts précédemment projetés par `3_prepare_pregraph.py`,
-  `4_finalize_pregraph.py` et, en phase 3, `5_compile_w.py`.
+- Remplacement des scripts précédemment projetés par `2.1_prepare_pregraph.py`,
+  `2.2_finalize_pregraph.py` et, en phase 3, `3.1_compile_w.py`.
+
+### 19.08.2026 — Nommage des scripts par phase
+
+- Adoption de la convention `<phase>.<ordre>_<action>.py` pour rendre la place de
+  chaque script explicite dans la feuille de route.
+- Renommage des scripts existants en `scripts/1.1_parse_for_edge_extraction.py` et
+  `scripts/1.2_parse_node.py`.
+- Alignement des scripts projetés des phases 2 et 3 sur la même convention.
 
 ## Prochaine étape
 
-Écrire `scripts/3_prepare_pregraph.py` : traiter les cas ordinaires, ajouter `Death` et
+Écrire `scripts/2.1_prepare_pregraph.py` : traiter les cas ordinaires, ajouter `Death` et
 `Win`, produire `auto_edges.csv` et `review_queue.csv`, puis créer le tableau
 `LW01_supervision.csv` vide. Les indices BoP et les trajectoires restent volontairement
 hors de ce chantier.

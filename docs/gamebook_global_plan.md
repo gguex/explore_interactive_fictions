@@ -155,18 +155,22 @@ Aucune correction n'est appliquée aux fichiers de phase 1.
 
 ## 6. Feuille de route
 
+Les scripts du pipeline suivent la convention `<phase>.<ordre>_<action>.py`. Leur nom
+indique ainsi directement leur place dans cette feuille de route.
+
 ### Phase 1 — Extraction LW01 — terminée
 
 - 350 sections et 556 arêtes ;
 - annotation structurelle et sémantique calibrée ;
 - complétude, identifiants et atteignabilité contrôlés.
+- scripts : `1.1_parse_for_edge_extraction.py` et `1.2_parse_node.py`.
 
 ### Phase 2 — Construire le pré-graphe — prochaine phase
 
-1. lancer un script qui traite les cas ordinaires, produit la file d'exceptions et crée
-   le tableau d'annotation vide ;
+1. lancer `2.1_prepare_pregraph.py`, qui traite les cas ordinaires, produit la file
+   d'exceptions et crée le tableau d'annotation vide ;
 2. remplir ce tableau pour les 18 paragraphes particuliers ;
-3. lancer un second script qui finalise et contrôle le pré-graphe.
+3. lancer `2.2_finalize_pregraph.py`, qui finalise et contrôle le pré-graphe.
 
 La recette est donnée dans
 [`graph_model.md`](graph_model.md#9-recette-courte-de-la-phase-2).
@@ -176,7 +180,8 @@ La recette est donnée dans
 1. définir les profils dans un fichier de paramètres ;
 2. laisser chaque profil fixer notamment ses affinités, ses disciplines et ses chances de
    victoire au combat ;
-3. compiler et contrôler une matrice $W^{(p)}$ par profil.
+3. lancer `3.1_compile_w.py` pour compiler et contrôler une matrice $W^{(p)}$ par
+   profil.
 
 ### Phase 4 — Analyses BoP et trajectoires — différée
 

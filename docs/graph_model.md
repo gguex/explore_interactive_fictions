@@ -402,7 +402,7 @@ profil en phase 3.
 Écrire puis lancer :
 
 ```bash
-uv run python scripts/3_prepare_pregraph.py
+uv run python scripts/2.1_prepare_pregraph.py
 ```
 
 Le script :
@@ -436,7 +436,7 @@ représentées et qu'aucune règle requise n'est vide.
 Écrire puis lancer :
 
 ```bash
-uv run python scripts/4_finalize_pregraph.py
+uv run python scripts/2.2_finalize_pregraph.py
 ```
 
 Le script :
@@ -466,7 +466,7 @@ de valeur.
 Le script :
 
 ```bash
-uv run python scripts/5_compile_w.py \
+uv run python scripts/3.1_compile_w.py \
   --pregraph data/processed/pregraph/LW01 \
   --profiles data/for_graph_model/LW01_profiles.json
 ```
