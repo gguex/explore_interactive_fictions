@@ -1,6 +1,6 @@
 # Plan global — Distant reading des fictions interactives
 
-> Document de référence mis à jour le 19.08.2026. La représentation du pré-graphe et la
+> Document de référence mis à jour le 20.08.2026. La représentation du pré-graphe et la
 > compilation de $W$ sont définies dans [`graph_model.md`](graph_model.md). Le suivi
 > chronologique se trouve dans [`progress_log.md`](progress_log.md).
 
@@ -80,9 +80,11 @@ $$
 W_{ij}^{(p)}=\sum_{e:i\rightarrow j}w_e^{(p)}.
 $$
 
-Le profil contient les affinités de choix, les disciplines, les hypothèses de ressources,
-les propensions d'évasion et les probabilités de victoire au combat. Plusieurs profils
-peuvent donc être compilés sans modifier ni réannoter le pré-graphe.
+Le profil contient uniquement les trois orientations comportementales `risk`,
+`morality` et `action`. Les disciplines, les conditions persistantes, les combats et
+l'évasion sont réglés une fois pour toute l'expérience. Plusieurs profils peuvent donc
+être compilés sans modifier ni réannoter le pré-graphe et sans changer de schéma de
+profil.
 
 ### 3.4 Usage de Bag-of-Paths
 
@@ -113,22 +115,30 @@ de tirages sont aplaties en une distribution finale.
 
 ### 4.3 Disciplines et compétences
 
-Deux familles de profils seront comparées :
-
-1. un profil moyen où une discipline précise a une disponibilité de $5/10$ ;
-2. les $\binom{10}{5}=252$ configurations cohérentes de cinq disciplines.
-
-Les matrices sont compilées séparément, puis les flux des configurations peuvent être
-moyennés.
+La disponibilité de toute discipline est fixée à $0{,}5$ pour cette itération. Elle
+représente une approximation marginale commune à tous les profils, et non un joueur
+possédant une configuration particulière. Les configurations réelles de disciplines ne
+sont pas comparées dans la présentation.
 
 ### 4.4 Combats et évasions
 
-La chance de victoire $v_p(i)$ au combat $i$ reste libre et dépend du profil. Le
-pré-graphe contient seulement les règles symboliques de victoire, mort, évasion ou autre
-issue. Le compilateur refuse un profil auquel il manque une valeur nécessaire.
+Une unique probabilité de victoire `combat_win_probability` et une unique probabilité de
+prendre la fuite `escape_probability` sont fixées pour toute l'expérience. Elles ne
+dépendent ni du profil ni du combat. Pour un combat avec fuite simple, si $v$ désigne la
+première et $f$ la seconde :
+
+$$
+P(\text{fuite})=f,\qquad
+P(\text{victoire})=(1-f)v,\qquad
+P(\text{mort})=(1-f)(1-v).
+$$
+
+Les rares issues particulières qui ne se ramènent pas à ces trois catégories reçoivent
+une distribution fixe dans la configuration du livre, jamais dans le profil.
 
 Les rounds, l'Endurance et les tables de combat ne sont pas simulés. Les caractéristiques
-des ennemis restent disponibles et pourront plus tard servir à calculer $v_p(i)$.
+des ennemis restent disponibles et pourront plus tard servir à calculer une probabilité
+de victoire propre à chaque combat $v(i)$ dans une expérience étendue.
 
 ### 4.5 État persistant
 
@@ -137,10 +147,12 @@ occurrences restent des métadonnées. Lorsqu'une condition simple peut être is
 possession d'un objet, montant minimal de Gold Crowns ou seuil d'Endurance — elle est
 conservée par une règle symbolique sans reconstituer l'état du personnage.
 
-Quand une transition dépend d'une ressource, le profil porte l'hypothèse retenue via
-`condition_available(type, value)`, par exemple restrictive ou permissive. Cela permet
-des analyses de sensibilité sans étendre les nœuds par l'état complet du personnage. Les
-conditions composées ou ambiguës restent soumises à supervision.
+Toutes les conditions persistantes simples utilisent la même probabilité fixe
+`has_condition`, quelle que soit leur nature ou leur valeur. Les détails conservés par
+`condition_available(type, value)` restent utiles à la traçabilité, mais le compilateur
+résout chaque appel avec ce même scalaire. La route complémentaire reçoit
+`1 - has_condition`. Les conditions composées ou ambiguës restent soumises à
+supervision.
 
 ## 5. Conservation de la phase 1
 
@@ -206,11 +218,16 @@ La recette est donnée dans
 
 ### Phase 3 — Compiler $W$ pour les profils
 
-1. définir les profils dans un fichier de paramètres ;
-2. laisser chaque profil fixer notamment ses affinités, ses disciplines et ses chances de
-   victoire au combat ;
+1. générer les 27 profils obtenus par le produit des trois niveaux de `risk`, des trois
+   niveaux de `morality` et des trois niveaux de `action` ;
+2. définir séparément les hypothèses fixes de l'expérience : `kai_availability`,
+   `combat_win_probability`, `escape_probability`, `has_condition` et l'intensité des
+   affinités de choix ;
 3. lancer `3.1_compile_w.py` pour compiler et contrôler une matrice $W^{(p)}$ par
-   profil.
+   profil selon un unique schéma.
+
+Les 27 matrices seront calculées et contrôlées. La présentation de 20 minutes montrera
+seulement un profil neutre, quelques archétypes lisibles et des effets agrégés par axe.
 
 ### Phase 4 — Analyses BoP et trajectoires — différée
 

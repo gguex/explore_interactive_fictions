@@ -16,7 +16,7 @@
 | Spécification du pré-graphe | Terminée | Multigraphe direct L0–L2 indépendant des profils, avec les deux issues `Death` et `Win`. |
 | Audit pour la phase 2 | Terminé | Les conditions persistantes simples sont automatisées et les 14 exceptions sont supervisées. |
 | Construction du pré-graphe | Terminée pour LW01 | 352 nœuds, 602 arêtes et aucune transition de phase 1 non classée. |
-| Compilation de \(W\) | Phase 3 planifiée | Une matrice par profil ; les probabilités de victoire au combat restent libres. |
+| Compilation de \(W\) | Phase 3 planifiée | 27 profils comportementaux ; mécaniques non comportementales fixées globalement. |
 | Bag-of-Paths et indices | Différé | Première analyse fixée à la borne RW ; indices à choisir après validation de \(W\). |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
 
@@ -232,6 +232,23 @@
 - Alignement du validateur 2.2 sur le type automatique `state_condition`.
 - Finalisation réussie : 352 nœuds, 602 arêtes, 14 sources supervisées et zéro arête de
   phase 1 non classée.
+
+### 20.08.2026 — Périmètre expérimental de la phase 3
+
+- Adoption d'un schéma unique de profil composé seulement de `profile_id`, `risk`,
+  `morality` et `action`.
+- Décision de compiler les 27 combinaisons des trois niveaux de chacun des trois axes,
+  tout en ne montrant dans la présentation qu'un profil neutre, quelques archétypes et
+  des résultats agrégés par axe.
+- Retrait des disciplines Kai, du combat, de la fuite et des ressources de la définition
+  du profil.
+- Fixation globale de `kai_availability` à 0,5 et adoption d'un paramètre unique pour la
+  victoire au combat, la fuite et la satisfaction d'une condition persistante.
+- Adoption du nom générique `has_condition` pour ce dernier paramètre, appliqué de la
+  même manière aux objets, à la monnaie et aux seuils d'Endurance.
+- Report des variantes de disciplines, des capacités de combat, de la propension à fuir,
+  du suivi d'état et de leurs analyses de sensibilité au-delà de l'itération de
+  présentation.
 
 ## Prochaine étape
 

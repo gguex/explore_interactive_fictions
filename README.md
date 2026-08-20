@@ -46,8 +46,10 @@ results/         cluster outputs and calibration history
    multiedges with constant or symbolic weighting rules. The 17 narrative preterminals
    lead to exactly two absorbing outcome nodes, `Death` and `Win`; all 556 phase-1 edges
    are classified or replaced by one of the 14 fully supervised sources.
-3. **Profile compilation** (phase 3, planned): compile one `W` per player profile, with
-   profile-dependent choice affinities, disciplines, and combat victory probabilities.
+3. **Profile compilation** (phase 3, planned): compile one `W` for each of the 27
+   behavioral profiles defined by the three choice axes. Kai disciplines, combat,
+   escape and persistent conditions use fixed experiment-wide probabilities and are
+   not profile dimensions.
 4. **BoP and analyses** (later phases): select justified structural indices, sample
    representative paths and develop the LLM critic protocol.
 

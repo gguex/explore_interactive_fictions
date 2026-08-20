@@ -16,7 +16,8 @@ L'évolution proposée repose sur une frontière plus nette :
 
 - la **phase 1** décrit sous forme structurée ce que dit le texte ;
 - la **phase 2.1** traduit cette description en règles du pré-graphe ;
-- les **profils de phase 3** attribuent des valeurs aux règles symboliques.
+- la **phase 3** combine un profil comportemental de schéma unique et une configuration
+  expérimentale fixe pour attribuer des valeurs aux règles symboliques.
 
 Le LLM ne doit donc produire ni probabilités finales, ni `weight_expression`, ni matrice
 $W$. Ces opérations restent déterministes et auditables.
@@ -306,23 +307,45 @@ Les critères minimaux d'acceptation sont :
 - la file de supervision est expliquée par des codes stables ;
 - la sortie LW01 reste topologiquement compatible avec le pré-graphe validé.
 
-## 8. Décisions encore ouvertes
+## 8. Axes d'analyse reportés après l'itération de présentation
 
-Avant l'implémentation, il faudra décider :
+La phase 3 actuelle ne fait varier que `risk`, `morality` et `action`. Les dimensions
+suivantes sont volontairement fixées afin de garder 27 profils homogènes et une méthode
+présentable en 20 minutes :
 
-1. si l'utilisation d'une discipline Kai disponible est toujours prise ou reste un choix
-   du joueur ;
-2. si une condition persistante est seulement paramétrée par le profil ou peut être
-   calculée depuis le chemin parcouru ;
-3. si les issues `win / escape / death` d'un combat sont directement paramétrées ou
-   factorisées en décision et conséquence ;
-4. si une ligne de phase 1 représente toujours une balise `<choice>` ou une issue logique
+- disponibilité réelle des disciplines Kai et comparaison des configurations de cinq
+  disciplines parmi dix ;
+- effet d'une discipline particulière sur la réussite, les flux et les trajectoires ;
+- capacité de combat propre au joueur, difficulté propre à chaque ennemi et calcul de la
+  victoire depuis les tables de combat ;
+- propension individuelle à prendre la fuite et survie jusqu'au round où elle devient
+  possible ;
+- disponibilité propre à chaque objet, seuil de monnaie ou seuil d'Endurance ;
+- dépendance de ces conditions au chemin déjà parcouru ;
+- interactions entre les trois axes comportementaux et les compétences ou ressources ;
+- analyses de sensibilité de `kai_availability`, `combat_win_probability`,
+  `escape_probability` et `has_condition` ;
+- comparaison entre une probabilité globale et des probabilités estimées par paragraphe
+  ou par mécanique ;
+- expansion L3 de l'état `(paragraphe, Endurance, inventaire, monnaie, équipement)` ;
+- robustesse des résultats sur LW02, d'autres volumes et d'autres séries.
+
+Ces extensions ne devront pas modifier le schéma du profil comportemental. Elles seront
+portées par des configurations expérimentales séparées ou, pour L3, par un autre niveau
+de modèle.
+
+## 9. Décisions encore ouvertes pour le pipeline étendu
+
+Avant une refonte de l'extraction ou du modèle, il faudra encore décider :
+
+1. si une ligne de phase 1 représente toujours une balise `<choice>` ou une issue logique
    élémentaire ;
-5. quels effets d'état conserver comme métadonnées sans introduire une simulation L3 ;
-6. quelles catégories sont propres à *Lone Wolf* et lesquelles appartiennent au modèle
-   général des fictions interactives.
+2. quels effets d'état conserver comme métadonnées sans introduire une simulation L3 ;
+3. quelles catégories sont propres à *Lone Wolf* et lesquelles appartiennent au modèle
+   général des fictions interactives ;
+4. comment calibrer les distributions fixes des rares combats à issues particulières.
 
-## 9. Éléments à ne pas déléguer au LLM
+## 10. Éléments à ne pas déléguer au LLM
 
 Même dans le processus étendu, le petit LLM ne doit pas :
 
@@ -334,7 +357,7 @@ Même dans le processus étendu, le petit LLM ne doit pas :
 - simuler l'inventaire ou l'Endurance au fil d'un parcours ;
 - corriger silencieusement une structure ambiguë.
 
-## 10. Quand rouvrir ce chantier
+## 11. Quand rouvrir ce chantier
 
 Cette refonte devient prioritaire si au moins une des situations suivantes apparaît :
 
@@ -347,7 +370,7 @@ Cette refonte devient prioritaire si au moins une des situations suivantes appar
 
 D'ici là, le pipeline actuel reste la référence opérationnelle pour terminer LW01.
 
-## 11. Observations à compléter lors des prochains corpus
+## 12. Observations à compléter lors des prochains corpus
 
 Les extensions doivent être motivées par des cas observés plutôt que par une liste
 théorique toujours plus large. Après chaque nouvelle extraction, consigner ici ou dans

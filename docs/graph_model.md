@@ -24,7 +24,7 @@ moteur général.
 | :--- | :--- | :--- |
 | **L0 — Topologie** | Unités narratives, transitions, entrée et issues. | Inclus. |
 | **L1 — Agentivité** | Choix, passages imposés, conditions et annotations sémantiques. | Inclus. |
-| **L2 — Incertitude** | Hasard et règles de pondération dépendant du profil. | Inclus sous forme symbolique dans le pré-graphe. |
+| **L2 — Incertitude** | Hasard et règles de pondération évaluées à la compilation. | Inclus sous forme symbolique dans le pré-graphe. |
 | **L3 — État persistant** | Santé, inventaire, monnaie, équipement et autres variables mémorisées. | Non simulé. |
 
 Le pré-graphe couvre L0–L2 sans reproduire tout le système de jeu. L3 demanderait des
@@ -41,7 +41,7 @@ $$
 
 où $V$ contient les nœuds, $E$ les transitions possibles, $\tau$ leur type et $\rho$
 leur règle de pondération. Certaines règles sont constantes ; d'autres ne deviennent
-numériques qu'après fourniture d'un profil.
+numériques qu'après fourniture d'un profil et des hypothèses fixes de l'expérience.
 
 ### 3.1 Nœuds narratifs, pré-terminaux et terminaux
 
@@ -105,32 +105,53 @@ Le texte et les métadonnées détaillées restent dans `LW01_nodes.csv`.
 | `transition_kind` | `forced`, `profile_choice`, `random`, `kai`, `state_condition`, `combat`, `escape`, `outcome` ou `manual`. |
 | `weight_rule` | `constant`, `profile_choice` ou `formula`. |
 | `weight_value` | Valeur d'une probabilité exacte, si elle existe déjà. |
-| `weight_expression` | Règle symbolique évaluée avec le profil. |
+| `weight_expression` | Règle symbolique évaluée avec le profil et la configuration fixe. |
 | `condition_kind`, `condition_value` | Condition conservée si nécessaire. |
 | `semantic_risk`, `semantic_morality`, `semantic_action` | Annotations utilisées pour les choix de profil. |
 | `origin` | `auto` ou `supervised`. |
 | `source_ref` | Provenance dans la phase 1 ou la supervision. |
 | `note` | Justification éventuelle, notamment pour une règle supervisée. |
 
-Une arête constante remplit `weight_value`. Une règle dépendant du profil remplit
-`weight_expression`. Le pré-graphe ne contient donc pas encore une distribution
-numérique complète.
+Une arête constante remplit `weight_value`. Une règle évaluée à la compilation remplit
+`weight_expression`, qu'elle dépende du profil ou d'une hypothèse fixe. Le pré-graphe ne
+contient donc pas encore une distribution numérique complète.
 
 ## 4. Compilation pour un profil
 
-Un profil $p$ rassemble les paramètres nécessaires pour transformer les règles du
-pré-graphe en probabilités :
+La phase 3 utilise une seule définition de profil. Un profil $p$ contient exactement :
 
-- les affinités sémantiques qui orientent les choix ;
-- les disciplines ou compétences disponibles ;
-- la probabilité de victoire à chaque combat ;
-- la propension à combattre ou à s'évader ;
-- les hypothèses de disponibilité des ressources exclues de L3.
+- `profile_id` ;
+- `risk` : `cautious`, `neutral` ou `reckless` ;
+- `morality` : `selfish`, `neutral` ou `noble` ;
+- `action` : `physical`, `neutral` ou `tactical`.
 
-La compilation est une fonction :
+Le produit cartésien donne $3^3=27$ profils. Il n'existe pas de profil alternatif pour
+les disciplines, le combat, la fuite ou les ressources.
+
+Ces mécanismes sont placés dans une configuration fixe de l'expérience, commune aux 27
+profils :
+
+- `kai_availability` : disponibilité marginale de toute discipline, fixée à $0{,}5$ ;
+- `combat_win_probability` : probabilité unique de gagner un combat ;
+- `escape_probability` : probabilité unique de prendre une fuite lorsqu'elle est
+  proposée ;
+- `has_condition` : probabilité unique de satisfaire toute condition persistante
+  simple, objet, monnaie ou Endurance ;
+- les coefficients globaux qui transforment la correspondance entre un profil et les
+  annotations sémantiques en affinité positive.
+
+Les valeurs numériques encore à choisir sont des hypothèses de l'expérience, pas des
+dimensions de profil. L'interface recommandée matérialise cette séparation :
+
+```python
+compiler = WCompiler(pre_graph, fixed_settings)
+W = compiler.generate_W(profile)
+```
+
+Pour une configuration fixe $s$, la compilation est une fonction :
 
 $$
-(\mathcal G^\ast,p)\longmapsto W^{(p)}.
+(\mathcal G^\ast,s,p)\longmapsto W^{(p;s)}.
 $$
 
 Pour chaque nœud non terminal :
@@ -201,17 +222,15 @@ résolution.
 
 ### 5.4 Disciplines
 
-Deux profils ou familles de profils seront comparés :
+La notation `kai_available("Discipline")` vaut toujours le paramètre fixe
+`kai_availability`, égal à $0{,}5$ dans cette itération. Lorsqu'une route Kai standard
+est disponible, elle est prise ; la masse restante est répartie entre les autres choix
+avec `choice_share`. Dans un groupe où la route Kai reste elle-même un choix,
+`kai_availability` devient son facteur de disponibilité dans
+`available_choice_share`.
 
-1. un profil moyen donnant à une discipline précise la disponibilité $5/10$ ;
-2. les 252 profils correspondant aux configurations cohérentes de cinq disciplines parmi
-   dix.
-
-Les règles restent inscrites symboliquement dans le pré-graphe. Les matrices sont
-compilées séparément, puis les flux des 252 configurations peuvent être moyennés.
-La notation `kai_available("Discipline")` vaut $0{,}5$ pour le profil moyen et 0 ou 1
-pour une configuration déterminée. Lorsqu'elle vaut 1, la route Kai est prise ; sinon,
-la masse restante est répartie entre les autres choix avec `choice_share`.
+Cette valeur est une approximation marginale de population. Elle ne décrit ni la liste
+des disciplines d'un joueur réel ni un comportement aléatoire en cours de partie.
 Le convertisseur détecte le nom écrit après « Discipline of » sans maintenir une liste
 fermée : les disciplines Kai, Magnakai et Grand Master des autres livres utilisent donc
 la même règle.
@@ -231,10 +250,13 @@ expression ; sa route complémentaire reçoit `1 - condition_available(...)`. Le
 produits sont `has_item`, `gold_crowns_at_least` et `endurance_at_least`, avec une
 variante suffixée par `_absent` sur l'arête complémentaire.
 
-Cette notation ne prétend pas calculer la condition depuis les paragraphes précédents :
-le profil fournit l'hypothèse de disponibilité au moment de compiler $W$. Une condition
-composée, ambiguë, sans alternative identifiable ou mêlée à une autre mécanique reste
-entièrement soumise à supervision.
+Cette notation ne prétend pas calculer la condition depuis les paragraphes précédents.
+Lors de la compilation, tout appel à `condition_available(type, value)` reçoit le même
+paramètre fixe `has_condition`, indépendamment de `type` et de `value`. Ces deux arguments
+restent dans le pré-graphe uniquement pour la provenance et de futures extensions. Une
+condition simple positive vaut donc `has_condition` et sa complémentaire vaut
+`1 - has_condition`. Une condition composée, ambiguë, sans alternative identifiable ou
+mêlée à une autre mécanique reste entièrement soumise à supervision.
 
 Lorsqu'un paragraphe supervisé propose plusieurs choix dont certains seulement sont
 conditionnels, l'agentivité est conservée avec :
@@ -250,37 +272,31 @@ discipline ouvre une option sans obliger le joueur à la prendre.
 
 ### 5.6 Combat
 
-La chance de victoire n'est pas fixée dans le pré-graphe. Pour un profil $p$, on note :
-
-$$
-v_p(i)=P(\text{victoire au combat du nœud }i\mid p).
-$$
+La chance de victoire n'est pas fixée dans le pré-graphe. La phase 3 utilise cependant
+une seule valeur $v=$ `combat_win_probability`, commune à tous les combats et profils.
 
 Pour un combat simple :
 
 $$
-w_{i\rightarrow\text{suite}}^{(p)}=v_p(i),
+w_{i\rightarrow\text{suite}}=v,
 \qquad
-w_{i\rightarrow\mathrm{Death}}^{(p)}=1-v_p(i).
+w_{i\rightarrow\mathrm{Death}}=1-v.
 $$
-
-Le profil peut fournir directement $v_p(i)$ ou le calculer à partir de caractéristiques
-du personnage et de l'ennemi. Le pré-graphe ne choisit aucune valeur par défaut.
 
 Si la victoire est suivie d'un RNT de probabilités $r_j$ :
 
 $$
-w_{i\rightarrow j}^{(p)}=v_p(i)r_j,
+w_{i\rightarrow j}=vr_j,
 \qquad
-w_{i\rightarrow\mathrm{Death}}^{(p)}=1-v_p(i).
+w_{i\rightarrow\mathrm{Death}}=1-v.
 $$
 
 Si elle est suivie de choix dont les parts sont $c_j^{(p)}$ :
 
 $$
-w_{i\rightarrow j}^{(p)}=v_p(i)c_j^{(p)},
+w_{i\rightarrow j}^{(p)}=vc_j^{(p)},
 \qquad
-w_{i\rightarrow\mathrm{Death}}^{(p)}=1-v_p(i).
+w_{i\rightarrow\mathrm{Death}}^{(p)}=1-v.
 $$
 
 Dans le fichier de supervision, ces parts sont notées
@@ -289,20 +305,28 @@ accessibles après la victoire.
 
 ### 5.7 Combat avec évasion ou issues particulières
 
-Une fuite proposée après un ou plusieurs rounds dépend à la fois de la décision du
-joueur et de sa survie jusqu'à cette occasion. Comme les rounds ne sont pas simulés, le
-pré-graphe ne factorise pas artificiellement ces deux phénomènes. Il utilise une
-distribution catégorielle :
+Une fuite proposée après un ou plusieurs rounds dépend réellement de la décision du
+joueur et de sa survie jusqu'à cette occasion. Comme les rounds ne sont pas simulés,
+cette itération l'approxime par un paramètre global $f=$ `escape_probability`. Pour un
+combat avec fuite simple :
+
+$$
+P(\mathrm{escape})=f,\qquad
+P(\mathrm{win})=(1-f)v,\qquad
+P(\mathrm{death})=(1-f)(1-v).
+$$
+
+Le pré-graphe conserve ces issues sous la forme d'une distribution catégorielle :
 
 $$
 \sum_o \operatorname{combat\_outcome}(i,o)=1.
 $$
 
-Pour un combat avec fuite simple, les issues sont `win`, `escape` et `death`. Un cas
-particulier peut employer des issues plus précises, par exemple
+Un cas particulier peut employer des issues plus précises, par exemple
 `win_with_endurance_loss`, `win_without_endurance_loss`, `win_within_4_rounds` ou
-`continue_after_4_rounds`. Le profil de phase 3 devra fournir une distribution cohérente
-pour les libellés présents à chaque source.
+`continue_after_4_rounds`. Les répartitions supplémentaires nécessaires sont des
+exceptions fixes de la configuration du livre. Elles doivent être normalisées, mais ne
+créent aucune dimension de profil.
 
 Une blessure non fatale pendant la fuite est conservée dans `note`, mais ne crée pas un
 état supplémentaire. L'Endurance et les tables de combat ne sont pas simulées dans le
@@ -315,13 +339,13 @@ pré-graphe.
 | Topologie et issues | **Incluse — L0** | Socle commun aux fictions à embranchements. |
 | Choix explicites | **Inclus — L1** | Les poids varient selon le profil. |
 | Hasard | **Inclus — L2** | Les probabilités textuelles sont convertibles. |
-| Combat | **Inclus abstraitement — L2** | La chance de victoire reste un paramètre du profil. |
-| Évasion | **Incluse abstraitement — L1/L2** | Destination et propension sont paramétrées. |
-| Disciplines et compétences | **Incluses dans les profils — L1/L2** | Comparaison du profil moyen et des configurations cohérentes. |
-| Endurance, dégâts et soins | **État exclu — L3** | Aucun suivi dynamique ; les seuils simples peuvent devenir des hypothèses de profil. |
-| Objets, inventaire et monnaie | **État exclu — L3** | Aucun inventaire dynamique ; les conditions simples peuvent devenir des hypothèses de profil. |
+| Combat | **Inclus abstraitement — L2** | Une probabilité de victoire fixe est commune à tous les combats et profils. |
+| Évasion | **Incluse abstraitement — L1/L2** | Une probabilité de fuite fixe est commune à tous les profils. |
+| Disciplines et compétences | **Incluses comme hypothèse fixe — L1/L2** | Toute discipline a une disponibilité marginale de 0,5. |
+| Endurance, dégâts et soins | **État exclu — L3** | Aucun suivi dynamique ; tout seuil simple utilise `has_condition`. |
+| Objets, inventaire et monnaie | **État exclu — L3** | Aucun inventaire dynamique ; toute condition simple utilise `has_condition`. |
 | Repas et équipement | **Exclus — L3** | Mécaniques trop spécifiques au système. |
-| Modificateurs de combat | **Paramètres possibles du profil** | Ils peuvent servir plus tard à calculer $v_p(i)$. |
+| Modificateurs de combat | **Extension reportée** | Ils pourront plus tard alimenter une configuration de combat plus détaillée. |
 | Énigmes et liens cachés | **Ajoutés seulement si vérifiables** | Aucune cible n'est inventée. |
 
 Les occurrences des mécaniques exclues restent disponibles comme métadonnées ou comme
@@ -340,10 +364,10 @@ entièrement supervisée ; aucune transformation partielle n'est conservée.
 | Transition imposée | Règle constante de poids 1. |
 | Choix du joueur | Règle de normalisation selon les affinités du profil. |
 | Tirage aléatoire | Probabilité exacte déduite des résultats possibles. |
-| Compétence ou condition | Règle de disponibilité dépendant du profil. |
-| Combat | Règles symboliques $v_p(i)$ et $1-v_p(i)$. |
+| Compétence ou condition | Règle de disponibilité évaluée avec une hypothèse fixe. |
+| Combat | Règles symboliques évaluées avec la probabilité de victoire fixe. |
 | Paragraphe mixte | Composition symbolique si elle est simple ; sinon supervision. |
-| État persistant non simulé | Hypothèse portée par le profil ou supervision. |
+| État persistant non simulé | Hypothèse fixe `has_condition` ou supervision. |
 
 ### 7.2 Inventaire de LW01
 
@@ -409,7 +433,7 @@ source_id,target_id,transition_kind,weight_rule,weight_value,weight_expression,c
 | `transition_kind` | Type final de la transition. |
 | `weight_rule` | `constant`, `profile_choice` ou `formula`. |
 | `weight_value` | Nombre si la probabilité est exacte. |
-| `weight_expression` | Formule symbolique si elle dépend du profil. |
+| `weight_expression` | Formule symbolique évaluée pendant la compilation. |
 | `condition_kind`, `condition_value` | Condition éventuelle. |
 | `semantic_risk`, `semantic_morality`, `semantic_action` | Annotations éventuelles d'un choix. |
 | `note` | Justification concise de l'annotation. |
@@ -441,8 +465,9 @@ Exemples :
 
 Les constantes décrivent un hasard objectif. Les expressions comme
 `combat_win(112)`, `postcombat_choice_share(112, 33)` ou
-`combat_outcome(43, "escape")` restent libres et seront fournies par chaque profil en
-phase 3.
+`combat_outcome(43, "escape")` restent symboliques jusqu'à la phase 3. Le compilateur
+les résout à partir du profil comportemental pour les parts de choix et des hypothèses
+fixes pour les combats.
 
 ### 8.2 Règles appliquées à la supervision de LW01
 
@@ -459,7 +484,7 @@ Le fichier `LW01_supervision.csv` applique les conventions suivantes :
    `1 - combat_win(source)`.
 4. **Combat avec fuite (§43, 169, 180, 191 et 220).** Les trois issues `win`, `escape`
    et `death` sont représentées par `combat_outcome(source, issue)`. Cette distribution
-   absorbe la survie jusqu'à l'occasion de fuite et la propension du profil à l'utiliser.
+   est résolue avec les probabilités globales de victoire et de fuite.
 5. **Issues de combat particulières (§227, 231 et 339).** La même distribution
    catégorielle distingue la victoire avec ou sans perte d'Endurance, la victoire avant
    quatre rounds, la continuation après quatre rounds, la fuite et la mort selon le
@@ -510,11 +535,11 @@ symbolique des conditions aux §9, 12, 173 et 203.
 3. Décrire toute la distribution sortante de chaque source, pas seulement la transition
    corrigée.
 4. Utiliser une constante seulement si elle est déductible du texte.
-5. Utiliser `profile_choice` ou une formule symbolique pour toute probabilité
-   dépendant du profil.
+5. Utiliser `profile_choice` ou une formule symbolique pour toute probabilité qui doit
+   être résolue pendant la compilation.
 6. Ajouter une note courte justifiant la décision.
 
-Le fichier est terminé lorsque les 18 sources de `review_queue.csv` y sont toutes
+Le fichier est terminé lorsque les 14 sources de `review_queue.csv` y sont toutes
 représentées et qu'aucune règle requise n'est vide.
 
 ### C — Finaliser le pré-graphe
@@ -542,20 +567,42 @@ Les profils sont définis dans un fichier séparé, par exemple :
 
 ```text
 data/for_graph_model/LW01_profiles.json
+data/for_graph_model/LW01_compilation_settings.json
 ```
 
-Chaque profil fournit les affinités de choix, les disciplines, les probabilités
-`combat_win(source_id)`, les distributions normalisées `combat_outcome` par source et
-par issue, ainsi que les hypothèses de ressources. Le compilateur en déduit les
+Chaque profil suit le même schéma à quatre champs : `profile_id`, `risk`, `morality` et
+`action`. Les 27 combinaisons sont générées exhaustivement. Un fichier séparé contient
+les paramètres fixes `kai_availability`, `combat_win_probability`,
+`escape_probability`, `has_condition`, les coefficients d'affinité et, si nécessaire,
+les distributions particulières propres au livre. Le compilateur en déduit les
 `available_choice_share` et `postcombat_choice_share`. Un paramètre nécessaire manquant
 provoque une erreur : le compilateur n'invente pas de valeur.
+
+Le contrat minimal des deux fichiers est :
+
+| Fichier des profils | Valeur autorisée |
+| :--- | :--- |
+| `profile_id` | Identifiant unique. |
+| `risk` | `cautious`, `neutral` ou `reckless`. |
+| `morality` | `selfish`, `neutral` ou `noble`. |
+| `action` | `physical`, `neutral` ou `tactical`. |
+
+| Configuration fixe | Rôle |
+| :--- | :--- |
+| `kai_availability` | Nombre dans $[0,1]$, égal à 0,5 pour cette itération. |
+| `combat_win_probability` | Nombre dans $[0,1]$, identique pour tous les combats. |
+| `escape_probability` | Nombre dans $[0,1]$, identique pour toutes les fuites. |
+| `has_condition` | Nombre dans $[0,1]$, utilisé pour tout `condition_available(type, value)`. |
+| `choice_affinities` | Coefficients positifs communs qui distinguent accord, neutralité et opposition sur les axes. |
+| `special_combat_outcomes` | Exceptions normalisées propres au livre, seulement si les issues ne se ramènent pas à `win`, `escape` et `death`. |
 
 Le script :
 
 ```bash
 uv run python scripts/3.1_compile_w.py \
   --pregraph data/processed/pregraph/LW01 \
-  --profiles data/for_graph_model/LW01_profiles.json
+  --profiles data/for_graph_model/LW01_profiles.json \
+  --settings data/for_graph_model/LW01_compilation_settings.json
 ```
 
 itère sur tous les profils et produit :
@@ -579,6 +626,7 @@ La phase 2 est terminée lorsque :
 - toutes les transitions possèdent une règle constante ou symbolique ;
 - le pré-graphe peut être régénéré depuis la phase 1 et la supervision.
 
-La phase 3 est terminée lorsqu'au moins un profil de référence et les profils de
-comparaison produisent des matrices $W$ valides. Les indices BoP et l'étude des
-trajectoires commencent ensuite.
+La phase 3 est terminée lorsque les 27 profils produisent des matrices $W$ valides avec
+la même configuration fixe. Les indices BoP et l'étude des trajectoires commencent
+ensuite. Tous les profils sont calculés, mais seuls quelques archétypes et les effets
+agrégés par axe sont destinés à la présentation.
