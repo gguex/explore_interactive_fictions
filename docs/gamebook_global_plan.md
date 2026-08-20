@@ -243,6 +243,7 @@ Les questions suivantes ne bloquent pas la construction du pré-graphe :
 
 - `gamebook_global_plan.md` : objectifs, décisions et phases ;
 - `graph_model.md` : pré-graphe, annotation et compilation de $W$ ;
+- `future_improvements.md` : limites connues et extensions reportées du pipeline ;
 - `progress_log.md` : journal chronologique ;
 - `notes.md` : questions de travail ;
 - `archives/` : documents et décisions remplacés.

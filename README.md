@@ -15,6 +15,7 @@ narrative analysis.
 | :--- | :--- |
 | `docs/gamebook_global_plan.md` | **Current reference plan**: research question, generic model, decisions and roadmap. |
 | `docs/graph_model.md` | Adopted direct multigraph model, mechanics scope and compilation process. |
+| `docs/future_improvements.md` | Deferred improvements: structured phase-1 schema, portability and migration path. |
 | `docs/progress_log.md` | Append-only progress journal and current project status. |
 | `docs/infict-llm_abstract.tex` | Accepted COMHUM2026 extended abstract. |
 | `docs/cluster_help/` | HPC (Curnagl) workflow notes. |
