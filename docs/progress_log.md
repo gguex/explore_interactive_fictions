@@ -4,7 +4,7 @@
 > précédentes. Une correction factuelle ultérieure doit être consignée dans une nouvelle
 > entrée.
 
-## État synthétique au 19.08.2026
+## État synthétique au 20.08.2026
 
 | Chantier | État | Résultat actuel |
 | :--- | :--- | :--- |
@@ -14,8 +14,8 @@
 | Calibration LLM | Terminée | Structure validée ; le rapport final versionné contient 3 divergences sémantiques douces. |
 | Contrôle qualité | Terminé | Choix complets, IDs valides, 350 nœuds atteignables, 17 fins explicites. |
 | Spécification du pré-graphe | Terminée | Multigraphe direct L0–L2 indépendant des profils, avec les deux issues `Death` et `Win`. |
-| Audit pour la phase 2 | Terminé | Conversions automatiques recensées et file initiale de 18 paragraphes à superviser. |
-| Construction du pré-graphe | En cours | Les deux scripts sont écrits mais non exécutés ; aucun pré-graphe encore produit. |
+| Audit pour la phase 2 | Terminé | Les conditions persistantes simples sont automatisées ; 14 paragraphes restent à superviser. |
+| Construction du pré-graphe | En cours | La préparation 2.1 produit 558 arêtes automatiques et une file de 14 paragraphes ; finalisation en attente. |
 | Compilation de \(W\) | Phase 3 planifiée | Une matrice par profil ; les probabilités de victoire au combat restent libres. |
 | Bag-of-Paths et indices | Différé | Première analyse fixée à la borne RW ; indices à choisir après validation de \(W\). |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
@@ -207,9 +207,21 @@
   propre à LW01 et quelques invariants généraux de la préparation.
 - Aucun script de production ni contrôle sur les données n'a été exécuté.
 
+### 20.08.2026 — Automatisation des conditions persistantes simples
+
+- Ajout dans `scripts/2.1_prepare_pregraph.py` d'une conversion générique pour la
+  possession d'un objet, un montant minimal de Gold Crowns et un seuil minimal
+  d'Endurance.
+- Conservation de ces conditions sous forme de `condition_available(type, value)` et de
+  sa formule complémentaire, sans simuler l'état persistant du personnage.
+- Maintien en supervision des conditions composées, ambiguës ou mêlées à d'autres
+  mécaniques.
+- Ajout de contrôles propres à LW01 pour les §9, 12, 173 et 203.
+- Exécution de la préparation et de son contrôle : 558 arêtes automatiques et réduction
+  de la file de supervision de 18 à 14 paragraphes.
+
 ## Prochaine étape
 
-Lancer `scripts/2.1_prepare_pregraph.py --book LW01`, puis le contrôle de phase 2.1.
-Examiner la file obtenue, remplir `LW01_supervision.csv`, puis lancer
-`scripts/2.2_finalize_pregraph.py --book LW01`. Les indices BoP et les trajectoires
-restent volontairement hors de ce chantier.
+Examiner les 14 paragraphes de la file obtenue, remplir `LW01_supervision.csv`, puis
+lancer `scripts/2.2_finalize_pregraph.py --book LW01`. Les indices BoP et les
+trajectoires restent volontairement hors de ce chantier.

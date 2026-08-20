@@ -17,17 +17,13 @@ DEFAULT_BOOK_ID = "LW01"
 # Corpus-specific expectations belong here, never in the production scripts.
 EXPECTED_REVIEW_SOURCES = {
     "LW01": {
-        "9",
-        "12",
         "21",
         "23",
         "43",
         "112",
         "169",
-        "173",
         "180",
         "191",
-        "203",
         "208",
         "220",
         "227",
@@ -38,6 +34,14 @@ EXPECTED_REVIEW_SOURCES = {
     }
 }
 EXPECTED_ENDING_COUNTS = {"LW01": {"death": 16, "win": 1}}
+EXPECTED_AUTOMATIC_STATE_CONDITIONS = {
+    "LW01": {
+        "9": ("has_item", "Vordak Gem"),
+        "12": ("gold_crowns_at_least", "10"),
+        "173": ("has_item", "Silver Key"),
+        "203": ("endurance_at_least", "10"),
+    }
+}
 
 AUTO_EDGE_FIELDS = [
     "source_id",
@@ -241,6 +245,20 @@ def main() -> None:
             dict(ending_counts) == expected_endings,
             f"{book_id}: expected written endings {expected_endings}, "
             f"found {dict(ending_counts)}",
+        )
+
+    expected_conditions = EXPECTED_AUTOMATIC_STATE_CONDITIONS.get(book_id, {})
+    for source_id, (condition_kind, condition_value) in expected_conditions.items():
+        outgoing = automatic_by_source[source_id]
+        add_error(
+            errors,
+            len(outgoing) == 2
+            and {row["condition_kind"] for row in outgoing}
+            == {condition_kind, f"{condition_kind}_absent"}
+            and {row["condition_value"] for row in outgoing} == {condition_value}
+            and all(row["weight_rule"] == "formula" for row in outgoing),
+            f"{book_id}: state condition at source {source_id} was not converted "
+            "into complementary symbolic routes.",
         )
 
     if errors:

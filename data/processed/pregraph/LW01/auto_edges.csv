@@ -15,9 +15,13 @@ source_id,target_id,transition_kind,weight_rule,weight_value,weight_expression,c
 7,108,random,constant,0.3,,,,,,,LW01_e_edges.csv:15,
 7,25,random,constant,0.7,,,,,,,LW01_e_edges.csv:16,
 8,70,forced,constant,1,,,,,,,LW01_e_edges.csv:17,
+9,236,state_condition,formula,,"condition_available(""has_item"", ""Vordak Gem"")",has_item,Vordak Gem,,,,LW01_e_edges.csv:18,Route is taken when the persistent-state condition is available.
+9,292,state_condition,formula,,"1 - condition_available(""has_item"", ""Vordak Gem"")",has_item_absent,Vordak Gem,,,,LW01_e_edges.csv:19,Complementary route when the persistent condition is false.
 10,115,profile_choice,profile_choice,,,,,cautious,neutral,neutral,LW01_e_edges.csv:20,
 10,83,profile_choice,profile_choice,,,,,reckless,neutral,physical,LW01_e_edges.csv:21,
 11,139,forced,constant,1,,,,,,,LW01_e_edges.csv:22,
+12,262,state_condition,formula,,"condition_available(""gold_crowns_at_least"", ""10"")",gold_crowns_at_least,10,,,,LW01_e_edges.csv:23,Route is taken when the persistent-state condition is available.
+12,247,state_condition,formula,,"1 - condition_available(""gold_crowns_at_least"", ""10"")",gold_crowns_at_least_absent,10,,,,LW01_e_edges.csv:24,Complementary route when the persistent condition is false.
 13,307,profile_choice,profile_choice,,,,,reckless,neutral,physical,LW01_e_edges.csv:25,
 13,213,profile_choice,profile_choice,,,,,cautious,neutral,neutral,LW01_e_edges.csv:26,
 14,43,profile_choice,profile_choice,,,,,reckless,neutral,physical,LW01_e_edges.csv:27,
@@ -298,6 +302,8 @@ source_id,target_id,transition_kind,weight_rule,weight_value,weight_expression,c
 172,114,kai,formula,,"kai_available(""Camouflage"")",kai_discipline,Camouflage,,,,LW01_e_edges.csv:298,Kai route is taken whenever the discipline is available.
 172,239,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(172, 239)",,,cautious,selfish,physical,LW01_e_edges.csv:299,Choice among routes remaining when the Kai route is unavailable.
 172,29,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(172, 29)",,,reckless,neutral,physical,LW01_e_edges.csv:300,Choice among routes remaining when the Kai route is unavailable.
+173,158,state_condition,formula,,"condition_available(""has_item"", ""Silver Key"")",has_item,Silver Key,,,,LW01_e_edges.csv:301,Route is taken when the persistent-state condition is available.
+173,259,state_condition,formula,,"1 - condition_available(""has_item"", ""Silver Key"")",has_item_absent,Silver Key,,,,LW01_e_edges.csv:302,Complementary route when the persistent condition is false.
 174,190,forced,constant,1,,,,,,,LW01_e_edges.csv:303,Loss of Backpack and Weapons during the transition
 175,182,kai,formula,,"kai_available(""Camouflage"")",kai_discipline,Camouflage,,,,LW01_e_edges.csv:304,Kai route is taken whenever the discipline is available.
 175,41,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(175, 41)",,,cautious,neutral,tactical,LW01_e_edges.csv:305,Choice among routes remaining when the Kai route is unavailable.
@@ -342,6 +348,8 @@ source_id,target_id,transition_kind,weight_rule,weight_value,weight_expression,c
 201,15,profile_choice,profile_choice,,,,,neutral,neutral,neutral,LW01_e_edges.csv:347,
 201,130,profile_choice,profile_choice,,,,,neutral,neutral,neutral,LW01_e_edges.csv:348,
 202,58,forced,constant,1,,,,,,,LW01_e_edges.csv:349,
+203,80,state_condition,formula,,"condition_available(""endurance_at_least"", ""10"")",endurance_at_least,10,,,,LW01_e_edges.csv:350,Route is taken when the persistent-state condition is available.
+203,344,state_condition,formula,,"1 - condition_available(""endurance_at_least"", ""10"")",endurance_at_least_absent,10,,,,LW01_e_edges.csv:351,Complementary route when the persistent condition is false.
 204,111,forced,constant,1,,,,,,,LW01_e_edges.csv:352,
 205,181,random,constant,0.5,,,,,,,LW01_e_edges.csv:353,
 205,145,random,constant,0.5,,,,,,,LW01_e_edges.csv:354,

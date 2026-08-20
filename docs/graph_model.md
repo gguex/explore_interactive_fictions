@@ -102,7 +102,7 @@ Le texte et les métadonnées détaillées restent dans `LW01_nodes.csv`.
 | :--- | :--- |
 | `edge_id` | Identifiant attribué automatiquement. |
 | `source_id`, `target_id` | Extrémités de la transition. |
-| `transition_kind` | `forced`, `profile_choice`, `random`, `kai`, `combat`, `escape`, `outcome` ou `manual`. |
+| `transition_kind` | `forced`, `profile_choice`, `random`, `kai`, `state_condition`, `combat`, `escape`, `outcome` ou `manual`. |
 | `weight_rule` | `constant`, `profile_choice` ou `formula`. |
 | `weight_value` | Valeur d'une probabilité exacte, si elle existe déjà. |
 | `weight_expression` | Règle symbolique évaluée avec le profil. |
@@ -216,7 +216,27 @@ Le convertisseur détecte le nom écrit après « Discipline of » sans mainteni
 fermée : les disciplines Kai, Magnakai et Grand Master des autres livres utilisent donc
 la même règle.
 
-### 5.5 Combat
+### 5.5 Conditions d'état persistant
+
+Le pré-graphe ne reconstruit ni l'inventaire, ni la monnaie, ni l'Endurance au fil du
+parcours. Il peut néanmoins conserver une condition simple sous la forme :
+
+```text
+condition_available("type", "valeur")
+```
+
+Le convertisseur reconnaît actuellement la possession d'un objet, un nombre minimal de
+Gold Crowns et un seuil minimal d'Endurance. La route conditionnelle reçoit cette
+expression ; sa route complémentaire reçoit `1 - condition_available(...)`. Les types
+produits sont `has_item`, `gold_crowns_at_least` et `endurance_at_least`, avec une
+variante suffixée par `_absent` sur l'arête complémentaire.
+
+Cette notation ne prétend pas calculer la condition depuis les paragraphes précédents :
+le profil fournit l'hypothèse de disponibilité au moment de compiler $W$. Une condition
+composée, ambiguë, sans alternative identifiable ou mêlée à une autre mécanique reste
+entièrement soumise à supervision.
+
+### 5.6 Combat
 
 La chance de victoire n'est pas fixée dans le pré-graphe. Pour un profil $p$, on note :
 
@@ -280,13 +300,14 @@ l'Endurance et les tables de combat ne sont pas simulés dans le pré-graphe.
 | Combat | **Inclus abstraitement — L2** | La chance de victoire reste un paramètre du profil. |
 | Évasion | **Incluse abstraitement — L1/L2** | Destination et propension sont paramétrées. |
 | Disciplines et compétences | **Incluses dans les profils — L1/L2** | Comparaison du profil moyen et des configurations cohérentes. |
-| Endurance, dégâts et soins | **Exclus — L3** | Exigeraient de mémoriser la santé. |
-| Objets, inventaire et monnaie | **Exclus — L3** | Dépendances persistantes et combinatoires. |
+| Endurance, dégâts et soins | **État exclu — L3** | Aucun suivi dynamique ; les seuils simples peuvent devenir des hypothèses de profil. |
+| Objets, inventaire et monnaie | **État exclu — L3** | Aucun inventaire dynamique ; les conditions simples peuvent devenir des hypothèses de profil. |
 | Repas et équipement | **Exclus — L3** | Mécaniques trop spécifiques au système. |
 | Modificateurs de combat | **Paramètres possibles du profil** | Ils peuvent servir plus tard à calculer $v_p(i)$. |
 | Énigmes et liens cachés | **Ajoutés seulement si vérifiables** | Aucune cible n'est inventée. |
 
-Les occurrences des mécaniques exclues restent disponibles comme métadonnées.
+Les occurrences des mécaniques exclues restent disponibles comme métadonnées ou comme
+conditions symboliques lorsqu'une disponibilité simple peut être isolée sans simuler L3.
 
 ## 7. Cas de figure à traiter
 
@@ -318,8 +339,8 @@ entièrement supervisée ; aucune transformation partielle n'est conservée.
 | Plusieurs arêtes vers la même cible | Conservation puis agrégation dans $W$. | §21 est déjà supervisé. |
 | Discipline Kai standard : 30 paragraphes | Règle symbolique de disponibilité. | Aucune. |
 | Plusieurs conditions ou disciplines | Détection puis blocage de la source entière. | §23 et 334. |
-| Objet ou monnaie | Détection de la condition. | §9, 12, 23 et 173. |
-| Seuil d'Endurance | Détection sans probabilité inventée. | §203. |
+| Objet ou monnaie | Condition simple et complément convertis symboliquement. | §9, 12 et 173 automatiques ; condition composée au §23. |
+| Seuil d'Endurance | Condition simple et complément convertis symboliquement. | §203 automatique. |
 | Combat simple : 17 paragraphes | `combat_win(source)` et `1-combat_win(source)`. | Aucune. |
 | Combat suivi d'un RNT | Composition automatique. | Aucune : §17. |
 | Combat suivi de choix | Composition après annotation sémantique. | §112, 208 et 229. |
@@ -328,8 +349,9 @@ entièrement supervisée ; aucune transformation partielle n'est conservée.
 | Combat avec/sans perte d'Endurance | Deux issues de victoire et mort. | §227. |
 | Cas inconnu | Blocage de la source entière. | Aucun autre cas connu. |
 
-La file connue contient 18 paragraphes : §9, 12, 21, 23, 43, 112, 169, 173, 180, 191,
-203, 208, 220, 227, 229, 231, 334 et 339.
+La file connue contient 14 paragraphes : §21, 23, 43, 112, 169, 180, 191, 208, 220,
+227, 229, 231, 334 et 339. Les §9, 12, 173 et 203, présents dans la file initiale, sont
+désormais convertis automatiquement.
 
 La colonne `enemies`, non `potential_death`, identifie les combats. Les colonnes
 `health_modifier`, `special_mechanic` et `items_granted` ne sont pas assez
@@ -431,7 +453,8 @@ uv run python scripts/tests/test_2_1_prepare_pregraph.py --book LW01
 ```
 
 Il vérifie la couverture des arêtes, les règles élémentaires, les fins explicites et,
-pour LW01 seulement, la liste des 18 paragraphes déjà auditée.
+pour LW01 seulement, la liste des 14 paragraphes déjà auditée ainsi que la conversion
+symbolique des conditions aux §9, 12, 173 et 203.
 
 ### B — Annoter les exceptions
 
@@ -504,7 +527,7 @@ La phase 2 est terminée lorsque :
 
 - `pregraph_nodes.csv` contient les 350 paragraphes, `Death` et `Win` ;
 - les 17 pré-terminaux sont reliés à leur issue ;
-- les 18 paragraphes particuliers sont entièrement annotés ;
+- les 14 paragraphes de la file de supervision sont entièrement annotés ;
 - toutes les transitions possèdent une règle constante ou symbolique ;
 - le pré-graphe peut être régénéré depuis la phase 1 et la supervision.
 

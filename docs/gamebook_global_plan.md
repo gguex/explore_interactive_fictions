@@ -133,11 +133,14 @@ des ennemis restent disponibles et pourront plus tard servir à calculer $v_p(i)
 ### 4.5 État persistant
 
 L'Endurance, l'inventaire, la monnaie, les repas et l'équipement ne sont pas suivis. Leurs
-occurrences restent des métadonnées.
+occurrences restent des métadonnées. Lorsqu'une condition simple peut être isolée —
+possession d'un objet, montant minimal de Gold Crowns ou seuil d'Endurance — elle est
+conservée par une règle symbolique sans reconstituer l'état du personnage.
 
-Quand une transition dépend d'une ressource, le profil porte l'hypothèse retenue, par
-exemple restrictive ou permissive. Cela permet des analyses de sensibilité sans étendre
-les nœuds par l'état complet du personnage.
+Quand une transition dépend d'une ressource, le profil porte l'hypothèse retenue via
+`condition_available(type, value)`, par exemple restrictive ou permissive. Cela permet
+des analyses de sensibilité sans étendre les nœuds par l'état complet du personnage. Les
+conditions composées ou ambiguës restent soumises à supervision.
 
 ## 5. Conservation de la phase 1
 
@@ -183,13 +186,15 @@ indique ainsi directement leur place dans cette feuille de route.
 - scripts : `1.1_parse_for_edge_extraction.py --book <BOOK_ID>` et
   `1.2_parse_node.py --book <BOOK_ID>`.
 
-### Phase 2 — Construire le pré-graphe — prochaine phase
+### Phase 2 — Construire le pré-graphe — en cours
 
-Les deux scripts sont écrits mais n'ont pas encore été exécutés.
+Les deux scripts sont écrits. La préparation 2.1 a été exécutée pour LW01 : elle produit
+558 arêtes automatiques et 14 paragraphes à superviser.
 
 1. lancer `2.1_prepare_pregraph.py --book <BOOK_ID>`, qui traite les cas ordinaires,
-   produit la file d'exceptions et crée le tableau d'annotation vide ;
-2. remplir ce tableau pour les 18 paragraphes particuliers ;
+   dont les conditions persistantes simples, produit la file d'exceptions et crée le
+   tableau d'annotation vide ;
+2. remplir ce tableau pour les 14 paragraphes particuliers de LW01 ;
 3. lancer `2.2_finalize_pregraph.py --book <BOOK_ID>`, qui finalise et contrôle le
    pré-graphe.
 

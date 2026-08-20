@@ -38,6 +38,14 @@ DISCIPLINE_PATTERN = re.compile(
     r"(?=\s+(?:and|or|on|to|if|when|then|at|in)\b|[,.;:]|$)",
     re.IGNORECASE,
 )
+ITEM_PATTERN = re.compile(
+    r"\b(?:possess|have)\s+(?:a|an)\s+(?P<name>.+?)(?=\s+and\b|[,.;:]|$)",
+    re.IGNORECASE,
+)
+GOLD_PATTERN = re.compile(r"\b(?:have|possess)\s+(?P<count>\d+)\s+Gold Crowns?\b", re.I)
+ENDURANCE_AT_LEAST_PATTERN = re.compile(
+    r"\b(?P<count>\d+)\s+or\s+more\s+ENDURANCE\s+points?\b", re.I
+)
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -153,6 +161,116 @@ def kai_fallback(text: str) -> bool:
             "if you do not have",
         )
     )
+
+
+def generic_condition(text: str) -> tuple[str, str] | None:
+    """Extract a simple persistent-state condition from phase-1 wording."""
+    if condition_fallback(text):
+        return None
+
+    endurance = ENDURANCE_AT_LEAST_PATTERN.search(text)
+    if endurance:
+        return "endurance_at_least", endurance.group("count")
+
+    gold = GOLD_PATTERN.search(text)
+    if gold:
+        return "gold_crowns_at_least", gold.group("count")
+
+    item = ITEM_PATTERN.search(text)
+    if item:
+        name = item.group("name").strip()
+        if "discipline" not in name.casefold() and "skill" not in name.casefold():
+            return "has_item", name
+    return None
+
+
+def condition_fallback(text: str) -> bool:
+    """Recognize the alternative used when a persistent condition is false."""
+    lowered = text.casefold()
+    return any(
+        phrase in lowered
+        for phrase in (
+            "if not",
+            "if you do not",
+            "if you do not possess",
+            "if you do not have",
+            "if you now have less than",
+        )
+    )
+
+
+def convert_state_condition_source(
+    edges: list[dict[str, str]],
+) -> tuple[list[dict[str, str]], str]:
+    """Convert one simple state condition and its complementary route."""
+    conditional = [edge for edge in edges if edge["transition_type"] == "conditional"]
+    explicit = [edge for edge in edges if edge["transition_type"] == "explicit_choice"]
+    recognized = [
+        (edge, condition)
+        for edge in conditional
+        if (condition := generic_condition(edge["realisation_value"])) is not None
+    ]
+    fallback = [
+        edge
+        for edge in conditional
+        if condition_fallback(edge["realisation_value"])
+    ]
+
+    if len(recognized) != 1:
+        return [], "multiple_or_unrecognized_state_conditions"
+    if len(fallback) > 1 or (fallback and explicit):
+        return [], "state_condition_mixed_with_other_routes"
+    if not fallback and not explicit:
+        return [], "state_condition_without_fallback"
+
+    positive, (condition_kind, condition_value) = recognized[0]
+    if positive in fallback:
+        return [], "state_condition_has_no_positive_route"
+
+    availability = (
+        f"condition_available({json.dumps(condition_kind)}, "
+        f"{json.dumps(condition_value, ensure_ascii=False)})"
+    )
+    converted = [
+        make_edge(
+            positive,
+            "state_condition",
+            "formula",
+            weight_expression=availability,
+            condition_kind=condition_kind,
+            condition_value=condition_value,
+            note="Route is taken when the persistent-state condition is available.",
+        )
+    ]
+
+    if fallback:
+        converted.append(
+            make_edge(
+                fallback[0],
+                "state_condition",
+                "formula",
+                weight_expression=f"1 - {availability}",
+                condition_kind=f"{condition_kind}_absent",
+                condition_value=condition_value,
+                note="Complementary route when the persistent condition is false.",
+            )
+        )
+        return converted, ""
+
+    for edge in explicit:
+        expression = f"1 - {availability}"
+        if len(explicit) > 1:
+            expression += f" * choice_share({edge['source_id']}, {edge['target_id']})"
+        converted.append(
+            make_edge(
+                edge,
+                "profile_choice",
+                "formula",
+                weight_expression=expression,
+                note="Choice among routes remaining when the state condition is false.",
+            )
+        )
+    return converted, ""
 
 
 def convert_kai_source(
@@ -324,7 +442,13 @@ def convert_source(
         ], ""
 
     if "conditional" in types:
-        return convert_kai_source(edges)
+        if any(
+            kai_disciplines(edge["realisation_value"])
+            for edge in edges
+            if edge["transition_type"] == "conditional"
+        ):
+            return convert_kai_source(edges)
+        return convert_state_condition_source(edges)
 
     return [], f"unsupported_transition_combination: {sorted(types)}"
 
