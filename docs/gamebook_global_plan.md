@@ -229,6 +229,11 @@ La recette est donnée dans
 Les 27 matrices seront calculées et contrôlées. La présentation de 20 minutes montrera
 seulement un profil neutre, quelques archétypes lisibles et des effets agrégés par axe.
 
+Le générateur des 27 profils, le compilateur et le validateur indépendant sont
+implémentés. Une première matrice neutre a été compilée avec les hypothèses techniques
+initiales ; la calibration scientifique des valeurs fixes reste à arrêter avant de
+compiler toute l'expérience.
+
 ### Phase 4 — Analyses BoP et trajectoires — différée
 
 Choisir les indices BoP, calculer les flux et probabilités d'absorption, puis sélectionner

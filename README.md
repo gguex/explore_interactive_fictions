@@ -46,10 +46,10 @@ results/         cluster outputs and calibration history
    multiedges with constant or symbolic weighting rules. The 17 narrative preterminals
    lead to exactly two absorbing outcome nodes, `Death` and `Win`; all 556 phase-1 edges
    are classified or replaced by one of the 14 fully supervised sources.
-3. **Profile compilation** (phase 3, planned): compile one `W` for each of the 27
-   behavioral profiles defined by the three choice axes. Kai disciplines, combat,
-   escape and persistent conditions use fixed experiment-wide probabilities and are
-   not profile dimensions.
+3. **Profile compilation** (phase 3, in progress): the profile generator, deterministic
+   compiler and independent validator are implemented. A first neutral `W` has been
+   compiled and validated; the 27 behavioral profiles share fixed probabilities for
+   Kai disciplines, combat, escape and persistent conditions.
 4. **BoP and analyses** (later phases): select justified structural indices, sample
    representative paths and develop the LLM critic protocol.
 
@@ -61,6 +61,11 @@ Python project managed with [uv](https://docs.astral.sh/uv/):
 uv sync
 uv run python scripts/1.1_parse_for_edge_extraction.py --book LW01
 uv run python scripts/1.2_parse_node.py --book LW01
+uv run python scripts/3.0_generate_profiles.py
+uv run python scripts/3.1_compile_w.py --book LW01 \
+  --profile neutral_neutral_neutral
+uv run python scripts/tests/test_3_1_compile_w.py --book LW01 \
+  --profile neutral_neutral_neutral
 ```
 
 The same commands accept another Lone Wolf identifier, such as `--book LW02`, provided

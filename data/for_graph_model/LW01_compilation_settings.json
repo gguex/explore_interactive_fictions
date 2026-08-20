@@ -1,0 +1,30 @@
+{
+  "kai_availability": 0.5,
+  "combat_win_probability": 0.5,
+  "escape_probability": 0.5,
+  "has_condition": 0.5,
+  "choice_affinities": {
+    "matching": 2.0,
+    "neutral": 1.0,
+    "opposed": 0.5
+  },
+  "special_combat_outcomes": {
+    "227": {
+      "win_with_endurance_loss": 0.25,
+      "win_without_endurance_loss": 0.25,
+      "death": 0.5
+    },
+    "231": {
+      "win_within_4_rounds": 0.125,
+      "continue_after_4_rounds": 0.125,
+      "escape": 0.5,
+      "death": 0.25
+    },
+    "339": {
+      "win_within_4_rounds": 0.125,
+      "continue_after_4_rounds": 0.125,
+      "escape": 0.5,
+      "death": 0.25
+    }
+  }
+}

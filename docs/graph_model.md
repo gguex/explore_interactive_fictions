@@ -148,6 +148,12 @@ compiler = WCompiler(pre_graph, fixed_settings)
 W = compiler.generate_W(profile)
 ```
 
+Pour une arête $e$, chaque axe reçoit le coefficient `matching`, `neutral` ou `opposed`.
+L'affinité $r_p(e)$ est le produit des trois coefficients. Si le profil ou l'arête est
+neutre sur un axe, le coefficient `neutral` est utilisé. Les valeurs provisoires sont
+respectivement 2, 1 et 0,5 ; le profil entièrement neutre donne donc $r_p(e)=1$ pour
+toutes les arêtes de choix.
+
 Pour une configuration fixe $s$, la compilation est une fonction :
 
 $$
@@ -563,10 +569,10 @@ Il ne construit aucune matrice $W$.
 
 ## 10. Phase 3 — compiler $W$ pour plusieurs profils
 
-Les profils sont définis dans un fichier séparé, par exemple :
+Les profils et les hypothèses fixes sont définis dans deux fichiers séparés :
 
 ```text
-data/for_graph_model/LW01_profiles.json
+data/for_graph_model/behavioral_profiles.json
 data/for_graph_model/LW01_compilation_settings.json
 ```
 
@@ -599,9 +605,10 @@ Le contrat minimal des deux fichiers est :
 Le script :
 
 ```bash
+uv run python scripts/3.0_generate_profiles.py
 uv run python scripts/3.1_compile_w.py \
-  --pregraph data/processed/pregraph/LW01 \
-  --profiles data/for_graph_model/LW01_profiles.json \
+  --book LW01 \
+  --profiles data/for_graph_model/behavioral_profiles.json \
   --settings data/for_graph_model/LW01_compilation_settings.json
 ```
 
@@ -615,6 +622,27 @@ data/processed/graph/LW01/<profile>/W.csv
 Pour chaque profil, il vérifie que les poids sont finis et positifs ou nuls, que chaque
 ligne non terminale somme à 1 et que `Death`/`Win` sont les deux seuls nœuds
 absorbants.
+
+L'option répétable `--profile <PROFILE_ID>` limite la compilation à un ou plusieurs
+profils. Le contrôle indépendant s'exécute ensuite, par exemple pour la référence
+neutre :
+
+```bash
+uv run python scripts/tests/test_3_1_compile_w.py \
+  --book LW01 \
+  --profile neutral_neutral_neutral
+```
+
+Le validateur compare les arêtes compilées au pré-graphe, recalcule leur agrégation dans
+$W$, vérifie les distributions locales et les deux états absorbants, puis résout les
+probabilités d'absorption. Il échoue si une partie de la masse ne rejoint pas `Death` ou
+`Win`.
+
+La configuration LW01 actuelle est une configuration technique initiale : les quatre
+probabilités globales valent 0,5. Pour les §227, 231 et 339, les issues supplémentaires
+sont données par des distributions fixes normalisées. Ces valeurs permettent de tester
+le pipeline ; elles devront être justifiées ou présentées explicitement comme hypothèses
+avant l'analyse scientifique.
 
 ## 11. Critères de fin
 

@@ -16,7 +16,7 @@
 | Spécification du pré-graphe | Terminée | Multigraphe direct L0–L2 indépendant des profils, avec les deux issues `Death` et `Win`. |
 | Audit pour la phase 2 | Terminé | Les conditions persistantes simples sont automatisées et les 14 exceptions sont supervisées. |
 | Construction du pré-graphe | Terminée pour LW01 | 352 nœuds, 602 arêtes et aucune transition de phase 1 non classée. |
-| Compilation de \(W\) | Phase 3 planifiée | 27 profils comportementaux ; mécaniques non comportementales fixées globalement. |
+| Compilation de \(W\) | En cours | Compilateur et validateur implémentés ; première matrice neutre valide. |
 | Bag-of-Paths et indices | Différé | Première analyse fixée à la borne RW ; indices à choisir après validation de \(W\). |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
 
@@ -250,8 +250,29 @@
   du suivi d'état et de leurs analyses de sensibilité au-delà de l'itération de
   présentation.
 
+### 20.08.2026 — Première compilation de la phase 3
+
+- Ajout de `scripts/3.0_generate_profiles.py`, qui produit déterministement les 27
+  combinaisons du schéma comportemental unique.
+- Ajout de `scripts/3.1_compile_w.py`, qui reconnaît explicitement toutes les formes
+  symboliques présentes dans le pré-graphe sans exécuter de code arbitraire.
+- Séparation des profils génériques dans `behavioral_profiles.json` et des hypothèses
+  propres à LW01 dans `LW01_compilation_settings.json`.
+- Adoption provisoire des valeurs 0,5 pour `kai_availability`,
+  `combat_win_probability`, `escape_probability` et `has_condition`, avec des
+  distributions fixes pour les trois combats à issues particulières.
+- Ajout de `scripts/tests/test_3_1_compile_w.py`, qui contrôle la couverture des 602
+  arêtes, leur agrégation, les sommes de lignes, les seuls absorbants `Death` et `Win` et
+  l'absorption éventuelle de tous les nœuds.
+- Compilation et validation de `neutral_neutral_neutral` : 352 nœuds, 602 arêtes,
+  erreur maximale de somme de ligne de $1{,}11\times10^{-15}$ ; depuis le §1,
+  $P(Death)=0{,}963805$ et $P(Win)=0{,}036195$ sous les hypothèses provisoires.
+- Compilation temporaire réussie des 27 profils afin de vérifier également les
+  affinités non neutres ; seule la matrice neutre est conservée comme premier artefact
+  du dépôt avant calibration.
+
 ## Prochaine étape
 
-Définir les profils de phase 3 et implémenter `scripts/3.1_compile_w.py` afin de compiler
-et contrôler une première matrice $W$. Les indices BoP et les trajectoires restent
-volontairement hors de ce chantier.
+Calibrer et justifier les probabilités fixes de la configuration, puis compiler et
+valider les 27 profils. Les indices BoP et les trajectoires restent volontairement hors
+de ce chantier.

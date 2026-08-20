@@ -1,0 +1,164 @@
+[
+  {
+    "profile_id": "cautious_selfish_physical",
+    "risk": "cautious",
+    "morality": "selfish",
+    "action": "physical"
+  },
+  {
+    "profile_id": "cautious_selfish_neutral",
+    "risk": "cautious",
+    "morality": "selfish",
+    "action": "neutral"
+  },
+  {
+    "profile_id": "cautious_selfish_tactical",
+    "risk": "cautious",
+    "morality": "selfish",
+    "action": "tactical"
+  },
+  {
+    "profile_id": "cautious_neutral_physical",
+    "risk": "cautious",
+    "morality": "neutral",
+    "action": "physical"
+  },
+  {
+    "profile_id": "cautious_neutral_neutral",
+    "risk": "cautious",
+    "morality": "neutral",
+    "action": "neutral"
+  },
+  {
+    "profile_id": "cautious_neutral_tactical",
+    "risk": "cautious",
+    "morality": "neutral",
+    "action": "tactical"
+  },
+  {
+    "profile_id": "cautious_noble_physical",
+    "risk": "cautious",
+    "morality": "noble",
+    "action": "physical"
+  },
+  {
+    "profile_id": "cautious_noble_neutral",
+    "risk": "cautious",
+    "morality": "noble",
+    "action": "neutral"
+  },
+  {
+    "profile_id": "cautious_noble_tactical",
+    "risk": "cautious",
+    "morality": "noble",
+    "action": "tactical"
+  },
+  {
+    "profile_id": "neutral_selfish_physical",
+    "risk": "neutral",
+    "morality": "selfish",
+    "action": "physical"
+  },
+  {
+    "profile_id": "neutral_selfish_neutral",
+    "risk": "neutral",
+    "morality": "selfish",
+    "action": "neutral"
+  },
+  {
+    "profile_id": "neutral_selfish_tactical",
+    "risk": "neutral",
+    "morality": "selfish",
+    "action": "tactical"
+  },
+  {
+    "profile_id": "neutral_neutral_physical",
+    "risk": "neutral",
+    "morality": "neutral",
+    "action": "physical"
+  },
+  {
+    "profile_id": "neutral_neutral_neutral",
+    "risk": "neutral",
+    "morality": "neutral",
+    "action": "neutral"
+  },
+  {
+    "profile_id": "neutral_neutral_tactical",
+    "risk": "neutral",
+    "morality": "neutral",
+    "action": "tactical"
+  },
+  {
+    "profile_id": "neutral_noble_physical",
+    "risk": "neutral",
+    "morality": "noble",
+    "action": "physical"
+  },
+  {
+    "profile_id": "neutral_noble_neutral",
+    "risk": "neutral",
+    "morality": "noble",
+    "action": "neutral"
+  },
+  {
+    "profile_id": "neutral_noble_tactical",
+    "risk": "neutral",
+    "morality": "noble",
+    "action": "tactical"
+  },
+  {
+    "profile_id": "reckless_selfish_physical",
+    "risk": "reckless",
+    "morality": "selfish",
+    "action": "physical"
+  },
+  {
+    "profile_id": "reckless_selfish_neutral",
+    "risk": "reckless",
+    "morality": "selfish",
+    "action": "neutral"
+  },
+  {
+    "profile_id": "reckless_selfish_tactical",
+    "risk": "reckless",
+    "morality": "selfish",
+    "action": "tactical"
+  },
+  {
+    "profile_id": "reckless_neutral_physical",
+    "risk": "reckless",
+    "morality": "neutral",
+    "action": "physical"
+  },
+  {
+    "profile_id": "reckless_neutral_neutral",
+    "risk": "reckless",
+    "morality": "neutral",
+    "action": "neutral"
+  },
+  {
+    "profile_id": "reckless_neutral_tactical",
+    "risk": "reckless",
+    "morality": "neutral",
+    "action": "tactical"
+  },
+  {
+    "profile_id": "reckless_noble_physical",
+    "risk": "reckless",
+    "morality": "noble",
+    "action": "physical"
+  },
+  {
+    "profile_id": "reckless_noble_neutral",
+    "risk": "reckless",
+    "morality": "noble",
+    "action": "neutral"
+  },
+  {
+    "profile_id": "reckless_noble_tactical",
+    "risk": "reckless",
+    "morality": "noble",
+    "action": "tactical"
+  }
+]
