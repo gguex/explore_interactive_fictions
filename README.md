@@ -42,11 +42,10 @@ results/         cluster outputs and calibration history
    vs the gold standard), full book extracted (556 edges, `LW01_e_edges.csv`) and
    quality-checked (complete vs `<choice>` tags, fully reachable graph, zero schema
    violations).
-2. **Pregraph construction** (phase 2, in progress): direct multiedges with constant or
-   symbolic weighting rules, 17 narrative preterminals, and exactly two absorbing
-   outcome nodes, `Death` and `Win`. Phase 2.1 currently produces 558 automatic edges
-   and a review queue of 14 source paragraphs; simple item, Gold Crowns and Endurance
-   conditions are handled automatically.
+2. **Pregraph construction** (phase 2, done for LW01): 352 nodes and 602 direct
+   multiedges with constant or symbolic weighting rules. The 17 narrative preterminals
+   lead to exactly two absorbing outcome nodes, `Death` and `Win`; all 556 phase-1 edges
+   are classified or replaced by one of the 14 fully supervised sources.
 3. **Profile compilation** (phase 3, planned): compile one `W` per player profile, with
    profile-dependent choice affinities, disciplines, and combat victory probabilities.
 4. **BoP and analyses** (later phases): select justified structural indices, sample

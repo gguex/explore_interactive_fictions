@@ -186,15 +186,18 @@ indique ainsi directement leur place dans cette feuille de route.
 - scripts : `1.1_parse_for_edge_extraction.py --book <BOOK_ID>` et
   `1.2_parse_node.py --book <BOOK_ID>`.
 
-### Phase 2 — Construire le pré-graphe — en cours
+### Phase 2 — Construire le pré-graphe — terminée pour LW01
 
-Les deux scripts sont écrits. La préparation 2.1 a été exécutée pour LW01 : elle produit
-558 arêtes automatiques et 14 paragraphes à superviser.
+La préparation produit 558 arêtes automatiques. Les 14 paragraphes particuliers ont été
+annotés en 44 arêtes supervisées, puis la finalisation a produit 352 nœuds et 602 arêtes
+de pré-graphe sans transition de phase 1 non classée.
+
+La recette réutilisable pour un autre livre reste :
 
 1. lancer `2.1_prepare_pregraph.py --book <BOOK_ID>`, qui traite les cas ordinaires,
    dont les conditions persistantes simples, produit la file d'exceptions et crée le
    tableau d'annotation vide ;
-2. remplir ce tableau pour les 14 paragraphes particuliers de LW01 ;
+2. remplir le tableau pour les paragraphes particuliers du livre ;
 3. lancer `2.2_finalize_pregraph.py --book <BOOK_ID>`, qui finalise et contrôle le
    pré-graphe.
 

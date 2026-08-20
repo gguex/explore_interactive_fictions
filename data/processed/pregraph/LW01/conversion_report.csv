@@ -1,0 +1,11 @@
+metric,value,detail
+phase1_nodes,350,
+phase1_edges,556,
+automatic_phase1_edges,523,
+replaced_phase1_edges,33,
+supervised_sources,14,
+automatic_pregraph_edges,558,
+supervised_pregraph_edges,44,
+pregraph_nodes,352,
+pregraph_edges,602,
+unclassified_phase1_edges,0,Must be zero.

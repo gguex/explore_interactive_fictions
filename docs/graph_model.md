@@ -236,6 +236,18 @@ le profil fournit l'hypothèse de disponibilité au moment de compiler $W$. Une 
 composée, ambiguë, sans alternative identifiable ou mêlée à une autre mécanique reste
 entièrement soumise à supervision.
 
+Lorsqu'un paragraphe supervisé propose plusieurs choix dont certains seulement sont
+conditionnels, l'agentivité est conservée avec :
+
+$$
+\operatorname{available\_choice\_share}(i,j,a_j)
+=\frac{a_j r_p(i,j)}{\sum_k a_k r_p(i,k)},
+$$
+
+où $a_j$ vaut `condition_available(...)`, `kai_available(...)` ou 1 pour une option
+toujours disponible. Cette règle est utilisée aux §23 et 334 : posséder un objet ou une
+discipline ouvre une option sans obliger le joueur à la prendre.
+
 ### 5.6 Combat
 
 La chance de victoire n'est pas fixée dans le pré-graphe. Pour un profil $p$, on note :
@@ -271,24 +283,30 @@ w_{i\rightarrow j}^{(p)}=v_p(i)c_j^{(p)},
 w_{i\rightarrow\mathrm{Death}}^{(p)}=1-v_p(i).
 $$
 
-### 5.6 Combat et évasion
+Dans le fichier de supervision, ces parts sont notées
+`postcombat_choice_share(i, j)`. Elles sont normalisées uniquement entre les choix
+accessibles après la victoire.
 
-Si $b_p(i)$ est la propension du profil à poursuivre le combat :
+### 5.7 Combat avec évasion ou issues particulières
+
+Une fuite proposée après un ou plusieurs rounds dépend à la fois de la décision du
+joueur et de sa survie jusqu'à cette occasion. Comme les rounds ne sont pas simulés, le
+pré-graphe ne factorise pas artificiellement ces deux phénomènes. Il utilise une
+distribution catégorielle :
 
 $$
-w_{i\rightarrow\text{victoire}}^{(p)}=b_p(i)v_p(i),
+\sum_o \operatorname{combat\_outcome}(i,o)=1.
 $$
 
-$$
-w_{i\rightarrow\mathrm{Death}}^{(p)}=b_p(i)(1-v_p(i)),
-$$
+Pour un combat avec fuite simple, les issues sont `win`, `escape` et `death`. Un cas
+particulier peut employer des issues plus précises, par exemple
+`win_with_endurance_loss`, `win_without_endurance_loss`, `win_within_4_rounds` ou
+`continue_after_4_rounds`. Le profil de phase 3 devra fournir une distribution cohérente
+pour les libellés présents à chaque source.
 
-$$
-w_{i\rightarrow\text{évasion}}^{(p)}=1-b_p(i).
-$$
-
-Un risque propre à l'évasion peut être ajouté dans la règle supervisée. Les rounds,
-l'Endurance et les tables de combat ne sont pas simulés dans le pré-graphe.
+Une blessure non fatale pendant la fuite est conservée dans `note`, mais ne crée pas un
+état supplémentaire. L'Endurance et les tables de combat ne sont pas simulées dans le
+pré-graphe.
 
 ## 6. Mécaniques incluses et exclues
 
@@ -417,13 +435,42 @@ Exemples :
 | 21 | 189 | `random` | `constant` | `0.60` |
 | 21 | 312 | `random` | `constant` | `0.04` |
 | 21 | `Death` | `random` | `constant` | `0.36` |
-| 43 | 195 | `combat` | `formula` | `fight_43 * combat_win(43)` |
-| 43 | 106 | `escape` | `formula` | `1 - fight_43` |
-| 43 | `Death` | `combat` | `formula` | `fight_43 * (1 - combat_win(43))` |
+| 43 | 195 | `combat` | `formula` | `combat_outcome(43, "win")` |
+| 43 | 106 | `escape` | `formula` | `combat_outcome(43, "escape")` |
+| 43 | `Death` | `combat` | `formula` | `combat_outcome(43, "death")` |
 
 Les constantes décrivent un hasard objectif. Les expressions comme
-`combat_win(43)` ou `fight_43` restent libres et seront fournies par chaque
-profil en phase 3.
+`combat_win(112)`, `postcombat_choice_share(112, 33)` ou
+`combat_outcome(43, "escape")` restent libres et seront fournies par chaque profil en
+phase 3.
+
+### 8.2 Règles appliquées à la supervision de LW01
+
+Le fichier `LW01_supervision.csv` applique les conventions suivantes :
+
+1. **Tirages successifs (§21).** Les chemins du petit arbre de tirages sont aplatis. Les
+   probabilités finales sont 0,60 vers le §189, 0,04 vers le §312 et 0,36 vers `Death`.
+2. **Choix soumis à plusieurs disponibilités (§23 et 334).** Chaque option reçoit
+   `available_choice_share(source, target, disponibilité)`. Une clé ou une discipline
+   rend le choix disponible mais ne le rend pas obligatoire. Les axes sémantiques sont
+   annotés manuellement pour toutes les options.
+3. **Choix après victoire (§112, 208 et 229).** Chaque destination reçoit
+   `combat_win(source) * postcombat_choice_share(source, target)` ; `Death` reçoit
+   `1 - combat_win(source)`.
+4. **Combat avec fuite (§43, 169, 180, 191 et 220).** Les trois issues `win`, `escape`
+   et `death` sont représentées par `combat_outcome(source, issue)`. Cette distribution
+   absorbe la survie jusqu'à l'occasion de fuite et la propension du profil à l'utiliser.
+5. **Issues de combat particulières (§227, 231 et 339).** La même distribution
+   catégorielle distingue la victoire avec ou sans perte d'Endurance, la victoire avant
+   quatre rounds, la continuation après quatre rounds, la fuite et la mort selon le
+   texte du paragraphe.
+6. **État persistant.** Les blessures et autres effets non fatals sont signalés dans les
+   notes mais ne provoquent aucune expansion L3.
+
+Pour toute source fondée sur `combat_outcome`, les expressions sortantes doivent former
+une distribution normalisée. Pour toute source utilisant `available_choice_share` ou
+`postcombat_choice_share`, les parts sont normalisées sur le groupe de choix effectivement
+disponible.
 
 ## 9. Recette courte de la phase 2
 
@@ -498,9 +545,10 @@ data/for_graph_model/LW01_profiles.json
 ```
 
 Chaque profil fournit les affinités de choix, les disciplines, les probabilités
-`combat_win(source_id)`, les propensions d'évasion et les hypothèses de ressources.
-Une probabilité de combat manquante provoque une erreur : le compilateur n'invente pas
-de valeur.
+`combat_win(source_id)`, les distributions normalisées `combat_outcome` par source et
+par issue, ainsi que les hypothèses de ressources. Le compilateur en déduit les
+`available_choice_share` et `postcombat_choice_share`. Un paramètre nécessaire manquant
+provoque une erreur : le compilateur n'invente pas de valeur.
 
 Le script :
 

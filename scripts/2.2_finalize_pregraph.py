@@ -45,6 +45,7 @@ TRANSITION_KINDS = {
     "profile_choice",
     "random",
     "kai",
+    "state_condition",
     "combat",
     "escape",
     "outcome",

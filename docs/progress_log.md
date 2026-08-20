@@ -14,8 +14,8 @@
 | Calibration LLM | Terminée | Structure validée ; le rapport final versionné contient 3 divergences sémantiques douces. |
 | Contrôle qualité | Terminé | Choix complets, IDs valides, 350 nœuds atteignables, 17 fins explicites. |
 | Spécification du pré-graphe | Terminée | Multigraphe direct L0–L2 indépendant des profils, avec les deux issues `Death` et `Win`. |
-| Audit pour la phase 2 | Terminé | Les conditions persistantes simples sont automatisées ; 14 paragraphes restent à superviser. |
-| Construction du pré-graphe | En cours | La préparation 2.1 produit 558 arêtes automatiques et une file de 14 paragraphes ; finalisation en attente. |
+| Audit pour la phase 2 | Terminé | Les conditions persistantes simples sont automatisées et les 14 exceptions sont supervisées. |
+| Construction du pré-graphe | Terminée pour LW01 | 352 nœuds, 602 arêtes et aucune transition de phase 1 non classée. |
 | Compilation de \(W\) | Phase 3 planifiée | Une matrice par profil ; les probabilités de victoire au combat restent libres. |
 | Bag-of-Paths et indices | Différé | Première analyse fixée à la borne RW ; indices à choisir après validation de \(W\). |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
@@ -220,8 +220,21 @@
 - Exécution de la préparation et de son contrôle : 558 arêtes automatiques et réduction
   de la file de supervision de 18 à 14 paragraphes.
 
+### 20.08.2026 — Supervision et finalisation du pré-graphe LW01
+
+- Annotation complète des 14 paragraphes de `review_queue.csv` en 44 arêtes
+  supervisées.
+- Aplatissement exact des tirages successifs du §21 : 0,60 vers le §189, 0,04 vers le
+  §312 et 0,36 vers `Death`.
+- Adoption de parts normalisées entre choix disponibles pour les conditions composées,
+  de choix conditionnés par la victoire pour les décisions post-combat et de
+  distributions catégorielles pour les combats avec fuite ou issues particulières.
+- Alignement du validateur 2.2 sur le type automatique `state_condition`.
+- Finalisation réussie : 352 nœuds, 602 arêtes, 14 sources supervisées et zéro arête de
+  phase 1 non classée.
+
 ## Prochaine étape
 
-Examiner les 14 paragraphes de la file obtenue, remplir `LW01_supervision.csv`, puis
-lancer `scripts/2.2_finalize_pregraph.py --book LW01`. Les indices BoP et les
-trajectoires restent volontairement hors de ce chantier.
+Définir les profils de phase 3 et implémenter `scripts/3.1_compile_w.py` afin de compiler
+et contrôler une première matrice $W$. Les indices BoP et les trajectoires restent
+volontairement hors de ce chantier.
