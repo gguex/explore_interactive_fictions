@@ -67,6 +67,20 @@ physique est ici associée à une meilleure réussite que l'action tactique. Ces
 décrivent le graphe annoté et ses pondérations : ils ne constituent pas une propriété
 générale de ces comportements.
 
+### Biais de la simplification des combats
+
+Un contrôle exploratoire remplaçant la probabilité de victoire globale de 0,833 par les
+taux estimés pour chaque paragraphe donne 11,60 % de victoire au profil neutre, contre
+11,98 % dans le modèle courant. Le biais neutre paraît donc faible, mais le taux unique
+tend surtout à rapprocher les profils de la moyenne : il pénalise les parcours évitant
+les combats difficiles et favorise ceux qui les rencontrent. Ces valeurs restent des
+probabilités internes au modèle L2, et non des probabilités exactes de terminer le livre.
+
+**Phrase pour la présentation :** « Notre modèle surestime légèrement la probabilité de
+victoire du profil neutre, de 11,60 % à 11,98 %, mais il comprime surtout les écarts :
+notre contrôle suggère une sous-estimation d'environ 3,9 points pour le meilleur parcours
+prudent et une surestimation pouvant atteindre 4,4 points pour un parcours téméraire. »
+
 ## 5. Intensité des choix
 
 Les affinités `matching / neutral / opposed = 2 / 1 / 0.5` restent des préférences
