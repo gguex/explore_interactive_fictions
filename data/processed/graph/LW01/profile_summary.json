@@ -1,0 +1,19 @@
+{
+  "book_id": "LW01",
+  "profile_count": 27,
+  "neutral": {
+    "profile_id": "neutral_neutral_neutral",
+    "win_probability": 0.1198111410425721,
+    "death_probability": 0.8801888589574265,
+    "expected_steps_to_absorption": 27.211670381886954
+  },
+  "minimum_win_probability": {
+    "profile_id": "reckless_selfish_tactical",
+    "value": 0.054396874279883975
+  },
+  "maximum_win_probability": {
+    "profile_id": "cautious_selfish_physical",
+    "value": 0.25834722148291267
+  },
+  "win_probability_range": 0.20395034720302868
+}

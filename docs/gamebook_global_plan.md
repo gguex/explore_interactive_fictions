@@ -240,15 +240,15 @@ La recette est donnée dans
 3. lancer `3.1_compile_w.py` pour compiler et contrôler une matrice $W^{(p)}$ par
    profil selon un unique schéma.
 
-Les 27 matrices seront calculées et contrôlées. La présentation de 20 minutes montrera
+Les 27 matrices sont calculées et contrôlées. La présentation de 20 minutes montrera
 seulement un profil neutre, quelques archétypes lisibles et des effets agrégés par axe.
 
 Le générateur des 27 profils, le compilateur et le validateur indépendant sont
-implémentés. La probabilité de combat est désormais calibrée à 0,833 pour LW01 ; les
-autres valeurs fixes restent à justifier ou à assumer explicitement avant de compiler
-toute l'expérience.
+implémentés. La configuration fixe est documentée, les 27 matrices LW01 sont valides et
+leurs probabilités d'absorption et durées attendues sont synthétisées dans
+`docs/phase3_results.md`. La phase 3 est terminée pour LW01.
 
-### Phase 4 — Analyses BoP et trajectoires — différée
+### Phase 4 — Analyses BoP et trajectoires — prochaine étape
 
 Choisir les indices BoP, calculer les flux et probabilités d'absorption, puis sélectionner
 et analyser les trajectoires. Les formules et interprétations seront fixées seulement

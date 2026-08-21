@@ -16,6 +16,7 @@ narrative analysis.
 | `docs/gamebook_global_plan.md` | **Current reference plan**: research question, generic model, decisions and roadmap. |
 | `docs/graph_model.md` | Adopted direct multigraph model, mechanics scope and compilation process. |
 | `docs/fixed_probabilities.md` | Calibration and assumptions for the fixed phase-3 parameters. |
+| `docs/phase3_results.md` | Validation and comparative results for all 27 profiles. |
 | `docs/future_improvements.md` | Deferred improvements: structured phase-1 schema, portability and migration path. |
 | `docs/progress_log.md` | Append-only progress journal and current project status. |
 | `docs/infict-llm_abstract.tex` | Accepted COMHUM2026 extended abstract. |
@@ -47,13 +48,11 @@ results/         cluster outputs and calibration history
    multiedges with constant or symbolic weighting rules. The 17 narrative preterminals
    lead to exactly two absorbing outcome nodes, `Death` and `Win`; all 556 phase-1 edges
    are classified or replaced by one of the 14 fully supervised sources.
-3. **Profile compilation** (phase 3, in progress): the profile generator, deterministic
-   compiler and independent validator are implemented. The fixed LW01 combat probability
-   is calibrated from the official rules at `combat_win_probability = 0.833`, including
-   carried combat attrition; the other mechanical probabilities remain fixed experiment
-   settings. Combat continuations use the generic roles `survive`, `escape` and `death`;
-   no book-specific paragraph is encoded in the compiler.
-4. **BoP and analyses** (later phases): select justified structural indices, sample
+3. **Profile compilation** (phase 3, done for LW01): all 27 matrices contain 352 nodes
+   and 602 edges and pass the independent structural and absorption checks. The fixed
+   combat probability is calibrated at `0.833`; the neutral profile reaches `Win` with
+   probability `0.119811`, and the complete design ranges from `0.054397` to `0.258347`.
+4. **BoP and analyses** (next phase): select justified structural indices, sample
    representative paths and develop the LLM critic protocol.
 
 ## Setup
@@ -68,9 +67,11 @@ uv run python scripts/3.0_generate_profiles.py
 uv run python scripts/3.1_compile_w.py --book LW01 \
   --profile neutral_neutral_neutral
 uv run python scripts/tests/test_3_1_compile_w.py --book LW01 \
-  --profile neutral_neutral_neutral
+  --all-profiles
 uv run python scripts/3.2_calibrate_combat.py --book LW01
 uv run python scripts/tests/test_3_2_calibrate_combat.py --book LW01
+uv run python scripts/3.3_summarize_profiles.py --book LW01
+uv run python scripts/tests/test_3_3_summarize_profiles.py --book LW01
 ```
 
 The same commands accept another Lone Wolf identifier, such as `--book LW02`, provided

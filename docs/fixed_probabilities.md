@@ -12,10 +12,16 @@ mécaniques qui ne varient pas entre profils sont regroupées dans
 | `combat_win_probability` | **0,833** | Calibration fondée sur les règles |
 | `escape_probability` | **0,5** | Hypothèse neutre subjective |
 | `has_condition` | **0,5** | Hypothèse neutre subjective |
-| Affinités `matching / neutral / opposed` | 2 / 1 / 0,5 | Choix expérimental provisoire |
+| Affinités `matching / neutral / opposed` | 2 / 1 / 0,5 | Choix expérimental retenu pour cette itération |
 
 Cette séparation garantit que les 27 profils ont exactement le même schéma. Une valeur
 fixe peut être recalibrée sans créer un nouveau type de joueur.
+
+Les affinités 2 / 1 / 0,5 produisent une préférence souple : face à une option
+correspondante et une option directement opposée, identiques sur les autres axes, les
+parts valent 80 % et 20 %. La compilation complète montre néanmoins un contraste fort
+des probabilités de victoire ; ces coefficients sont donc conservés pour cette
+itération.
 
 ## 2. Disponibilité des disciplines Kai
 

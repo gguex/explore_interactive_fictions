@@ -693,3 +693,7 @@ La phase 3 est terminée lorsque les 27 profils produisent des matrices $W$ vali
 la même configuration fixe. Les indices BoP et l'étude des trajectoires commencent
 ensuite. Tous les profils sont calculés, mais seuls quelques archétypes et les effets
 agrégés par axe sont destinés à la présentation.
+
+Ce critère est atteint pour LW01 : les 27 matrices passent le validateur global avec une
+erreur maximale de somme de ligne de $1{,}11\times10^{-15}$. Les résultats comparatifs
+sont consignés dans `docs/phase3_results.md`.

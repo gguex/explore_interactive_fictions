@@ -4,7 +4,7 @@
 > précédentes. Une correction factuelle ultérieure doit être consignée dans une nouvelle
 > entrée.
 
-## État synthétique au 20.08.2026
+## État synthétique au 21.08.2026
 
 | Chantier | État | Résultat actuel |
 | :--- | :--- | :--- |
@@ -16,8 +16,8 @@
 | Spécification du pré-graphe | Terminée | Multigraphe direct L0–L2 indépendant des profils, avec les deux issues `Death` et `Win`. |
 | Audit pour la phase 2 | Terminé | Les conditions persistantes simples sont automatisées et les 14 exceptions sont supervisées. |
 | Construction du pré-graphe | Terminée pour LW01 | 352 nœuds, 602 arêtes et aucune transition de phase 1 non classée. |
-| Compilation de \(W\) | En cours | Compilateur et validateur implémentés ; première matrice neutre valide. |
-| Bag-of-Paths et indices | Différé | Première analyse fixée à la borne RW ; indices à choisir après validation de \(W\). |
+| Compilation de \(W\) | Terminée pour LW01 | 27 matrices valides ; résultats par profil et par axe synthétisés. |
+| Bag-of-Paths et indices | Prochaine phase | Première analyse fixée à la borne RW ; indices et trajectoires à implémenter. |
 | Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
 
 ## Historique
@@ -332,8 +332,26 @@
 - Les deux valeurs sont consignées comme hypothèses subjectives, et non comme
   estimations empiriques ; elles restent communes aux 27 profils.
 
+### 21.08.2026 — Finalisation de la phase 3 pour LW01
+
+- Extension du validateur 3.1 avec `--all-profiles` et contrôle exhaustif des 27 matrices
+  contre le même pré-graphe de 352 nœuds et 602 arêtes.
+- Ajout de `scripts/3.3_summarize_profiles.py` et de son contrôle indépendant, produisant
+  `profile_summary.csv`, `axis_summary.csv` et `profile_summary.json`.
+- Validation réussie des 27 matrices, avec absorption garantie et une erreur maximale
+  de somme de ligne de $1{,}11\times10^{-15}$.
+- Pour le profil neutre : $P(Win)=0{,}119811$ et 27,21 transitions attendues avant
+  absorption.
+- Étendue de $P(Win)$ de 0,054397 pour `reckless_selfish_tactical` à 0,258347 pour
+  `cautious_selfish_physical`, soit 20,40 points de pourcentage et un rapport d'environ
+  4,75 entre les deux extrêmes.
+- L'axe du risque est le plus contrasté : moyennes de 0,211973 pour `cautious`, 0,119682
+  pour `neutral` et 0,067321 pour `reckless`. Les affinités 2 / 1 / 0,5 sont conservées
+  pour cette itération.
+- Documentation complète des résultats et de leur interprétation dans
+  `docs/phase3_results.md`. La phase 3 est terminée pour LW01.
+
 ## Prochaine étape
 
-Calibrer et justifier les probabilités fixes de la configuration, puis compiler et
-valider les 27 profils. Les indices BoP et les trajectoires restent volontairement hors
-de ce chantier.
+Définir puis implémenter le petit ensemble d'indices retenus pour la présentation, avant
+de sélectionner et comparer des trajectoires représentatives entre profils.

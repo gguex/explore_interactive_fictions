@@ -1,0 +1,603 @@
+edge_id,source_id,target_id,transition_kind,weight_rule,weight_value,weight_expression,condition_kind,condition_value,semantic_risk,semantic_morality,semantic_action,origin,source_ref,note,profile_id,compiled_weight
+e0001,1,141,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth Sense,,,,auto,LW01_e_edges.csv:2,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0002,1,85,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(1, 85)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:3,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0003,1,275,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(1, 275)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:4,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0004,2,343,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:5,,cautious_noble_physical,0.5
+e0005,2,276,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:6,,cautious_noble_physical,0.5
+e0006,3,196,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:7,,cautious_noble_physical,0.2
+e0007,3,144,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:8,,cautious_noble_physical,0.8
+e0008,4,218,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth Sense,,,,auto,LW01_e_edges.csv:9,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0009,4,75,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(4, 75)",,,cautious,neutral,tactical,auto,LW01_e_edges.csv:10,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.4
+e0010,4,175,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(4, 175)",,,reckless,neutral,tactical,auto,LW01_e_edges.csv:11,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.1
+e0011,5,111,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:12,,cautious_noble_physical,1
+e0012,6,183,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:13,,cautious_noble_physical,0.2
+e0013,6,200,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:14,,cautious_noble_physical,0.8
+e0014,7,108,random,constant,0.3,,,,,,,auto,LW01_e_edges.csv:15,,cautious_noble_physical,0.3
+e0015,7,25,random,constant,0.7,,,,,,,auto,LW01_e_edges.csv:16,,cautious_noble_physical,0.7
+e0016,8,70,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:17,,cautious_noble_physical,1
+e0017,9,236,state_condition,formula,,"condition_available(""has_item"", ""Vordak Gem"")",has_item,Vordak Gem,,,,auto,LW01_e_edges.csv:18,Route is taken when the persistent-state condition is available.,cautious_noble_physical,0.5
+e0018,9,292,state_condition,formula,,"1 - condition_available(""has_item"", ""Vordak Gem"")",has_item_absent,Vordak Gem,,,,auto,LW01_e_edges.csv:19,Complementary route when the persistent condition is false.,cautious_noble_physical,0.5
+e0019,10,115,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:20,,cautious_noble_physical,0.666666666666667
+e0020,10,83,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:21,,cautious_noble_physical,0.333333333333333
+e0021,11,139,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:22,,cautious_noble_physical,1
+e0022,12,262,state_condition,formula,,"condition_available(""gold_crowns_at_least"", ""10"")",gold_crowns_at_least,10,,,,auto,LW01_e_edges.csv:23,Route is taken when the persistent-state condition is available.,cautious_noble_physical,0.5
+e0023,12,247,state_condition,formula,,"1 - condition_available(""gold_crowns_at_least"", ""10"")",gold_crowns_at_least_absent,10,,,,auto,LW01_e_edges.csv:24,Complementary route when the persistent condition is false.,cautious_noble_physical,0.5
+e0024,13,307,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:25,,cautious_noble_physical,0.333333333333333
+e0025,13,213,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:26,,cautious_noble_physical,0.666666666666667
+e0026,14,43,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:27,,cautious_noble_physical,0.2
+e0027,14,106,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:28,,cautious_noble_physical,0.8
+e0028,15,207,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:29,,cautious_noble_physical,0.333333333333333
+e0029,15,201,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:30,,cautious_noble_physical,0.333333333333333
+e0030,15,35,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:31,,cautious_noble_physical,0.333333333333333
+e0031,16,192,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:32,,cautious_noble_physical,1
+e0032,17,53,combat,formula,,combat_win(17) * 0.1,,,,,,auto,LW01_e_edges.csv:33,Combat victory followed by a random-number result.,cautious_noble_physical,0.0833
+e0033,17,274,combat,formula,,combat_win(17) * 0.2,,,,,,auto,LW01_e_edges.csv:34,Combat victory followed by a random-number result.,cautious_noble_physical,0.1666
+e0034,17,316,combat,formula,,combat_win(17) * 0.7,,,,,,auto,LW01_e_edges.csv:35,Combat victory followed by a random-number result.,cautious_noble_physical,0.5831
+e0035,17,Death,combat,formula,,1 - combat_win(17),,,,,,auto,generated:combat_death:17,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0036,18,114,kai,formula,,"kai_available(""Camouflage"")",kai_discipline,Camouflage,,,,auto,LW01_e_edges.csv:36,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0037,18,239,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(18, 239)",,,cautious,neutral,physical,auto,LW01_e_edges.csv:37,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.4
+e0038,18,29,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(18, 29)",,,reckless,neutral,physical,auto,LW01_e_edges.csv:38,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.1
+e0039,19,69,kai,formula,,"kai_available(""Tracking"")",kai_discipline,Tracking,,,,auto,LW01_e_edges.csv:39,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0040,19,272,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(19, 272)",,,cautious,neutral,neutral,auto,LW01_e_edges.csv:40,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.333333333333333
+e0041,19,119,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(19, 119)",,,reckless,neutral,physical,auto,LW01_e_edges.csv:41,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.166666666666667
+e0042,20,273,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:42,,cautious_noble_physical,1
+e0043,21,189,random,constant,0.60,,,,,,,supervised,LW01_supervision.csv:2,Aggregate success probability: 0.5 + 0.5 * 0.2.,cautious_noble_physical,0.6
+e0044,21,312,random,constant,0.04,,,,,,,supervised,LW01_supervision.csv:3,Third-draw success probability: 0.5 * 0.8 * 0.1.,cautious_noble_physical,0.04
+e0045,21,Death,random,constant,0.36,,,,,,,supervised,LW01_supervision.csv:4,Implicit death probability: 0.5 * 0.8 * 0.9.,cautious_noble_physical,0.36
+e0046,22,181,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:46,,cautious_noble_physical,0.5
+e0047,22,145,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:47,,cautious_noble_physical,0.5
+e0048,23,326,profile_choice,formula,,"available_choice_share(23, 326, condition_available(""has_item"", ""Golden Key""))",has_item,Golden Key,cautious,neutral,tactical,supervised,LW01_supervision.csv:5,Choice to use the Golden Key when it is available.,cautious_noble_physical,0.166666666666667
+e0049,23,151,profile_choice,formula,,"available_choice_share(23, 151, kai_available(""Mind Over Matter""))",kai_discipline,Mind Over Matter,cautious,neutral,tactical,supervised,LW01_supervision.csv:6,Choice to use Mind Over Matter when it is available.,cautious_noble_physical,0.166666666666667
+e0050,23,337,profile_choice,formula,,"available_choice_share(23, 337, 1)",,,neutral,neutral,physical,supervised,LW01_supervision.csv:7,Unconditionally available choice to remove the pin.,cautious_noble_physical,0.666666666666667
+e0051,24,234,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:51,,cautious_noble_physical,0.5
+e0052,24,184,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:52,,cautious_noble_physical,0.5
+e0053,25,139,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:53,,cautious_noble_physical,1
+e0054,26,249,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:54,,cautious_noble_physical,0.333333333333333
+e0055,26,100,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:55,,cautious_noble_physical,0.666666666666667
+e0056,27,250,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:56,,cautious_noble_physical,0.5
+e0057,27,52,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:57,,cautious_noble_physical,0.5
+e0058,28,130,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:58,,cautious_noble_physical,0.5
+e0059,28,147,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:59,,cautious_noble_physical,0.5
+e0060,29,270,combat,formula,,combat_win(29),,,,,,auto,LW01_e_edges.csv:60,"Transition after combat victory. | Combat outcome determines progression, but only one choice tag exists. Deduction of 2 COMBAT SKILL points unless Mindshield is possessed.",cautious_noble_physical,0.833
+e0061,29,Death,combat,formula,,1 - combat_win(29),,,,,,auto,generated:combat_death:29,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0062,30,194,profile_choice,profile_choice,,,,,reckless,noble,physical,auto,LW01_e_edges.csv:61,,cautious_noble_physical,0.5
+e0063,30,261,profile_choice,profile_choice,,,,,cautious,selfish,physical,auto,LW01_e_edges.csv:62,,cautious_noble_physical,0.5
+e0064,31,264,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:63,,cautious_noble_physical,1
+e0065,32,176,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:64,,cautious_noble_physical,0.5
+e0066,32,340,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:65,,cautious_noble_physical,0.5
+e0067,33,248,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:66,,cautious_noble_physical,1
+e0068,34,328,combat,formula,,combat_win(34),,,,,,auto,LW01_e_edges.csv:67,"Transition after combat victory. | Combat outcome determines progression, but only one choice tag exists. Deduction of 2 COMBAT SKILL points unless Mindshield is possessed.",cautious_noble_physical,0.833
+e0069,34,Death,combat,formula,,1 - combat_win(34),,,,,,auto,generated:combat_death:34,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0070,35,207,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:68,,cautious_noble_physical,1
+e0071,36,140,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:69,Loss of 2 ENDURANCE points during the transition,cautious_noble_physical,0.5
+e0072,36,323,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:70,,cautious_noble_physical,0.5
+e0073,37,282,kai,formula,,"kai_available(""Camouflage"")",kai_discipline,Camouflage,,,,auto,LW01_e_edges.csv:71,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0074,37,289,profile_choice,formula,,"1 - kai_available(""Camouflage"")",,,reckless,neutral,neutral,auto,LW01_e_edges.csv:72,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.5
+e0075,38,128,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:73,,cautious_noble_physical,0.2
+e0076,38,347,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:74,,cautious_noble_physical,0.8
+e0077,39,228,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:75,,cautious_noble_physical,1
+e0078,40,105,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:76,,cautious_noble_physical,1
+e0079,41,174,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:77,,cautious_noble_physical,0.5
+e0080,41,116,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:78,,cautious_noble_physical,0.5
+e0081,42,86,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:79,,cautious_noble_physical,0.25
+e0082,42,238,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:80,,cautious_noble_physical,0.25
+e0083,42,157,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:81,,cautious_noble_physical,0.25
+e0084,42,147,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:82,,cautious_noble_physical,0.25
+e0085,43,195,combat,formula,,"combat_outcome(43, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:8,Victory after continuing the combat.,cautious_noble_physical,0.4165
+e0086,43,106,escape,formula,,"combat_outcome(43, ""escape"")",combat_outcome,escape,cautious,neutral,physical,supervised,LW01_supervision.csv:9,Escape outcome after surviving three combat rounds.,cautious_noble_physical,0.5
+e0087,43,Death,combat,formula,,"combat_outcome(43, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:10,Death before victory or escape.,cautious_noble_physical,0.0835
+e0088,44,277,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:85,,cautious_noble_physical,0.5
+e0089,44,338,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:86,,cautious_noble_physical,0.5
+e0090,45,180,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:87,,cautious_noble_physical,1
+e0091,46,296,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth Sense,,,,auto,LW01_e_edges.csv:88,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0092,46,246,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(46, 246)",,,reckless,neutral,neutral,auto,LW01_e_edges.csv:89,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.0555555555555556
+e0093,46,90,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(46, 90)",,,cautious,neutral,physical,auto,LW01_e_edges.csv:90,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.444444444444444
+e0094,47,136,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:91,,cautious_noble_physical,0.2
+e0095,47,322,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:92,,cautious_noble_physical,0.8
+e0096,48,243,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:93,,cautious_noble_physical,1
+e0097,49,339,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:94,,cautious_noble_physical,0.5
+e0098,49,60,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:95,,cautious_noble_physical,0.5
+e0099,50,97,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:96,,cautious_noble_physical,0.2
+e0100,50,243,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:97,,cautious_noble_physical,0.8
+e0101,51,288,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:98,,cautious_noble_physical,0.2
+e0102,51,221,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:99,,cautious_noble_physical,0.8
+e0103,52,225,kai,formula,,"kai_available(""Animal Kinship"")",kai_discipline,Animal Kinship,,,,auto,LW01_e_edges.csv:100,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0104,52,250,kai,formula,,"1 - kai_available(""Animal Kinship"")",kai_discipline_absent,Animal Kinship,,,,auto,LW01_e_edges.csv:101,,cautious_noble_physical,0.5
+e0105,53,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:53,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0106,54,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:54,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0107,55,325,combat,formula,,combat_win(55),,,,,,auto,LW01_e_edges.csv:102,"Transition after combat victory. | Combat outcome determines progression, but only one choice tag exists",cautious_noble_physical,0.833
+e0108,55,Death,combat,formula,,1 - combat_win(55),,,,,,auto,generated:combat_death:55,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0109,56,222,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:103,,cautious_noble_physical,1
+e0110,57,164,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:104,,cautious_noble_physical,0.25
+e0111,57,109,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:105,,cautious_noble_physical,0.25
+e0112,57,308,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:106,,cautious_noble_physical,0.5
+e0113,58,251,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:107,,cautious_noble_physical,0.5
+e0114,58,160,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:108,,cautious_noble_physical,0.5
+e0115,59,124,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:109,,cautious_noble_physical,0.166666666666667
+e0116,59,106,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:110,,cautious_noble_physical,0.666666666666667
+e0117,59,211,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:111,,cautious_noble_physical,0.166666666666667
+e0118,60,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:60,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0119,61,268,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:112,,cautious_noble_physical,1
+e0120,62,288,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:113,,cautious_noble_physical,1
+e0121,63,269,combat,formula,,combat_win(63),,,,,,auto,LW01_e_edges.csv:114,"Transition after combat victory. | Combat outcome determines progression, but only one choice tag exists",cautious_noble_physical,0.833
+e0122,63,Death,combat,formula,,1 - combat_win(63),,,,,,auto,generated:combat_death:63,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0123,64,188,profile_choice,profile_choice,,,,,cautious,selfish,physical,auto,LW01_e_edges.csv:115,,cautious_noble_physical,0.666666666666667
+e0124,64,16,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:116,,cautious_noble_physical,0.333333333333333
+e0125,65,104,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:117,,cautious_noble_physical,1
+e0126,66,350,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:118,,cautious_noble_physical,1
+e0127,67,252,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:119,,cautious_noble_physical,1
+e0128,68,130,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:120,,cautious_noble_physical,0.5
+e0129,68,15,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:121,,cautious_noble_physical,0.5
+e0130,69,272,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:122,,cautious_noble_physical,1
+e0131,70,8,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth Sense,,,,auto,LW01_e_edges.csv:123,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0132,70,28,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(70, 28)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:124,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0133,70,157,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(70, 157)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:125,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0134,71,65,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth Sense,,,,auto,LW01_e_edges.csv:126,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0135,71,242,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(71, 242)",,,reckless,selfish,physical,auto,LW01_e_edges.csv:127,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.1
+e0136,71,104,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(71, 104)",,,cautious,neutral,neutral,auto,LW01_e_edges.csv:128,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.4
+e0137,72,265,combat,formula,,combat_win(72),,,,,,auto,LW01_e_edges.csv:129,"Transition after combat victory. | Combat outcome determines progression, but only one choice tag exists",cautious_noble_physical,0.833
+e0138,72,Death,combat,formula,,1 - combat_win(72),,,,,,auto,generated:combat_death:72,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0139,73,243,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:130,,cautious_noble_physical,1
+e0140,74,138,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:131,,cautious_noble_physical,0.2
+e0141,74,281,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:132,,cautious_noble_physical,0.8
+e0142,75,260,profile_choice,profile_choice,,,,,reckless,noble,physical,auto,LW01_e_edges.csv:133,,cautious_noble_physical,0.8
+e0143,75,163,profile_choice,profile_choice,,,,,cautious,selfish,tactical,auto,LW01_e_edges.csv:134,,cautious_noble_physical,0.2
+e0144,76,118,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:135,Loss of 2 ENDURANCE points during the transition,cautious_noble_physical,1
+e0145,77,19,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:136,,cautious_noble_physical,1
+e0146,78,132,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:137,,cautious_noble_physical,0.5
+e0147,78,12,profile_choice,profile_choice,,,,,cautious,selfish,neutral,auto,LW01_e_edges.csv:138,,cautious_noble_physical,0.25
+e0148,78,220,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:139,,cautious_noble_physical,0.25
+e0149,79,204,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:140,,cautious_noble_physical,1
+e0150,80,7,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:141,,cautious_noble_physical,1
+e0151,81,183,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:142,,cautious_noble_physical,0.666666666666667
+e0152,81,200,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:143,,cautious_noble_physical,0.333333333333333
+e0153,82,235,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:144,,cautious_noble_physical,1
+e0154,83,45,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth Sense,,,,auto,LW01_e_edges.csv:145,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0155,83,205,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(83, 205)",,,cautious,neutral,neutral,auto,LW01_e_edges.csv:146,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0156,83,180,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(83, 180)",,,reckless,neutral,physical,auto,LW01_e_edges.csv:147,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.125
+e0157,83,232,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(83, 232)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:148,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.125
+e0158,84,188,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:149,,cautious_noble_physical,1
+e0159,85,229,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:150,,cautious_noble_physical,0.2
+e0160,85,99,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:151,,cautious_noble_physical,0.8
+e0161,86,6,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:152,,cautious_noble_physical,0.25
+e0162,86,35,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:153,,cautious_noble_physical,0.25
+e0163,86,167,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:154,,cautious_noble_physical,0.25
+e0164,86,42,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:155,,cautious_noble_physical,0.25
+e0165,87,61,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:156,,cautious_noble_physical,1
+e0166,88,216,kai,formula,,"kai_available(""Healing"")",kai_discipline,Healing,,,,auto,LW01_e_edges.csv:157,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0167,88,31,kai,formula,,"1 - kai_available(""Healing"")",kai_discipline_absent,Healing,,,,auto,LW01_e_edges.csv:158,,cautious_noble_physical,0.5
+e0168,89,53,random,constant,0.2,,,,,,,auto,LW01_e_edges.csv:159,,cautious_noble_physical,0.2
+e0169,89,274,random,constant,0.3,,,,,,,auto,LW01_e_edges.csv:160,,cautious_noble_physical,0.3
+e0170,89,316,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:161,,cautious_noble_physical,0.5
+e0171,90,18,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:162,,cautious_noble_physical,1
+e0172,91,198,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth Sense,,,,auto,LW01_e_edges.csv:163,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0173,91,152,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(91, 152)",,,neutral,neutral,tactical,auto,LW01_e_edges.csv:164,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.1
+e0174,91,7,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(91, 7)",,,cautious,neutral,neutral,auto,LW01_e_edges.csv:165,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.4
+e0175,92,13,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:166,,cautious_noble_physical,1
+e0176,93,106,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:167,,cautious_noble_physical,1
+e0177,94,7,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:168,,cautious_noble_physical,1
+e0178,95,240,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:169,,cautious_noble_physical,0.5
+e0179,95,5,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:170,,cautious_noble_physical,0.5
+e0180,96,33,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:171,,cautious_noble_physical,0.0588235294117647
+e0181,96,248,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:172,,cautious_noble_physical,0.941176470588235
+e0182,97,255,profile_choice,profile_choice,,,,,reckless,noble,physical,auto,LW01_e_edges.csv:173,,cautious_noble_physical,0.5
+e0183,97,306,profile_choice,profile_choice,,,,,cautious,selfish,physical,auto,LW01_e_edges.csv:174,,cautious_noble_physical,0.5
+e0184,98,139,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:175,,cautious_noble_physical,1
+e0185,99,222,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:176,,cautious_noble_physical,1
+e0186,100,161,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:177,,cautious_noble_physical,0.25
+e0187,100,133,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:178,,cautious_noble_physical,0.25
+e0188,100,257,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:179,,cautious_noble_physical,0.5
+e0189,101,281,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:180,,cautious_noble_physical,1
+e0190,102,284,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:181,,cautious_noble_physical,1
+e0191,103,13,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:182,,cautious_noble_physical,0.5
+e0192,103,287,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:183,,cautious_noble_physical,0.5
+e0193,104,26,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:184,,cautious_noble_physical,0.5
+e0194,104,100,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:185,,cautious_noble_physical,0.5
+e0195,105,298,kai,formula,,"kai_available(""Animal Kinship"")",kai_discipline,Animal Kinship,,,,auto,LW01_e_edges.csv:186,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0196,105,335,kai,formula,,"1 - kai_available(""Animal Kinship"")",kai_discipline_absent,Animal Kinship,,,,auto,LW01_e_edges.csv:187,,cautious_noble_physical,0.5
+e0197,106,263,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:188,,cautious_noble_physical,0.5
+e0198,106,334,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:189,,cautious_noble_physical,0.5
+e0199,107,23,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:190,,cautious_noble_physical,1
+e0200,108,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:108,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0201,109,164,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:191,,cautious_noble_physical,0.5
+e0202,109,308,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:192,,cautious_noble_physical,0.5
+e0203,110,55,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:193,,cautious_noble_physical,1
+e0204,111,57,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:194,,cautious_noble_physical,0.5
+e0205,111,308,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:195,,cautious_noble_physical,0.5
+e0206,112,33,profile_choice,formula,,"combat_win(112) * postcombat_choice_share(112, 33)",combat_outcome,win,reckless,neutral,tactical,supervised,LW01_supervision.csv:11,Choice to explore the cave after winning both combats.,cautious_noble_physical,0.0925555555555555
+e0207,112,248,profile_choice,formula,,"combat_win(112) * postcombat_choice_share(112, 248)",combat_outcome,win,cautious,selfish,physical,supervised,LW01_supervision.csv:12,Choice to leave after winning both combats.,cautious_noble_physical,0.740444444444444
+e0208,112,Death,combat,formula,,1 - combat_win(112),combat_outcome,death,,,,supervised,LW01_supervision.csv:13,Death if the combats are lost.,cautious_noble_physical,0.167
+e0209,113,347,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:198,,cautious_noble_physical,0.5
+e0210,113,295,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:199,,cautious_noble_physical,0.5
+e0211,114,239,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:200,,cautious_noble_physical,1
+e0212,115,150,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:201,,cautious_noble_physical,0.181818181818182
+e0213,115,177,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:202,,cautious_noble_physical,0.0909090909090909
+e0214,115,83,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:203,,cautious_noble_physical,0.727272727272727
+e0215,116,321,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:204,,cautious_noble_physical,1
+e0216,117,330,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:205,,cautious_noble_physical,1
+e0217,118,224,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:206,,cautious_noble_physical,1
+e0218,119,226,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:207,,cautious_noble_physical,0.333333333333333
+e0219,119,38,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:208,,cautious_noble_physical,0.666666666666667
+e0220,120,84,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:209,,cautious_noble_physical,0.166666666666667
+e0221,120,171,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:210,,cautious_noble_physical,0.666666666666667
+e0222,120,54,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:211,,cautious_noble_physical,0.166666666666667
+e0223,121,342,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:212,,cautious_noble_physical,0.285714285714286
+e0224,121,309,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:213,,cautious_noble_physical,0.142857142857143
+e0225,121,283,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:214,,cautious_noble_physical,0.571428571428571
+e0226,122,206,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:215,,cautious_noble_physical,1
+e0227,123,304,profile_choice,profile_choice,,,,,reckless,selfish,physical,auto,LW01_e_edges.csv:216,,cautious_noble_physical,0.111111111111111
+e0228,123,2,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:217,,cautious_noble_physical,0.888888888888889
+e0229,124,211,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:218,,cautious_noble_physical,0.111111111111111
+e0230,124,106,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:219,,cautious_noble_physical,0.888888888888889
+e0231,125,301,kai,formula,,"kai_available(""Tracking"")",kai_discipline,Tracking,,,,auto,LW01_e_edges.csv:220,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0232,125,27,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(125, 27)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:221,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0233,125,214,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(125, 214)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:222,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0234,126,46,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:223,,cautious_noble_physical,0.2
+e0235,126,143,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:224,,cautious_noble_physical,0.8
+e0236,127,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:127,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0237,128,297,kai,formula,,"kai_available(""Hunting"")",kai_discipline,Hunting,,,,auto,LW01_e_edges.csv:225,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0238,128,336,kai,formula,,"1 - kai_available(""Hunting"")",kai_discipline_absent,Hunting,,,,auto,LW01_e_edges.csv:226,,cautious_noble_physical,0.5
+e0239,129,3,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:227,,cautious_noble_physical,0.941176470588235
+e0240,129,144,profile_choice,profile_choice,,,,,reckless,selfish,tactical,auto,LW01_e_edges.csv:228,,cautious_noble_physical,0.0588235294117647
+e0241,130,28,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:229,,cautious_noble_physical,0.5
+e0242,130,201,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:230,,cautious_noble_physical,0.5
+e0243,131,241,profile_choice,profile_choice,,,,,cautious,noble,tactical,auto,LW01_e_edges.csv:231,,cautious_noble_physical,0.2
+e0244,131,55,profile_choice,profile_choice,,,,,reckless,noble,physical,auto,LW01_e_edges.csv:232,,cautious_noble_physical,0.2
+e0245,131,302,profile_choice,profile_choice,,,,,neutral,noble,physical,auto,LW01_e_edges.csv:233,,cautious_noble_physical,0.4
+e0246,131,101,profile_choice,profile_choice,,,,,cautious,selfish,physical,auto,LW01_e_edges.csv:234,,cautious_noble_physical,0.2
+e0247,132,64,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:235,,cautious_noble_physical,1
+e0248,133,266,combat,formula,,combat_win(133),,,,,,auto,LW01_e_edges.csv:236,"Transition after combat victory. | Combat outcome determines progression, but only one choice tag exists",cautious_noble_physical,0.833
+e0249,133,Death,combat,formula,,1 - combat_win(133),,,,,,auto,generated:combat_death:133,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0250,134,305,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:237,,cautious_noble_physical,0.2
+e0251,134,40,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:238,,cautious_noble_physical,0.8
+e0252,135,223,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:239,,cautious_noble_physical,0.333333333333333
+e0253,135,4,profile_choice,profile_choice,,,,,neutral,neutral,physical,auto,LW01_e_edges.csv:240,,cautious_noble_physical,0.666666666666667
+e0254,136,313,combat,formula,,combat_win(136),,,,,,auto,LW01_e_edges.csv:241,"Transition after combat victory. | Combat outcome determines progression, but only one choice tag exists",cautious_noble_physical,0.833
+e0255,136,Death,combat,formula,,1 - combat_win(136),,,,,,auto,generated:combat_death:136,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0256,137,23,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:242,,cautious_noble_physical,1
+e0257,138,291,combat,formula,,combat_win(138),,,,,,auto,LW01_e_edges.csv:243,Transition after combat victory. | Implicit death condition if combat is lost,cautious_noble_physical,0.833
+e0258,138,Death,combat,formula,,1 - combat_win(138),,,,,,auto,generated:combat_death:138,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0259,139,66,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:244,,cautious_noble_physical,1
+e0260,140,14,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:245,,cautious_noble_physical,0.25
+e0261,140,252,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:246,,cautious_noble_physical,0.25
+e0262,140,215,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:247,,cautious_noble_physical,0.25
+e0263,140,36,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:248,,cautious_noble_physical,0.25
+e0264,141,56,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:249,,cautious_noble_physical,0.5
+e0265,141,333,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:250,,cautious_noble_physical,0.5
+e0266,142,58,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:251,,cautious_noble_physical,0.307692307692308
+e0267,142,135,profile_choice,profile_choice,,,,,neutral,neutral,physical,auto,LW01_e_edges.csv:252,,cautious_noble_physical,0.615384615384615
+e0268,142,102,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:253,,cautious_noble_physical,0.0769230769230769
+e0269,143,149,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:254,,cautious_noble_physical,1
+e0270,144,63,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:255,,cautious_noble_physical,0.5
+e0271,144,217,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:256,,cautious_noble_physical,0.5
+e0272,145,165,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:257,Implicit death or unconsciousness,cautious_noble_physical,1
+e0273,146,154,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:258,Loss of 3 ENDURANCE points during the transition,cautious_noble_physical,1
+e0274,147,42,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:259,,cautious_noble_physical,0.5
+e0275,147,28,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:260,,cautious_noble_physical,0.5
+e0276,148,81,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:261,,cautious_noble_physical,0.571428571428571
+e0277,148,320,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:262,,cautious_noble_physical,0.285714285714286
+e0278,148,199,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:263,,cautious_noble_physical,0.142857142857143
+e0279,149,256,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:264,,cautious_noble_physical,1
+e0280,150,83,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:265,,cautious_noble_physical,1
+e0281,151,87,kai,formula,,"kai_available(""Mind Over Matter"")",kai_discipline,Mind Over Matter,,,,auto,LW01_e_edges.csv:266,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0282,151,337,profile_choice,formula,,"1 - kai_available(""Mind Over Matter"")",,,reckless,neutral,tactical,auto,LW01_e_edges.csv:267,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.5
+e0283,152,49,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:268,,cautious_noble_physical,0.2
+e0284,152,231,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:269,,cautious_noble_physical,0.8
+e0285,153,202,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:270,,cautious_noble_physical,0.19047619047619
+e0286,153,135,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:271,,cautious_noble_physical,0.761904761904762
+e0287,153,329,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:272,,cautious_noble_physical,0.0476190476190476
+e0288,154,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:154,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0289,155,70,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:273,,cautious_noble_physical,1
+e0290,156,294,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:274,,cautious_noble_physical,0.5
+e0291,156,245,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:275,,cautious_noble_physical,0.5
+e0292,157,30,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:276,,cautious_noble_physical,0.333333333333333
+e0293,157,167,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:277,,cautious_noble_physical,0.666666666666667
+e0294,158,106,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:278,"Loss of 6 ENDURANCE points during the transition. Potential additional loss of 4 ENDURANCE points based on a random roll (0-5 miss, 6-9 hit) before the forced transition.",cautious_noble_physical,1
+e0295,159,191,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:279,,cautious_noble_physical,0.5
+e0296,159,234,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:280,,cautious_noble_physical,0.5
+e0297,160,286,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:281,,cautious_noble_physical,0.5
+e0298,160,10,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:282,,cautious_noble_physical,0.5
+e0299,161,209,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:283,,cautious_noble_physical,1
+e0300,162,258,kai,formula,,"kai_available(""Mind Over Matter"")",kai_discipline,Mind Over Matter,,,,auto,LW01_e_edges.csv:284,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0301,162,127,kai,formula,,"1 - kai_available(""Mind Over Matter"")",kai_discipline_absent,Mind Over Matter,,,,auto,LW01_e_edges.csv:285,,cautious_noble_physical,0.5
+e0302,163,321,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:286,,cautious_noble_physical,1
+e0303,164,308,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:287,,cautious_noble_physical,1
+e0304,165,212,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:288,,cautious_noble_physical,1
+e0305,166,104,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:289,Loss of 4 ENDURANCE points during the transition,cautious_noble_physical,1
+e0306,167,178,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth Sense,,,,auto,LW01_e_edges.csv:290,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0307,167,88,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(167, 88)",,,reckless,neutral,tactical,auto,LW01_e_edges.csv:291,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.0555555555555556
+e0308,167,264,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(167, 264)",,,cautious,neutral,neutral,auto,LW01_e_edges.csv:292,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.444444444444444
+e0309,168,64,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:293,Player must take a Meal before proceeding,cautious_noble_physical,1
+e0310,169,137,combat,formula,,"combat_outcome(169, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:14,Victory after continuing the combat.,cautious_noble_physical,0.4165
+e0311,169,23,escape,formula,,"combat_outcome(169, ""escape"")",combat_outcome,escape,cautious,selfish,physical,supervised,LW01_supervision.csv:15,Escape outcome after surviving the first combat round.,cautious_noble_physical,0.5
+e0312,169,Death,combat,formula,,"combat_outcome(169, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:16,Death before victory or escape.,cautious_noble_physical,0.0835
+e0313,170,319,combat,formula,,combat_win(170),,,,,,auto,LW01_e_edges.csv:296,Transition after combat victory. | Combat outcome determines progression. Conditional penalty (deduct 3 COMBAT SKILL) applies if Torch is missing.,cautious_noble_physical,0.833
+e0314,170,Death,combat,formula,,1 - combat_win(170),,,,,,auto,generated:combat_death:170,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0315,171,303,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:297,,cautious_noble_physical,1
+e0316,172,114,kai,formula,,"kai_available(""Camouflage"")",kai_discipline,Camouflage,,,,auto,LW01_e_edges.csv:298,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0317,172,239,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(172, 239)",,,cautious,selfish,physical,auto,LW01_e_edges.csv:299,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.333333333333333
+e0318,172,29,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(172, 29)",,,reckless,neutral,physical,auto,LW01_e_edges.csv:300,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.166666666666667
+e0319,173,158,state_condition,formula,,"condition_available(""has_item"", ""Silver Key"")",has_item,Silver Key,,,,auto,LW01_e_edges.csv:301,Route is taken when the persistent-state condition is available.,cautious_noble_physical,0.5
+e0320,173,259,state_condition,formula,,"1 - condition_available(""has_item"", ""Silver Key"")",has_item_absent,Silver Key,,,,auto,LW01_e_edges.csv:302,Complementary route when the persistent condition is false.,cautious_noble_physical,0.5
+e0321,174,190,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:303,Loss of Backpack and Weapons during the transition,cautious_noble_physical,1
+e0322,175,182,kai,formula,,"kai_available(""Camouflage"")",kai_discipline,Camouflage,,,,auto,LW01_e_edges.csv:304,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0323,175,41,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(175, 41)",,,cautious,neutral,tactical,auto,LW01_e_edges.csv:305,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0324,175,116,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(175, 116)",,,reckless,neutral,physical,auto,LW01_e_edges.csv:306,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0325,176,253,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:307,,cautious_noble_physical,0.333333333333333
+e0326,176,126,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:308,,cautious_noble_physical,0.666666666666667
+e0327,177,83,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:309,,cautious_noble_physical,1
+e0328,178,88,profile_choice,profile_choice,,,,,reckless,noble,neutral,auto,LW01_e_edges.csv:310,,cautious_noble_physical,0.5
+e0329,178,264,profile_choice,profile_choice,,,,,cautious,selfish,neutral,auto,LW01_e_edges.csv:311,,cautious_noble_physical,0.5
+e0330,179,318,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:312,,cautious_noble_physical,0.0588235294117647
+e0331,179,51,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:313,,cautious_noble_physical,0.941176470588235
+e0332,180,62,combat,formula,,"combat_outcome(180, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:17,Victory after defeating all three opponents.,cautious_noble_physical,0.4165
+e0333,180,22,escape,formula,,"combat_outcome(180, ""escape"")",combat_outcome,escape,cautious,neutral,tactical,supervised,LW01_supervision.csv:18,Available escape outcome during the combat.,cautious_noble_physical,0.5
+e0334,180,Death,combat,formula,,"combat_outcome(180, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:19,Death before victory or escape.,cautious_noble_physical,0.0835
+e0335,181,288,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:316,,cautious_noble_physical,1
+e0336,182,174,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:317,,cautious_noble_physical,1
+e0337,183,97,profile_choice,profile_choice,,,,,neutral,noble,neutral,auto,LW01_e_edges.csv:318,,cautious_noble_physical,0.666666666666667
+e0338,183,200,profile_choice,profile_choice,,,,,cautious,selfish,neutral,auto,LW01_e_edges.csv:319,,cautious_noble_physical,0.333333333333333
+e0339,184,64,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:320,Mandatory consumption of 1 Meal before transition,cautious_noble_physical,1
+e0340,185,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:185,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0341,186,106,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:321,,cautious_noble_physical,1
+e0342,187,186,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:322,,cautious_noble_physical,0.333333333333333
+e0343,187,228,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:323,,cautious_noble_physical,0.666666666666667
+e0344,188,303,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:324,Loss of 3 ENDURANCE points during the transition,cautious_noble_physical,1
+e0345,189,118,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:325,,cautious_noble_physical,1
+e0346,190,20,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:326,,cautious_noble_physical,0.111111111111111
+e0347,190,273,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:327,,cautious_noble_physical,0.888888888888889
+e0348,191,24,combat,formula,,"combat_outcome(191, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:20,Victory after continuing the combat.,cautious_noble_physical,0.4165
+e0349,191,234,escape,formula,,"combat_outcome(191, ""escape"")",combat_outcome,escape,reckless,neutral,physical,supervised,LW01_supervision.csv:21,Escape by jumping from the moving caravan.,cautious_noble_physical,0.5
+e0350,191,Death,combat,formula,,"combat_outcome(191, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:22,Death before victory or escape.,cautious_noble_physical,0.0835
+e0351,192,171,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:330,,cautious_noble_physical,0.8
+e0352,192,120,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:331,,cautious_noble_physical,0.2
+e0353,193,253,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:332,,cautious_noble_physical,0.2
+e0354,193,126,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:333,,cautious_noble_physical,0.8
+e0355,194,208,profile_choice,profile_choice,,,,,reckless,noble,physical,auto,LW01_e_edges.csv:334,,cautious_noble_physical,0.5
+e0356,194,148,profile_choice,profile_choice,,,,,cautious,selfish,physical,auto,LW01_e_edges.csv:335,,cautious_noble_physical,0.5
+e0357,195,59,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:336,,cautious_noble_physical,0.111111111111111
+e0358,195,106,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:337,,cautious_noble_physical,0.888888888888889
+e0359,196,332,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:338,,cautious_noble_physical,0.2
+e0360,196,144,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:339,,cautious_noble_physical,0.8
+e0361,197,172,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:340,,cautious_noble_physical,1
+e0362,198,7,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:341,,cautious_noble_physical,0.888888888888889
+e0363,198,152,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:342,,cautious_noble_physical,0.111111111111111
+e0364,199,81,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:343,,cautious_noble_physical,1
+e0365,200,168,kai,formula,,"kai_available(""Camouflage"")",kai_discipline,Camouflage,,,,auto,LW01_e_edges.csv:344,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0366,200,78,profile_choice,formula,,"1 - kai_available(""Camouflage"")",,,reckless,neutral,physical,auto,LW01_e_edges.csv:345,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.5
+e0367,201,238,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:346,,cautious_noble_physical,0.333333333333333
+e0368,201,15,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:347,,cautious_noble_physical,0.333333333333333
+e0369,201,130,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:348,,cautious_noble_physical,0.333333333333333
+e0370,202,58,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:349,,cautious_noble_physical,1
+e0371,203,80,state_condition,formula,,"condition_available(""endurance_at_least"", ""10"")",endurance_at_least,10,,,,auto,LW01_e_edges.csv:350,Route is taken when the persistent-state condition is available.,cautious_noble_physical,0.5
+e0372,203,344,state_condition,formula,,"1 - condition_available(""endurance_at_least"", ""10"")",endurance_at_least_absent,10,,,,auto,LW01_e_edges.csv:351,Complementary route when the persistent condition is false.,cautious_noble_physical,0.5
+e0373,204,111,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:352,,cautious_noble_physical,1
+e0374,205,181,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:353,,cautious_noble_physical,0.5
+e0375,205,145,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:354,,cautious_noble_physical,0.5
+e0376,206,224,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:355,,cautious_noble_physical,1
+e0377,207,30,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:356,,cautious_noble_physical,1
+e0378,208,148,profile_choice,formula,,"combat_win(208) * postcombat_choice_share(208, 148)",combat_outcome,win,cautious,neutral,physical,supervised,LW01_supervision.csv:23,Choice to run to the farmhouse after victory.,cautious_noble_physical,0.6664
+e0379,208,320,profile_choice,formula,,"combat_win(208) * postcombat_choice_share(208, 320)",combat_outcome,win,reckless,neutral,physical,supervised,LW01_supervision.csv:24,Choice to return to the woods after victory.,cautious_noble_physical,0.1666
+e0380,208,Death,combat,formula,,1 - combat_win(208),combat_outcome,death,,,,supervised,LW01_supervision.csv:25,Death if the combat is lost.,cautious_noble_physical,0.167
+e0381,209,23,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:359,,cautious_noble_physical,1
+e0382,210,332,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:360,,cautious_noble_physical,0.2
+e0383,210,37,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:361,,cautious_noble_physical,0.8
+e0384,211,244,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth Sense,,,,auto,LW01_e_edges.csv:362,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0385,211,173,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(211, 173)",,,reckless,neutral,neutral,auto,LW01_e_edges.csv:363,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.1
+e0386,211,106,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(211, 106)",,,cautious,neutral,neutral,auto,LW01_e_edges.csv:364,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.4
+e0387,212,350,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:365,Restoration of all lost ENDURANCE points during the transition,cautious_noble_physical,1
+e0388,213,331,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:366,,cautious_noble_physical,1
+e0389,214,125,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:367,,cautious_noble_physical,1
+e0390,215,346,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:368,,cautious_noble_physical,0.111111111111111
+e0391,215,14,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:369,,cautious_noble_physical,0.888888888888889
+e0392,216,264,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:370,,cautious_noble_physical,1
+e0393,217,91,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:371,,cautious_noble_physical,0.333333333333333
+e0394,217,7,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:372,,cautious_noble_physical,0.666666666666667
+e0395,218,75,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:373,,cautious_noble_physical,1
+e0396,219,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:219,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0397,220,24,combat,formula,,"combat_outcome(220, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:26,Victory after continuing the combat.,cautious_noble_physical,0.4165
+e0398,220,234,escape,formula,,"combat_outcome(220, ""escape"")",combat_outcome,escape,reckless,neutral,physical,supervised,LW01_supervision.csv:27,Escape by jumping from the moving caravan.,cautious_noble_physical,0.5
+e0399,220,Death,combat,formula,,"combat_outcome(220, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:28,Death before victory or escape.,cautious_noble_physical,0.0835
+e0400,221,318,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:376,,cautious_noble_physical,1
+e0401,222,67,kai,formula,,"kai_available(""Tracking"")",kai_discipline,Tracking,,,,auto,LW01_e_edges.csv:377,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0402,222,140,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(222, 140)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:378,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0403,222,252,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(222, 252)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:379,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0404,223,75,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:380,,cautious_noble_physical,0.8
+e0405,223,175,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:381,,cautious_noble_physical,0.2
+e0406,224,153,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:382,,cautious_noble_physical,1
+e0407,225,187,profile_choice,profile_choice,,,,,cautious,noble,neutral,auto,LW01_e_edges.csv:383,,cautious_noble_physical,0.8
+e0408,225,39,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:384,,cautious_noble_physical,0.2
+e0409,226,277,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:385,,cautious_noble_physical,0.5
+e0410,226,338,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:386,,cautious_noble_physical,0.5
+e0411,227,271,combat,formula,,"combat_outcome(227, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:29,Victory with Endurance loss; one of two non-fatal continuations.,cautious_noble_physical,0.4165
+e0412,227,348,combat,formula,,"combat_outcome(227, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:30,Victory without Endurance loss; one of two non-fatal continuations.,cautious_noble_physical,0.4165
+e0413,227,Death,combat,formula,,"combat_outcome(227, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:31,Death if the combat is lost.,cautious_noble_physical,0.167
+e0414,228,140,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:389,,cautious_noble_physical,0.333333333333333
+e0415,228,215,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:390,,cautious_noble_physical,0.666666666666667
+e0416,229,267,profile_choice,formula,,"combat_win(229) * postcombat_choice_share(229, 267)",combat_outcome,win,reckless,selfish,tactical,supervised,LW01_supervision.csv:32,Choice to search the body after victory.,cautious_noble_physical,0.0252424242424242
+e0417,229,125,profile_choice,formula,,"combat_win(229) * postcombat_choice_share(229, 125)",combat_outcome,win,cautious,neutral,physical,supervised,LW01_supervision.csv:33,Choice to continue along the path after victory.,cautious_noble_physical,0.807757575757576
+e0418,229,Death,combat,formula,,1 - combat_win(229),combat_outcome,death,,,,supervised,LW01_supervision.csv:34,Death if the combat is lost.,cautious_noble_physical,0.167
+e0419,230,179,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:393,,cautious_noble_physical,1
+e0420,231,94,combat,formula,,"combat_outcome(231, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:35,Victory within four rounds; one of two non-fatal continuations.,cautious_noble_physical,0.20825
+e0421,231,203,combat,formula,,"combat_outcome(231, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:36,Combat still in progress after four rounds; one of two non-fatal continuations.,cautious_noble_physical,0.20825
+e0422,231,7,escape,formula,,"combat_outcome(231, ""escape"")",combat_outcome,escape,cautious,neutral,physical,supervised,LW01_supervision.csv:37,Escape after surviving two combat rounds.,cautious_noble_physical,0.5
+e0423,231,Death,combat,formula,,"combat_outcome(231, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:38,Death before another outcome is reached.,cautious_noble_physical,0.0835
+e0424,232,180,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:397,,cautious_noble_physical,0.333333333333333
+e0425,232,22,profile_choice,profile_choice,,,,,cautious,selfish,physical,auto,LW01_e_edges.csv:398,,cautious_noble_physical,0.666666666666667
+e0426,233,206,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:399,,cautious_noble_physical,1
+e0427,234,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:234,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0428,235,254,kai,formula,,"kai_available(""Tracking"")",kai_discipline,Tracking,,,,auto,LW01_e_edges.csv:400,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0429,235,32,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(235, 32)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:401,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0430,235,146,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(235, 146)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:402,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0431,236,104,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:403,Loss of 6 ENDURANCE points and permanent reduction of 1 COMBAT SKILL point during the transition,cautious_noble_physical,1
+e0432,237,265,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:404,,cautious_noble_physical,0.5
+e0433,237,72,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:405,,cautious_noble_physical,0.5
+e0434,238,42,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:406,,cautious_noble_physical,0.666666666666667
+e0435,238,68,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:407,,cautious_noble_physical,0.333333333333333
+e0436,239,34,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:408,,cautious_noble_physical,0.5
+e0437,239,118,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:409,,cautious_noble_physical,0.5
+e0438,240,79,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:410,,cautious_noble_physical,1
+e0439,241,349,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:411,,cautious_noble_physical,1
+e0440,242,166,kai,formula,,"kai_available(""Mindshield"")",kai_discipline,Mindshield,,,,auto,LW01_e_edges.csv:412,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0441,242,9,kai,formula,,"1 - kai_available(""Mindshield"")",kai_discipline_absent,Mindshield,,,,auto,LW01_e_edges.csv:413,,cautious_noble_physical,0.5
+e0442,243,97,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:414,,cautious_noble_physical,1
+e0443,244,93,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:415,,cautious_noble_physical,1
+e0444,245,190,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:416,,cautious_noble_physical,1
+e0445,246,197,combat,formula,,combat_win(246),,,,,,auto,LW01_e_edges.csv:417,Transition after combat victory. | Implicit death condition if combat is lost,cautious_noble_physical,0.833
+e0446,246,Death,combat,formula,,1 - combat_win(246),,,,,,auto,generated:combat_death:246,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0447,247,159,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:418,,cautious_noble_physical,0.5
+e0448,247,220,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:419,,cautious_noble_physical,0.5
+e0449,248,44,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:420,,cautious_noble_physical,0.5
+e0450,248,300,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:421,,cautious_noble_physical,0.5
+e0451,249,169,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:422,,cautious_noble_physical,0.5
+e0452,249,107,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:423,,cautious_noble_physical,0.5
+e0453,250,186,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:424,,cautious_noble_physical,0.333333333333333
+e0454,250,228,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:425,,cautious_noble_physical,0.666666666666667
+e0455,251,10,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:426,,cautious_noble_physical,1
+e0456,252,155,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:427,,cautious_noble_physical,0.2
+e0457,252,70,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:428,,cautious_noble_physical,0.8
+e0458,253,278,combat,formula,,combat_win(253),,,,,,auto,LW01_e_edges.csv:429,"Transition after combat victory. | Combat sequence with multiple enemies. Only one outcome provided (victory), implying death is the implicit alternative not captured in a choice tag.",cautious_noble_physical,0.833
+e0459,253,Death,combat,formula,,1 - combat_win(253),,,,,,auto,generated:combat_death:253,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0460,254,32,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:430,,cautious_noble_physical,0.5
+e0461,254,146,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:431,,cautious_noble_physical,0.5
+e0462,255,82,combat,formula,,combat_win(255),,,,,,auto,LW01_e_edges.csv:432,"Transition after combat victory. | Combat outcome determines progression, but only one choice tag exists",cautious_noble_physical,0.833
+e0463,255,Death,combat,formula,,1 - combat_win(255),,,,,,auto,generated:combat_death:255,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0464,256,224,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:433,,cautious_noble_physical,1
+e0465,257,133,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:434,,cautious_noble_physical,0.5
+e0466,257,161,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:435,,cautious_noble_physical,0.5
+e0467,258,50,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:436,Loss of Backpack and Weapons during the transition,cautious_noble_physical,1
+e0468,259,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:259,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0469,260,156,combat,formula,,combat_win(260),,,,,,auto,LW01_e_edges.csv:437,Transition after combat victory. | Combat scenario with only one outcome option provided in the text,cautious_noble_physical,0.833
+e0470,260,Death,combat,formula,,1 - combat_win(260),,,,,,auto,generated:combat_death:260,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0471,261,208,profile_choice,profile_choice,,,,,reckless,noble,physical,auto,LW01_e_edges.csv:438,,cautious_noble_physical,0.5
+e0472,261,264,profile_choice,profile_choice,,,,,cautious,selfish,physical,auto,LW01_e_edges.csv:439,,cautious_noble_physical,0.5
+e0473,262,191,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:440,,cautious_noble_physical,0.5
+e0474,262,234,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:441,,cautious_noble_physical,0.5
+e0475,263,70,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:442,,cautious_noble_physical,0.5
+e0476,263,157,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:443,,cautious_noble_physical,0.5
+e0477,264,97,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:444,,cautious_noble_physical,0.111111111111111
+e0478,264,6,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:445,,cautious_noble_physical,0.888888888888889
+e0479,265,142,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:446,,cautious_noble_physical,1
+e0480,266,209,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:447,,cautious_noble_physical,1
+e0481,267,125,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:448,,cautious_noble_physical,1
+e0482,268,288,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:449,,cautious_noble_physical,1
+e0483,269,314,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:450,,cautious_noble_physical,0.666666666666667
+e0484,269,7,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:451,,cautious_noble_physical,0.333333333333333
+e0485,270,21,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:452,,cautious_noble_physical,1
+e0486,271,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:271,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0487,272,134,kai,formula,,"kai_available(""Tracking"")",kai_discipline,Tracking,,,,auto,LW01_e_edges.csv:453,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0488,272,305,kai,formula,,"1 - kai_available(""Tracking"")",kai_discipline_absent,Tracking,,,,auto,LW01_e_edges.csv:454,,cautious_noble_physical,0.5
+e0489,273,179,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:455,,cautious_noble_physical,0.2
+e0490,273,51,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:456,,cautious_noble_physical,0.8
+e0491,274,331,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:457,Loss of Weapon(s) during the transition,cautious_noble_physical,1
+e0492,275,345,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:458,,cautious_noble_physical,0.5
+e0493,275,74,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:459,,cautious_noble_physical,0.5
+e0494,276,213,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:460,Loss of 1 ENDURANCE point during the transition,cautious_noble_physical,1
+e0495,277,113,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:461,Loss of a Weapon during the transition,cautious_noble_physical,1
+e0496,278,149,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:462,,cautious_noble_physical,1
+e0497,279,112,random,constant,0.7,,,,,,,auto,LW01_e_edges.csv:463,,cautious_noble_physical,0.7
+e0498,279,96,random,constant,0.3,,,,,,,auto,LW01_e_edges.csv:464,,cautious_noble_physical,0.3
+e0499,280,327,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:465,,cautious_noble_physical,0.0588235294117647
+e0500,280,170,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:466,,cautious_noble_physical,0.941176470588235
+e0501,281,311,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:467,,cautious_noble_physical,0.2
+e0502,281,77,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:468,,cautious_noble_physical,0.8
+e0503,282,11,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:469,,cautious_noble_physical,1
+e0504,283,123,combat,formula,,combat_win(283),,,,,,auto,LW01_e_edges.csv:470,Transition after combat victory. | Combat encounter with a Vordak. Contains implicit death condition if the player loses.,cautious_noble_physical,0.833
+e0505,283,Death,combat,formula,,1 - combat_win(283),,,,,,auto,generated:combat_death:283,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0506,284,71,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:471,,cautious_noble_physical,1
+e0507,285,325,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:472,,cautious_noble_physical,1
+e0508,286,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:286,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0509,287,13,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:473,,cautious_noble_physical,0.666666666666667
+e0510,287,330,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:474,,cautious_noble_physical,0.333333333333333
+e0511,288,129,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:475,,cautious_noble_physical,1
+e0512,289,139,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:476,,cautious_noble_physical,1
+e0513,290,140,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:477,,cautious_noble_physical,1
+e0514,291,272,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:478,,cautious_noble_physical,1
+e0515,292,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:292,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0516,293,281,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:479,,cautious_noble_physical,1
+e0517,294,230,random,constant,0.3,,,,,,,auto,LW01_e_edges.csv:480,,cautious_noble_physical,0.3
+e0518,294,190,random,constant,0.4,,,,,,,auto,LW01_e_edges.csv:481,,cautious_noble_physical,0.4
+e0519,294,321,random,constant,0.3,,,,,,,auto,LW01_e_edges.csv:482,,cautious_noble_physical,0.3
+e0520,295,185,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:483,,cautious_noble_physical,0.0588235294117647
+e0521,295,92,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:484,,cautious_noble_physical,0.941176470588235
+e0522,296,90,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:485,,cautious_noble_physical,1
+e0523,297,117,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:486,,cautious_noble_physical,1
+e0524,298,121,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:487,,cautious_noble_physical,0.5
+e0525,298,38,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:488,,cautious_noble_physical,0.5
+e0526,299,227,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:489,,cautious_noble_physical,0.5
+e0527,299,95,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:490,,cautious_noble_physical,0.5
+e0528,300,13,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:491,Consumption of a Meal required before transition,cautious_noble_physical,1
+e0529,301,27,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:492,,cautious_noble_physical,1
+e0530,302,110,random,constant,0.3,,,,,,,auto,LW01_e_edges.csv:493,,cautious_noble_physical,0.3
+e0531,302,285,random,constant,0.7,,,,,,,auto,LW01_e_edges.csv:494,,cautious_noble_physical,0.7
+e0532,303,237,kai,formula,,"kai_available(""Camouflage"")",kai_discipline,Camouflage,,,,auto,LW01_e_edges.csv:495,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0533,303,72,kai,formula,,"1 - kai_available(""Camouflage"")",kai_discipline_absent,Camouflage,,,,auto,LW01_e_edges.csv:496,,cautious_noble_physical,0.5
+e0534,304,2,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:497,Loss of 2 ENDURANCE points during the transition,cautious_noble_physical,1
+e0535,305,105,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:498,,cautious_noble_physical,1
+e0536,306,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:306,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0537,307,213,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:499,"Contains optional item acquisition (Meal, Warhammer) before forced transition",cautious_noble_physical,1
+e0538,308,122,kai,formula,,"kai_available(""Animal Kinship"")",kai_discipline,Animal Kinship,,,,auto,LW01_e_edges.csv:500,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0539,308,233,profile_choice,formula,,"1 - kai_available(""Animal Kinship"")",,,reckless,neutral,physical,auto,LW01_e_edges.csv:501,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.5
+e0540,309,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:309,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0541,310,37,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:502,,cautious_noble_physical,1
+e0542,311,324,kai,formula,,"kai_available(""Camouflage"")",kai_discipline,Camouflage,,,,auto,LW01_e_edges.csv:503,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0543,311,279,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(311, 279)",,,cautious,neutral,tactical,auto,LW01_e_edges.csv:504,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0544,311,47,profile_choice,formula,,"(1 - kai_available(""Camouflage"")) * choice_share(311, 47)",,,reckless,neutral,physical,auto,LW01_e_edges.csv:505,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.25
+e0545,312,299,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:506,,cautious_noble_physical,1
+e0546,313,248,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:507,Loss of 1 ENDURANCE point during the transition,cautious_noble_physical,1
+e0547,314,341,random,constant,0.7,,,,,,,auto,LW01_e_edges.csv:508,,cautious_noble_physical,0.7
+e0548,314,98,random,constant,0.3,,,,,,,auto,LW01_e_edges.csv:509,,cautious_noble_physical,0.3
+e0549,315,213,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:510,,cautious_noble_physical,1
+e0550,316,331,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:511,,cautious_noble_physical,1
+e0551,317,61,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:512,,cautious_noble_physical,1
+e0552,318,129,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:513,,cautious_noble_physical,1
+e0553,319,157,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:514,Player acquires 20 Gold Crowns and a Dagger during the transition,cautious_noble_physical,1
+e0554,320,264,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:515,Loss of 2 ENDURANCE points during the transition,cautious_noble_physical,1
+e0555,321,273,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:516,,cautious_noble_physical,1
+e0556,322,17,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:517,,cautious_noble_physical,0.5
+e0557,322,89,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:518,,cautious_noble_physical,0.5
+e0558,323,290,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:519,,cautious_noble_physical,0.111111111111111
+e0559,323,140,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:520,,cautious_noble_physical,0.888888888888889
+e0560,324,33,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:521,,cautious_noble_physical,0.2
+e0561,324,248,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:522,,cautious_noble_physical,0.8
+e0562,325,349,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:523,,cautious_noble_physical,1
+e0563,326,61,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:524,,cautious_noble_physical,1
+e0564,327,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:327,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
+e0565,328,76,profile_choice,profile_choice,,,,,reckless,selfish,neutral,auto,LW01_e_edges.csv:525,,cautious_noble_physical,0.111111111111111
+e0566,328,118,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:526,,cautious_noble_physical,0.888888888888889
+e0567,329,284,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:527,,cautious_noble_physical,1
+e0568,330,315,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:528,,cautious_noble_physical,0.111111111111111
+e0569,330,213,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:529,,cautious_noble_physical,0.888888888888889
+e0570,331,170,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW01_e_edges.csv:530,,cautious_noble_physical,0.111111111111111
+e0571,331,280,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:531,,cautious_noble_physical,0.888888888888889
+e0572,332,350,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:532,,cautious_noble_physical,1
+e0573,333,131,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:533,,cautious_noble_physical,1
+e0574,334,48,profile_choice,formula,,"available_choice_share(334, 48, kai_available(""Sixth Sense""))",kai_discipline,Sixth Sense,cautious,neutral,tactical,supervised,LW01_supervision.csv:39,Choice to use Sixth Sense when it is available.,cautious_noble_physical,0.333333333333333
+e0575,334,73,profile_choice,formula,,"available_choice_share(334, 73, kai_available(""Camouflage""))",kai_discipline,Camouflage,cautious,neutral,tactical,supervised,LW01_supervision.csv:40,Choice to use Camouflage and wait when it is available.,cautious_noble_physical,0.333333333333333
+e0576,334,162,profile_choice,formula,,"available_choice_share(334, 162, 1)",,,reckless,neutral,neutral,supervised,LW01_supervision.csv:41,Unconditionally available choice to approach the soldiers.,cautious_noble_physical,0.333333333333333
+e0577,335,121,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:537,,cautious_noble_physical,1
+e0578,336,117,combat,formula,,combat_win(336),,,,,,auto,LW01_e_edges.csv:538,Transition after combat victory. | Implicit risk of death if combat is lost,cautious_noble_physical,0.833
+e0579,336,Death,combat,formula,,1 - combat_win(336),,,,,,auto,generated:combat_death:336,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0580,337,219,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:539,,cautious_noble_physical,0.5
+e0581,337,317,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:540,,cautious_noble_physical,0.5
+e0582,338,113,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:541,,cautious_noble_physical,1
+e0583,339,94,combat,formula,,"combat_outcome(339, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:42,Victory within four rounds; one of two non-fatal continuations.,cautious_noble_physical,0.20825
+e0584,339,203,combat,formula,,"combat_outcome(339, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:43,Combat still in progress after four rounds; one of two non-fatal continuations.,cautious_noble_physical,0.20825
+e0585,339,7,escape,formula,,"combat_outcome(339, ""escape"")",combat_outcome,escape,cautious,neutral,tactical,supervised,LW01_supervision.csv:44,Escape at any stage of the combat.,cautious_noble_physical,0.5
+e0586,339,Death,combat,formula,,"combat_outcome(339, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:45,Death before another outcome is reached.,cautious_noble_physical,0.0835
+e0587,340,193,combat,formula,,combat_win(340),,,,,,auto,LW01_e_edges.csv:545,Transition after combat victory. | Combat scenario with only one outcome provided (win). Implicit death condition if lost.,cautious_noble_physical,0.833
+e0588,340,Death,combat,formula,,1 - combat_win(340),,,,,,auto,generated:combat_death:340,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0589,341,310,kai,formula,,"kai_available(""Tracking"")",kai_discipline,Tracking,,,,auto,LW01_e_edges.csv:546,Kai route is taken whenever the discipline is available.,cautious_noble_physical,0.5
+e0590,341,210,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(341, 210)",,,neutral,neutral,neutral,auto,LW01_e_edges.csv:547,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.333333333333333
+e0591,341,37,profile_choice,formula,,"(1 - kai_available(""Tracking"")) * choice_share(341, 37)",,,neutral,neutral,tactical,auto,LW01_e_edges.csv:548,Choice among routes remaining when the Kai route is unavailable.,cautious_noble_physical,0.166666666666667
+e0592,342,123,combat,formula,,combat_win(342),,,,,,auto,LW01_e_edges.csv:549,"Transition after combat victory. | Combat outcome determines progression, but only one choice tag exists",cautious_noble_physical,0.833
+e0593,342,Death,combat,formula,,1 - combat_win(342),,,,,,auto,generated:combat_death:342,Implicit death when the combat is lost.,cautious_noble_physical,0.167
+e0594,343,213,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:550,Loss of 2 ENDURANCE points during the transition,cautious_noble_physical,1
+e0595,344,60,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:551,,cautious_noble_physical,1
+e0596,345,272,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:552,,cautious_noble_physical,0.8
+e0597,345,19,profile_choice,profile_choice,,,,,neutral,neutral,tactical,auto,LW01_e_edges.csv:553,,cautious_noble_physical,0.2
+e0598,346,14,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:554,,cautious_noble_physical,1
+e0599,347,103,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:555,,cautious_noble_physical,1
+e0600,348,95,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:556,,cautious_noble_physical,1
+e0601,349,293,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:557,Acquisition of item: Crystal Star Pendant,cautious_noble_physical,1
+e0602,350,Win,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:350,Written narrative ending linked to its shared outcome.,cautious_noble_physical,1
