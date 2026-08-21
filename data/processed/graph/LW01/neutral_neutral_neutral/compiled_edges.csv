@@ -83,7 +83,7 @@ e0081,42,86,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_
 e0082,42,238,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:80,,neutral_neutral_neutral,0.25
 e0083,42,157,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:81,,neutral_neutral_neutral,0.25
 e0084,42,147,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:82,,neutral_neutral_neutral,0.25
-e0085,43,195,combat,formula,,"combat_outcome(43, ""win"")",combat_outcome,win,,,,supervised,LW01_supervision.csv:8,Victory after continuing the combat.,neutral_neutral_neutral,0.25
+e0085,43,195,combat,formula,,"combat_outcome(43, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:8,Victory after continuing the combat.,neutral_neutral_neutral,0.25
 e0086,43,106,escape,formula,,"combat_outcome(43, ""escape"")",combat_outcome,escape,cautious,neutral,physical,supervised,LW01_supervision.csv:9,Escape outcome after surviving three combat rounds.,neutral_neutral_neutral,0.5
 e0087,43,Death,combat,formula,,"combat_outcome(43, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:10,Death before victory or escape.,neutral_neutral_neutral,0.25
 e0088,44,277,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:85,,neutral_neutral_neutral,0.5
@@ -308,7 +308,7 @@ e0306,167,178,kai,formula,,"kai_available(""Sixth Sense"")",kai_discipline,Sixth
 e0307,167,88,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(167, 88)",,,reckless,neutral,tactical,auto,LW01_e_edges.csv:291,Choice among routes remaining when the Kai route is unavailable.,neutral_neutral_neutral,0.25
 e0308,167,264,profile_choice,formula,,"(1 - kai_available(""Sixth Sense"")) * choice_share(167, 264)",,,cautious,neutral,neutral,auto,LW01_e_edges.csv:292,Choice among routes remaining when the Kai route is unavailable.,neutral_neutral_neutral,0.25
 e0309,168,64,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:293,Player must take a Meal before proceeding,neutral_neutral_neutral,1
-e0310,169,137,combat,formula,,"combat_outcome(169, ""win"")",combat_outcome,win,,,,supervised,LW01_supervision.csv:14,Victory after continuing the combat.,neutral_neutral_neutral,0.25
+e0310,169,137,combat,formula,,"combat_outcome(169, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:14,Victory after continuing the combat.,neutral_neutral_neutral,0.25
 e0311,169,23,escape,formula,,"combat_outcome(169, ""escape"")",combat_outcome,escape,cautious,selfish,physical,supervised,LW01_supervision.csv:15,Escape outcome after surviving the first combat round.,neutral_neutral_neutral,0.5
 e0312,169,Death,combat,formula,,"combat_outcome(169, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:16,Death before victory or escape.,neutral_neutral_neutral,0.25
 e0313,170,319,combat,formula,,combat_win(170),,,,,,auto,LW01_e_edges.csv:296,Transition after combat victory. | Combat outcome determines progression. Conditional penalty (deduct 3 COMBAT SKILL) applies if Torch is missing.,neutral_neutral_neutral,0.5
@@ -330,7 +330,7 @@ e0328,178,88,profile_choice,profile_choice,,,,,reckless,noble,neutral,auto,LW01_
 e0329,178,264,profile_choice,profile_choice,,,,,cautious,selfish,neutral,auto,LW01_e_edges.csv:311,,neutral_neutral_neutral,0.5
 e0330,179,318,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:312,,neutral_neutral_neutral,0.5
 e0331,179,51,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:313,,neutral_neutral_neutral,0.5
-e0332,180,62,combat,formula,,"combat_outcome(180, ""win"")",combat_outcome,win,,,,supervised,LW01_supervision.csv:17,Victory after defeating all three opponents.,neutral_neutral_neutral,0.25
+e0332,180,62,combat,formula,,"combat_outcome(180, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:17,Victory after defeating all three opponents.,neutral_neutral_neutral,0.25
 e0333,180,22,escape,formula,,"combat_outcome(180, ""escape"")",combat_outcome,escape,cautious,neutral,tactical,supervised,LW01_supervision.csv:18,Available escape outcome during the combat.,neutral_neutral_neutral,0.5
 e0334,180,Death,combat,formula,,"combat_outcome(180, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:19,Death before victory or escape.,neutral_neutral_neutral,0.25
 e0335,181,288,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:316,,neutral_neutral_neutral,1
@@ -346,7 +346,7 @@ e0344,188,303,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:324,Loss of 3 ENDURA
 e0345,189,118,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:325,,neutral_neutral_neutral,1
 e0346,190,20,profile_choice,profile_choice,,,,,reckless,neutral,tactical,auto,LW01_e_edges.csv:326,,neutral_neutral_neutral,0.5
 e0347,190,273,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:327,,neutral_neutral_neutral,0.5
-e0348,191,24,combat,formula,,"combat_outcome(191, ""win"")",combat_outcome,win,,,,supervised,LW01_supervision.csv:20,Victory after continuing the combat.,neutral_neutral_neutral,0.25
+e0348,191,24,combat,formula,,"combat_outcome(191, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:20,Victory after continuing the combat.,neutral_neutral_neutral,0.25
 e0349,191,234,escape,formula,,"combat_outcome(191, ""escape"")",combat_outcome,escape,reckless,neutral,physical,supervised,LW01_supervision.csv:21,Escape by jumping from the moving caravan.,neutral_neutral_neutral,0.5
 e0350,191,Death,combat,formula,,"combat_outcome(191, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:22,Death before victory or escape.,neutral_neutral_neutral,0.25
 e0351,192,171,profile_choice,profile_choice,,,,,cautious,neutral,physical,auto,LW01_e_edges.csv:330,,neutral_neutral_neutral,0.5
@@ -395,7 +395,7 @@ e0393,217,91,profile_choice,profile_choice,,,,,reckless,neutral,neutral,auto,LW0
 e0394,217,7,profile_choice,profile_choice,,,,,cautious,neutral,tactical,auto,LW01_e_edges.csv:372,,neutral_neutral_neutral,0.5
 e0395,218,75,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:373,,neutral_neutral_neutral,1
 e0396,219,Death,outcome,constant,1,,,,,,,auto,LW01_nodes.csv:219,Written narrative ending linked to its shared outcome.,neutral_neutral_neutral,1
-e0397,220,24,combat,formula,,"combat_outcome(220, ""win"")",combat_outcome,win,,,,supervised,LW01_supervision.csv:26,Victory after continuing the combat.,neutral_neutral_neutral,0.25
+e0397,220,24,combat,formula,,"combat_outcome(220, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:26,Victory after continuing the combat.,neutral_neutral_neutral,0.25
 e0398,220,234,escape,formula,,"combat_outcome(220, ""escape"")",combat_outcome,escape,reckless,neutral,physical,supervised,LW01_supervision.csv:27,Escape by jumping from the moving caravan.,neutral_neutral_neutral,0.5
 e0399,220,Death,combat,formula,,"combat_outcome(220, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:28,Death before victory or escape.,neutral_neutral_neutral,0.25
 e0400,221,318,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:376,,neutral_neutral_neutral,1
@@ -409,8 +409,8 @@ e0407,225,187,profile_choice,profile_choice,,,,,cautious,noble,neutral,auto,LW01
 e0408,225,39,profile_choice,profile_choice,,,,,neutral,neutral,neutral,auto,LW01_e_edges.csv:384,,neutral_neutral_neutral,0.5
 e0409,226,277,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:385,,neutral_neutral_neutral,0.5
 e0410,226,338,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:386,,neutral_neutral_neutral,0.5
-e0411,227,271,combat,formula,,"combat_outcome(227, ""win_with_endurance_loss"")",combat_outcome,win_with_endurance_loss,,,,supervised,LW01_supervision.csv:29,Victory with Endurance loss.,neutral_neutral_neutral,0.25
-e0412,227,348,combat,formula,,"combat_outcome(227, ""win_without_endurance_loss"")",combat_outcome,win_without_endurance_loss,,,,supervised,LW01_supervision.csv:30,Victory without Endurance loss.,neutral_neutral_neutral,0.25
+e0411,227,271,combat,formula,,"combat_outcome(227, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:29,Victory with Endurance loss; one of two non-fatal continuations.,neutral_neutral_neutral,0.25
+e0412,227,348,combat,formula,,"combat_outcome(227, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:30,Victory without Endurance loss; one of two non-fatal continuations.,neutral_neutral_neutral,0.25
 e0413,227,Death,combat,formula,,"combat_outcome(227, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:31,Death if the combat is lost.,neutral_neutral_neutral,0.5
 e0414,228,140,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:389,,neutral_neutral_neutral,0.5
 e0415,228,215,profile_choice,profile_choice,,,,,cautious,neutral,neutral,auto,LW01_e_edges.csv:390,,neutral_neutral_neutral,0.5
@@ -418,8 +418,8 @@ e0416,229,267,profile_choice,formula,,"combat_win(229) * postcombat_choice_share
 e0417,229,125,profile_choice,formula,,"combat_win(229) * postcombat_choice_share(229, 125)",combat_outcome,win,cautious,neutral,physical,supervised,LW01_supervision.csv:33,Choice to continue along the path after victory.,neutral_neutral_neutral,0.25
 e0418,229,Death,combat,formula,,1 - combat_win(229),combat_outcome,death,,,,supervised,LW01_supervision.csv:34,Death if the combat is lost.,neutral_neutral_neutral,0.5
 e0419,230,179,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:393,,neutral_neutral_neutral,1
-e0420,231,94,combat,formula,,"combat_outcome(231, ""win_within_4_rounds"")",combat_outcome,win_within_4_rounds,,,,supervised,LW01_supervision.csv:35,Victory within four combat rounds.,neutral_neutral_neutral,0.125
-e0421,231,203,combat,formula,,"combat_outcome(231, ""continue_after_4_rounds"")",combat_outcome,continue_after_4_rounds,,,,supervised,LW01_supervision.csv:36,Survival with the combat still in progress after four rounds.,neutral_neutral_neutral,0.125
+e0420,231,94,combat,formula,,"combat_outcome(231, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:35,Victory within four rounds; one of two non-fatal continuations.,neutral_neutral_neutral,0.125
+e0421,231,203,combat,formula,,"combat_outcome(231, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:36,Combat still in progress after four rounds; one of two non-fatal continuations.,neutral_neutral_neutral,0.125
 e0422,231,7,escape,formula,,"combat_outcome(231, ""escape"")",combat_outcome,escape,cautious,neutral,physical,supervised,LW01_supervision.csv:37,Escape after surviving two combat rounds.,neutral_neutral_neutral,0.5
 e0423,231,Death,combat,formula,,"combat_outcome(231, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:38,Death before another outcome is reached.,neutral_neutral_neutral,0.25
 e0424,232,180,profile_choice,profile_choice,,,,,reckless,neutral,physical,auto,LW01_e_edges.csv:397,,neutral_neutral_neutral,0.5
@@ -581,8 +581,8 @@ e0579,336,Death,combat,formula,,1 - combat_win(336),,,,,,auto,generated:combat_d
 e0580,337,219,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:539,,neutral_neutral_neutral,0.5
 e0581,337,317,random,constant,0.5,,,,,,,auto,LW01_e_edges.csv:540,,neutral_neutral_neutral,0.5
 e0582,338,113,forced,constant,1,,,,,,,auto,LW01_e_edges.csv:541,,neutral_neutral_neutral,1
-e0583,339,94,combat,formula,,"combat_outcome(339, ""win_within_4_rounds"")",combat_outcome,win_within_4_rounds,,,,supervised,LW01_supervision.csv:42,Victory within four combat rounds.,neutral_neutral_neutral,0.125
-e0584,339,203,combat,formula,,"combat_outcome(339, ""continue_after_4_rounds"")",combat_outcome,continue_after_4_rounds,,,,supervised,LW01_supervision.csv:43,Survival with the combat still in progress after four rounds.,neutral_neutral_neutral,0.125
+e0583,339,94,combat,formula,,"combat_outcome(339, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:42,Victory within four rounds; one of two non-fatal continuations.,neutral_neutral_neutral,0.125
+e0584,339,203,combat,formula,,"combat_outcome(339, ""survive"")",combat_outcome,survive,,,,supervised,LW01_supervision.csv:43,Combat still in progress after four rounds; one of two non-fatal continuations.,neutral_neutral_neutral,0.125
 e0585,339,7,escape,formula,,"combat_outcome(339, ""escape"")",combat_outcome,escape,cautious,neutral,tactical,supervised,LW01_supervision.csv:44,Escape at any stage of the combat.,neutral_neutral_neutral,0.5
 e0586,339,Death,combat,formula,,"combat_outcome(339, ""death"")",combat_outcome,death,,,,supervised,LW01_supervision.csv:45,Death before another outcome is reached.,neutral_neutral_neutral,0.25
 e0587,340,193,combat,formula,,combat_win(340),,,,,,auto,LW01_e_edges.csv:545,Transition after combat victory. | Combat scenario with only one outcome provided (win). Implicit death condition if lost.,neutral_neutral_neutral,0.5

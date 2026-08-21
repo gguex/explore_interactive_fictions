@@ -1,6 +1,6 @@
 # Plan global — Distant reading des fictions interactives
 
-> Document de référence mis à jour le 20.08.2026. La représentation du pré-graphe et la
+> Document de référence mis à jour le 21.08.2026. La représentation du pré-graphe et la
 > compilation de $W$ sont définies dans [`graph_model.md`](graph_model.md). Le suivi
 > chronologique se trouve dans [`progress_log.md`](progress_log.md).
 
@@ -133,8 +133,14 @@ P(\text{victoire})=(1-f)v,\qquad
 P(\text{mort})=(1-f)(1-v).
 $$
 
-Les rares issues particulières qui ne se ramènent pas à ces trois catégories reçoivent
-une distribution fixe dans la configuration du livre, jamais dans le profil.
+Toutes les issues catégorielles sont ramenées aux trois rôles génériques `survive`,
+`escape` et `death`. Si plusieurs arêtes partagent un rôle, sa masse est répartie à parts
+égales entre elles. Les précisions comme une victoire rapide, une perte d'Endurance ou un
+combat encore en cours restent dans les notes, sans règle propre au livre.
+
+Cette simplification est volontaire : elle sacrifie une partie de la mécanique locale
+pour que le même compilateur puisse traiter d'autres livres sans connaître leurs
+paragraphes particuliers.
 
 Les rounds, l'Endurance et les tables de combat ne sont pas simulés. Les caractéristiques
 des ennemis restent disponibles et pourront plus tard servir à calculer une probabilité

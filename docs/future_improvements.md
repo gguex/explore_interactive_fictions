@@ -343,7 +343,8 @@ Avant une refonte de l'extraction ou du modèle, il faudra encore décider :
 2. quels effets d'état conserver comme métadonnées sans introduire une simulation L3 ;
 3. quelles catégories sont propres à *Lone Wolf* et lesquelles appartiennent au modèle
    général des fictions interactives ;
-4. comment calibrer les distributions fixes des rares combats à issues particulières.
+4. si une future étude doit remplacer le partage égal entre plusieurs continuations
+   `survive` par des parts déduites des règles détaillées du combat.
 
 ## 10. Éléments à ne pas déléguer au LLM
 

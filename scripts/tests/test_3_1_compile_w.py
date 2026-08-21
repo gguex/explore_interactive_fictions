@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import csv
 import math
+import re
 from collections import defaultdict
 from pathlib import Path
 
@@ -91,6 +92,33 @@ def main() -> None:
 
     if len(compiled_edges) != len(pregraph_edges):
         raise ValueError("Compiled edge count differs from the pregraph")
+
+    combat_roles: dict[str, list[str]] = defaultdict(list)
+    for edge in pregraph_edges:
+        if not edge["weight_expression"].startswith("combat_outcome("):
+            continue
+        match = re.fullmatch(
+            r'combat_outcome\((\d+), "(survive|escape|death)"\)',
+            edge["weight_expression"],
+        )
+        if match is None:
+            raise ValueError(
+                f"Edge {edge['edge_id']} uses a non-generic combat outcome"
+            )
+        if match[1] != edge["source_id"]:
+            raise ValueError(f"Edge {edge['edge_id']} has a combat source mismatch")
+        if (
+            edge["condition_kind"] != "combat_outcome"
+            or edge["condition_value"] != match[2]
+        ):
+            raise ValueError(f"Edge {edge['edge_id']} has inconsistent combat metadata")
+        combat_roles[edge["source_id"]].append(match[2])
+    for source_id, roles in combat_roles.items():
+        if "survive" not in roles or "death" not in roles:
+            raise ValueError(
+                f"Combat source {source_id} lacks a survive or death role"
+            )
+
     for pregraph_edge, compiled in zip(
         pregraph_edges, compiled_edges, strict=True
     ):

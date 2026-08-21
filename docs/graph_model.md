@@ -309,30 +309,48 @@ Dans le fichier de supervision, ces parts sont notées
 `postcombat_choice_share(i, j)`. Elles sont normalisées uniquement entre les choix
 accessibles après la victoire.
 
-### 5.7 Combat avec évasion ou issues particulières
+### 5.7 Combat avec évasion ou plusieurs continuations
 
 Une fuite proposée après un ou plusieurs rounds dépend réellement de la décision du
 joueur et de sa survie jusqu'à cette occasion. Comme les rounds ne sont pas simulés,
-cette itération l'approxime par un paramètre global $f=$ `escape_probability`. Pour un
-combat avec fuite simple :
+cette itération l'approxime par un paramètre global $f=$ `escape_probability`.
+
+Toute arête d'une distribution catégorielle reçoit exactement l'un des trois rôles
+généraux suivants :
+
+- `survive` : continuation narrative non fatale, que le combat soit terminé ou non ;
+- `escape` : continuation obtenue par la fuite ;
+- `death` : mort pendant le combat.
+
+Si la source ne propose aucune fuite et possède $n_s$ continuations `survive` et $n_d$
+issues `death`, chaque arête reçoit :
 
 $$
-P(\mathrm{escape})=f,\qquad
-P(\mathrm{win})=(1-f)v,\qquad
-P(\mathrm{death})=(1-f)(1-v).
+P(e_{\mathrm{survive}})=\frac{v}{n_s},\qquad
+P(e_{\mathrm{death}})=\frac{1-v}{n_d}.
 $$
 
-Le pré-graphe conserve ces issues sous la forme d'une distribution catégorielle :
+Si elle possède également $n_e$ arêtes `escape` :
+
+$$
+P(e_{\mathrm{escape}})=\frac{f}{n_e},\qquad
+P(e_{\mathrm{survive}})=\frac{(1-f)v}{n_s},\qquad
+P(e_{\mathrm{death}})=\frac{(1-f)(1-v)}{n_d}.
+$$
+
+Le pré-graphe les conserve sous la forme `combat_outcome(source, role)` et exige au
+moins un rôle `survive` et un rôle `death` ; `escape` est facultatif. La somme reste :
 
 $$
 \sum_o \operatorname{combat\_outcome}(i,o)=1.
 $$
 
-Un cas particulier peut employer des issues plus précises, par exemple
-`win_with_endurance_loss`, `win_without_endurance_loss`, `win_within_4_rounds` ou
-`continue_after_4_rounds`. Les répartitions supplémentaires nécessaires sont des
-exceptions fixes de la configuration du livre. Elles doivent être normalisées, mais ne
-créent aucune dimension de profil.
+Les détails plus précis ne sont pas perdus : ils restent dans `note`. En revanche, ils
+ne créent ni vocabulaire supplémentaire dans le compilateur, ni paramètre par source. Le
+§227 possède ainsi deux arêtes `survive`, chacune de poids $v/2$. Les §231 et 339 en
+possèdent deux avec fuite, chacune de poids $(1-f)v/2$. Le fait de traiter une victoire
+rapide et une continuation après quatre rounds comme deux continuations non fatales
+équiprobables est une simplification méthodologique explicite.
 
 Une blessure non fatale pendant la fuite est conservée dans `note`, mais ne crée pas un
 état supplémentaire. L'Endurance et les tables de combat ne sont pas simulées dans le
@@ -393,8 +411,8 @@ entièrement supervisée ; aucune transformation partielle n'est conservée.
 | Combat suivi d'un RNT | Composition automatique. | Aucune : §17. |
 | Combat suivi de choix | Composition après annotation sémantique. | §112, 208 et 229. |
 | Combat avec évasion | Règles de victoire, mort et évasion. | §43, 169, 180, 191 et 220. |
-| Combat dépendant de sa durée | Issues avant/après quatre rounds. | §231 et 339. |
-| Combat avec/sans perte d'Endurance | Deux issues de victoire et mort. | §227. |
+| Combat dépendant de sa durée | Deux continuations `survive` équiprobables. | §231 et 339. |
+| Combat avec/sans perte d'Endurance | Deux continuations `survive` équiprobables. | §227. |
 | Cas inconnu | Blocage de la source entière. | Aucun autre cas connu. |
 
 La file connue contient 14 paragraphes : §21, 23, 43, 112, 169, 180, 191, 208, 220,
@@ -465,7 +483,7 @@ Exemples :
 | 21 | 189 | `random` | `constant` | `0.60` |
 | 21 | 312 | `random` | `constant` | `0.04` |
 | 21 | `Death` | `random` | `constant` | `0.36` |
-| 43 | 195 | `combat` | `formula` | `combat_outcome(43, "win")` |
+| 43 | 195 | `combat` | `formula` | `combat_outcome(43, "survive")` |
 | 43 | 106 | `escape` | `formula` | `combat_outcome(43, "escape")` |
 | 43 | `Death` | `combat` | `formula` | `combat_outcome(43, "death")` |
 
@@ -488,20 +506,19 @@ Le fichier `LW01_supervision.csv` applique les conventions suivantes :
 3. **Choix après victoire (§112, 208 et 229).** Chaque destination reçoit
    `combat_win(source) * postcombat_choice_share(source, target)` ; `Death` reçoit
    `1 - combat_win(source)`.
-4. **Combat avec fuite (§43, 169, 180, 191 et 220).** Les trois issues `win`, `escape`
-   et `death` sont représentées par `combat_outcome(source, issue)`. Cette distribution
+4. **Combat avec fuite (§43, 169, 180, 191 et 220).** Les trois rôles `survive`,
+   `escape` et `death` sont représentés par `combat_outcome(source, role)`. Leur masse
    est résolue avec les probabilités globales de victoire et de fuite.
-5. **Issues de combat particulières (§227, 231 et 339).** La même distribution
-   catégorielle distingue la victoire avec ou sans perte d'Endurance, la victoire avant
-   quatre rounds, la continuation après quatre rounds, la fuite et la mort selon le
-   texte du paragraphe.
+5. **Plusieurs continuations non fatales (§227, 231 et 339).** La perte d'Endurance, la
+   victoire rapide ou le combat encore en cours restent décrits dans `note`, mais les
+   arêtes reçoivent toutes le rôle `survive` et se partagent sa masse à parts égales.
 6. **État persistant.** Les blessures et autres effets non fatals sont signalés dans les
    notes mais ne provoquent aucune expansion L3.
 
-Pour toute source fondée sur `combat_outcome`, les expressions sortantes doivent former
-une distribution normalisée. Pour toute source utilisant `available_choice_share` ou
-`postcombat_choice_share`, les parts sont normalisées sur le groupe de choix effectivement
-disponible.
+Pour toute source fondée sur `combat_outcome`, les expressions sortantes doivent utiliser
+uniquement `survive`, `escape` et `death` et former une distribution normalisée. Pour
+toute source utilisant `available_choice_share` ou `postcombat_choice_share`, les parts
+sont normalisées sur le groupe de choix effectivement disponible.
 
 ## 9. Recette courte de la phase 2
 
@@ -579,10 +596,9 @@ data/for_graph_model/LW01_compilation_settings.json
 Chaque profil suit le même schéma à quatre champs : `profile_id`, `risk`, `morality` et
 `action`. Les 27 combinaisons sont générées exhaustivement. Un fichier séparé contient
 les paramètres fixes `kai_availability`, `combat_win_probability`,
-`escape_probability`, `has_condition`, les coefficients d'affinité et, si nécessaire,
-les distributions particulières propres au livre. Le compilateur en déduit les
-`available_choice_share` et `postcombat_choice_share`. Un paramètre nécessaire manquant
-provoque une erreur : le compilateur n'invente pas de valeur.
+`escape_probability`, `has_condition` et les coefficients d'affinité. Le compilateur en
+déduit les `available_choice_share` et `postcombat_choice_share`. Un paramètre nécessaire
+manquant provoque une erreur : le compilateur n'invente pas de valeur.
 
 Le contrat minimal des deux fichiers est :
 
@@ -600,7 +616,6 @@ Le contrat minimal des deux fichiers est :
 | `escape_probability` | Nombre dans $[0,1]$, identique pour toutes les fuites. |
 | `has_condition` | Nombre dans $[0,1]$, utilisé pour tout `condition_available(type, value)`. |
 | `choice_affinities` | Coefficients positifs communs qui distinguent accord, neutralité et opposition sur les axes. |
-| `special_combat_outcomes` | Exceptions normalisées propres au livre, seulement si les issues ne se ramènent pas à `win`, `escape` et `death`. |
 
 Le script :
 
@@ -639,10 +654,10 @@ probabilités d'absorption. Il échoue si une partie de la masse ne rejoint pas 
 `Win`.
 
 La configuration LW01 actuelle est une configuration technique initiale : les quatre
-probabilités globales valent 0,5. Pour les §227, 231 et 339, les issues supplémentaires
-sont données par des distributions fixes normalisées. Ces valeurs permettent de tester
-le pipeline ; elles devront être justifiées ou présentées explicitement comme hypothèses
-avant l'analyse scientifique.
+probabilités globales valent 0,5. Les groupes de plusieurs arêtes `survive` sont divisés
+à parts égales par une règle générale, sans entrée propre au livre dans la configuration.
+Ces valeurs permettent de tester le pipeline ; elles devront être justifiées ou
+présentées explicitement comme hypothèses avant l'analyse scientifique.
 
 ## 11. Critères de fin
 

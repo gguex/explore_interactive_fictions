@@ -5,41 +5,41 @@ source_id,target_id,transition_kind,weight_rule,weight_value,weight_expression,c
 23,326,profile_choice,formula,,"available_choice_share(23, 326, condition_available(""has_item"", ""Golden Key""))",has_item,Golden Key,cautious,neutral,tactical,Choice to use the Golden Key when it is available.
 23,151,profile_choice,formula,,"available_choice_share(23, 151, kai_available(""Mind Over Matter""))",kai_discipline,Mind Over Matter,cautious,neutral,tactical,Choice to use Mind Over Matter when it is available.
 23,337,profile_choice,formula,,"available_choice_share(23, 337, 1)",,,neutral,neutral,physical,Unconditionally available choice to remove the pin.
-43,195,combat,formula,,"combat_outcome(43, ""win"")",combat_outcome,win,,,,Victory after continuing the combat.
+43,195,combat,formula,,"combat_outcome(43, ""survive"")",combat_outcome,survive,,,,Victory after continuing the combat.
 43,106,escape,formula,,"combat_outcome(43, ""escape"")",combat_outcome,escape,cautious,neutral,physical,Escape outcome after surviving three combat rounds.
 43,Death,combat,formula,,"combat_outcome(43, ""death"")",combat_outcome,death,,,,Death before victory or escape.
 112,33,profile_choice,formula,,"combat_win(112) * postcombat_choice_share(112, 33)",combat_outcome,win,reckless,neutral,tactical,Choice to explore the cave after winning both combats.
 112,248,profile_choice,formula,,"combat_win(112) * postcombat_choice_share(112, 248)",combat_outcome,win,cautious,selfish,physical,Choice to leave after winning both combats.
 112,Death,combat,formula,,1 - combat_win(112),combat_outcome,death,,,,Death if the combats are lost.
-169,137,combat,formula,,"combat_outcome(169, ""win"")",combat_outcome,win,,,,Victory after continuing the combat.
+169,137,combat,formula,,"combat_outcome(169, ""survive"")",combat_outcome,survive,,,,Victory after continuing the combat.
 169,23,escape,formula,,"combat_outcome(169, ""escape"")",combat_outcome,escape,cautious,selfish,physical,Escape outcome after surviving the first combat round.
 169,Death,combat,formula,,"combat_outcome(169, ""death"")",combat_outcome,death,,,,Death before victory or escape.
-180,62,combat,formula,,"combat_outcome(180, ""win"")",combat_outcome,win,,,,Victory after defeating all three opponents.
+180,62,combat,formula,,"combat_outcome(180, ""survive"")",combat_outcome,survive,,,,Victory after defeating all three opponents.
 180,22,escape,formula,,"combat_outcome(180, ""escape"")",combat_outcome,escape,cautious,neutral,tactical,Available escape outcome during the combat.
 180,Death,combat,formula,,"combat_outcome(180, ""death"")",combat_outcome,death,,,,Death before victory or escape.
-191,24,combat,formula,,"combat_outcome(191, ""win"")",combat_outcome,win,,,,Victory after continuing the combat.
+191,24,combat,formula,,"combat_outcome(191, ""survive"")",combat_outcome,survive,,,,Victory after continuing the combat.
 191,234,escape,formula,,"combat_outcome(191, ""escape"")",combat_outcome,escape,reckless,neutral,physical,Escape by jumping from the moving caravan.
 191,Death,combat,formula,,"combat_outcome(191, ""death"")",combat_outcome,death,,,,Death before victory or escape.
 208,148,profile_choice,formula,,"combat_win(208) * postcombat_choice_share(208, 148)",combat_outcome,win,cautious,neutral,physical,Choice to run to the farmhouse after victory.
 208,320,profile_choice,formula,,"combat_win(208) * postcombat_choice_share(208, 320)",combat_outcome,win,reckless,neutral,physical,Choice to return to the woods after victory.
 208,Death,combat,formula,,1 - combat_win(208),combat_outcome,death,,,,Death if the combat is lost.
-220,24,combat,formula,,"combat_outcome(220, ""win"")",combat_outcome,win,,,,Victory after continuing the combat.
+220,24,combat,formula,,"combat_outcome(220, ""survive"")",combat_outcome,survive,,,,Victory after continuing the combat.
 220,234,escape,formula,,"combat_outcome(220, ""escape"")",combat_outcome,escape,reckless,neutral,physical,Escape by jumping from the moving caravan.
 220,Death,combat,formula,,"combat_outcome(220, ""death"")",combat_outcome,death,,,,Death before victory or escape.
-227,271,combat,formula,,"combat_outcome(227, ""win_with_endurance_loss"")",combat_outcome,win_with_endurance_loss,,,,Victory with Endurance loss.
-227,348,combat,formula,,"combat_outcome(227, ""win_without_endurance_loss"")",combat_outcome,win_without_endurance_loss,,,,Victory without Endurance loss.
+227,271,combat,formula,,"combat_outcome(227, ""survive"")",combat_outcome,survive,,,,Victory with Endurance loss; one of two non-fatal continuations.
+227,348,combat,formula,,"combat_outcome(227, ""survive"")",combat_outcome,survive,,,,Victory without Endurance loss; one of two non-fatal continuations.
 227,Death,combat,formula,,"combat_outcome(227, ""death"")",combat_outcome,death,,,,Death if the combat is lost.
 229,267,profile_choice,formula,,"combat_win(229) * postcombat_choice_share(229, 267)",combat_outcome,win,reckless,selfish,tactical,Choice to search the body after victory.
 229,125,profile_choice,formula,,"combat_win(229) * postcombat_choice_share(229, 125)",combat_outcome,win,cautious,neutral,physical,Choice to continue along the path after victory.
 229,Death,combat,formula,,1 - combat_win(229),combat_outcome,death,,,,Death if the combat is lost.
-231,94,combat,formula,,"combat_outcome(231, ""win_within_4_rounds"")",combat_outcome,win_within_4_rounds,,,,Victory within four combat rounds.
-231,203,combat,formula,,"combat_outcome(231, ""continue_after_4_rounds"")",combat_outcome,continue_after_4_rounds,,,,Survival with the combat still in progress after four rounds.
+231,94,combat,formula,,"combat_outcome(231, ""survive"")",combat_outcome,survive,,,,Victory within four rounds; one of two non-fatal continuations.
+231,203,combat,formula,,"combat_outcome(231, ""survive"")",combat_outcome,survive,,,,Combat still in progress after four rounds; one of two non-fatal continuations.
 231,7,escape,formula,,"combat_outcome(231, ""escape"")",combat_outcome,escape,cautious,neutral,physical,Escape after surviving two combat rounds.
 231,Death,combat,formula,,"combat_outcome(231, ""death"")",combat_outcome,death,,,,Death before another outcome is reached.
 334,48,profile_choice,formula,,"available_choice_share(334, 48, kai_available(""Sixth Sense""))",kai_discipline,Sixth Sense,cautious,neutral,tactical,Choice to use Sixth Sense when it is available.
 334,73,profile_choice,formula,,"available_choice_share(334, 73, kai_available(""Camouflage""))",kai_discipline,Camouflage,cautious,neutral,tactical,Choice to use Camouflage and wait when it is available.
 334,162,profile_choice,formula,,"available_choice_share(334, 162, 1)",,,reckless,neutral,neutral,Unconditionally available choice to approach the soldiers.
-339,94,combat,formula,,"combat_outcome(339, ""win_within_4_rounds"")",combat_outcome,win_within_4_rounds,,,,Victory within four combat rounds.
-339,203,combat,formula,,"combat_outcome(339, ""continue_after_4_rounds"")",combat_outcome,continue_after_4_rounds,,,,Survival with the combat still in progress after four rounds.
+339,94,combat,formula,,"combat_outcome(339, ""survive"")",combat_outcome,survive,,,,Victory within four rounds; one of two non-fatal continuations.
+339,203,combat,formula,,"combat_outcome(339, ""survive"")",combat_outcome,survive,,,,Combat still in progress after four rounds; one of two non-fatal continuations.
 339,7,escape,formula,,"combat_outcome(339, ""escape"")",combat_outcome,escape,cautious,neutral,tactical,Escape at any stage of the combat.
 339,Death,combat,formula,,"combat_outcome(339, ""death"")",combat_outcome,death,,,,Death before another outcome is reached.

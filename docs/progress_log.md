@@ -271,6 +271,28 @@
   affinités non neutres ; seule la matrice neutre est conservée comme premier artefact
   du dépôt avant calibration.
 
+### 21.08.2026 — Généralisation des issues de combat
+
+- Remplacement des libellés détaillés de combat par trois rôles génériques : `survive`,
+  `escape` et `death`.
+- Suppression de `special_combat_outcomes` et de toutes les distributions configurées
+  pour des paragraphes particuliers de LW01.
+- Adoption d'une répartition automatique : la masse de chaque rôle est divisée à parts
+  égales entre les arêtes qui le portent. Sans fuite, `survive` reçoit $v$ et `death`
+  reçoit $1-v$ ; avec fuite, les masses deviennent $(1-f)v$, $f$ et
+  $(1-f)(1-v)$.
+- Simplification explicite des §227, 231 et 339 : les différences de perte d'Endurance
+  ou de durée du combat restent dans les notes, tandis que leurs continuations non
+  fatales partagent le rôle `survive`.
+- Cette perte volontaire de finesse locale évite toute règle codée pour un livre et rend
+  le compilateur directement réutilisable pour d'autres corpus respectant les trois
+  rôles génériques.
+- Régénération réussie du pré-graphe et de la matrice neutre, dont les résultats restent
+  inchangés : 352 nœuds, 602 arêtes, $P(Death)=0{,}963805$ et
+  $P(Win)=0{,}036195$ depuis le §1.
+- Nouvelle compilation temporaire réussie des 27 profils avec cette représentation
+  générique.
+
 ## Prochaine étape
 
 Calibrer et justifier les probabilités fixes de la configuration, puis compiler et

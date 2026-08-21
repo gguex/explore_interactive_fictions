@@ -75,7 +75,6 @@ class Settings:
     escape_probability: float
     has_condition: float
     choice_affinities: dict[str, float]
-    special_combat_outcomes: dict[str, dict[str, float]]
 
 
 def read_csv(path: Path, expected_fields: list[str]) -> list[dict[str, str]]:
@@ -173,7 +172,6 @@ def load_settings(path: Path) -> Settings:
         "escape_probability",
         "has_condition",
         "choice_affinities",
-        "special_combat_outcomes",
     }
     if not isinstance(payload, dict) or set(payload) != required:
         raise ValueError(f"{path} must contain exactly {sorted(required)}")
@@ -187,22 +185,6 @@ def load_settings(path: Path) -> Settings:
         for key in sorted(affinity_keys)
     }
 
-    raw_special = payload["special_combat_outcomes"]
-    if not isinstance(raw_special, dict):
-        raise ValueError("special_combat_outcomes must be an object")
-    special: dict[str, dict[str, float]] = {}
-    for source_id, raw_distribution in raw_special.items():
-        label = f"special_combat_outcomes.{source_id}"
-        if not isinstance(raw_distribution, dict) or not raw_distribution:
-            raise ValueError(f"{label} must be a non-empty object")
-        distribution = {
-            str(outcome): probability(value, f"{label}.{outcome}")
-            for outcome, value in raw_distribution.items()
-        }
-        if not math.isclose(sum(distribution.values()), 1.0, abs_tol=1e-12):
-            raise ValueError(f"{label} must sum to 1")
-        special[str(source_id)] = distribution
-
     return Settings(
         kai_availability=probability(
             payload["kai_availability"], "kai_availability"
@@ -215,7 +197,6 @@ def load_settings(path: Path) -> Settings:
         ),
         has_condition=probability(payload["has_condition"], "has_condition"),
         choice_affinities=affinities,
-        special_combat_outcomes=special,
     )
 
 
@@ -354,28 +335,62 @@ def available_choice_share(
     )
 
 
-def combat_outcome(source_id: str, outcome: str, settings: Settings) -> float:
-    """Resolve a standard or book-specific categorical combat outcome."""
-    special = settings.special_combat_outcomes.get(source_id)
-    if special is not None:
-        if outcome not in special:
-            raise ValueError(
-                f"Missing special combat outcome {outcome!r} for source {source_id}"
-            )
-        return special[outcome]
-
-    if outcome == "escape":
-        return settings.escape_probability
-    if outcome == "win":
-        return (1 - settings.escape_probability) * settings.combat_win_probability
-    if outcome == "death":
-        return (1 - settings.escape_probability) * (
-            1 - settings.combat_win_probability
-        )
-    raise ValueError(
-        f"Combat source {source_id} uses non-standard outcome {outcome!r} "
-        "without a fixed special distribution"
+def combat_outcome_role(row: dict[str, str]) -> tuple[str, str] | None:
+    """Return the source and generic role of a categorical combat edge."""
+    match = re.fullmatch(
+        r'combat_outcome\((\d+), "(survive|escape|death)"\)',
+        row["weight_expression"],
     )
+    if match is None:
+        return None
+    return match[1], match[2]
+
+
+def combat_outcome(
+    row: dict[str, str],
+    source_edges: list[dict[str, str]],
+    role: str,
+    settings: Settings,
+) -> float:
+    """Split generic survive, escape and death masses across matching edges."""
+    if row["condition_kind"] != "combat_outcome" or row["condition_value"] != role:
+        raise ValueError(
+            f"Edge {row['edge_id']}: combat role metadata does not match its formula"
+        )
+
+    roles = []
+    for edge in source_edges:
+        parsed = combat_outcome_role(edge)
+        if parsed is None:
+            continue
+        source_id, edge_role = parsed
+        if source_id != edge["source_id"]:
+            raise ValueError(
+                f"Edge {edge['edge_id']}: combat_outcome source mismatch"
+            )
+        roles.append(edge_role)
+
+    if "survive" not in roles or "death" not in roles:
+        raise ValueError(
+            f"Combat source {row['source_id']} must contain survive and death roles"
+        )
+    role_count = roles.count(role)
+    if role_count == 0:
+        raise ValueError(
+            f"Combat source {row['source_id']} has no edge for role {role!r}"
+        )
+
+    has_escape = "escape" in roles
+    remaining_mass = 1 - settings.escape_probability if has_escape else 1.0
+    if role == "escape":
+        role_mass = settings.escape_probability
+    elif role == "survive":
+        role_mass = remaining_mass * settings.combat_win_probability
+    elif role == "death":
+        role_mass = remaining_mass * (1 - settings.combat_win_probability)
+    else:
+        raise ValueError(f"Unsupported generic combat role: {role!r}")
+    return role_mass / role_count
 
 
 def compile_formula(
@@ -448,11 +463,12 @@ def compile_formula(
             row, source_edges, profile, settings
         )
 
-    match = re.fullmatch(r'combat_outcome\((\d+), "([^"]+)"\)', expression)
-    if match is not None:
-        if match[1] != row["source_id"]:
+    parsed_outcome = combat_outcome_role(row)
+    if parsed_outcome is not None:
+        source_id, role = parsed_outcome
+        if source_id != row["source_id"]:
             raise ValueError(f"Edge {row['edge_id']}: combat_outcome source mismatch")
-        return combat_outcome(match[1], match[2], settings)
+        return combat_outcome(row, source_edges, role, settings)
 
     raise ValueError(
         f"Edge {row['edge_id']}: unsupported weight expression {expression!r}"

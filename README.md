@@ -49,7 +49,9 @@ results/         cluster outputs and calibration history
 3. **Profile compilation** (phase 3, in progress): the profile generator, deterministic
    compiler and independent validator are implemented. A first neutral `W` has been
    compiled and validated; the 27 behavioral profiles share fixed probabilities for
-   Kai disciplines, combat, escape and persistent conditions.
+   Kai disciplines, combat, escape and persistent conditions. Combat continuations use
+   the generic roles `survive`, `escape` and `death`; no book-specific paragraph is
+   encoded in the compiler or its settings.
 4. **BoP and analyses** (later phases): select justified structural indices, sample
    representative paths and develop the LLM critic protocol.
 
