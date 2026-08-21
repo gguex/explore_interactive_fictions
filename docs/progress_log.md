@@ -17,8 +17,8 @@
 | Audit pour la phase 2 | Terminé | Les conditions persistantes simples sont automatisées et les 14 exceptions sont supervisées. |
 | Construction du pré-graphe | Terminée pour LW01 | 352 nœuds, 602 arêtes et aucune transition de phase 1 non classée. |
 | Compilation de \(W\) | Terminée pour LW01 | 27 matrices valides ; résultats par profil et par axe synthétisés. |
-| Bag-of-Paths et indices | Prochaine phase | Première analyse fixée à la borne RW ; indices et trajectoires à implémenter. |
-| Analyse des histoires par LLM | À faire | Principe retenu, protocole non développé. |
+| Bag-of-Paths et indices | Phase 4 — prochaine | Première analyse fixée à la borne RW ; catalogue et noyau des indices retenus. |
+| Analyse des histoires par LLM | Phase 5 — à faire | Phase distincte ; sélection des trajectoires et protocole hybride à préciser. |
 
 ## Historique
 
@@ -351,7 +351,18 @@
 - Documentation complète des résultats et de leur interprétation dans
   `docs/phase3_results.md`. La phase 3 est terminée pour LW01.
 
+### 21.08.2026 — Séparation des analyses structurelles et narratives
+
+- Limitation de la phase 4 au calcul et à l'interprétation des indices BoP.
+- Création d'une phase 5 distincte pour sélectionner des trajectoires, reconstruire leurs
+  histoires complètes et les faire évaluer par un LLM.
+- Adoption provisoire d'un protocole hybride : distances structurelles pour le contrôle,
+  embeddings pour la diversité et la sélection, puis évaluation LLM structurée pour la
+  cohérence et les qualités narratives.
+- Report de la généralisation à la phase 6.
+
 ## Prochaine étape
 
-Définir puis implémenter le petit ensemble d'indices retenus pour la présentation, avant
-de sélectionner et comparer des trajectoires représentatives entre profils.
+Implémenter le petit ensemble d'indices BoP retenus pour la présentation. La sélection
+des trajectoires représentatives et l'analyse LLM des histoires complètes suivront dans
+une phase 5 distincte.

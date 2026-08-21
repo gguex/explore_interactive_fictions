@@ -52,8 +52,11 @@ results/         cluster outputs and calibration history
    and 602 edges and pass the independent structural and absorption checks. The fixed
    combat probability is calibrated at `0.833`; the neutral profile reaches `Win` with
    probability `0.119811`, and the complete design ranges from `0.054397` to `0.258347`.
-4. **BoP and analyses** (next phase): select justified structural indices, sample
-   representative paths and develop the LLM critic protocol.
+4. **BoP indices** (next phase): compute the selected local and global structural
+   indices from the 27 transition matrices.
+5. **LLM trajectory analysis**: select representative complete paths, use embeddings to
+   characterize their diversity and apply a structured LLM evaluation to their stories.
+6. **Generalization**: apply the reusable pipeline to another book or corpus.
 
 ## Setup
 

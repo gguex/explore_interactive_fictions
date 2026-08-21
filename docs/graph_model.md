@@ -690,8 +690,9 @@ La phase 2 est terminée lorsque :
 - le pré-graphe peut être régénéré depuis la phase 1 et la supervision.
 
 La phase 3 est terminée lorsque les 27 profils produisent des matrices $W$ valides avec
-la même configuration fixe. Les indices BoP et l'étude des trajectoires commencent
-ensuite. Tous les profils sont calculés, mais seuls quelques archétypes et les effets
+la même configuration fixe. Les indices BoP commencent ensuite en phase 4 ; la sélection
+des trajectoires et l'analyse LLM des histoires complètes constituent une phase 5
+distincte. Tous les profils sont calculés, mais seuls quelques archétypes et les effets
 agrégés par axe sont destinés à la présentation.
 
 Ce critère est atteint pour LW01 : les 27 matrices passent le validateur global avec une

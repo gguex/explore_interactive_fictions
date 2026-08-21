@@ -31,7 +31,8 @@ internes. Il sépare :
 - l'extraction des paragraphes et transitions ;
 - la construction d'un pré-graphe indépendant des profils ;
 - la compilation d'une matrice $W^{(p)}$ pour chaque profil de joueur ;
-- l'analyse BoP et l'étude des trajectoires.
+- l'analyse structurelle par BoP ;
+- l'analyse des histoires complètes produites par les trajectoires.
 
 ## 3. Périmètre de modélisation
 
@@ -98,7 +99,8 @@ La première étude se place à la borne **Random Walk** :
 Avec les deux issues `Death` et `Win`, les probabilités d'absorption donnent
 directement les probabilités de défaite et de victoire du profil.
 
-Le choix des indices BoP est reporté jusqu'à la validation des matrices $W$.
+Le catalogue et le noyau des indices BoP ont été fixés après la validation des matrices
+$W$ ; ils sont décrits dans la phase 4 de la feuille de route.
 
 ## 4. Mécaniques retenues
 
@@ -248,13 +250,109 @@ implémentés. La configuration fixe est documentée, les 27 matrices LW01 sont 
 leurs probabilités d'absorption et durées attendues sont synthétisées dans
 `docs/phase3_results.md`. La phase 3 est terminée pour LW01.
 
-### Phase 4 — Analyses BoP et trajectoires — prochaine étape
+### Phase 4 — Indices et analyses BoP — prochaine étape
 
-Choisir les indices BoP, calculer les flux et probabilités d'absorption, puis sélectionner
-et analyser les trajectoires. Les formules et interprétations seront fixées seulement
-après validation de $W$.
+À la borne Random Walk retenue pour cette itération, les indices sont calculés à partir
+de la matrice transitoire $Q^{(p)}$ et de la matrice fondamentale :
 
-### Phase 5 — Généralisation
+$$
+N^{(p)}=(I-Q^{(p)})^{-1}.
+$$
+
+$N^{(p)}_{si}$ donne le nombre attendu de visites du nœud $i$ depuis le paragraphe
+initial $s$. Les probabilités de visite, flux, absorptions et entropies dérivés de cette
+matrice décrivent les chemins effectivement probables pour chaque profil. Les décisions
+ci-dessous limitent le nombre d'indicateurs principaux tout en conservant un catalogue
+pour les extensions futures.
+
+#### Indices locaux potentiels
+
+| Indice | Ce qu'il mesure | Intérêt pour la fiction interactive | Décision pour cette itération |
+| :--- | :--- | :--- | :--- |
+| **Probabilité de visite** | Probabilité qu'une lecture atteigne le nœud. | Distingue les scènes centrales des contenus rares. | **Oui — principal** |
+| **Nombre attendu de visites** | Flux total passant par le nœud, répétitions et cycles compris. | Mesure son poids effectif dans l'expérience de lecture. | **Oui — support** |
+| **Flux d'arête** | Nombre attendu de passages par chaque transition. | Identifie les routes réellement empruntées et prépare l'échantillonnage des trajectoires. | **Oui — support** |
+| **Contribution à la mortalité** | Probabilité totale qu'une lecture meure en quittant ce nœud vers `Death`. | Localise les principaux points de danger du livre. | **Oui — principal** |
+| **Potentiel de victoire** | Probabilité d'atteindre `Win` en partant du nœud. | Situe les régions favorables ou dangereuses et sert au calcul de l'impact des choix. | **Oui — support** |
+| **Impact d'un choix** | Dispersion des potentiels de victoire de ses options. | Distingue les décisions décisives des choix sans conséquence sur l'issue. | **Oui — principal** |
+| **Divergence des branches** | Différence entre les distributions de futurs accessibles après chaque option. | Détecte les faux choix, les reconvergences et les bifurcations narratives durables. | **Non — reporté à l'article** |
+| **Entropie locale** | Incertitude de la distribution sortante du nœud. | Mesure la liberté immédiate offerte au lecteur. | **Oui — support** |
+| **Sensibilité locale au profil** | Variation de la probabilité de visite entre profils. | Montre où les styles de jeu produisent des expériences différentes. | **Oui — principal** |
+| **Co-présence des nœuds** | Covariance ou corrélation entre les scènes visitées. | Permet d'identifier des régions narratives parcourues ensemble. | **Non — reporté à l'article** |
+
+#### Indices globaux potentiels
+
+| Indice | Ce qu'il mesure | Intérêt pour la fiction interactive | Décision pour cette itération |
+| :--- | :--- | :--- | :--- |
+| **Probabilité de victoire et de mort** | Probabilités d'absorption depuis le paragraphe initial. | Mesure la difficulté globale pour chaque profil. | **Oui — principal, déjà calculé** |
+| **Durée attendue** | Nombre moyen de transitions avant `Win` ou `Death`. | Donne la longueur effective d'une lecture. | **Oui — support, déjà calculé** |
+| **Entropie totale des trajectoires** | Somme des entropies locales pondérées par les visites attendues. | Mesure la quantité globale de liberté rencontrée pendant une lecture. | **Oui — principal** |
+| **Entropie par transition** | Entropie totale divisée par la durée attendue. | Compare la variété des décisions sans la confondre avec la longueur des parcours. | **Oui — support** |
+| **Couverture attendue** | Fraction moyenne des paragraphes distincts atteints en une lecture. | Mesure la quantité de contenu découverte à chaque partie. | **Oui — principal** |
+| **Chevauchement entre deux lectures** | Contenu attendu en commun entre deux parcours indépendants. | Son complément fournit un indice interprétable de rejouabilité. | **Oui — principal** |
+| **Concentration du flux** | Concentration des visites sur une petite partie du graphe. | Mesure la force d'une colonne vertébrale narrative commune. | **Non — redondant pour la présentation** |
+| **Divergence entre profils** | Divergence entre les distributions normalisées de visites ou de flux. | Mesure la réactivité du livre au type de joueur. | **Oui — principal** |
+| **Agentivité globale** | Impact moyen des choix, pondéré par leur probabilité de visite. | Résume la capacité effective du lecteur à influencer l'issue. | **Oui — support** |
+| **Rapport survie–liberté** | Position de chaque profil selon sa victoire et son entropie de trajectoire. | Montre si survivre exige de sacrifier de la liberté de parcours. | **Oui — visualisation dérivée** |
+
+Le noyau destiné à la présentation comprend donc cinq familles : difficulté, liberté,
+rejouabilité, réactivité au profil et importance locale des nœuds. Les indices de support
+seront calculés lorsqu'ils sont nécessaires aux formules ou à leur interprétation, sans
+recevoir chacun une figure. La divergence complète des branches et la covariance de
+présence sont reportées à l'article.
+
+Les centralités classiques comme PageRank, le degré brut et les centralités de plus
+court chemin ne sont pas retenues : elles ignorent les probabilités de lecture ou sont
+déformées par les nœuds absorbants. La phase 4 privilégie les mesures fondées sur les
+flux de chemins produits par $W^{(p)}$.
+
+### Phase 5 — Analyse des trajectoires complètes avec un LLM
+
+Cette phase passe de la structure probabiliste du livre aux histoires effectivement
+produites par ses parcours. Elle devra :
+
+1. sélectionner un nombre limité de trajectoires complètes issues des matrices
+   $W^{(p)}$ ;
+2. reconstruire pour chacune le texte narratif dans l'ordre de lecture, avec son profil,
+   son issue et ses métadonnées structurelles conservés séparément ;
+3. faire lire l'histoire complète par un LLM avec une sortie JSON contrainte ;
+4. comparer les histoires entre elles et relier les résultats qualitatifs aux indices
+   BoP de la phase 4.
+
+La méthode exacte de sélection reste à définir. Les dimensions à arbitrer sont le nombre
+de profils, le nombre de trajectoires par profil, l'équilibre entre victoires et morts,
+et la représentation des parcours ordinaires, rares ou extrêmes. Une possibilité est
+de générer un grand échantillon probabiliste, puis de sélectionner des médoïdes et des
+cas périphériques plutôt que de transmettre toutes les trajectoires au LLM.
+
+#### Méthodes potentielles
+
+| Méthode | Usage possible | Limite | Orientation actuelle |
+| :--- | :--- | :--- | :--- |
+| **Distances structurelles** | Comparer les suites de paragraphes, leur longueur, leur issue et leur chevauchement. | Ne mesure pas la similarité du contenu narratif. | **Oui — contrôle et présélection** |
+| **Embeddings des histoires** | Regrouper les trajectoires, mesurer leur dispersion sémantique et sélectionner des médoïdes ou des cas atypiques. | Un embedding global restitue mal l'ordre, la causalité et les contradictions. | **Oui — diversité et sélection, pas jugement de cohérence** |
+| **Évaluation LLM structurée** | Produire des scores et justifications selon une grille commune. | Sensible au modèle, au prompt et à l'ordre des textes. | **Oui — méthode qualitative principale** |
+| **Comparaisons LLM par paires** | Dire laquelle de deux histoires est la plus cohérente ou variée, puis agréger les préférences. | Nombre de comparaisons rapidement élevé. | **Non pour la présentation — candidat pour l'article** |
+| **Extraction d'événements, entités et lieux** | Vérifier la continuité des personnages, objets, lieux et événements le long du parcours. | Demande une nouvelle annotation et une métrique de séquence. | **Non — extension future** |
+| **Évaluation humaine** | Vérifier la validité d'un petit échantillon de jugements du LLM. | Coûteuse et difficile à étendre. | **Souhaitable comme contrôle limité, non bloquant** |
+
+La grille LLM devra au minimum distinguer :
+
+- la **cohérence causale et la continuité** de l'histoire ;
+- la **variation narrative** entre trajectoires, sans la confondre avec une simple
+  différence de paragraphes ;
+- la **progression et la tension** du récit ;
+- la **cohérence entre le profil annoncé et les actions racontées** ;
+- les **ruptures, répétitions ou transitions abruptes** ;
+- la **qualité et la pertinence de l'issue**.
+
+Les scores ne devront pas être interprétés seuls. Ils seront accompagnés de justifications
+courtes, de références aux paragraphes concernés et d'indicateurs de diversité issus des
+embeddings et de la structure. Pour la présentation, l'approche visée est donc un petit
+protocole hybride : sélection structurelle, embeddings pour la diversité, puis lecture
+complète et évaluation structurée par le LLM.
+
+### Phase 6 — Généralisation
 
 Appliquer au moins L0–L1 à un second corpus différent afin de distinguer les règles
 générales des adaptations propres à LW01.
@@ -269,14 +367,14 @@ générales des adaptations propres à LW01.
 - **Interprétabilité** : chaque poids de $W$ dérive d'une règle du pré-graphe et d'un
   profil identifié.
 
-## 8. Questions reportées
+## 8. Questions restant à traiter dans les phases 4 et 5
 
-Les questions suivantes ne bloquent pas la construction du pré-graphe :
+Le catalogue et le noyau des indices BoP sont désormais fixés. Il reste à préciser :
 
-1. quels indices BoP retenir ;
-2. comment les interpréter narrativement ;
-3. comment sélectionner et analyser les trajectoires ;
-4. comment articuler les indices et l'analyse LLM des histoires.
+1. les normalisations exactes utilisées pour comparer les profils ;
+2. la méthode de sélection et le nombre de trajectoires représentatives ;
+3. la grille, le modèle et le protocole de répétition de l'évaluation LLM ;
+4. comment articuler les indices structurels, les embeddings et les jugements du LLM.
 
 ## 9. Documentation active
 

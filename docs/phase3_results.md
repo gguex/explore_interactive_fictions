@@ -1,4 +1,4 @@
-# Résultats de compilation de la phase 3
+# Phase 3 terminée — Résultats de compilation
 
 ## 1. Expérience compilée
 
@@ -99,4 +99,5 @@ l'itération actuelle.
 - `profile_summary.json` : résumé compact et profils extrêmes.
 
 Ces fichiers terminent la compilation de la phase 3. Ils constituent les entrées de la
-phase suivante consacrée aux indices et aux trajectoires.
+phase 4 consacrée aux indices BoP ; les trajectoires complètes seront sélectionnées et
+analysées par LLM dans la phase 5.
