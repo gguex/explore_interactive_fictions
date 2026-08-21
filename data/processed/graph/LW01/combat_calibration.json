@@ -1,0 +1,333 @@
+{
+  "book_id": "LW01",
+  "method": "pooled encounter hazard with carried combat Endurance",
+  "profile_id_for_route_exposure": "neutral_neutral_neutral",
+  "seed": 20260821,
+  "simulations": 300000,
+  "unresolved_simulations": 0,
+  "escaped_encounters_not_counted_as_fights": 28945,
+  "fresh_endurance": {
+    "attempts": 463609,
+    "losses": 53384,
+    "loss_probability": 0.1151487568187848,
+    "ci95_low": 0.11422990622212133,
+    "ci95_high": 0.11606760741544826
+  },
+  "attrition_aware": {
+    "attempts": 463609,
+    "losses": 77535,
+    "loss_probability": 0.16724222351162293,
+    "ci95_low": 0.1661679559621668,
+    "ci95_high": 0.16831649106107907
+  },
+  "recommended_combat_loss_probability": 0.167,
+  "recommended_combat_win_probability": 0.833,
+  "by_combat_ordinal": {
+    "1": {
+      "attempts": 235959,
+      "losses": 26466,
+      "loss_probability": 0.112163553837743,
+      "ci95_low": 0.11089025552665902,
+      "ci95_high": 0.11343685214882698,
+      "mean_starting_endurance": 25.10651426730915
+    },
+    "2": {
+      "attempts": 133523,
+      "losses": 27170,
+      "loss_probability": 0.20348554181676565,
+      "ci95_low": 0.20132609933522638,
+      "ci95_high": 0.2056449842983049,
+      "mean_starting_endurance": 20.772653400537735
+    },
+    "3": {
+      "attempts": 62041,
+      "losses": 15166,
+      "loss_probability": 0.24445124997985204,
+      "ci95_low": 0.24106948008558854,
+      "ci95_high": 0.24783301987411555,
+      "mean_starting_endurance": 17.727389951806064
+    },
+    "4": {
+      "attempts": 23542,
+      "losses": 6573,
+      "loss_probability": 0.27920312632741484,
+      "ci95_low": 0.27347251466507316,
+      "ci95_high": 0.2849337379897565,
+      "mean_starting_endurance": 16.496856681675304
+    },
+    "5": {
+      "attempts": 6690,
+      "losses": 1771,
+      "loss_probability": 0.2647234678624813,
+      "ci95_low": 0.25415128694136485,
+      "ci95_high": 0.27529564878359775,
+      "mean_starting_endurance": 15.936173393124065
+    },
+    "6": {
+      "attempts": 1552,
+      "losses": 335,
+      "loss_probability": 0.21585051546391754,
+      "ci95_low": 0.19538200738918204,
+      "ci95_high": 0.23631902353865303,
+      "mean_starting_endurance": 16.093427835051546
+    },
+    "7": {
+      "attempts": 266,
+      "losses": 49,
+      "loss_probability": 0.18421052631578946,
+      "ci95_low": 0.1376238718678784,
+      "ci95_high": 0.23079718076370054,
+      "mean_starting_endurance": 16.650375939849624
+    },
+    "8": {
+      "attempts": 33,
+      "losses": 5,
+      "loss_probability": 0.15151515151515152,
+      "ci95_low": 0.0291805872645943,
+      "ci95_high": 0.2738497157657087,
+      "mean_starting_endurance": 16.545454545454547
+    },
+    "9": {
+      "attempts": 3,
+      "losses": 0,
+      "loss_probability": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "mean_starting_endurance": 21.0
+    }
+  },
+  "by_paragraph": {
+    "17": {
+      "attempts": 2921,
+      "losses": 361,
+      "loss_probability": 0.1235878123930161,
+      "ci95_low": 0.1116525404299918,
+      "ci95_high": 0.13552308435604038,
+      "mean_starting_endurance": 24.935638479972614
+    },
+    "29": {
+      "attempts": 758,
+      "losses": 267,
+      "loss_probability": 0.35224274406332456,
+      "ci95_low": 0.31823728518891053,
+      "ci95_high": 0.3862482029377386,
+      "mean_starting_endurance": 13.552770448548813
+    },
+    "34": {
+      "attempts": 1137,
+      "losses": 348,
+      "loss_probability": 0.30606860158311344,
+      "ci95_low": 0.27928040372993485,
+      "ci95_high": 0.33285679943629204,
+      "mean_starting_endurance": 14.530343007915567
+    },
+    "43": {
+      "attempts": 8585,
+      "losses": 299,
+      "loss_probability": 0.03482818870122306,
+      "ci95_low": 0.030949779033180434,
+      "ci95_high": 0.03870659836926569,
+      "mean_starting_endurance": 22.48759464181712
+    },
+    "55": {
+      "attempts": 24408,
+      "losses": 0,
+      "loss_probability": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "mean_starting_endurance": 25.110496558505407
+    },
+    "63": {
+      "attempts": 17124,
+      "losses": 608,
+      "loss_probability": 0.035505722961924786,
+      "ci95_low": 0.03273398308948426,
+      "ci95_high": 0.03827746283436531,
+      "mean_starting_endurance": 19.084034104181267
+    },
+    "72": {
+      "attempts": 43748,
+      "losses": 4128,
+      "loss_probability": 0.09435859925025145,
+      "ci95_low": 0.09161925983708225,
+      "ci95_high": 0.09709793866342065,
+      "mean_starting_endurance": 22.081740879583066
+    },
+    "112": {
+      "attempts": 8040,
+      "losses": 45,
+      "loss_probability": 0.005597014925373134,
+      "ci95_low": 0.00396626454248903,
+      "ci95_high": 0.007227765308257238,
+      "mean_starting_endurance": 24.977487562189054
+    },
+    "133": {
+      "attempts": 7321,
+      "losses": 1095,
+      "loss_probability": 0.14956973091107773,
+      "ci95_low": 0.14139991861051496,
+      "ci95_high": 0.1577395432116405,
+      "mean_starting_endurance": 19.64185220598279
+    },
+    "136": {
+      "attempts": 5735,
+      "losses": 15,
+      "loss_probability": 0.0026155187445510027,
+      "ci95_low": 0.0012936157636444154,
+      "ci95_high": 0.00393742172545759,
+      "mean_starting_endurance": 24.95030514385353
+    },
+    "138": {
+      "attempts": 18563,
+      "losses": 101,
+      "loss_probability": 0.005440930884016592,
+      "ci95_low": 0.004382691587433655,
+      "ci95_high": 0.006499170180599529,
+      "mean_starting_endurance": 25.088455529817377
+    },
+    "169": {
+      "attempts": 1179,
+      "losses": 132,
+      "loss_probability": 0.11195928753180662,
+      "ci95_low": 0.09396039971293124,
+      "ci95_high": 0.129958175350682,
+      "mean_starting_endurance": 19.74300254452926
+    },
+    "170": {
+      "attempts": 80484,
+      "losses": 7399,
+      "loss_probability": 0.09193131554097708,
+      "ci95_low": 0.08993516917665918,
+      "ci95_high": 0.09392746190529498,
+      "mean_starting_endurance": 21.546729784801947
+    },
+    "180": {
+      "attempts": 5900,
+      "losses": 2174,
+      "loss_probability": 0.36847457627118646,
+      "ci95_low": 0.3561653926850578,
+      "ci95_high": 0.3807837598573151,
+      "mean_starting_endurance": 19.474406779661017
+    },
+    "191": {
+      "attempts": 2783,
+      "losses": 80,
+      "loss_probability": 0.02874595759971254,
+      "ci95_low": 0.022537920863577768,
+      "ci95_high": 0.03495399433584731,
+      "mean_starting_endurance": 22.15307222421847
+    },
+    "208": {
+      "attempts": 53006,
+      "losses": 1998,
+      "loss_probability": 0.037693845979700415,
+      "ci95_low": 0.036072463735844204,
+      "ci95_high": 0.039315228223556625,
+      "mean_starting_endurance": 22.335961966569823
+    },
+    "220": {
+      "attempts": 9044,
+      "losses": 259,
+      "loss_probability": 0.02863777089783282,
+      "ci95_low": 0.025200323937033017,
+      "ci95_high": 0.03207521785863262,
+      "mean_starting_endurance": 21.891972578505086
+    },
+    "227": {
+      "attempts": 12,
+      "losses": 2,
+      "loss_probability": 0.16666666666666666,
+      "ci95_low": 0.0,
+      "ci95_high": 0.3775290932935149,
+      "mean_starting_endurance": 10.916666666666666
+    },
+    "229": {
+      "attempts": 37808,
+      "losses": 4824,
+      "loss_probability": 0.12759204401184934,
+      "ci95_low": 0.12422897464346355,
+      "ci95_high": 0.13095511338023513,
+      "mean_starting_endurance": 25.11111404993652
+    },
+    "231": {
+      "attempts": 1063,
+      "losses": 75,
+      "loss_probability": 0.07055503292568203,
+      "ci95_low": 0.05516054389299721,
+      "ci95_high": 0.08594952195836686,
+      "mean_starting_endurance": 19.718720602069613
+    },
+    "246": {
+      "attempts": 834,
+      "losses": 185,
+      "loss_probability": 0.22182254196642687,
+      "ci95_low": 0.19362474312644926,
+      "ci95_high": 0.2500203408064045,
+      "mean_starting_endurance": 12.622302158273381
+    },
+    "253": {
+      "attempts": 6512,
+      "losses": 4818,
+      "loss_probability": 0.7398648648648649,
+      "ci95_low": 0.7292093464402197,
+      "ci95_high": 0.7505203832895101,
+      "mean_starting_endurance": 12.139588452088452
+    },
+    "255": {
+      "attempts": 61980,
+      "losses": 33231,
+      "loss_probability": 0.5361568247821878,
+      "ci95_low": 0.5322307208676168,
+      "ci95_high": 0.5400829286967589,
+      "mean_starting_endurance": 21.673136495643757
+    },
+    "260": {
+      "attempts": 6271,
+      "losses": 1768,
+      "loss_probability": 0.2819327061074789,
+      "ci95_low": 0.27079635348527187,
+      "ci95_high": 0.2930690587296859,
+      "mean_starting_endurance": 19.001435177802584
+    },
+    "283": {
+      "attempts": 21550,
+      "losses": 3708,
+      "loss_probability": 0.17206496519721579,
+      "ci95_low": 0.16702558888924932,
+      "ci95_high": 0.17710434150518226,
+      "mean_starting_endurance": 24.26997679814385
+    },
+    "336": {
+      "attempts": 7459,
+      "losses": 181,
+      "loss_probability": 0.0242659873977745,
+      "ci95_low": 0.020773937234717474,
+      "ci95_high": 0.027758037560831526,
+      "mean_starting_endurance": 24.514814318273228
+    },
+    "339": {
+      "attempts": 524,
+      "losses": 34,
+      "loss_probability": 0.0648854961832061,
+      "ci95_low": 0.04379452203232115,
+      "ci95_high": 0.08597647033409106,
+      "mean_starting_endurance": 19.744274809160306
+    },
+    "340": {
+      "attempts": 7337,
+      "losses": 1413,
+      "loss_probability": 0.19258552541910862,
+      "ci95_low": 0.18356240198202436,
+      "ci95_high": 0.20160864885619287,
+      "mean_starting_endurance": 12.698786970151287
+    },
+    "342": {
+      "attempts": 21523,
+      "losses": 7987,
+      "loss_probability": 0.37109139060539886,
+      "ci95_low": 0.36463724323094904,
+      "ci95_high": 0.3775455379798487,
+      "mean_starting_endurance": 24.29368582446685
+    }
+  }
+}

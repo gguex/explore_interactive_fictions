@@ -142,9 +142,17 @@ Cette simplification est volontaire : elle sacrifie une partie de la mécanique 
 pour que le même compilateur puisse traiter d'autres livres sans connaître leurs
 paragraphes particuliers.
 
-Les rounds, l'Endurance et les tables de combat ne sont pas simulés. Les caractéristiques
-des ennemis restent disponibles et pourront plus tard servir à calculer une probabilité
-de victoire propre à chaque combat $v(i)$ dans une expérience étendue.
+Les rounds, l'Endurance et les tables de combat ne sont pas simulés pendant la compilation
+du graphe. Ils sont toutefois utilisés hors pipeline générique par une calibration
+reproductible : `scripts/3.2_calibrate_combat.py` simule la création de personnages, les
+combats et l'attrition sur les routes neutres, puis les regroupe en une seule valeur.
+Pour LW01, cette opération donne $P(\text{perte})=0{,}167$ et fixe donc
+`combat_win_probability` à 0,833. La méthode, les hypothèses et les limites sont décrites
+avec les autres paramètres fixes dans `docs/fixed_probabilities.md`.
+
+Les probabilités propres à chaque combat $v(i)$ restent exclues de l'expérience : elles
+ne sont conservées que dans le rapport de calibration et ne changent pas les poids du
+compilateur.
 
 ### 4.5 État persistant
 
@@ -236,9 +244,9 @@ Les 27 matrices seront calculées et contrôlées. La présentation de 20 minute
 seulement un profil neutre, quelques archétypes lisibles et des effets agrégés par axe.
 
 Le générateur des 27 profils, le compilateur et le validateur indépendant sont
-implémentés. Une première matrice neutre a été compilée avec les hypothèses techniques
-initiales ; la calibration scientifique des valeurs fixes reste à arrêter avant de
-compiler toute l'expérience.
+implémentés. La probabilité de combat est désormais calibrée à 0,833 pour LW01 ; les
+autres valeurs fixes restent à justifier ou à assumer explicitement avant de compiler
+toute l'expérience.
 
 ### Phase 4 — Analyses BoP et trajectoires — différée
 

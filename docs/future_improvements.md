@@ -316,8 +316,9 @@ présentable en 20 minutes :
 - disponibilité réelle des disciplines Kai et comparaison des configurations de cinq
   disciplines parmi dix ;
 - effet d'une discipline particulière sur la réussite, les flux et les trajectoires ;
-- capacité de combat propre au joueur, difficulté propre à chaque ennemi et calcul de la
-  victoire depuis les tables de combat ;
+- variation de la capacité de combat propre au joueur et utilisation dans le graphe de
+  probabilités $v(i)$ propres à chaque ennemi ; la table officielle est désormais
+  utilisée uniquement pour calibrer le scalaire global de LW01 ;
 - propension individuelle à prendre la fuite et survie jusqu'au round où elle devient
   possible ;
 - disponibilité propre à chaque objet, seuil de monnaie ou seuil d'Endurance ;
@@ -327,6 +328,8 @@ présentable en 20 minutes :
   `escape_probability` et `has_condition` ;
 - comparaison entre une probabilité globale et des probabilités estimées par paragraphe
   ou par mécanique ;
+- suivi exact des dégâts hors combat, de l'inventaire acquis, des soins et des rounds
+  obligatoires avant une fuite dans la calibration ;
 - expansion L3 de l'état `(paragraphe, Endurance, inventaire, monnaie, équipement)` ;
 - robustesse des résultats sur LW02, d'autres volumes et d'autres séries.
 

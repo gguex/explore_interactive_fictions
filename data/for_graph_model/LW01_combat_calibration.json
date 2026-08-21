@@ -1,0 +1,79 @@
+{
+  "profile_id": "neutral_neutral_neutral",
+  "seed": 20260821,
+  "simulations": 300000,
+  "max_steps": 2000,
+  "character_creation": {
+    "combat_skill_base": 10,
+    "endurance_base": 20,
+    "random_values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "disciplines_chosen": 5,
+    "disciplines": [
+      "Camouflage",
+      "Hunting",
+      "Sixth Sense",
+      "Tracking",
+      "Healing",
+      "Weaponskill",
+      "Mindshield",
+      "Mindblast",
+      "Animal Kinship",
+      "Mind Over Matter"
+    ],
+    "starting_weapons": ["Axe"],
+    "weaponskill_table": {
+      "0": "Dagger",
+      "1": "Spear",
+      "2": "Mace",
+      "3": "Short Sword",
+      "4": "Warhammer",
+      "5": "Sword",
+      "6": "Axe",
+      "7": "Sword",
+      "8": "Quarterstaff",
+      "9": "Broadsword"
+    },
+    "equipment_table": {
+      "0": {"weapons": ["Broadsword"]},
+      "1": {"weapons": ["Sword"]},
+      "2": {"endurance_bonus": 2},
+      "3": {},
+      "4": {"endurance_bonus": 4},
+      "5": {"weapons": ["Mace"]},
+      "6": {"healing_potion": true},
+      "7": {"weapons": ["Quarterstaff"]},
+      "8": {"weapons": ["Spear"]},
+      "9": {}
+    }
+  },
+  "combat_rules": {
+    "mindblast_bonus": 2,
+    "weaponskill_bonus": 2,
+    "healing_potion_points": 4,
+    "healing_potion_use_threshold": 4
+  },
+  "combat_overrides": {
+    "17": {"combat_skill_modifier": -1},
+    "29": {"unless_discipline": {"name": "Mindshield", "modifier": -2}},
+    "34": {"unless_discipline": {"name": "Mindshield", "modifier": -2}},
+    "55": {"combat_skill_modifier": 4},
+    "133": {"mindblast_immune": true},
+    "136": {"combat_skill_modifier": 1},
+    "170": {"mindblast_immune": true, "absent_condition_modifier": -3},
+    "229": {"combat_skill_modifier": -1},
+    "255": {"mindblast_immune": true, "weapons": ["Sword"]},
+    "260": {"combat_skill_modifier": -4, "unarmed": true},
+    "283": {
+      "first_round_modifier": 2,
+      "unless_discipline": {
+        "name": "Mindshield",
+        "modifier": -2,
+        "from_round": 2
+      }
+    },
+    "342": {
+      "mindblast_immune": true,
+      "unless_discipline": {"name": "Mindshield", "modifier": -2}
+    }
+  }
+}

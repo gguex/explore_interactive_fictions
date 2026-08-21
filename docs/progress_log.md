@@ -293,6 +293,45 @@
 - Nouvelle compilation temporaire réussie des 27 profils avec cette représentation
   générique.
 
+### 21.08.2026 — Calibration de la probabilité globale de combat
+
+- Relecture des règles officielles de création, d'équipement, de disciplines et de
+  combat de *Flight from the Dark*, ainsi que des 29 paragraphes de combat de LW01.
+- Ajout de `scripts/3.2_calibrate_combat.py` et de la configuration déclarative
+  `LW01_combat_calibration.json`. Les modificateurs propres aux paragraphes restent hors
+  du compilateur générique.
+- Simulation reproductible de 300 000 parcours neutres avec les caractéristiques 10–19
+  et 20–29, cinq disciplines sur dix, l'équipement initial, la table de combat complète,
+  Healing et les blessures conservées entre combats.
+- Sur 463 609 combats engagés, estimation d'une perte à 0,115149 avec Endurance remise
+  au maximum et à 0,167242 avec attrition. L'Endurance moyenne passe de 25,11 au premier
+  combat à 20,77 au deuxième, 17,73 au troisième et 16,50 au quatrième.
+- Lissage par risque groupé $D/N$ et adoption de
+  `combat_win_probability = 0.833`, soit une probabilité de perte arrondie à 0,167.
+- Conservation du rapport complet par rang et par paragraphe dans
+  `data/processed/graph/LW01/combat_calibration.json`; synthèse méthodologique dans
+  `docs/fixed_probabilities.md`.
+- Ajout d'un contrôle indépendant des cellules de table utilisées dans les exemples
+  officiels, des agrégations du rapport, de l'effet d'attrition et de la couverture des
+  29 paragraphes de combat.
+- Recompilation et validation de la matrice neutre avec $v=0{,}833$ : 352 nœuds,
+  602 arêtes, erreur maximale de somme de ligne de $1{,}11\times10^{-15}$ et, depuis le
+  §1, $P(Death)=0{,}880189$, $P(Win)=0{,}119811$ sous les autres hypothèses fixes.
+
+### 21.08.2026 — Justification des paramètres fixes subjectifs
+
+- Regroupement de la calibration du combat et des choix subjectifs dans
+  `docs/fixed_probabilities.md`, avec une présentation plus concise du calcul détaillé du
+  combat.
+- Adoption explicite de `escape_probability = 0.5` comme hypothèse d'indifférence entre
+  fuir et poursuivre, et de `has_condition = 0.5` comme prior binaire neutre commun aux
+  objets, à l'argent et à l'Endurance.
+- Contrôle de sensibilité aux valeurs 0,25 et 0,75 : variation de $P(Win)$ de 0,13 point
+  de pourcentage pour la fuite et de 0,60 point pour les conditions entre les scénarios
+  extrêmes.
+- Les deux valeurs sont consignées comme hypothèses subjectives, et non comme
+  estimations empiriques ; elles restent communes aux 27 profils.
+
 ## Prochaine étape
 
 Calibrer et justifier les probabilités fixes de la configuration, puis compiler et

@@ -140,8 +140,9 @@ profils :
 - les coefficients globaux qui transforment la correspondance entre un profil et les
   annotations sémantiques en affinité positive.
 
-Les valeurs numériques encore à choisir sont des hypothèses de l'expérience, pas des
-dimensions de profil. L'interface recommandée matérialise cette séparation :
+Ces valeurs numériques sont des hypothèses de l'expérience, pas des dimensions de
+profil. Pour LW01, la valeur du combat est calibrée à 0,833 ; les autres probabilités
+restent des hypothèses fixes. L'interface recommandée matérialise cette séparation :
 
 ```python
 compiler = WCompiler(pre_graph, fixed_settings)
@@ -280,6 +281,7 @@ discipline ouvre une option sans obliger le joueur à la prendre.
 
 La chance de victoire n'est pas fixée dans le pré-graphe. La phase 3 utilise cependant
 une seule valeur $v=$ `combat_win_probability`, commune à tous les combats et profils.
+Pour LW01, elle est calibrée à 0,833, soit un risque de perte lissé de 0,167.
 
 Pour un combat simple :
 
@@ -356,6 +358,23 @@ Une blessure non fatale pendant la fuite est conservée dans `note`, mais ne cr�
 état supplémentaire. L'Endurance et les tables de combat ne sont pas simulées dans le
 pré-graphe.
 
+### 5.8 Calibration externe de $v$
+
+Le compilateur ne contient aucune règle de combat. Un utilitaire séparé,
+`scripts/3.2_calibrate_combat.py`, utilise la table officielle de *Lone Wolf*, les
+caractéristiques initiales, l'équipement, cinq disciplines sur dix et les ennemis du
+livre. Il conserve les blessures entre les combats le long de parcours neutres, puis
+calcule le risque constant $q=D/N$ sur tous les combats engagés.
+
+Dans LW01, 300 000 parcours donnent 463 609 combats engagés et
+$q=0{,}167242$ (contre 0,115149 en remettant artificiellement l'Endurance au maximum
+avant chaque combat). La configuration retient les valeurs arrondies
+$q=0{,}167$ et $v=0{,}833$. La synthèse méthodologique et les limites sont consignées
+avec les autres hypothèses fixes dans `docs/fixed_probabilities.md`.
+
+Cette étape reste une calibration du paramètre L2 : elle ne crée aucun état Endurance
+dans $W$ et n'introduit aucun $v(i)$ par paragraphe.
+
 ## 6. Mécaniques incluses et exclues
 
 | Mécanique | Décision | Justification |
@@ -369,7 +388,7 @@ pré-graphe.
 | Endurance, dégâts et soins | **État exclu — L3** | Aucun suivi dynamique ; tout seuil simple utilise `has_condition`. |
 | Objets, inventaire et monnaie | **État exclu — L3** | Aucun inventaire dynamique ; toute condition simple utilise `has_condition`. |
 | Repas et équipement | **Exclus — L3** | Mécaniques trop spécifiques au système. |
-| Modificateurs de combat | **Extension reportée** | Ils pourront plus tard alimenter une configuration de combat plus détaillée. |
+| Modificateurs de combat | **Inclus dans la calibration seulement** | Ils estiment le scalaire global ; le compilateur n'en dépend pas. |
 | Énigmes et liens cachés | **Ajoutés seulement si vérifiables** | Aucune cible n'est inventée. |
 
 Les occurrences des mécaniques exclues restent disponibles comme métadonnées ou comme
@@ -612,7 +631,7 @@ Le contrat minimal des deux fichiers est :
 | Configuration fixe | Rôle |
 | :--- | :--- |
 | `kai_availability` | Nombre dans $[0,1]$, égal à 0,5 pour cette itération. |
-| `combat_win_probability` | Nombre dans $[0,1]$, identique pour tous les combats. |
+| `combat_win_probability` | Nombre dans $[0,1]$, identique pour tous les combats ; 0,833 après calibration de LW01. |
 | `escape_probability` | Nombre dans $[0,1]$, identique pour toutes les fuites. |
 | `has_condition` | Nombre dans $[0,1]$, utilisé pour tout `condition_available(type, value)`. |
 | `choice_affinities` | Coefficients positifs communs qui distinguent accord, neutralité et opposition sur les axes. |
@@ -653,11 +672,12 @@ $W$, vérifie les distributions locales et les deux états absorbants, puis rés
 probabilités d'absorption. Il échoue si une partie de la masse ne rejoint pas `Death` ou
 `Win`.
 
-La configuration LW01 actuelle est une configuration technique initiale : les quatre
-probabilités globales valent 0,5. Les groupes de plusieurs arêtes `survive` sont divisés
-à parts égales par une règle générale, sans entrée propre au livre dans la configuration.
-Ces valeurs permettent de tester le pipeline ; elles devront être justifiées ou
-présentées explicitement comme hypothèses avant l'analyse scientifique.
+La configuration LW01 actuelle distingue désormais deux statuts. La victoire au combat
+est calibrée à 0,833 par le protocole reproductible de
+`docs/fixed_probabilities.md`. `kai_availability`, `escape_probability` et
+`has_condition` valent encore 0,5 : ce sont à ce stade des hypothèses neutres, et non des
+estimations empiriques. Les groupes de plusieurs arêtes `survive` sont divisés à parts
+égales par une règle générale, sans entrée propre au livre dans la configuration.
 
 ## 11. Critères de fin
 

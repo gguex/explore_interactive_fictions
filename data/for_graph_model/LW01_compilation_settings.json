@@ -1,6 +1,6 @@
 {
   "kai_availability": 0.5,
-  "combat_win_probability": 0.5,
+  "combat_win_probability": 0.833,
   "escape_probability": 0.5,
   "has_condition": 0.5,
   "choice_affinities": {
