@@ -17,7 +17,7 @@
 | Audit pour la phase 2 | Terminé | Les conditions persistantes simples sont automatisées et les 14 exceptions sont supervisées. |
 | Construction du pré-graphe | Terminée pour LW01 | 352 nœuds, 602 arêtes et aucune transition de phase 1 non classée. |
 | Compilation de \(W\) | Terminée pour LW01 | 27 matrices valides ; résultats par profil et par axe synthétisés. |
-| Bag-of-Paths et indices | Phase 4 — en cours | Calcul exhaustif et validation terminés ; extractions et figures de présentation à produire. |
+| Bag-of-Paths et indices | Terminée pour LW01 | Calcul, synthèses et package de trois diapositives validés. |
 | Analyse des histoires par LLM | Phase 5 — à faire | Phase distincte ; sélection des trajectoires et protocole hybride à préciser. |
 
 ## Historique
@@ -410,9 +410,43 @@
   attendue de 27,211670 transitions et entropie de 15,478212 nats.
 - Documentation des formules, conventions et schémas dans `docs/phase4_indices.md`.
 
+### 25.08.2026 — Synthèses 4.2 pour la présentation
+
+- Implémentation de `scripts/4.2_summarize_bop_indices.py`, qui relit exclusivement les
+  sorties canoniques de 4.1 et ne recalcule ni $W$ ni les matrices fondamentales.
+- Production d'une synthèse des 15 indices globaux, de 135 effets axe–niveau–indice et
+  des 45 valeurs du contraste contrôlé prudent–neutre–téméraire.
+- Production de tables prêtes pour les figures couvrant les 350 paragraphes et les 602
+  arêtes, avec valeurs neutres, moyennes équilibrées, sensibilités et contrastes entre
+  les trajectoires conditionnées à la victoire et à la mort.
+- Sélection déterministe des dix premiers paragraphes selon six classements locaux.
+- Ajout et passage du validateur 4.2, qui recalcule indépendamment les agrégations,
+  extrêmes, différences et classements à partir des tables de 4.1.
+- Pour contrôle : victoire neutre de 0,119811 contre une moyenne équilibrée de 0,132992 ;
+  couverture neutre de 0,072789 et rejouabilité neutre de 0,795552.
+
+### 25.08.2026 — Package de présentation 4.3 et fin de la phase 4
+
+- Sélection finale de trois messages pour la présentation de 20 minutes : paysage
+  difficulté–liberté des 27 profils, effets marginaux des axes et trois cartes locales du
+  même graphe longitudinal.
+- Ajout de `scripts/4.3_build_bop_presentation.py`, produisant quatre supports en anglais
+  dans des versions PNG 1920 × 1080 et SVG éditable, ainsi qu'un tableau CSV et un
+  manifeste avec empreintes SHA-256.
+- Mise en évidence d'une association descriptive positive entre victoire et entropie de
+  trajectoire ($r=0{,}826$) sur le plan factoriel complet, sans interprétation causale ou
+  inférentielle.
+- Présentation des effets marginaux sur la victoire, l'entropie, la couverture et la
+  rejouabilité ; l'axe du risque est le contraste principal.
+- Réunion sur une seule diapositive des probabilités de visite, contributions à la
+  mortalité et sensibilités au profil, avec le layout Project Aon fixé entre les panneaux.
+- Ajout d'un validateur couvrant les formats, dimensions, titres, valeurs arrondies,
+  points mis en avant, provenance et empreintes de tous les artefacts.
+- Documentation des choix, des phrases proposées et des résultats volontairement laissés
+  en annexe dans `docs/phase4_presentation.md`. La phase 4 est terminée pour LW01.
+
 ## Prochaine étape
 
-Extraire des tables canoniques les comparaisons retenues pour la présentation : profil
-neutre, moyenne équilibrée, effets marginaux, contraste contrôlé du risque et vues
-locales sur le graphe. La sélection des trajectoires représentatives et l'analyse LLM
-des histoires complètes suivront dans une phase 5 distincte.
+Définir la sélection des trajectoires représentatives et l'analyse LLM des histoires
+complètes de la phase 5, en réutilisant notamment les flux conditionnés produits en
+phase 4.

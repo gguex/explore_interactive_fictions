@@ -18,6 +18,7 @@ narrative analysis.
 | `docs/fixed_probabilities.md` | Calibration and assumptions for the fixed phase-3 parameters. |
 | `docs/phase3_results.md` | Validation and comparative results for all 27 profiles. |
 | `docs/phase4_indices.md` | Canonical phase-4 BoP metrics, output tables and independent validation. |
+| `docs/phase4_presentation.md` | Final three-slide phase-4 selection, speaking points and generated artifacts. |
 | `docs/future_improvements.md` | Deferred improvements: structured phase-1 schema, portability and migration path. |
 | `docs/progress_log.md` | Append-only progress journal and current project status. |
 | `docs/infict-llm_abstract.tex` | Accepted COMHUM2026 extended abstract. |
@@ -53,9 +54,9 @@ results/         cluster outputs and calibration history
    and 602 edges and pass the independent structural and absorption checks. The fixed
    combat probability is calibrated at `0.833`; the neutral profile reaches `Win` with
    probability `0.119811`, and the complete design ranges from `0.054397` to `0.258347`.
-4. **BoP indices** (in progress): the selected local and global structural indices are
-   calculated and independently validated for all 27 profiles; presentation-oriented
-   summaries and figures remain to be produced.
+4. **BoP indices** (done for LW01): the selected local and global structural indices are
+   calculated and independently validated for all 27 profiles. A concise three-slide
+   presentation package and an optional key-number table are generated reproducibly.
 5. **LLM trajectory analysis**: select representative complete paths, use embeddings to
    characterize their diversity and apply a structured LLM evaluation to their stories.
 6. **Generalization**: apply the reusable pipeline to another book or corpus.
@@ -85,6 +86,10 @@ uv run python scripts/tests/test_4_0_visualize_graph.py --book LW01 \
   --profile neutral_neutral_neutral
 uv run python scripts/4.1_compute_bop_indices.py --book LW01
 uv run python scripts/tests/test_4_1_compute_bop_indices.py --book LW01
+uv run python scripts/4.2_summarize_bop_indices.py --book LW01
+uv run python scripts/tests/test_4_2_summarize_bop_indices.py --book LW01
+uv run python scripts/4.3_build_bop_presentation.py --book LW01
+uv run python scripts/tests/test_4_3_build_bop_presentation.py --book LW01
 ```
 
 The same commands accept another Lone Wolf identifier, such as `--book LW02`, provided

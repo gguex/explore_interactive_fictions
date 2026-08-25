@@ -1,0 +1,120 @@
+{
+  "book_id": "LW01",
+  "controlled_risk_profiles": [
+    "cautious_neutral_neutral",
+    "neutral_neutral_neutral",
+    "reckless_neutral_neutral"
+  ],
+  "global_metrics": [
+    "death_probability",
+    "win_probability",
+    "expected_transitions",
+    "expected_transitions_given_death",
+    "expected_transitions_given_win",
+    "trajectory_entropy_nats",
+    "entropy_per_transition_nats",
+    "expected_distinct_nodes",
+    "expected_coverage",
+    "expected_shared_nodes_same_profile",
+    "replay_overlap_ratio",
+    "replayability",
+    "choice_exposure",
+    "global_agency_total",
+    "global_agency_mean"
+  ],
+  "headline": {
+    "balanced_mean_win_probability": 0.132992146115,
+    "neutral_expected_coverage": 0.072789145299,
+    "neutral_replayability": 0.79555215062,
+    "neutral_trajectory_entropy_nats": 15.4782115487,
+    "neutral_win_probability": 0.119811141043
+  },
+  "output_schemas": {
+    "axis_summary.csv": [
+      "axis",
+      "level",
+      "metric",
+      "profile_count",
+      "mean",
+      "std",
+      "minimum",
+      "maximum",
+      "delta_vs_axis_neutral"
+    ],
+    "controlled_risk.csv": [
+      "profile_id",
+      "risk",
+      "morality",
+      "action",
+      "metric",
+      "value",
+      "delta_vs_neutral"
+    ],
+    "edge_presentation_metrics.csv": [
+      "edge_id",
+      "source_id",
+      "target_id",
+      "transition_kind",
+      "neutral_compiled_weight",
+      "neutral_expected_flow",
+      "balanced_mean_expected_flow",
+      "expected_flow_range",
+      "neutral_expected_flow_given_death",
+      "neutral_expected_flow_given_win",
+      "neutral_win_minus_death_expected_flow"
+    ],
+    "global_summary.csv": [
+      "metric",
+      "neutral_value",
+      "balanced_mean",
+      "balanced_std",
+      "minimum_value",
+      "minimum_profile",
+      "maximum_value",
+      "maximum_profile",
+      "range"
+    ],
+    "node_presentation_metrics.csv": [
+      "node_id",
+      "node_kind",
+      "outcome",
+      "is_combat",
+      "is_player_choice",
+      "neutral_expected_visits",
+      "neutral_visit_probability",
+      "balanced_mean_visit_probability",
+      "visit_probability_range",
+      "min_visit_profile",
+      "max_visit_profile",
+      "neutral_death_contribution",
+      "balanced_mean_death_contribution",
+      "neutral_win_potential",
+      "neutral_local_entropy_nats",
+      "neutral_entropy_contribution_nats",
+      "neutral_choice_impact",
+      "neutral_choice_win_range",
+      "neutral_visit_probability_given_death",
+      "neutral_visit_probability_given_win",
+      "neutral_win_minus_death_visit_probability"
+    ],
+    "node_rankings.csv": [
+      "ranking",
+      "rank",
+      "node_id",
+      "score",
+      "value"
+    ]
+  },
+  "outputs": {
+    "axis_summary.csv": 135,
+    "controlled_risk.csv": 45,
+    "edge_presentation_metrics.csv": 602,
+    "global_summary.csv": 15,
+    "node_presentation_metrics.csv": 350,
+    "node_rankings.csv": 60
+  },
+  "profile_count": 27,
+  "schema_version": "1.0",
+  "source": "data/processed/bop/LW01",
+  "top_n": 10
+}

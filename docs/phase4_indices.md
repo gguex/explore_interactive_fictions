@@ -78,3 +78,39 @@ uv run python scripts/tests/test_4_1_compute_bop_indices.py --book LW01
 Le calcul exhaustif constitue la source canonique. Les prochains scripts de phase 4
 pourront en extraire la moyenne équilibrée, les effets marginaux, les profils contrôlés
 et les figures sans recalculer les matrices fondamentales.
+
+## Synthèses pour l'analyse et la présentation
+
+Le script 4.2 relit uniquement les tables de 4.1 : il ne recharge pas les matrices $W$
+et ne recalcule aucun indice BoP.
+
+```bash
+uv run python scripts/4.2_summarize_bop_indices.py --book LW01
+uv run python scripts/tests/test_4_2_summarize_bop_indices.py --book LW01
+```
+
+Les sorties sont écrites dans `data/processed/bop/LW01/presentation/` :
+
+| Fichier | Rôle |
+| :--- | :--- |
+| `global_summary.csv` | Pour chacun des 15 indices globaux : profil neutre, moyenne et écart-type équilibrés, minimum, maximum et étendue sur les 27 profils. |
+| `axis_summary.csv` | 135 lignes axe–niveau–indice avec moyenne marginale, dispersion et différence par rapport au niveau neutre du même axe. |
+| `controlled_risk.csv` | Comparaison longue des trois profils qui ne diffèrent que par `risk`, avec différence au profil entièrement neutre. |
+| `node_presentation_metrics.csv` | Une ligne par paragraphe avec les valeurs neutres, moyennes et sensibilités nécessaires aux cartes locales. |
+| `edge_presentation_metrics.csv` | Une ligne par arête avec les flux neutres, moyens et conditionnés à chaque issue. |
+| `node_rankings.csv` | Dix premiers paragraphes pour six classements : visite neutre, visite moyenne, sensibilité au profil, mortalité, impact des choix et contraste victoire–mort. |
+| `summary.json` | Schémas, nombres de lignes, paramètres de sélection et valeurs principales. |
+
+La « moyenne équilibrée » est toujours la moyenne arithmétique des 27 résultats déjà
+calculés. Les effets marginaux d'un niveau sont des moyennes sur les neuf combinaisons
+des deux autres axes. L'écart-type décrit ici la dispersion du plan factoriel complet :
+ce n'est ni une incertitude d'échantillonnage ni un intervalle de confiance.
+
+Le vérificateur 4.2 reconstruit indépendamment toutes ces agrégations depuis les tables
+4.1, contrôle les extrêmes et les différences, puis reproduit l'ordre exact des six
+classements locaux. Ces fichiers deviennent ainsi l'entrée des figures, qui pourront
+changer de forme sans modifier les calculs scientifiques.
+
+Le script `4.3_build_bop_presentation.py` réalise cette dernière mise en forme. La
+sélection des figures, leur ordre recommandé et les phrases proposées sont documentés
+séparément dans [`phase4_presentation.md`](phase4_presentation.md).

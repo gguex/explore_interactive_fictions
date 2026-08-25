@@ -1,0 +1,16 @@
+metric,neutral_value,balanced_mean,balanced_std,minimum_value,minimum_profile,maximum_value,maximum_profile,range
+death_probability,0.880188858957,0.867007853885,0.0650467867756,0.741652778517,cautious_selfish_physical,0.94560312572,reckless_selfish_tactical,0.203950347203
+win_probability,0.119811141043,0.132992146115,0.0650467867756,0.0543968742799,reckless_selfish_tactical,0.258347221483,cautious_selfish_physical,0.203950347203
+expected_transitions,27.2116703819,27.8024555437,2.43855206994,24.4198905699,reckless_selfish_neutral,33.1985856711,cautious_noble_physical,8.7786951012
+expected_transitions_given_death,23.6939401,24.0768085959,1.13887801803,22.0711462142,neutral_selfish_tactical,26.8504528394,cautious_noble_physical,4.7793066252
+expected_transitions_given_win,53.054567595,53.3549147729,2.315949874,49.5601971286,cautious_selfish_neutral,57.9695717482,reckless_neutral_tactical,8.4093746196
+trajectory_entropy_nats,15.4782115487,14.3675326674,1.34474189762,12.6472036384,reckless_noble_physical,16.8244721737,cautious_noble_physical,4.1772685353
+entropy_per_transition_nats,0.568807843529,0.517052403209,0.0254060482714,0.476441932075,reckless_noble_physical,0.568807843529,neutral_neutral_neutral,0.092365911454
+expected_distinct_nodes,25.4762008547,26.0544016789,2.36607092753,22.7863254996,reckless_selfish_neutral,31.321250599,cautious_noble_physical,8.5349250994
+expected_coverage,0.072789145299,0.0744411476541,0.00676020265007,0.0651037871416,reckless_selfish_neutral,0.0894892874256,cautious_noble_physical,0.024385500284
+expected_shared_nodes_same_profile,5.2085544751,6.0579134352,1.1534536335,4.72383040929,reckless_selfish_tactical,8.93248587032,cautious_selfish_physical,4.20865546103
+replay_overlap_ratio,0.20444784938,0.230840713166,0.0241271524081,0.201853368804,neutral_neutral_tactical,0.294953932137,cautious_selfish_physical,0.093100563333
+replayability,0.79555215062,0.769159286834,0.0241271524081,0.705046067863,cautious_selfish_physical,0.798146631196,neutral_neutral_tactical,0.093100563333
+choice_exposure,16.0622473267,16.2999847159,1.51167053717,14.342434981,reckless_selfish_neutral,19.5028337756,cautious_noble_physical,5.1603987946
+global_agency_total,0.520065359635,0.474484504141,0.135156252277,0.275383274111,reckless_selfish_neutral,0.705110890704,cautious_noble_neutral,0.429727616593
+global_agency_mean,0.0323781192667,0.0287019730368,0.00632260961905,0.0187067354147,reckless_selfish_physical,0.0384115308282,cautious_noble_neutral,0.0197047954135

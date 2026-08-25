@@ -250,7 +250,7 @@ implémentés. La configuration fixe est documentée, les 27 matrices LW01 sont 
 leurs probabilités d'absorption et durées attendues sont synthétisées dans
 `docs/phase3_results.md`. La phase 3 est terminée pour LW01.
 
-### Phase 4 — Indices et analyses BoP — calcul exhaustif terminé
+### Phase 4 — Indices et analyses BoP — terminée pour LW01
 
 À la borne Random Walk retenue pour cette itération, les indices sont calculés à partir
 de la matrice transitoire $Q^{(p)}$ et de la matrice fondamentale :
@@ -376,8 +376,14 @@ les tables par profil, nœud, arête et paire de profils dans
 `scripts/tests/test_4_1_compute_bop_indices.py` reconstruit les matrices fondamentales et
 vérifie les identités d'absorption, de flux, de durée, d'entropie, de couverture et de
 divergence. Les formules exactes et les schémas de sortie sont documentés dans
-`phase4_indices.md`. Il reste à extraire de ces tables les comparaisons et figures
-destinées à la présentation.
+`phase4_indices.md`. `scripts/4.2_summarize_bop_indices.py` extrait ensuite, sans
+recalculer les indices, la référence neutre, la moyenne équilibrée, les effets marginaux,
+le contraste contrôlé du risque, les valeurs locales prêtes à projeter sur le graphe et
+six classements de paragraphes. Son validateur reproduit indépendamment toutes les
+agrégations. `scripts/4.3_build_bop_presentation.py` transforme enfin ces synthèses en
+trois diapositives principales et un tableau optionnel, tous disponibles en PNG 16:9 et
+SVG éditable. La sélection, les messages et les précautions d'interprétation sont fixés
+dans `phase4_presentation.md`. La phase 4 est terminée pour LW01.
 
 #### Visualisation longitudinale du graphe
 
@@ -394,15 +400,20 @@ ce même layout : une différence visuelle représente ainsi une différence de 
 non un déplacement arbitraire des nœuds. Un layout algorithmique fondé sur le pré-graphe
 reste disponible comme solution de repli pour les livres sans diagramme externe.
 
-Le script de figure devra produire au minimum :
+Les figures produites retiennent finalement :
 
 - une vue **topologique** de la phase 3 ;
-- une vue où la taille ou la couleur représente la **probabilité de visite** ;
-- une vue des principales **contributions à la mortalité** ;
-- une vue divergente de la **différence de visite entre deux profils** ;
-- une vue optionnelle de l'**impact des choix**.
+- un panneau où taille et couleur représentent la **probabilité de visite** neutre ;
+- un panneau des principales **contributions à la mortalité** neutre ;
+- un panneau de la **sensibilité au profil**, mesurée par l'étendue des probabilités de
+  visite entre les 27 profils.
 
-Deux rendus seront produits à partir des mêmes coordonnées : un SVG longitudinal complet,
+Ces trois indices locaux partagent une même diapositive afin de montrer que la colonne
+vertébrale, les points de danger et les régions sensibles ne coïncident pas. Une carte
+séparée de l'impact des choix et les contrastes par paires restent disponibles dans les
+données, mais sont écartés de la présentation pour conserver un message concis.
+
+Deux rendus sont produits à partir des mêmes coordonnées : un SVG longitudinal complet,
 zoomable et portant les numéros des paragraphes, et une version simplifiée au format de
 la présentation, où seuls les nœuds importants sont étiquetés. Les arêtes parallèles
 peuvent être agrégées visuellement par couple source–cible, même si elles restent séparées
@@ -410,7 +421,7 @@ dans les données scientifiques.
 
 Dans le modèle, toutes les morts rejoignent l'unique absorbant `Death`. Les afficher sous
 forme de longues arêtes vers un même point rendrait la figure illisible. La projection de
-présentation colorera donc les paragraphes de mort et les transitions mortelles localement,
+présentation colore donc les paragraphes de mort et les transitions mortelles localement,
 tout en indiquant dans la légende qu'ils correspondent au même absorbant. Le fichier de
 calcul et les indices restent, eux, fondés sur le graphe canonique inchangé.
 
@@ -418,15 +429,15 @@ La vue structurelle utilise une couleur et une forme stables pour les principaux
 nœuds : cercle blanc pour un paragraphe ordinaire, losange orange pour un combat, croix
 rouge sombre pour une fin mortelle, étoile verte pour la victoire et cercle bleu sombre
 pour le départ. Une petite croix rouge distincte signale une transition possible vers
-`Death` sans transformer sa source en fin mortelle. Lorsque la couleur représentera un
-indice BoP, les formes permettront de conserver ces catégories.
+`Death` sans transformer sa source en fin mortelle. Lorsque la couleur représente un
+indice BoP, les formes conservent ces catégories.
 
 `scripts/utils/extract_project_aon_layout.py` télécharge ou lit le SVG/SVGZ, contrôle la
 correspondance avec les paragraphes canoniques et écrit les références. Le script
 `4.0_visualize_graph.py` utilise ce layout par défaut, puis produit le SVG longitudinal et
 la vue 16:9 du profil demandé. Tous les textes de la figure sont en anglais et son titre
-est limité à `<BOOK_ID> - graph`. Les futurs rendus d'indices pourront être régénérés sans
-refaire l'extraction du layout ni les calculs BoP.
+est limité à `<BOOK_ID> - graph`. Les rendus 4.3 peuvent être régénérés sans refaire
+l'extraction du layout ni les calculs BoP.
 
 ### Phase 5 — Analyse des trajectoires complètes avec un LLM
 
@@ -503,6 +514,7 @@ reste à préciser :
 - `gamebook_global_plan.md` : objectifs, décisions et phases ;
 - `graph_model.md` : pré-graphe, annotation et compilation de $W$ ;
 - `phase4_indices.md` : formules, tables canoniques et validation des indices BoP ;
+- `phase4_presentation.md` : sélection finale, figures et messages pour la présentation ;
 - `future_improvements.md` : limites connues et extensions reportées du pipeline ;
 - `progress_log.md` : journal chronologique ;
 - `notes.md` : questions de travail ;
