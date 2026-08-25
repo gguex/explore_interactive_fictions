@@ -250,7 +250,7 @@ implémentés. La configuration fixe est documentée, les 27 matrices LW01 sont 
 leurs probabilités d'absorption et durées attendues sont synthétisées dans
 `docs/phase3_results.md`. La phase 3 est terminée pour LW01.
 
-### Phase 4 — Indices et analyses BoP — prochaine étape
+### Phase 4 — Indices et analyses BoP — calcul exhaustif terminé
 
 À la borne Random Walk retenue pour cette itération, les indices sont calculés à partir
 de la matrice transitoire $Q^{(p)}$ et de la matrice fondamentale :
@@ -370,6 +370,15 @@ court chemin ne sont pas retenues : elles ignorent les probabilités de lecture 
 déformées par les nœuds absorbants. La phase 4 privilégie les mesures fondées sur les
 flux de chemins produits par $W^{(p)}$.
 
+Le calcul canonique est implémenté par `scripts/4.1_compute_bop_indices.py`. Il produit
+les tables par profil, nœud, arête et paire de profils dans
+`data/processed/bop/<BOOK_ID>/`. Le contrôle indépendant
+`scripts/tests/test_4_1_compute_bop_indices.py` reconstruit les matrices fondamentales et
+vérifie les identités d'absorption, de flux, de durée, d'entropie, de couverture et de
+divergence. Les formules exactes et les schémas de sortie sont documentés dans
+`phase4_indices.md`. Il reste à extraire de ces tables les comparaisons et figures
+destinées à la présentation.
+
 #### Visualisation longitudinale du graphe
 
 Une même représentation du graphe servira de fil visuel entre les phases 3 et 4. Pour
@@ -482,17 +491,18 @@ générales des adaptations propres à LW01.
 
 ## 8. Questions restant à traiter dans les phases 4 et 5
 
-Le catalogue et le noyau des indices BoP sont désormais fixés. Il reste à préciser :
+Le catalogue, le noyau et les normalisations des indices BoP sont désormais fixés. Il
+reste à préciser :
 
-1. les normalisations exactes utilisées pour comparer les profils ;
-2. la méthode de sélection et le nombre de trajectoires représentatives ;
-3. la grille, le modèle et le protocole de répétition de l'évaluation LLM ;
-4. comment articuler les indices structurels, les embeddings et les jugements du LLM.
+1. la méthode de sélection et le nombre de trajectoires représentatives ;
+2. la grille, le modèle et le protocole de répétition de l'évaluation LLM ;
+3. comment articuler les indices structurels, les embeddings et les jugements du LLM.
 
 ## 9. Documentation active
 
 - `gamebook_global_plan.md` : objectifs, décisions et phases ;
 - `graph_model.md` : pré-graphe, annotation et compilation de $W$ ;
+- `phase4_indices.md` : formules, tables canoniques et validation des indices BoP ;
 - `future_improvements.md` : limites connues et extensions reportées du pipeline ;
 - `progress_log.md` : journal chronologique ;
 - `notes.md` : questions de travail ;

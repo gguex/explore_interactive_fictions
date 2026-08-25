@@ -17,7 +17,7 @@
 | Audit pour la phase 2 | Terminé | Les conditions persistantes simples sont automatisées et les 14 exceptions sont supervisées. |
 | Construction du pré-graphe | Terminée pour LW01 | 352 nœuds, 602 arêtes et aucune transition de phase 1 non classée. |
 | Compilation de \(W\) | Terminée pour LW01 | 27 matrices valides ; résultats par profil et par axe synthétisés. |
-| Bag-of-Paths et indices | Phase 4 — prochaine | Première analyse fixée à la borne RW ; catalogue et noyau des indices retenus. |
+| Bag-of-Paths et indices | Phase 4 — en cours | Calcul exhaustif et validation terminés ; extractions et figures de présentation à produire. |
 | Analyse des histoires par LLM | Phase 5 — à faire | Phase distincte ; sélection des trajectoires et protocole hybride à préciser. |
 
 ## Historique
@@ -393,8 +393,26 @@
 - Limitation de la présentation à une figure globale, une synthèse des axes et une
   comparaison locale sur le layout longitudinal commun.
 
+### 25.08.2026 — Calcul exhaustif des indices BoP
+
+- Implémentation de `scripts/4.1_compute_bop_indices.py` à la borne Random Walk pour les
+  27 matrices de profils, sans moyenne préalable de $W$.
+- Production des métriques globales, des 9 450 lignes profil–nœud, des 16 254 lignes
+  profil–arête, des 350 synthèses locales et des 351 paires de profils dans
+  `data/processed/bop/LW01/`.
+- Calcul analytique des visites et flux non conditionnels et conditionnés à `Death` ou
+  `Win`, des entropies en nats, de la couverture, du chevauchement, de la rejouabilité,
+  de l'impact des choix, de l'agentivité et des divergences de Jensen–Shannon.
+- Ajout d'un validateur indépendant qui recharge chaque matrice $W$, reconstruit sa
+  matrice fondamentale et contrôle les identités locales et globales ainsi que l'accord
+  avec les absorptions de la phase 3.
+- Validation complète réussie. Pour le profil neutre : $P(Win)=0{,}119811$, durée
+  attendue de 27,211670 transitions et entropie de 15,478212 nats.
+- Documentation des formules, conventions et schémas dans `docs/phase4_indices.md`.
+
 ## Prochaine étape
 
-Implémenter le petit ensemble d'indices BoP retenus pour la présentation. La sélection
-des trajectoires représentatives et l'analyse LLM des histoires complètes suivront dans
-une phase 5 distincte.
+Extraire des tables canoniques les comparaisons retenues pour la présentation : profil
+neutre, moyenne équilibrée, effets marginaux, contraste contrôlé du risque et vues
+locales sur le graphe. La sélection des trajectoires représentatives et l'analyse LLM
+des histoires complètes suivront dans une phase 5 distincte.

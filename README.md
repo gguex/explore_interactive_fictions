@@ -17,6 +17,7 @@ narrative analysis.
 | `docs/graph_model.md` | Adopted direct multigraph model, mechanics scope and compilation process. |
 | `docs/fixed_probabilities.md` | Calibration and assumptions for the fixed phase-3 parameters. |
 | `docs/phase3_results.md` | Validation and comparative results for all 27 profiles. |
+| `docs/phase4_indices.md` | Canonical phase-4 BoP metrics, output tables and independent validation. |
 | `docs/future_improvements.md` | Deferred improvements: structured phase-1 schema, portability and migration path. |
 | `docs/progress_log.md` | Append-only progress journal and current project status. |
 | `docs/infict-llm_abstract.tex` | Accepted COMHUM2026 extended abstract. |
@@ -52,8 +53,9 @@ results/         cluster outputs and calibration history
    and 602 edges and pass the independent structural and absorption checks. The fixed
    combat probability is calibrated at `0.833`; the neutral profile reaches `Win` with
    probability `0.119811`, and the complete design ranges from `0.054397` to `0.258347`.
-4. **BoP indices** (next phase): compute the selected local and global structural
-   indices from the 27 transition matrices.
+4. **BoP indices** (in progress): the selected local and global structural indices are
+   calculated and independently validated for all 27 profiles; presentation-oriented
+   summaries and figures remain to be produced.
 5. **LLM trajectory analysis**: select representative complete paths, use embeddings to
    characterize their diversity and apply a structured LLM evaluation to their stories.
 6. **Generalization**: apply the reusable pipeline to another book or corpus.
@@ -81,6 +83,8 @@ uv run python scripts/4.0_visualize_graph.py --book LW01 \
   --profile neutral_neutral_neutral
 uv run python scripts/tests/test_4_0_visualize_graph.py --book LW01 \
   --profile neutral_neutral_neutral
+uv run python scripts/4.1_compute_bop_indices.py --book LW01
+uv run python scripts/tests/test_4_1_compute_bop_indices.py --book LW01
 ```
 
 The same commands accept another Lone Wolf identifier, such as `--book LW02`, provided
