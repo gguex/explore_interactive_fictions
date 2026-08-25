@@ -12,4 +12,6 @@ wheels/
 # MacOS-specific files
 .DS_Store
 
-.ruff_cache/    
+.ruff_cache/  
+
+.mypy_cache/
