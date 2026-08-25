@@ -97,6 +97,14 @@ l'itération actuelle.
 - `profile_summary.csv` : résultats et écarts au profil neutre pour les 27 profils ;
 - `axis_summary.csv` : moyennes par niveau de chaque axe ;
 - `profile_summary.json` : résumé compact et profils extrêmes.
+- `data/processed/graph/LW01/project_aon_layout.csv` : coordonnées des 350 paragraphes
+  extraites du SVG Project Aon ;
+- `data/processed/graph/LW01/project_aon_layout_manifest.json` : URL, transformation et
+  empreinte SHA-256 de la source ;
+- `results/phase4/LW01/graph_neutral_neutral_neutral_full.svg` : graphe complet et
+  zoomable du profil neutre ;
+- `results/phase4/LW01/graph_neutral_neutral_neutral_slide.svg` et `.png` : rendu 16:9
+  destiné à la présentation.
 
 Ces fichiers terminent la compilation de la phase 3. Ils constituent les entrées de la
 phase 4 consacrée aux indices BoP ; les trajectoires complètes seront sélectionnées et

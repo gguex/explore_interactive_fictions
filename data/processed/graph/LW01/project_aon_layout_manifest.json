@@ -1,0 +1,17 @@
+{
+  "book_id": "LW01",
+  "coordinate_transform": {
+    "x": "(source_cx - min_source_cx) / 100",
+    "y": "-source_cy / 100"
+  },
+  "layout_method": "project_aon_svg_node_centers",
+  "node_count": 350,
+  "output": "data/processed/graph/LW01/project_aon_layout.csv",
+  "source": "https://www.projectaon.org/en/svg/lw/01fftd.svgz",
+  "source_canvas": {
+    "height": "1494pt",
+    "viewBox": "0.00 0.00 14257.89 1493.88",
+    "width": "14258pt"
+  },
+  "source_sha256": "84c1f7e8075f868feabe24e612dcdf7abb714f6a9fd99b5a99045a6e83691c85"
+}

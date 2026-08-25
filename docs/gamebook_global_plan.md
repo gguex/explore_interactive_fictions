@@ -1,6 +1,6 @@
 # Plan global — Distant reading des fictions interactives
 
-> Document de référence mis à jour le 21.08.2026. La représentation du pré-graphe et la
+> Document de référence mis à jour le 25.08.2026. La représentation du pré-graphe et la
 > compilation de $W$ sont définies dans [`graph_model.md`](graph_model.md). Le suivi
 > chronologique se trouve dans [`progress_log.md`](progress_log.md).
 
@@ -295,6 +295,70 @@ pour les extensions futures.
 | **Agentivité globale** | Impact moyen des choix, pondéré par leur probabilité de visite. | Résume la capacité effective du lecteur à influencer l'issue. | **Oui — support** |
 | **Rapport survie–liberté** | Position de chaque profil selon sa victoire et son entropie de trajectoire. | Montre si survivre exige de sacrifier de la liberté de parcours. | **Oui — visualisation dérivée** |
 
+#### Conditions de calcul et niveaux de comparaison
+
+Tous les indices retenus sont calculés séparément pour les **27 profils**. Ce calcul
+exhaustif est conservé dans les sorties scientifiques, même si seule une sélection est
+montrée dans la présentation. Il évite de choisir les profils après observation des
+résultats et permet de réutiliser les données pour l'article.
+
+Deux références différentes sont conservées :
+
+- le profil `neutral_neutral_neutral`, qui représente un comportement défini par le
+  schéma expérimental ;
+- la moyenne équilibrée des 27 profils, qui représente une population artificielle où
+  chaque combinaison reçoit le même poids.
+
+Cette moyenne ne constitue ni un profil observé ni une estimation d'un joueur moyen
+réel. Chaque indice est d'abord calculé sur chaque $W^{(p)}$, puis moyenné. Les matrices
+$W^{(p)}$ ne sont jamais moyennées avant le calcul : une telle matrice représenterait un
+lecteur hybride changeant implicitement de comportement au cours de l'histoire et ne
+correspondrait pas au schéma de profil retenu.
+
+Les comparaisons suivantes seront produites :
+
+| Comparaison | Définition | Usage |
+| :--- | :--- | :--- |
+| **Profil neutre** | Tous les indices pour `neutral_neutral_neutral`. | Référence principale. |
+| **Moyenne équilibrée** | Moyenne arithmétique de chaque indice sur les 27 profils. | Niveau global du plan factoriel, non moyenne empirique de joueurs. |
+| **Effets marginaux des axes** | Pour chaque niveau d'un axe, moyenne sur les neuf combinaisons des deux autres axes. | Isoler les effets moyens du risque, de la moralité et de l'action. |
+| **Contraste contrôlé du risque** | `cautious_neutral_neutral`, `neutral_neutral_neutral` et `reckless_neutral_neutral`. | Montrer une différence lisible où un seul axe varie. |
+| **Extrêmes observés** | Minimum et maximum obtenus parmi les 27 profils pour un indice. | Illustrer l'étendue, avec mention explicite de leur sélection après calcul. |
+| **Conditionnement sur l'issue** | Visites et flux calculés sans condition, puis conditionnellement à `Win` ou `Death`. | Comparer les chemins caractéristiques de la réussite et de l'échec et préparer la phase 5. |
+| **Sensibilité des paramètres fixes** | Recalcul limité avec les hypothèses alternatives documentées. | Contrôle de robustesse en annexe, non nouvelle famille de profils. |
+
+Pour un indice $I$, l'effet marginal du niveau `cautious` est par exemple :
+
+$$
+I_{\mathrm{cautious}}
+=\frac{1}{9}\sum_{m\in\mathrm{morality}}\sum_{a\in\mathrm{action}}
+I_{\mathrm{cautious},m,a}.
+$$
+
+Les 27 profils constituent le plan expérimental complet et non un échantillon aléatoire.
+Les résultats seront donc décrits par leurs moyennes, écarts, étendues et divergences,
+sans intervalle de confiance ou test de significativité artificiel. Une incertitude de
+Monte-Carlo ne sera introduite que plus tard pour les quantités estimées par
+échantillonnage de trajectoires.
+
+#### Sélection pour la présentation
+
+La présentation de 20 minutes ne montrera pas un tableau de 27 profils. Elle utilisera :
+
+1. une figure globale contenant les 27 profils, placés selon la probabilité de victoire
+   et l'entropie des trajectoires, mais n'étiquetant que le profil neutre et les extrêmes ;
+2. une synthèse des effets marginaux des trois axes ;
+3. une comparaison locale détaillée des trois profils contrôlés
+   `cautious_neutral_neutral`, `neutral_neutral_neutral` et
+   `reckless_neutral_neutral` ;
+4. si l'espace le permet, une opposition entre flux conditionnés à la victoire et à la
+   mort pour préparer le passage vers les histoires complètes de la phase 5.
+
+Les profils donnant le minimum et le maximum d'un indice sont visibles dans la figure
+globale, mais ne servent pas seuls à interpréter l'effet d'un axe puisqu'ils peuvent
+différer simultanément sur les trois dimensions. Les tableaux exhaustifs, la sensibilité
+et les comparaisons supplémentaires restent disponibles en annexe.
+
 Le noyau destiné à la présentation comprend donc cinq familles : difficulté, liberté,
 rejouabilité, réactivité au profil et importance locale des nœuds. Les indices de support
 seront calculés lorsqu'ils sont nécessaires aux formules ou à leur interprétation, sans
@@ -305,6 +369,55 @@ Les centralités classiques comme PageRank, le degré brut et les centralités d
 court chemin ne sont pas retenues : elles ignorent les probabilités de lecture ou sont
 déformées par les nœuds absorbants. La phase 4 privilégie les mesures fondées sur les
 flux de chemins produits par $W^{(p)}$.
+
+#### Visualisation longitudinale du graphe
+
+Une même représentation du graphe servira de fil visuel entre les phases 3 et 4. Pour
+LW01, elle réutilise les centres des 350 nœuds numérotés du diagramme longitudinal de
+Project Aon. Les identifiants `001`–`350` correspondent exactement aux paragraphes
+canoniques `1`–`350`. Seules les coordonnées sont importées : les nœuds, arêtes, types et
+poids affichés restent ceux du pipeline courant.
+
+Les coordonnées sont extraites une seule fois et conservées dans
+`project_aon_layout.csv`, accompagnées d'un manifeste donnant l'URL, l'empreinte SHA-256
+et la transformation appliquée. Tous les profils et tous les indices utilisent exactement
+ce même layout : une différence visuelle représente ainsi une différence de valeur, et
+non un déplacement arbitraire des nœuds. Un layout algorithmique fondé sur le pré-graphe
+reste disponible comme solution de repli pour les livres sans diagramme externe.
+
+Le script de figure devra produire au minimum :
+
+- une vue **topologique** de la phase 3 ;
+- une vue où la taille ou la couleur représente la **probabilité de visite** ;
+- une vue des principales **contributions à la mortalité** ;
+- une vue divergente de la **différence de visite entre deux profils** ;
+- une vue optionnelle de l'**impact des choix**.
+
+Deux rendus seront produits à partir des mêmes coordonnées : un SVG longitudinal complet,
+zoomable et portant les numéros des paragraphes, et une version simplifiée au format de
+la présentation, où seuls les nœuds importants sont étiquetés. Les arêtes parallèles
+peuvent être agrégées visuellement par couple source–cible, même si elles restent séparées
+dans les données scientifiques.
+
+Dans le modèle, toutes les morts rejoignent l'unique absorbant `Death`. Les afficher sous
+forme de longues arêtes vers un même point rendrait la figure illisible. La projection de
+présentation colorera donc les paragraphes de mort et les transitions mortelles localement,
+tout en indiquant dans la légende qu'ils correspondent au même absorbant. Le fichier de
+calcul et les indices restent, eux, fondés sur le graphe canonique inchangé.
+
+La vue structurelle utilise une couleur et une forme stables pour les principaux types de
+nœuds : cercle blanc pour un paragraphe ordinaire, losange orange pour un combat, croix
+rouge sombre pour une fin mortelle, étoile verte pour la victoire et cercle bleu sombre
+pour le départ. Une petite croix rouge distincte signale une transition possible vers
+`Death` sans transformer sa source en fin mortelle. Lorsque la couleur représentera un
+indice BoP, les formes permettront de conserver ces catégories.
+
+`scripts/utils/extract_project_aon_layout.py` télécharge ou lit le SVG/SVGZ, contrôle la
+correspondance avec les paragraphes canoniques et écrit les références. Le script
+`4.0_visualize_graph.py` utilise ce layout par défaut, puis produit le SVG longitudinal et
+la vue 16:9 du profil demandé. Tous les textes de la figure sont en anglais et son titre
+est limité à `<BOOK_ID> - graph`. Les futurs rendus d'indices pourront être régénérés sans
+refaire l'extraction du layout ni les calculs BoP.
 
 ### Phase 5 — Analyse des trajectoires complètes avec un LLM
 

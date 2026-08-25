@@ -75,6 +75,12 @@ uv run python scripts/3.2_calibrate_combat.py --book LW01
 uv run python scripts/tests/test_3_2_calibrate_combat.py --book LW01
 uv run python scripts/3.3_summarize_profiles.py --book LW01
 uv run python scripts/tests/test_3_3_summarize_profiles.py --book LW01
+uv run python scripts/utils/extract_project_aon_layout.py --book LW01
+uv run python scripts/tests/test_extract_project_aon_layout.py --book LW01
+uv run python scripts/4.0_visualize_graph.py --book LW01 \
+  --profile neutral_neutral_neutral
+uv run python scripts/tests/test_4_0_visualize_graph.py --book LW01 \
+  --profile neutral_neutral_neutral
 ```
 
 The same commands accept another Lone Wolf identifier, such as `--book LW02`, provided

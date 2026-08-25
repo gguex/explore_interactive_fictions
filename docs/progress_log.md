@@ -4,7 +4,7 @@
 > précédentes. Une correction factuelle ultérieure doit être consignée dans une nouvelle
 > entrée.
 
-## État synthétique au 21.08.2026
+## État synthétique au 25.08.2026
 
 | Chantier | État | Résultat actuel |
 | :--- | :--- | :--- |
@@ -360,6 +360,38 @@
   embeddings pour la diversité et la sélection, puis évaluation LLM structurée pour la
   cohérence et les qualités narratives.
 - Report de la généralisation à la phase 6.
+
+### 25.08.2026 — Visualisation commune des phases 3 et 4
+
+- Adoption d'un layout longitudinal stable, de gauche à droite selon la progression
+  narrative, inspiré du diagramme de Project Aon.
+- Implémentation de `scripts/4.0_visualize_graph.py`, qui calcule des coordonnées
+  indépendantes du profil et rend les poids compilés du profil demandé.
+- Ajout de `scripts/utils/extract_project_aon_layout.py` : les 350 centres du SVG officiel
+  sont appariés exactement aux paragraphes `1`–`350`, avec URL et empreinte SHA-256.
+- Adoption du layout Project Aon par défaut pour LW01 et conservation du layout
+  algorithmique comme solution de repli.
+- Production pour le profil neutre d'un SVG complet zoomable, d'un SVG 16:9 et d'un PNG
+  2880 × 1620 destiné aux diapositives.
+- Passage de toute la figure en anglais avec le titre unique `LW01 - graph` ; ajout des
+  losanges orange de combat, croix rouges de fin mortelle et étoile verte de victoire.
+- Ajout d'un validateur indépendant couvrant les 350 paragraphes, les composantes
+  fortement connexes, la progression des couches et les trois fichiers graphiques.
+- Conservation du graphe canonique à deux absorbants dans les calculs, avec une projection
+  locale des morts dans la figure pour éviter les longues arêtes convergeant vers `Death`.
+
+### 25.08.2026 — Protocole de comparaison des indices
+
+- Décision de calculer les indices séparément pour les 27 profils et de ne jamais
+  calculer un indice sur une moyenne préalable des matrices $W$.
+- Distinction entre le profil neutre et la moyenne équilibrée des 27 profils, qui ne
+  représente pas une population empirique de joueurs.
+- Adoption des effets marginaux des axes et du contraste contrôlé
+  prudent–neutre–téméraire pour interpréter les profils sans confondre leurs dimensions.
+- Conservation des extrêmes observés comme illustration de l'étendue et calcul de flux
+  conditionnés à `Win` ou `Death` pour préparer les trajectoires de phase 5.
+- Limitation de la présentation à une figure globale, une synthèse des axes et une
+  comparaison locale sur le layout longitudinal commun.
 
 ## Prochaine étape
 
