@@ -2,7 +2,9 @@
 
 > **Statut au 26.08.2026 : protocole validé, implémentation à faire.** Cette phase reste
 > une preuve de concept courte. Elle privilégie quelques annotations bornées, vérifiables
-> et directement reliées aux profils et aux résultats BoP de la phase 4.
+> et directement reliées aux profils et aux résultats BoP de la phase 4. Chaque cellule
+> profil–issue est représentée par sa trajectoire conditionnelle la plus probable (MAP),
+> calculée exactement et non tirée au hasard.
 
 Le découpage des futurs scripts, le paquet envoyé au cluster et les fichiers attendus au
 retour sont décrits dans `docs/phase5_implementation_plan.md`.
@@ -43,44 +45,70 @@ Sept profils isolent les trois axes sans faire varier les deux autres :
 | Moralité | `neutral_selfish_neutral`, `neutral_noble_neutral` |
 | Action | `neutral_neutral_physical`, `neutral_neutral_tactical` |
 
-### 2.2 Issues et répétitions
+### 2.2 Issues et trajectoires retenues
 
-Pour chaque profil, trois trajectoires sont échantillonnées conditionnellement à `Win` et
-trois conditionnellement à `Death` :
-
-$$
-7\ \text{profils} \times 2\ \text{issues} \times 3\ \text{graines}
-= 42\ \text{trajectoires}.
-$$
-
-Ce plan donne trois observations par cellule profil–issue, tout en restant assez petit
-pour une exécution locale rapide. Une version de secours à 14 trajectoires, une par
-cellule, peut être produite pour déboguer le pipeline mais ne remplace pas le corpus final.
-
-### 2.3 Échantillonnage conditionnel
-
-Pour une issue $o$, soit
+Pour chaque profil, une trajectoire conditionnelle la plus probable est calculée vers
+`Win` et une autre vers `Death` :
 
 $$
-h_o(i)=P_i(\text{atteindre }o).
+7\ \text{profils} \times 2\ \text{issues}
+= 14\ \text{trajectoires MAP}.
 $$
 
-Pour tout nœud avec $h_o(i)>0$, la chaîne conditionnée utilise la transformation de Doob :
+Le corpus ne vise donc ni à estimer la variabilité interne d'une cellule, ni à représenter
+toute la masse des chemins possibles. Il répond à une question plus étroite et
+reproductible : quelle histoire complète est individuellement la plus probable pour ce
+profil, sachant que l'issue fixée est atteinte ?
+
+### 2.3 Calcul exact de la trajectoire conditionnelle MAP
+
+Pour une trajectoire étiquetée $\pi=(e_1,\ldots,e_m)$ conduisant du départ à l'issue $o$,
+où $w(e)$ est le `compiled_weight` de l'arête, le modèle attribue le poids :
 
 $$
-W^{(o)}_{ij}=W_{ij}\frac{h_o(j)}{h_o(i)}.
+P(\pi)=\prod_{k=1}^{m}w(e_k).
 $$
 
-Elle permet d'échantillonner directement une trajectoire aboutissant à l'issue demandée.
-Les règles suivantes sont fixées avant toute annotation :
+Le conditionnement sur l'issue ne change pas le chemin maximisant cette quantité :
 
-- les graines `42`, `43` et `44` sont utilisées dans toutes les cellules ;
-- aucune trajectoire n'est remplacée en fonction de son intérêt narratif ;
-- les doublons sont conservés comme résultat de l'échantillonnage, mais leur texte n'est
-  envoyé qu'une fois au modèle grâce à une empreinte stable ;
-- les cycles, longueurs et éventuels échecs d'absorption sont consignés ;
-- une limite de sécurité peut arrêter une exécution anormale, mais aucune histoire
-  tronquée n'est annotée.
+$$
+P(\pi\mid o)=\frac{P(\pi)}{P(o)},
+$$
+
+car $P(o)$ est constant pour tous les chemins comparés. La même conclusion découle de la
+transformation de Doob : ses facteurs $h_o(j)/h_o(i)$ se télescopent le long d'une
+trajectoire terminée en $o$.
+
+Le produit est transformé en somme en donnant à chaque arête de probabilité strictement
+positive le coût :
+
+$$
+c(e)=-\log w(e).
+$$
+
+La trajectoire MAP est alors un plus court chemin dans le multigraphe pondéré. Les arêtes
+de poids nul sont exclues. Comme $0<w(e)\leq1$, les coûts sont non négatifs et un
+algorithme de Dijkstra suffit. Le calcul part de `compiled_edges.csv`, plutôt que de la
+matrice dense qui agrège les arêtes de mêmes extrémités : les arêtes parallèles conservent
+ainsi leur identité et leur choix narratif. Les règles suivantes sont fixées avant toute
+annotation :
+
+- le même algorithme et la même règle de départage déterministe sont employés dans les
+  quatorze cellules ;
+- aucune trajectoire n'est remplacée selon son intérêt narratif ou après lecture du texte ;
+- le produit des poids $P(\pi)$, son logarithme, la probabilité de l'issue $P(o)$ et la
+  part conditionnelle $P(\pi\mid o)=P(\pi)/P(o)$ sont consignés ;
+- toute égalité entre plusieurs chemins optimaux est signalée et résolue par un ordre
+  canonique des identifiants d'arêtes ;
+- tout cycle atteignable de coût nul est une erreur bloquante, car il rendrait la
+  trajectoire modale ambiguë ;
+- chaque trajectoire doit atteindre l'issue demandée et être reproductible depuis la
+  matrice $W$ archivée.
+
+Cette sélection produit un **mode**, et non une médiane ou un médoïde. Le chemin le plus
+probable peut être court ou isolé alors qu'une famille de chemins voisins concentre une
+masse totale supérieure. Cette limite est explicitement conservée dans l'interprétation ;
+les médoïdes et l'étude de la dispersion sont reportés à une extension ultérieure.
 
 ## 3. Reconstruction des histoires
 
@@ -232,7 +260,7 @@ par le script d'analyse, entre `perceived_profile` et les métadonnées cachées
 
 ## 5. Comparaisons par paires
 
-Les profils extrêmes sont comparés à issue et graine identiques :
+Les profils extrêmes sont comparés à issue identique, en utilisant leurs trajectoires MAP :
 
 | Axe | Paire |
 | :--- | :--- |
@@ -243,8 +271,8 @@ Les profils extrêmes sont comparés à issue et graine identiques :
 Le plan contient donc :
 
 $$
-3\ \text{axes} \times 2\ \text{issues} \times 3\ \text{graines}
-=18\ \text{paires}.
+3\ \text{axes} \times 2\ \text{issues}
+=6\ \text{paires}.
 $$
 
 Le modèle reçoit les deux histoires complètes, identifiées seulement comme A et B. Il ne
@@ -279,7 +307,7 @@ est marqué `order_sensitive` et n'est pas utilisé comme comparaison stable.
 
 ## 6. Mesures structurelles indépendantes
 
-Pour les mêmes 18 paires, un script calcule sans LLM :
+Pour les mêmes six paires, un script calcule sans LLM :
 
 - les longueurs des trajectoires ;
 - le nombre et la proportion de paragraphes communs ;
@@ -289,7 +317,7 @@ Pour les mêmes 18 paires, un script calcule sans LLM :
 - la distance d'édition normalisée ;
 - la divergence BoP entre les profils générateurs.
 
-Ces valeurs sont jointes aux annotations après l'inférence. Avec 18 paires, leur relation
+Ces valeurs sont jointes aux annotations après l'inférence. Avec six paires, leur relation
 avec `narrative_distinctness` reste descriptive et ne soutient pas un test inférentiel.
 
 ## 7. Modèle, prompt et inférence
@@ -329,21 +357,19 @@ Quatre histoires humaines de calibration servent à corriger le codebook et les 
 mais ne sont pas insérées comme longues démonstrations dans le prompt. Le prompt final est
 figé avant l'analyse du reste du corpus.
 
-## 8. Validation humaine et robustesse
+## 8. Validation humaine et stabilité de l'instrument
 
-Une trajectoire par cellule profil–issue, soit 14 histoires, est annotée humainement avant
-de consulter Qwen :
+Les 14 trajectoires MAP sont annotées humainement avant de consulter Qwen :
 
 - quatre histoires servent à la calibration ;
 - dix histoires restent un petit ensemble de validation ;
-- les 28 autres servent à observer la variation automatisée interne aux cellules.
 
-Les six comparaisons d'une graine, trois axes par deux issues, sont également annotées
-humainement. Les preuves citées sont contrôlées sur ce sous-ensemble.
+Les six comparaisons, trois axes par deux issues, sont également annotées humainement. Les
+preuves citées peuvent ainsi être contrôlées sur la totalité du corpus retenu.
 
-Le run primaire couvre les 42 histoires. Une variante prédéfinie du prompt, qui conserve
+Le run primaire couvre les 14 histoires. Une variante prédéfinie du prompt, qui conserve
 exactement les mêmes définitions et ne change que leur ordre de présentation, est appliquée
-aux 14 histoires humaines pour estimer la sensibilité à la formulation. Les 18 paires sont
+aux 14 histoires pour estimer la sensibilité à la formulation. Les six paires sont
 toutes évaluées dans les deux ordres.
 
 Les résultats sont rapportés en effectifs bruts lorsque les sous-ensembles sont petits. La
@@ -353,12 +379,13 @@ confiance déclarée par le modèle n'est pas utilisée comme mesure de fiabilit
 
 ### 9.1 Résultats principaux
 
-1. **Manifestation du profil** : part des trajectoires non `unclear` dont le profil perçu
-   correspond au niveau générateur, séparément pour `risk`, `morality` et `action`. Ce
-   n'est pas une accuracy du modèle : une trajectoire échantillonnée peut légitimement ne
-   pas manifester le profil probabiliste qui l'a favorisée.
-2. **Récupération du contraste** : part des 18 paires où la direction attendue de l'axe
-   contrôlé est retrouvée.
+1. **Manifestation sur les trajectoires modales** : effectif des 14 trajectoires MAP dont
+   le profil perçu correspond au niveau générateur, séparément pour `risk`, `morality` et
+   `action`, avec les `unclear` rapportés à part. Ce résultat décrit les chemins modaux
+   retenus ; ce n'est ni une accuracy du modèle ni une estimation de toutes les
+   trajectoires possibles.
+2. **Récupération du contraste** : effectif des six paires où la direction attendue de
+   l'axe contrôlé est retrouvée.
 3. **Fuite entre axes** : fréquence à laquelle les deux axes maintenus constants sont
    néanmoins perçus comme différents dans une paire contrôlée.
 4. **Structure et impression narrative** : confrontation descriptive entre les distances
@@ -387,7 +414,8 @@ Les noms restent indicatifs jusqu'à l'implémentation :
 
 | Fichier | Contenu |
 | :--- | :--- |
-| `trajectories.jsonl` | Textes complets, choix, issues, profils cachés au modèle, graines et empreintes. |
+| `trajectories.jsonl` | Textes complets, choix, issues, profils cachés au modèle, probabilités MAP et empreintes. |
+| `map_selection_report.json` | Algorithme, coûts, probabilités brutes et conditionnelles des chemins, égalités et règle de départage. |
 | `trajectory_annotations.jsonl` | Sorties individuelles brutes et normalisées de Qwen. |
 | `pairwise_annotations.jsonl` | Comparaisons A/B et B/A. |
 | `human_annotations.jsonl` | Calibration et validation humaines, séparées des sorties du modèle. |
@@ -399,8 +427,8 @@ Les noms restent indicatifs jusqu'à l'implémentation :
 
 La phase 5 doit tenir sur une seule diapositive :
 
-1. le plan `7 profils × 2 issues × 3 trajectoires = 42 histoires` ;
-2. la manifestation ou récupération des trois axes ;
+1. le plan `7 profils × 2 issues = 14 trajectoires conditionnelles MAP` ;
+2. la manifestation modale et la récupération des trois axes ;
 3. une confrontation courte entre distance structurelle et différence narrative ;
 4. une ligne donnant l'accord humain et la stabilité.
 

@@ -471,8 +471,23 @@
   manifestes et l'ordre des étapes sont définis dans
   `docs/phase5_implementation_plan.md`.
 
+### 26.08.2026 — Révision de la sélection des trajectoires de phase 5
+
+- Abandon du plan à trois graines par cellule : trois tirages ne suffisent pas à soutenir
+  une analyse de robustesse et peuvent donner une image accidentelle de la cellule.
+- Adoption d'une trajectoire conditionnelle MAP par profil et par issue, soit 14 histoires.
+  Elle est calculée exactement dans le multigraphe compilé par plus court chemin avec
+  $c(e)=-\log w(e)$ ; aucune seed de trajectoire ni sélection narrative après observation
+  n'intervient.
+- Réduction corrélative de 18 à six comparaisons extrême–extrême. Les 14 histoires et les
+  six paires sont toutes contrôlées humainement ; la variante de prompt et l'inversion
+  A/B restent des contrôles de stabilité de l'instrument.
+- La trajectoire MAP est explicitement distinguée d'un médoïde : elle répond à la question
+  de l'histoire individuellement la plus probable, sans prétendre résumer la masse ou la
+  diversité de tous les chemins.
+
 ## Prochaine étape
 
-Implémenter l'échantillonnage conditionnel, la reconstruction des histoires et les grilles
-de la phase 5 selon `docs/phase5_protocol.md`, en réutilisant les probabilités d'absorption
-et les résultats structurels de la phase 4.
+Implémenter le calcul exact des trajectoires conditionnelles MAP, la reconstruction des
+histoires et les grilles de la phase 5 selon `docs/phase5_protocol.md`, en réutilisant les
+matrices et résultats structurels de la phase 4.

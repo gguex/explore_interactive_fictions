@@ -10,7 +10,7 @@
 ```text
 matrices et textes locaux
         ↓
-5.0 échantillonner les trajectoires
+5.0 calculer les trajectoires conditionnelles MAP
         ↓
 5.1 reconstruire les histoires et préparer l'annotation humaine
         ↓
@@ -33,8 +33,8 @@ opaques, les prompts, les schémas et les paramètres nécessaires à l'inféren
 
 | Script | Rôle | Entrées principales | Sorties principales |
 | :--- | :--- | :--- | :--- |
-| `scripts/5.0_sample_trajectories.py` | Construire les chaînes conditionnées et échantillonner les 42 trajectoires avec les graines 42, 43 et 44. | Matrices $W$, profils, probabilités d'absorption. | Trajectoires, métadonnées cachées et rapport d'échantillonnage. |
-| `scripts/5.1_build_trajectory_corpus.py` | Reconstituer chaque histoire complète avec paragraphes, choix disponibles, choix suivi et type de transition ; former les 18 paires dans les deux ordres. | Trajectoires, nœuds, arêtes et textes. | Corpus individuel, corpus pairwise, gabarits humains et mesures de longueur. |
+| `scripts/5.0_compute_map_trajectories.py` | Transformer chaque `compiled_weight` en coût $-\log w(e)$ et calculer les 14 trajectoires MAP, une par profil et par issue. | Tables de multiarêtes compilées, profils, probabilités d'absorption. | Trajectoires, probabilités MAP, métadonnées cachées et rapport de sélection. |
+| `scripts/5.1_build_trajectory_corpus.py` | Reconstituer chaque histoire complète avec paragraphes, choix disponibles, choix suivi et type de transition ; former les six paires dans les deux ordres. | Trajectoires, nœuds, arêtes et textes. | Corpus individuel, corpus pairwise, gabarits humains et mesures de longueur. |
 | `scripts/5.2_build_phase5_bundle.py` | Produire un paquet autonome sans fuite des profils ou résultats BoP. | Corpus, prompts figés, schémas et configuration du modèle. | Paquet `pilot` ou `final` avec manifeste et empreintes. |
 | `scripts/5.3_import_phase5_annotations.py` | Importer les sorties revenues du cluster, contrôler les schémas et normaliser les résultats valides. | Dossier de sortie du cluster et manifeste du paquet. | Annotations canoniques, quarantaine et rapport de validation. |
 | `scripts/5.4_compute_phase5_results.py` | Réunir annotations Qwen, métadonnées cachées, annotations humaines et distances structurelles ; calculer les indicateurs. | Sorties 5.0–5.3 et fichiers humains. | Tables individuelles, pairwise, qualité et synthèse. |
@@ -44,7 +44,7 @@ Chaque script doit relire les fichiers de l'étape précédente plutôt que réi
 calcul. Les validateurs indépendants suivent les conventions existantes :
 
 ```text
-scripts/tests/test_5_0_sample_trajectories.py
+scripts/tests/test_5_0_compute_map_trajectories.py
 scripts/tests/test_5_1_build_trajectory_corpus.py
 scripts/tests/test_5_2_build_phase5_bundle.py
 scripts/tests/test_5_3_import_phase5_annotations.py
@@ -57,7 +57,7 @@ scripts/tests/test_5_5_build_phase5_presentation.py
 `5.1` produit deux gabarits dans `data/for_trajectory_annotation/LW01/` :
 
 - `human_trajectory_annotations.jsonl` pour les 14 histoires sélectionnées ;
-- `human_pairwise_annotations.jsonl` pour les six paires d'une graine.
+- `human_pairwise_annotations.jsonl` pour les six paires.
 
 Les annotations humaines sont remplies avant de consulter Qwen. Quatre histoires sont
 marquées `calibration` et dix `validation`. Le premier paquet produit par
@@ -67,10 +67,10 @@ réponses humaines.
 Après examen du pilote, le codebook et les prompts sont figés et empreintés. Le paquet
 `final` contient alors :
 
-- 42 annotations individuelles primaires ;
+- 14 annotations individuelles primaires ;
 - 14 annotations individuelles avec la variante prédéfinie du prompt ;
-- 18 comparaisons A/B ;
-- 18 comparaisons B/A.
+- six comparaisons A/B ;
+- six comparaisons B/A.
 
 ## 4. Fichiers envoyés au serveur
 
@@ -152,6 +152,7 @@ Les sorties canoniques sont regroupées sous :
 data/processed/phase5/LW01/
 ├── trajectories.jsonl
 ├── trajectory_private_metadata.jsonl
+├── map_selection_report.json
 ├── trajectory_annotations.jsonl
 ├── pairwise_annotations.jsonl
 ├── pair_structural_metrics.csv
@@ -181,7 +182,12 @@ les contrôles définis dans `docs/phase5_protocol.md` les déclarent suffisamme
 
 Le pipeline s'arrête notamment si :
 
-- les 42 trajectoires ou les 18 paires attendues ne sont pas présentes ;
+- les 14 trajectoires MAP ou les six paires attendues ne sont pas présentes ;
+- une trajectoire n'est pas le plus court chemin selon les coûts $-\log w(e)$ ;
+- sa probabilité recomposée ne correspond pas au produit de ses `compiled_weight` ou sa
+  probabilité conditionnelle ne correspond pas à $P(\pi)/P(o)$ ;
+- plusieurs chemins optimaux sont à égalité sans départage canonique consigné ;
+- un cycle atteignable de coût nul rend la sélection modale ambiguë ;
 - une trajectoire n'atteint pas l'issue demandée ;
 - une histoire est tronquée ou dépasse la fenêtre configurée ;
 - une donnée cachée apparaît dans le paquet serveur ;

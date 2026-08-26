@@ -271,7 +271,7 @@ pour les extensions futures.
 | :--- | :--- | :--- | :--- |
 | **Probabilité de visite** | Probabilité qu'une lecture atteigne le nœud. | Distingue les scènes centrales des contenus rares. | **Oui — principal** |
 | **Nombre attendu de visites** | Flux total passant par le nœud, répétitions et cycles compris. | Mesure son poids effectif dans l'expérience de lecture. | **Oui — support** |
-| **Flux d'arête** | Nombre attendu de passages par chaque transition. | Identifie les routes réellement empruntées et prépare l'échantillonnage des trajectoires. | **Oui — support** |
+| **Flux d'arête** | Nombre attendu de passages par chaque transition. | Identifie les routes réellement empruntées et prépare la sélection des trajectoires. | **Oui — support** |
 | **Contribution à la mortalité** | Probabilité totale qu'une lecture meure en quittant ce nœud vers `Death`. | Localise les principaux points de danger du livre. | **Oui — principal** |
 | **Potentiel de victoire** | Probabilité d'atteindre `Win` en partant du nœud. | Situe les régions favorables ou dangereuses et sert au calcul de l'impact des choix. | **Oui — support** |
 | **Impact d'un choix** | Dispersion des potentiels de victoire de ses options. | Distingue les décisions décisives des choix sans conséquence sur l'issue. | **Oui — principal** |
@@ -338,8 +338,8 @@ $$
 Les 27 profils constituent le plan expérimental complet et non un échantillon aléatoire.
 Les résultats seront donc décrits par leurs moyennes, écarts, étendues et divergences,
 sans intervalle de confiance ou test de significativité artificiel. Une incertitude de
-Monte-Carlo ne sera introduite que plus tard pour les quantités estimées par
-échantillonnage de trajectoires.
+Monte-Carlo ne sera pas introduite dans l'itération actuelle : les trajectoires de la
+phase 5 seront sélectionnées exactement par leur probabilité maximale conditionnelle.
 
 #### Sélection pour la présentation
 
@@ -455,11 +455,15 @@ produites par ses parcours. Elle devra :
 4. comparer les histoires entre elles et relier les résultats qualitatifs aux indices
    BoP de la phase 4.
 
-Le corpus comprendra 42 trajectoires : sept profils contrôlés — neutre et les deux
-extrêmes de chacun des trois axes — croisés avec `Win` et `Death`, avec trois graines par
-cellule. Les trajectoires seront échantillonnées par la chaîne conditionnée sur l'issue.
-Les embeddings sont exclus : ils ajouteraient un second instrument sémantique sans être
-nécessaires à ce plan contrôlé.
+Le corpus comprendra 14 trajectoires : sept profils contrôlés — neutre et les deux
+extrêmes de chacun des trois axes — croisés avec `Win` et `Death`. Chaque cellule est
+représentée par sa trajectoire conditionnelle la plus probable (MAP). Elle est calculée
+exactement dans le multigraphe comme un plus court chemin de coûts $-\log w(e)$, où
+$w(e)$ est le poids compilé de l'arête ; il n'y a ni tirage aléatoire ni sélection après
+lecture. Cette trajectoire modale ne doit pas être confondue
+avec un médoïde et ne résume pas toute la masse des chemins possibles. Les embeddings sont
+exclus : ils ajouteraient un second instrument sémantique sans être nécessaires à ce plan
+contrôlé.
 
 #### Méthodes potentielles
 
@@ -468,7 +472,7 @@ nécessaires à ce plan contrôlé.
 | **Distances structurelles** | Comparer les suites de paragraphes, leur longueur, leur issue et leur chevauchement. | Ne mesure pas la similarité du contenu narratif. | **Oui — comparaison indépendante** |
 | **Embeddings des histoires** | Regrouper un grand nombre de trajectoires par proximité sémantique. | Ajoute un modèle et une mesure difficile à interpréter ; inutile pour le petit pilote. | **Non — abandonné pour cette recherche** |
 | **Évaluation LLM structurée** | Inférer les trois axes du profil et contrôler continuité causale et cohérence du profil sur les histoires complètes. | Sensible au modèle et au prompt. | **Oui — méthode principale** |
-| **Comparaisons LLM par paires** | Comparer les extrêmes de chaque axe à issue et graine identiques. | Sensible à l'ordre A/B. | **Oui — 18 paires, évaluées dans les deux ordres** |
+| **Comparaisons LLM par paires** | Comparer les trajectoires MAP des extrêmes de chaque axe à issue identique. | Sensible à l'ordre A/B. | **Oui — 6 paires, évaluées dans les deux ordres** |
 | **Extraction d'événements, entités et lieux** | Vérifier la continuité des personnages, objets, lieux et événements le long du parcours. | Demande une nouvelle annotation et une métrique de séquence. | **Non — extension future** |
 | **Évaluation humaine** | Vérifier la validité d'un petit échantillon de jugements du LLM. | Coûteuse et difficile à étendre. | **Oui — contrôle requis sur 14 histoires et 6 paires** |
 
@@ -479,13 +483,14 @@ d'adéquation choix–conséquence, d'équité de l'issue et de qualité littér
 
 Qwen3.6-27B recevra les histoires complètes et leurs choix, mais aucun profil, poids,
 annotation sémantique ni indice BoP. Les justifications devront citer des choix ou
-paragraphes vérifiables. Quatorze histoires et six paires seront annotées humainement ;
-les comparaisons seront inversées pour détecter le biais de position.
+paragraphes vérifiables. Les quatorze histoires et les six paires seront annotées
+humainement ; les comparaisons seront inversées pour détecter le biais de position.
 
-Les résultats principaux seront la manifestation des trois axes, la récupération des
-contrastes, la fuite entre axes et la confrontation descriptive entre différence
-structurelle et `narrative_distinctness`. La présentation restera limitée à une seule
-diapositive.
+Les résultats principaux seront la manifestation des trois axes sur ces chemins modaux,
+la récupération des contrastes, la fuite entre axes et la confrontation descriptive
+entre différence structurelle et `narrative_distinctness`. Ils seront rapportés comme des
+effectifs sur des trajectoires sélectionnées, non comme une estimation de la distribution
+de toutes les histoires. La présentation restera limitée à une seule diapositive.
 
 ### Phase 6 — Généralisation
 

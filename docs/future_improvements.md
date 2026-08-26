@@ -396,9 +396,10 @@ pas être réintroduites sans nouvelle question de recherche et nouvelle validat
 
 ### 13.1 Embeddings et sélection à grande échelle
 
-Les embeddings d'histoires complètes sont abandonnés pour LW01 : avec 42 trajectoires
-issues d'un plan contrôlé, ils ajouteraient un modèle et une distance difficile à
-interpréter sans résoudre un besoin de sélection.
+Les embeddings d'histoires complètes sont abandonnés pour LW01 : le petit corpus courant
+est sélectionné directement par la probabilité conditionnelle issue du formalisme BoP.
+Ils ajouteraient un modèle et une distance difficile à interpréter sans résoudre un besoin
+de sélection de cette itération.
 
 Ils pourraient redevenir utiles si une étude future génère des centaines ou milliers de
 trajectoires par livre. Leur rôle serait alors limité à :
@@ -432,13 +433,15 @@ Une étude future pourrait les reprendre en combinant :
 
 ### 13.3 Corpus de trajectoires plus large
 
-Le plan actuel isole les effets principaux avec sept profils et trois trajectoires par
-profil–issue. Les extensions possibles sont :
+Le plan actuel isole les effets principaux avec sept profils et une trajectoire MAP par
+profil–issue. Ce choix déterministe évite de surinterpréter trois tirages, mais ne mesure
+pas la dispersion des expériences possibles. Les extensions possibles sont :
 
 - les 27 profils du plan factoriel complet afin d'étudier les interactions entre axes ;
-- davantage de graines par cellule pour estimer la variabilité interne ;
-- des trajectoires modales, rares ou contrastives, clairement distinguées des échantillons
-  conditionnels ordinaires ;
+- un échantillon conditionnel assez grand par cellule pour estimer la variabilité interne ;
+- des médoïdes, des familles de trajectoires et des cas périphériques, avec leur masse
+  probabiliste, clairement distingués de la trajectoire MAP actuelle ;
+- des trajectoires rares ou contrastives sélectionnées par une règle fixée à l'avance ;
 - plusieurs livres afin de tester la portabilité du codebook et la stabilité des axes.
 
 Toute augmentation doit tenir compte du coût de la validation humaine et ne pas présenter

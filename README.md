@@ -19,7 +19,7 @@ narrative analysis.
 | `docs/phase3_results.md` | Validation and comparative results for all 27 profiles. |
 | `docs/phase4_indices.md` | Canonical phase-4 BoP metrics, output tables and independent validation. |
 | `docs/phase4_presentation.md` | Final three-slide phase-4 selection, speaking points and generated artifacts. |
-| `docs/phase5_protocol.md` | Validated complete-trajectory sampling, annotation grids, robustness checks and outputs. |
+| `docs/phase5_protocol.md` | Validated conditional-MAP trajectory selection, annotation grids, validation checks and outputs. |
 | `docs/phase5_implementation_plan.md` | Proposed local/cluster script split and files exchanged for phase 5. |
 | `docs/llm_digital_humanities.md` | Critical and reproducible use of local LLMs in digital humanities; phase-5 protocol and sources. |
 | `docs/future_improvements.md` | Deferred improvements: extraction schema, portability, mechanics and trajectory analysis. |
@@ -60,8 +60,9 @@ results/         cluster outputs and calibration history
 4. **BoP indices** (done for LW01): the selected local and global structural indices are
    calculated and independently validated for all 27 profiles. A concise three-slide
    presentation package and an optional key-number table are generated reproducibly.
-5. **LLM trajectory analysis**: the protocol is fixed; sample 42 controlled complete
-   paths and apply a structured, human-checked Qwen3.6-27B annotation to their stories.
+5. **LLM trajectory analysis**: the protocol is fixed; compute one conditional maximum-
+   probability path for each of seven controlled profiles and two outcomes (14 complete
+   stories), then apply a structured, fully human-checked Qwen3.6-27B annotation.
 6. **Generalization**: apply the reusable pipeline to another book or corpus.
 
 ## Setup

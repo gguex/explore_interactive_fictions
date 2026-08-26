@@ -95,15 +95,15 @@ difficile à interpréter dans ce petit plan contrôlé.
 La spécification complète et canonique se trouve dans `docs/phase5_protocol.md`. Les
 décisions centrales sont :
 
-- 42 histoires complètes : sept profils contrôlés, deux issues et trois graines ;
-- échantillonnage par chaîne conditionnée sur `Win` ou `Death`, sans sélection narrative
-  après observation ;
+- 14 histoires complètes : sept profils contrôlés et deux issues ;
+- sélection exacte, sans tirage ni lecture préalable, de la trajectoire conditionnelle
+  la plus probable pour chaque cellule profil–issue par plus court chemin sur
+  les coûts d'arêtes $-\log w(e)$ ;
 - annotation locale par `Qwen/Qwen3.6-27B`, sans accès aux profils, annotations d'arêtes,
   probabilités ou indices BoP ;
 - grille individuelle limitée à `risk`, `morality`, `action`, `causal_continuity` et
   `profile_coherence` ;
-- 18 comparaisons des profils extrêmes, à issue et graine identiques, évaluées dans les
-  deux ordres ;
+- six comparaisons des profils extrêmes à issue identique, évaluées dans les deux ordres ;
 - quatorze histoires et six paires préannotées humainement ;
 - mesures structurelles calculées séparément, puis confrontées aux annotations globales ;
 - une seule diapositive éventuelle, centrée sur les résultats les plus stables.
@@ -140,7 +140,7 @@ La publication des réussites seules produirait une fausse impression de stabili
 | « Le score mesure la cohérence. » | « Le score est une observation du modèle sur un construit opérationnalisé par la grille. » |
 | « Le LLM remplace la lecture humaine. » | « Le LLM signale et annote ; la chercheuse ou le chercheur vérifie et interprète. » |
 | « Le LLM confirme les indices BoP. » | « Les lectures de trajectoires sont mises en relation avec les résultats structurels de la phase 4. » |
-| « Les résultats sont objectifs. » | « Les résultats sont situés, documentés et soumis à des tests de robustesse. » |
+| « Les résultats sont objectifs. » | « Les résultats sont situés, documentés, contrôlés humainement et soumis à des tests de stabilité de l'instrument. » |
 
 Phrase courte proposée pour la présentation :
 
@@ -157,8 +157,10 @@ Complément oral utile :
 
 Cette phase ne permettra pas de démontrer une qualité littéraire objective, une réception
 réelle par des lecteurs, ni la diversité de toutes les expériences possibles. Elle portera
-sur un livre, 42 trajectoires contrôlées, une grille et un modèle local fixé. Les
-conclusions devront demeurer descriptives et exploratoires.
+sur un livre, 14 trajectoires conditionnelles modales, une grille et un modèle local fixé.
+La trajectoire MAP est reproductible, mais elle ne représente ni une trajectoire médiane,
+ni toute la masse des chemins possibles. Les conclusions devront demeurer descriptives et
+exploratoires.
 
 Cette modestie n'affaiblit pas la recherche. Elle en constitue l'apport : montrer comment
 un LLM peut être inséré dans une chaîne de preuve où ses décisions sont bornées,
