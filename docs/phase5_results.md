@@ -66,6 +66,13 @@ médoïdes exacts différents, mais appartenant à des familles proches : simila
 empirique**. Elle est reproductible avec la graine fixée, mais elle ne constitue ni le
 médoïde exact de toute la distribution ni une mesure de sa dispersion.
 
-L'étape 5.1 peut maintenant reconstruire le texte complet de ces 14 trajectoires et former
-les six paires extrême–extrême. Les conclusions du LLM porteront explicitement sur ces
-histoires représentatives sélectionnées, pas sur toutes les trajectoires possibles.
+## 4. Corpus narratif produit par 5.1
+
+Les 14 histoires ont maintenant été reconstruites sous identifiants opaques, avec le texte
+de chaque paragraphe, les options disponibles, l'action suivie et le type de transition.
+Elles comptent 19 à 49 étapes et 2 005 à 5 854 mots. Les six paires extrême–extrême sont
+matérialisées dans les deux ordres et leurs distances structurelles sont archivées.
+
+Les conclusions du LLM porteront explicitement sur ces histoires représentatives
+sélectionnées, pas sur toutes les trajectoires possibles. Les profils et issues restent
+dans les métadonnées privées et ne figurent pas dans les corpus publics.

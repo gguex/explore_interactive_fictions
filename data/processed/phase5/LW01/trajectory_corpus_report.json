@@ -1,0 +1,76 @@
+{
+  "book_id": "LW01",
+  "calibration_count": 4,
+  "calibration_rule": "neutral/Win plus one controlled pole per axis, alternating outcomes: cautious/Death, noble/Win, tactical/Death",
+  "comparison_count": 6,
+  "editable_human_templates": {
+    "data/for_trajectory_annotation/LW01/human_pairwise_annotations.jsonl": {
+      "rows": 6,
+      "sha256_at_report_time": "f4938d155f074884479d415c54a5b767e6dcafe2655e86434e9df801a9464fd8",
+      "status": "preserved"
+    },
+    "data/for_trajectory_annotation/LW01/human_trajectory_annotations.jsonl": {
+      "rows": 14,
+      "sha256_at_report_time": "caec2092b190a1c20b258675fe5c71fc95d405bc71f2ee4dd5714398766a29ff",
+      "status": "preserved"
+    }
+  },
+  "inputs": {
+    "data/processed/bop/LW01/profile_pair_metrics.csv": "1a5d48961478c953aadfd776251b4e9740a3323f94546ef1912993d56c1d9547",
+    "data/processed/graph/LW01/cautious_neutral_neutral/compiled_edges.csv": "97bb7409b4df3fc3bb05a2d0d7536e09544fecfa058e452a39739417a17b41ec",
+    "data/processed/graph/LW01/neutral_neutral_neutral/compiled_edges.csv": "67392f19a25b00f55fa632773630ec640d5c78f44bdeb38871e9e6106ec1c1e0",
+    "data/processed/graph/LW01/neutral_neutral_physical/compiled_edges.csv": "8de0e148033405278b3fd44bc51929cefab49184d5421705e6a485ef11819346",
+    "data/processed/graph/LW01/neutral_neutral_tactical/compiled_edges.csv": "e1d2aa9ecfe2b4c803557e48d83f185e6561dbe5312feb1e19477ee0571f6a7f",
+    "data/processed/graph/LW01/neutral_noble_neutral/compiled_edges.csv": "bba769ba55af3df3e4422ad8a0d7ef2b529e78fd316b22cad52f32abcfb2f4b7",
+    "data/processed/graph/LW01/neutral_selfish_neutral/compiled_edges.csv": "9b3494e602c1f0a452a60b86a24fd9d78e9d38d1fd60779b330acd197100100d",
+    "data/processed/graph/LW01/reckless_neutral_neutral/compiled_edges.csv": "a3dbe77c2006a53fc3dee662ff1ca6881edf776940713b15cae143f1707a1c26",
+    "data/processed/nodes_edges/LW01/LW01_e_edges.csv": "30be0eeb34e8081b6d28db6c30f68bc7a4c7f263a72421bc50c0fc43eb68ac52",
+    "data/processed/nodes_edges/LW01/LW01_nodes.csv": "00f233a0b4dd1037dedc0a15871cf2266b148f44f1a9f725398e1f198095088a",
+    "data/processed/phase5/LW01/medoid_trajectories.jsonl": "8f2ecf9d6e51b00f5375e21b40b2fa9356ee8beb821ba4edb7808824925161a9"
+  },
+  "length_summary": {
+    "maximum_estimated_tokens": 8267,
+    "maximum_steps": 49,
+    "maximum_words": 5854,
+    "minimum_steps": 19,
+    "minimum_words": 2005,
+    "token_estimate_warning": "Character-count/4 is only a planning estimate; 5.2 must use the exact Qwen tokenizer after adding the prompt."
+  },
+  "ordered_pair_count": 12,
+  "outputs": {
+    "data/processed/phase5/LW01/pair_private_metadata.jsonl": {
+      "sha256": "e27bb079b1bc4254ce7c73fc2d647b3e8d385c2cf1d5d27ffa6d0945cf7f79ea"
+    },
+    "data/processed/phase5/LW01/pair_structural_metrics.csv": {
+      "sha256": "e07583793491a396efab0a18ebf002a547078289efd8757cbcefe59362775b6a"
+    },
+    "data/processed/phase5/LW01/trajectories.jsonl": {
+      "sha256": "9360e5b50a9b7196e4c35b87c846666d526785275d5037e69d3fc658262dc09f"
+    },
+    "data/processed/phase5/LW01/trajectory_pairs.jsonl": {
+      "sha256": "08c870268a7708d876b14a51d9b8f7e51b66d9e727e12bcdd063f73799e0777b"
+    },
+    "data/processed/phase5/LW01/trajectory_private_metadata.jsonl": {
+      "sha256": "56dd68387db5a219483b12c761d598234b01e66242d07c481d0b1aaa909a4d22"
+    }
+  },
+  "phase": "5.1",
+  "player_choice_kinds": [
+    "escape",
+    "profile_choice"
+  ],
+  "schema_version": "1.0",
+  "status": "complete",
+  "trajectory_count": 14,
+  "transition_labels": {
+    "combat": "Combat resolution",
+    "escape": "Player choice: escape from combat",
+    "forced": "Forced transition",
+    "kai": "Kai availability or mechanical route",
+    "outcome": "Story outcome",
+    "profile_choice": "Player choice",
+    "random": "Random or mechanical resolution",
+    "state_condition": "Inventory or state-dependent route"
+  },
+  "validation_count": 10
+}

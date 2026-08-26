@@ -464,9 +464,10 @@ moyenne aux autres tirages ; aucune sélection n'intervient après lecture du te
 embeddings sont exclus : ils ajouteraient un second instrument sémantique sans être
 nécessaires à ce plan contrôlé.
 
-L'étape 5.0 est terminée pour LW01 : les tirages et les 14 médoïdes ont été calculés et
-validés indépendamment. Les premiers résultats et les limites liées à l'échantillonnage
-sont consignés dans `docs/phase5_results.md`.
+Les étapes 5.0 et 5.1 sont terminées pour LW01 : les tirages et les 14 médoïdes ont été
+calculés, puis leurs histoires complètes ont été reconstruites sous identifiants opaques.
+Six comparaisons extrême–extrême existent dans les deux ordres, avec leurs distances
+structurelles calculées séparément. Les deux étapes sont validées indépendamment.
 
 #### Méthodes potentielles
 
@@ -512,10 +513,10 @@ générales des adaptations propres à LW01.
 
 ## 8. Questions restant à traiter dans la phase 5
 
-Le corpus, les grilles, Qwen3.6-27B et les contrôles sont fixés, et les médoïdes sont
-calculés. Il reste à reconstruire les histoires, implémenter l'échange avec le
-cluster, puis vérifier empiriquement la longueur des contextes, la stabilité des sorties
-et l'utilité des deux champs complémentaires avant de choisir le contenu de la diapositive.
+Le corpus, les grilles, Qwen3.6-27B et les contrôles sont fixés ; les médoïdes et leurs
+histoires sont construits. Il reste à remplir la calibration humaine, implémenter l'échange
+avec le cluster, puis vérifier la longueur exacte avec le tokenizer Qwen, la stabilité des
+sorties et l'utilité des deux champs complémentaires avant de choisir la diapositive.
 
 ## 9. Documentation active
 

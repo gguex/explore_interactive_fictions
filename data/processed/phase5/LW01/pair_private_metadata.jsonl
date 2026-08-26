@@ -1,0 +1,6 @@
+{"axis":"risk","book_id":"LW01","comparison_id":"C001","outcome":"Win","profile_a":"cautious_neutral_neutral","profile_b":"reckless_neutral_neutral","trajectory_a_id":"T0003","trajectory_b_id":"T0005"}
+{"axis":"risk","book_id":"LW01","comparison_id":"C002","outcome":"Death","profile_a":"cautious_neutral_neutral","profile_b":"reckless_neutral_neutral","trajectory_a_id":"T0004","trajectory_b_id":"T0006"}
+{"axis":"morality","book_id":"LW01","comparison_id":"C003","outcome":"Win","profile_a":"neutral_selfish_neutral","profile_b":"neutral_noble_neutral","trajectory_a_id":"T0007","trajectory_b_id":"T0009"}
+{"axis":"morality","book_id":"LW01","comparison_id":"C004","outcome":"Death","profile_a":"neutral_selfish_neutral","profile_b":"neutral_noble_neutral","trajectory_a_id":"T0008","trajectory_b_id":"T0010"}
+{"axis":"action","book_id":"LW01","comparison_id":"C005","outcome":"Win","profile_a":"neutral_neutral_physical","profile_b":"neutral_neutral_tactical","trajectory_a_id":"T0011","trajectory_b_id":"T0013"}
+{"axis":"action","book_id":"LW01","comparison_id":"C006","outcome":"Death","profile_a":"neutral_neutral_physical","profile_b":"neutral_neutral_tactical","trajectory_a_id":"T0012","trajectory_b_id":"T0014"}

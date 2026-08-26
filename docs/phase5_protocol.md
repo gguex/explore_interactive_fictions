@@ -421,14 +421,18 @@ confiance déclarée par le modèle n'est pas utilisée comme mesure de fiabilit
 
 ## 10. Sorties attendues
 
-Les noms de 5.0 sont désormais fixés ; les suivants restent indicatifs :
+Les noms de 5.0 et 5.1 sont désormais fixés ; les suivants restent indicatifs :
 
 | Fichier | Contenu |
 | :--- | :--- |
 | `medoid_trajectories.jsonl` | Séquences des 14 médoïdes, profils, issues, objectif, probabilités, graines et empreintes produites par 5.0. |
 | `conditional_path_counts.jsonl` | Chemins conditionnels uniques, effectifs et probabilités permettant d'auditer les médoïdes. |
 | `trajectories.jsonl` | Textes complets et choix reconstruits par 5.1, avec les données privées séparées avant l'inférence. |
+| `trajectory_private_metadata.jsonl` | Correspondance locale entre identifiants opaques, profils, issues et chemins ; jamais transmise au modèle. |
+| `trajectory_pairs.jsonl` | Six comparaisons extrême–extrême matérialisées dans les ordres A/B et B/A. |
+| `pair_private_metadata.jsonl` | Axe, issue et profils générateurs des six paires, conservés localement. |
 | `medoid_selection_report.json` | Conditionnement, tirages, distance, règles de sélection, empreintes et MAP diagnostiques. |
+| `trajectory_corpus_report.json` | Sources, empreintes, tailles du corpus, répartition calibration–validation et estimation des longueurs. |
 | `trajectory_annotations.jsonl` | Sorties individuelles brutes et normalisées de Qwen. |
 | `pairwise_annotations.jsonl` | Comparaisons A/B et B/A. |
 | `human_annotations.jsonl` | Calibration et validation humaines, séparées des sorties du modèle. |

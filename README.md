@@ -61,10 +61,9 @@ results/         cluster outputs and calibration history
 4. **BoP indices** (done for LW01): the selected local and global structural indices are
    calculated and independently validated for all 27 profiles. A concise three-slide
    presentation package and an optional key-number table are generated reproducibly.
-5. **LLM trajectory analysis**: step 5.0 has sampled 2,000 outcome-conditioned paths per
-   cell and independently validated one empirical medoid for each of seven controlled
-   profiles and two outcomes (14 paths). Story reconstruction and structured
-   Qwen3.6-27B annotation remain to be implemented.
+5. **LLM trajectory analysis**: steps 5.0–5.1 have selected 14 empirical medoids and
+   reconstructed their complete blinded stories, plus six extreme-profile comparisons in
+   both A/B orders. Human calibration and structured Qwen3.6-27B annotation remain.
 6. **Generalization**: apply the reusable pipeline to another book or corpus.
 
 ## Setup
@@ -98,6 +97,8 @@ uv run python scripts/4.3_build_bop_presentation.py --book LW01
 uv run python scripts/tests/test_4_3_build_bop_presentation.py --book LW01
 uv run python scripts/5.0_select_medoid_trajectories.py --book LW01
 uv run python scripts/tests/test_5_0_select_medoid_trajectories.py --book LW01
+uv run python scripts/5.1_build_trajectory_corpus.py --book LW01
+uv run python scripts/tests/test_5_1_build_trajectory_corpus.py --book LW01
 ```
 
 The same commands accept another Lone Wolf identifier, such as `--book LW02`, provided

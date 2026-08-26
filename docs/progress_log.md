@@ -515,8 +515,24 @@
 - Les 14 chemins retenus sont distincts ; les victoires comptent 39 à 49 transitions et
   les morts 19 à 32. Le choix MAP précédent est donc remplacé dans le protocole actif.
 
+### 26.08.2026 — Phase 5.1 : corpus d'histoires complètes construit
+
+- Implémentation de `scripts/5.1_build_trajectory_corpus.py` : reconstruction des 14
+  histoires en anglais depuis les textes de paragraphes et les options originales, avec
+  action suivie et type de transition à chaque étape.
+- Attribution d'identifiants opaques `T0001`–`T0014`. Profils, axes, issues, chemins et
+  empreintes restent dans des métadonnées privées séparées.
+- Production des six comparaisons extrême–extrême dans les deux ordres A/B et B/A, ainsi
+  que des chevauchements de paragraphes et d'arêtes, LCS, distance d'édition et divergences
+  BoP correspondantes.
+- Création des gabarits pour 14 annotations humaines individuelles et six annotations par
+  paires. Quatre histoires sont prédéfinies pour la calibration et dix pour la validation.
+- Ajout d'un validateur indépendant contrôlant les textes, options, chemins, inversions,
+  métriques, empreintes et absence de clés privées dans les corpus publics.
+- Les histoires comptent 19 à 49 étapes et 2 005 à 5 854 mots. L'estimation maximale de
+  contexte reste inférieure à 32k tokens, à confirmer avec le tokenizer exact en 5.2.
+
 ## Prochaine étape
 
-Implémenter l'étape 5.1 : reconstruire les histoires complètes et les six paires à partir
-des médoïdes empiriques, puis produire les gabarits d'annotation humaine selon
-`docs/phase5_protocol.md`.
+Remplir les quatre annotations humaines de calibration, puis implémenter `5.2` pour
+construire le paquet aveugle destiné au cluster selon `docs/phase5_protocol.md`.

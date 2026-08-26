@@ -1,6 +1,6 @@
 # Phase 5 — Découpage des scripts et échanges avec le cluster
 
-> **Statut au 26.08.2026 : étape 5.0 implémentée et validée ; étapes 5.1–5.5 à créer.**
+> **Statut au 26.08.2026 : étapes 5.0 et 5.1 implémentées et validées ; étapes 5.2–5.5 à créer.**
 > Le protocole scientifique reste défini dans `docs/phase5_protocol.md`. Cette note décrit
 > les étapes techniques et les fichiers qui circuleront entre la machine locale et le
 > serveur universitaire.
@@ -34,7 +34,7 @@ opaques, les prompts, les schémas et les paramètres nécessaires à l'inféren
 | Script | Rôle | Entrées principales | Sorties principales |
 | :--- | :--- | :--- | :--- |
 | `scripts/5.0_select_medoid_trajectories.py` — **fait** | Tirer 2 000 trajectoires conditionnelles par cellule avec la transformation de Doob et sélectionner le chemin observé minimisant la distance LCS moyenne. | Matrices, multiarêtes compilées, profils et probabilités d'absorption. | `medoid_trajectories.jsonl`, `conditional_path_counts.jsonl` et `medoid_selection_report.json`. |
-| `scripts/5.1_build_trajectory_corpus.py` | Reconstituer chaque histoire complète avec paragraphes, choix disponibles, choix suivi et type de transition ; former les six paires dans les deux ordres. | Trajectoires, nœuds, arêtes et textes. | Corpus individuel, corpus pairwise, gabarits humains et mesures de longueur. |
+| `scripts/5.1_build_trajectory_corpus.py` — **fait** | Reconstituer chaque histoire complète avec paragraphes, choix disponibles, choix suivi et type de transition ; former les six paires dans les deux ordres. | Médoïdes, nœuds, arêtes originales et compilées, métriques BoP. | Corpus aveugle, métadonnées privées, paires A/B et B/A, gabarits humains, distances structurelles et rapport. |
 | `scripts/5.2_build_phase5_bundle.py` | Produire un paquet autonome sans fuite des profils ou résultats BoP. | Corpus, prompts figés, schémas et configuration du modèle. | Paquet `pilot` ou `final` avec manifeste et empreintes. |
 | `scripts/5.3_import_phase5_annotations.py` | Importer les sorties revenues du cluster, contrôler les schémas et normaliser les résultats valides. | Dossier de sortie du cluster et manifeste du paquet. | Annotations canoniques, quarantaine et rapport de validation. |
 | `scripts/5.4_compute_phase5_results.py` | Réunir annotations Qwen, métadonnées cachées, annotations humaines et distances structurelles ; calculer les indicateurs. | Sorties 5.0–5.3 et fichiers humains. | Tables individuelles, pairwise, qualité et synthèse. |
@@ -45,7 +45,7 @@ calcul. Les validateurs indépendants suivent les conventions existantes :
 
 ```text
 scripts/tests/test_5_0_select_medoid_trajectories.py
-scripts/tests/test_5_1_build_trajectory_corpus.py
+scripts/tests/test_5_1_build_trajectory_corpus.py  # fait
 scripts/tests/test_5_2_build_phase5_bundle.py
 scripts/tests/test_5_3_import_phase5_annotations.py
 scripts/tests/test_5_4_compute_phase5_results.py
@@ -63,6 +63,9 @@ Les annotations humaines sont remplies avant de consulter Qwen. Quatre histoires
 marquées `calibration` et dix `validation`. Le premier paquet produit par
 `5.2 --stage pilot` ne contient que les quatre histoires de calibration, sans leurs
 réponses humaines.
+
+Les deux fichiers humains sont des artefacts éditables : `5.1` les crée s'ils n'existent
+pas, puis vérifie leurs identifiants sans jamais écraser des annotations déjà remplies.
 
 Après examen du pilote, le codebook et les prompts sont figés et empreintés. Le paquet
 `final` contient alors :
@@ -154,7 +157,10 @@ data/processed/phase5/LW01/
 ├── conditional_path_counts.jsonl
 ├── trajectories.jsonl
 ├── trajectory_private_metadata.jsonl
+├── trajectory_pairs.jsonl
+├── pair_private_metadata.jsonl
 ├── medoid_selection_report.json
+├── trajectory_corpus_report.json
 ├── trajectory_annotations.jsonl
 ├── pairwise_annotations.jsonl
 ├── pair_structural_metrics.csv
@@ -202,8 +208,8 @@ Le pipeline s'arrête notamment si :
 ## 9. Ordre d'implémentation
 
 1. **Fait :** implémenter et valider `5.0`.
-2. Implémenter et valider `5.1` à partir des 14 médoïdes distincts.
-3. Remplir les annotations humaines de calibration.
+2. **Fait :** implémenter et valider `5.1` à partir des 14 médoïdes distincts.
+3. Remplir les annotations humaines de calibration à partir des gabarits produits.
 4. Créer l'exécuteur du cluster et `5.2`, puis lancer le paquet `pilot`.
 5. Figer les prompts après le pilote et produire le paquet `final`.
 6. Récupérer les sorties et implémenter `5.3`.
