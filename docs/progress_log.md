@@ -455,9 +455,20 @@
   contrôle humain complet.
 - Consignation des exigences de reproductibilité, des formulations pour la présentation
   et des sources dans `docs/llm_digital_humanities.md`.
+- Abandon des embeddings pour le pilote de phase 5 : la sélection reposera sur les
+  probabilités et la structure déjà calculées, afin de ne pas ajouter un second modèle
+  sémantique difficile à interpréter.
+- Validation du protocole opérationnel : 42 trajectoires conditionnées, sept profils
+  contrôlés, deux issues et trois graines, annotées par Qwen3.6-27B.
+- Limitation de la grille individuelle aux trois axes perçus, à la continuité causale et à
+  la cohérence interne du profil ; abandon de l'adéquation choix–conséquence et de l'équité
+  perçue de l'issue.
+- Adoption de 18 comparaisons extrême–extrême, de mesures structurelles indépendantes et
+  d'un sous-ensemble humain de validation. Spécification complète dans
+  `docs/phase5_protocol.md` ; extensions reportées dans `docs/future_improvements.md`.
 
 ## Prochaine étape
 
-Implémenter la sélection des trajectoires représentatives et préparer le pilote humain de
-la phase 5 selon `docs/llm_digital_humanities.md`, en réutilisant notamment les flux
-conditionnés produits en phase 4.
+Implémenter l'échantillonnage conditionnel, la reconstruction des histoires et les grilles
+de la phase 5 selon `docs/phase5_protocol.md`, en réutilisant les probabilités d'absorption
+et les résultats structurels de la phase 4.

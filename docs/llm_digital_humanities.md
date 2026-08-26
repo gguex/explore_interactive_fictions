@@ -59,16 +59,17 @@ Le pipeline répartit volontairement les responsabilités :
 4. l'interprétation finale, la sélection des exemples et les conclusions restent humaines.
 
 La phase 4 décrit l'architecture des possibles : accessibilité, centralité, mortalité,
-sensibilité aux profils et diversité structurelle. Elle ne peut pas déterminer si deux
-parcours racontent réellement des histoires différentes, si une issue paraît préparée ou
-si la continuité narrative est convaincante. La phase 5 confronte donc les structures
-mesurées au texte effectivement lu le long des trajectoires. Elle complète la phase 4 ;
-elle ne la valide pas rétroactivement et ne remplace pas la lecture rapprochée.
+sensibilité aux profils et diversité structurelle. Elle ne peut pas déterminer si les
+orientations probabilistes deviennent perceptibles dans les histoires complètes, ni si
+deux chemins structurellement différents produisent une impression narrative différente.
+La phase 5 confronte donc les structures mesurées au texte effectivement lu le long des
+trajectoires. Elle complète la phase 4 ; elle ne la valide pas rétroactivement et ne
+remplace pas la lecture rapprochée.
 
-Avec un petit ensemble final de trajectoires, toutes peuvent être lues humainement. Le
-bénéfice du LLM n'est alors pas d'économiser la lecture : il est de rendre la grille
-d'analyse explicite, répétable et réutilisable pour d'autres livres, tout en donnant accès
-aux accords et désaccords entre plusieurs lectures.
+Un sous-ensemble contrôlé des trajectoires sera lu humainement. Le bénéfice du LLM n'est
+pas de supprimer cette lecture : il est de rendre la grille explicite, répétable et
+réutilisable sur un corpus un peu plus large, tout en donnant accès aux accords et
+désaccords entre plusieurs annotations.
 
 ## 4. Statut épistémologique des sorties
 
@@ -77,94 +78,40 @@ C'est une observation générée par un instrument particulier, sous un prompt, 
 et des paramètres particuliers. La validation doit donc porter sur le construit visé :
 mesure-t-on bien ce que la grille prétend mesurer ?
 
-Les tâches les plus défendables sont celles qui exigent des indices contrôlables dans le
-texte :
+Les tâches retenues exigent des preuves contrôlables dans le texte : inférer les trois axes
+du profil depuis plusieurs décisions, signaler une rupture causale en citant les passages
+qui se contredisent et déterminer si les décisions dessinent un profil interne stable.
+Le modèle doit pouvoir s'abstenir lorsque les preuves sont insuffisantes.
 
-- repérer personnages, lieux, objets et événements récurrents ;
-- signaler une disparition, une répétition ou une transition abrupte ;
-- indiquer si une conséquence a été préparée auparavant ;
-- relever l'accord apparent entre les actions racontées et le profil du joueur ;
-- fournir les identifiants exacts des paragraphes soutenant chaque observation.
+Les jugements d'équité, d'adéquation choix–conséquence, de tension, de richesse et de
+qualité littéraire sont exclus de cette itération. Pour la variation narrative, une
+histoire isolée ne suffit pas : les profils extrêmes seront comparés par paires, tandis que
+les chevauchements et distances de chemins seront calculés indépendamment. Les embeddings
+sont également écartés, car ils ajouteraient un second modèle et une distance sémantique
+difficile à interpréter dans ce petit plan contrôlé.
 
-Les jugements synthétiques — cohérence globale, tension, richesse ou qualité d'une fin —
-restent possibles, mais ils doivent être accompagnés de preuves textuelles, comparés à une
-lecture humaine et présentés comme des résultats conditionnels. Pour la variation, une
-histoire isolée ne constitue pas une unité suffisante : il faut comparer une paire ou un
-ensemble de trajectoires. Les embeddings peuvent aider à sélectionner des récits proches,
-représentatifs ou périphériques, mais ne mesurent pas à eux seuls la causalité, l'ordre des
-événements ou la cohérence.
+## 5. Protocole adopté pour la phase 5
 
-## 5. Protocole recommandé pour la phase 5
+La spécification complète et canonique se trouve dans `docs/phase5_protocol.md`. Les
+décisions centrales sont :
 
-Le protocole doit rester assez petit pour être expliqué en vingt minutes et intégralement
-audité.
+- 42 histoires complètes : sept profils contrôlés, deux issues et trois graines ;
+- échantillonnage par chaîne conditionnée sur `Win` ou `Death`, sans sélection narrative
+  après observation ;
+- annotation locale par `Qwen/Qwen3.6-27B`, sans accès aux profils, annotations d'arêtes,
+  probabilités ou indices BoP ;
+- grille individuelle limitée à `risk`, `morality`, `action`, `causal_continuity` et
+  `profile_coherence` ;
+- 18 comparaisons des profils extrêmes, à issue et graine identiques, évaluées dans les
+  deux ordres ;
+- quatorze histoires et six paires préannotées humainement ;
+- mesures structurelles calculées séparément, puis confrontées aux annotations globales ;
+- une seule diapositive éventuelle, centrée sur les résultats les plus stables.
 
-### 5.1 Sélection
-
-Une première cible raisonnable est **douze trajectoires** : trois profils contrastés,
-deux issues (`Win` et `Death`) et, pour chaque couple profil–issue, un parcours
-représentatif et un parcours atypique. La sélection combinera les probabilités et flux de
-la phase 4, des distances structurelles et, si utile, des embeddings locaux. Elle doit être
-fixée avant de lire les jugements du LLM afin d'éviter de choisir uniquement des exemples
-spectaculaires.
-
-### 5.2 Construction de la grille
-
-Quatre trajectoires seront d'abord annotées manuellement, sans voir de sortie de modèle.
-Cette lecture pilote servira à définir précisément chaque critère, les valeurs autorisées,
-les preuves attendues et les cas où le modèle doit répondre `uncertain`. Le prompt sera
-traité comme un instrument de mesure, non comme une simple formulation à « optimiser ».
-
-La sortie JSON devrait au minimum conserver :
-
-- `trajectory_id`, `profile_id`, `outcome` et la suite des paragraphes ;
-- des observations séparées pour continuité/cohérence causale, progression/tension,
-  répétitions/ruptures, adéquation profil–actions et pertinence de l'issue ;
-- pour chaque observation, un niveau ou score ordinal clairement défini ;
-- une justification courte et une liste de `evidence_paragraph_ids` ;
-- un niveau de confiance et la possibilité explicite de ne pas conclure ;
-- les erreurs de format, passages non cités et assertions non vérifiables.
-
-### 5.3 Calibration et choix du modèle
-
-Deux modèles locaux à poids ouverts seront comparés sur le petit pilote : le modèle déjà
-utilisé dans le projet s'il convient à la longueur des histoires, et une seconde famille
-de modèle. Le choix ne dépendra ni du nombre de paramètres ni de conclusions plus
-intéressantes, mais de critères annoncés à l'avance :
-
-- respect du JSON et de la grille ;
-- exactitude des références aux paragraphes ;
-- stabilité entre répétitions ;
-- accord et désaccord explicables avec les annotations humaines ;
-- fréquence des inventions, omissions et conclusions sans preuve ;
-- temps de calcul, mémoire et licence.
-
-Le contexte utile doit être mesuré sur les trajectoires réellement sélectionnées. Les
-estimations préliminaires du corpus donnent environ 2 200 tokens pour une histoire menant
-à la mort et 5 300 pour une victoire typique ; avec le prompt, une fenêtre effective de
-16k tokens semble donc suffisante pour les cas ordinaires. Cette hypothèse devra être
-vérifiée sur le parcours le plus long, notamment si les cycles sont autorisés.
-
-### 5.4 Analyse finale et robustesse
-
-Chaque trajectoire sera évaluée deux fois à faible température, avec le même prompt, le
-même modèle, la même quantification et, lorsque le moteur le permet, la même graine. Les
-paramètres possibles ne doivent pas être explorés après coup jusqu'à obtenir un
-résultat désirable : les variantes essayées pendant la calibration seront toutes
-consignées.
-
-Les douze sorties finales seront contrôlées humainement. On rapportera :
-
-- les observations confirmées, corrigées et rejetées ;
-- la stabilité entre les deux passages ;
-- les écarts entre modèles sur le pilote ;
-- les cas où les humains ou le modèle ne sont pas d'accord ;
-- la sensibilité des conclusions importantes à une reformulation raisonnable du prompt.
-
-Si des comparaisons par paires sont ajoutées plus tard, l'ordre A/B devra être inversé et
-les deux résultats comparés, car les LLM juges présentent des biais de position. Pour la
-présentation actuelle, une grille par trajectoire avec contrôle humain est plus simple et
-moins coûteuse qu'un tournoi exhaustif de comparaisons.
+Le prompt est traité comme un instrument de mesure : définitions, abstention, preuves et
+contre-exemples courts sont fixés avant le run principal. Aucune trajectoire complète déjà
+annotée n'est placée dans le prompt. Une variante prédéfinie est testée sur le sous-ensemble
+humain pour estimer la sensibilité à la formulation.
 
 ## 6. Journal de reproductibilité à conserver
 
@@ -210,8 +157,8 @@ Complément oral utile :
 
 Cette phase ne permettra pas de démontrer une qualité littéraire objective, une réception
 réelle par des lecteurs, ni la diversité de toutes les expériences possibles. Elle portera
-sur un livre, un petit ensemble construit de trajectoires, une grille et un ou deux
-modèles. Les conclusions devront demeurer descriptives et exploratoires.
+sur un livre, 42 trajectoires contrôlées, une grille et un modèle local fixé. Les
+conclusions devront demeurer descriptives et exploratoires.
 
 Cette modestie n'affaiblit pas la recherche. Elle en constitue l'apport : montrer comment
 un LLM peut être inséré dans une chaîne de preuve où ses décisions sont bornées,

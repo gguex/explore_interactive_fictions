@@ -441,8 +441,8 @@ l'extraction du layout ni les calculs BoP.
 
 ### Phase 5 — Analyse des trajectoires complètes avec un LLM
 
-La position épistémologique, les exigences de reproductibilité et le protocole local
-envisagé pour cette phase sont détaillés dans `docs/llm_digital_humanities.md`.
+La position épistémologique est détaillée dans `docs/llm_digital_humanities.md` et la
+spécification opérationnelle validée dans `docs/phase5_protocol.md`.
 
 Cette phase passe de la structure probabiliste du livre aux histoires effectivement
 produites par ses parcours. Elle devra :
@@ -455,38 +455,37 @@ produites par ses parcours. Elle devra :
 4. comparer les histoires entre elles et relier les résultats qualitatifs aux indices
    BoP de la phase 4.
 
-La méthode exacte de sélection reste à définir. Les dimensions à arbitrer sont le nombre
-de profils, le nombre de trajectoires par profil, l'équilibre entre victoires et morts,
-et la représentation des parcours ordinaires, rares ou extrêmes. Une possibilité est
-de générer un grand échantillon probabiliste, puis de sélectionner des médoïdes et des
-cas périphériques plutôt que de transmettre toutes les trajectoires au LLM.
+Le corpus comprendra 42 trajectoires : sept profils contrôlés — neutre et les deux
+extrêmes de chacun des trois axes — croisés avec `Win` et `Death`, avec trois graines par
+cellule. Les trajectoires seront échantillonnées par la chaîne conditionnée sur l'issue.
+Les embeddings sont exclus : ils ajouteraient un second instrument sémantique sans être
+nécessaires à ce plan contrôlé.
 
 #### Méthodes potentielles
 
 | Méthode | Usage possible | Limite | Orientation actuelle |
 | :--- | :--- | :--- | :--- |
-| **Distances structurelles** | Comparer les suites de paragraphes, leur longueur, leur issue et leur chevauchement. | Ne mesure pas la similarité du contenu narratif. | **Oui — contrôle et présélection** |
-| **Embeddings des histoires** | Regrouper les trajectoires, mesurer leur dispersion sémantique et sélectionner des médoïdes ou des cas atypiques. | Un embedding global restitue mal l'ordre, la causalité et les contradictions. | **Oui — diversité et sélection, pas jugement de cohérence** |
-| **Évaluation LLM structurée** | Produire des scores et justifications selon une grille commune. | Sensible au modèle, au prompt et à l'ordre des textes. | **Oui — méthode qualitative principale** |
-| **Comparaisons LLM par paires** | Dire laquelle de deux histoires est la plus cohérente ou variée, puis agréger les préférences. | Nombre de comparaisons rapidement élevé. | **Non pour la présentation — candidat pour l'article** |
+| **Distances structurelles** | Comparer les suites de paragraphes, leur longueur, leur issue et leur chevauchement. | Ne mesure pas la similarité du contenu narratif. | **Oui — comparaison indépendante** |
+| **Embeddings des histoires** | Regrouper un grand nombre de trajectoires par proximité sémantique. | Ajoute un modèle et une mesure difficile à interpréter ; inutile pour le petit pilote. | **Non — abandonné pour cette recherche** |
+| **Évaluation LLM structurée** | Inférer les trois axes du profil et contrôler continuité causale et cohérence du profil sur les histoires complètes. | Sensible au modèle et au prompt. | **Oui — méthode principale** |
+| **Comparaisons LLM par paires** | Comparer les extrêmes de chaque axe à issue et graine identiques. | Sensible à l'ordre A/B. | **Oui — 18 paires, évaluées dans les deux ordres** |
 | **Extraction d'événements, entités et lieux** | Vérifier la continuité des personnages, objets, lieux et événements le long du parcours. | Demande une nouvelle annotation et une métrique de séquence. | **Non — extension future** |
-| **Évaluation humaine** | Vérifier la validité d'un petit échantillon de jugements du LLM. | Coûteuse et difficile à étendre. | **Souhaitable comme contrôle limité, non bloquant** |
+| **Évaluation humaine** | Vérifier la validité d'un petit échantillon de jugements du LLM. | Coûteuse et difficile à étendre. | **Oui — contrôle requis sur 14 histoires et 6 paires** |
 
-La grille LLM devra au minimum distinguer :
+La grille individuelle contient uniquement le profil perçu sur `risk`, `morality` et
+`action`, la `causal_continuity` et la `profile_coherence`. Les deux derniers champs sont
+des résultats complémentaires et ne seront montrés que s'ils sont stables. Les champs
+d'adéquation choix–conséquence, d'équité de l'issue et de qualité littéraire sont exclus.
 
-- la **cohérence causale et la continuité** de l'histoire ;
-- la **variation narrative** entre trajectoires, sans la confondre avec une simple
-  différence de paragraphes ;
-- la **progression et la tension** du récit ;
-- la **cohérence entre le profil annoncé et les actions racontées** ;
-- les **ruptures, répétitions ou transitions abruptes** ;
-- la **qualité et la pertinence de l'issue**.
+Qwen3.6-27B recevra les histoires complètes et leurs choix, mais aucun profil, poids,
+annotation sémantique ni indice BoP. Les justifications devront citer des choix ou
+paragraphes vérifiables. Quatorze histoires et six paires seront annotées humainement ;
+les comparaisons seront inversées pour détecter le biais de position.
 
-Les scores ne devront pas être interprétés seuls. Ils seront accompagnés de justifications
-courtes, de références aux paragraphes concernés et d'indicateurs de diversité issus des
-embeddings et de la structure. Pour la présentation, l'approche visée est donc un petit
-protocole hybride : sélection structurelle, embeddings pour la diversité, puis lecture
-complète et évaluation structurée par le LLM.
+Les résultats principaux seront la manifestation des trois axes, la récupération des
+contrastes, la fuite entre axes et la confrontation descriptive entre différence
+structurelle et `narrative_distinctness`. La présentation restera limitée à une seule
+diapositive.
 
 ### Phase 6 — Généralisation
 
@@ -503,14 +502,11 @@ générales des adaptations propres à LW01.
 - **Interprétabilité** : chaque poids de $W$ dérive d'une règle du pré-graphe et d'un
   profil identifié.
 
-## 8. Questions restant à traiter dans les phases 4 et 5
+## 8. Questions restant à traiter dans la phase 5
 
-Le catalogue, le noyau et les normalisations des indices BoP sont désormais fixés. Il
-reste à préciser :
-
-1. la méthode de sélection et le nombre de trajectoires représentatives ;
-2. la grille, le modèle et le protocole de répétition de l'évaluation LLM ;
-3. comment articuler les indices structurels, les embeddings et les jugements du LLM.
+Le corpus, les grilles, Qwen3.6-27B et les contrôles sont fixés. Il reste à implémenter le
+pipeline, puis à vérifier empiriquement la longueur des contextes, la stabilité des sorties
+et l'utilité des deux champs complémentaires avant de choisir le contenu de la diapositive.
 
 ## 9. Documentation active
 
@@ -518,6 +514,7 @@ reste à préciser :
 - `graph_model.md` : pré-graphe, annotation et compilation de $W$ ;
 - `phase4_indices.md` : formules, tables canoniques et validation des indices BoP ;
 - `phase4_presentation.md` : sélection finale, figures et messages pour la présentation ;
+- `phase5_protocol.md` : corpus, grilles, modèle, validation et sorties de la phase 5 ;
 - `llm_digital_humanities.md` : rôle, limites, audit et sources pour l'usage local des LLM ;
 - `future_improvements.md` : limites connues et extensions reportées du pipeline ;
 - `progress_log.md` : journal chronologique ;

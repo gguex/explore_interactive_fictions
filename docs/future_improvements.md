@@ -1,8 +1,9 @@
 # Améliorations et extensions futures
 
-> **Statut au 20.08.2026 : chantier reporté.** Ce document conserve les limites
-> identifiées et les évolutions souhaitables. Il ne modifie ni le schéma courant de la
-> phase 1, ni la recette nécessaire pour terminer le pré-graphe de LW01.
+> **Statut au 26.08.2026 : chantiers reportés.** Ce document conserve les limites
+> identifiées et les évolutions souhaitables pour l'extraction, la modélisation et
+> l'analyse des trajectoires. Il ne modifie ni le pipeline validé de LW01, ni le protocole
+> courant de la phase 5.
 
 ## 1. Objectif
 
@@ -386,3 +387,89 @@ un rapport lié :
 
 Cette mesure permettra de distinguer une formulation isolée, qui peut rester supervisée,
 d'une mécanique récurrente qui justifie une évolution du schéma ou du convertisseur.
+
+## 13. Extensions reportées de l'analyse des trajectoires
+
+Le protocole courant est fixé dans `docs/phase5_protocol.md`. Les possibilités ci-dessous
+ont été discutées puis exclues de l'itération destinée à la présentation. Elles ne doivent
+pas être réintroduites sans nouvelle question de recherche et nouvelle validation.
+
+### 13.1 Embeddings et sélection à grande échelle
+
+Les embeddings d'histoires complètes sont abandonnés pour LW01 : avec 42 trajectoires
+issues d'un plan contrôlé, ils ajouteraient un modèle et une distance difficile à
+interpréter sans résoudre un besoin de sélection.
+
+Ils pourraient redevenir utiles si une étude future génère des centaines ou milliers de
+trajectoires par livre. Leur rôle serait alors limité à :
+
+- regrouper les histoires avant annotation ;
+- sélectionner des médoïdes et des cas périphériques ;
+- détecter des doublons ou familles sémantiques.
+
+Ils ne devraient pas servir seuls à mesurer la cohérence, la causalité ou la variation
+narrative. Leur évaluation devrait contrôler la longueur, le vocabulaire et la perte de
+l'ordre des événements, et les comparer aux distances structurelles de séquences.
+
+### 13.2 Adéquation choix–conséquence et équité de l'issue
+
+Deux annotations ont été envisagées puis retirées :
+
+- l'adéquation globale entre le caractère prudent, téméraire ou moral d'un choix et ses
+  conséquences ;
+- l'équité perçue de `Win` ou `Death` au regard des décisions précédentes.
+
+Une seule trajectoire ne montre pas les conséquences des options non choisies. Ces champs
+risqueraient donc de transformer une impression rétrospective en conclusion causale et
+d'introduire un jugement normatif difficile à valider.
+
+Une étude future pourrait les reprendre en combinant :
+
+- les branches contrefactuelles issues du graphe ;
+- les probabilités de conséquences conditionnelles aux décisions ;
+- un codebook séparant prévisibilité, proportionnalité, hasard et agentivité ;
+- plusieurs lectures humaines ou une étude de réception avec de véritables joueurs.
+
+### 13.3 Corpus de trajectoires plus large
+
+Le plan actuel isole les effets principaux avec sept profils et trois trajectoires par
+profil–issue. Les extensions possibles sont :
+
+- les 27 profils du plan factoriel complet afin d'étudier les interactions entre axes ;
+- davantage de graines par cellule pour estimer la variabilité interne ;
+- des trajectoires modales, rares ou contrastives, clairement distinguées des échantillons
+  conditionnels ordinaires ;
+- plusieurs livres afin de tester la portabilité du codebook et la stabilité des axes.
+
+Toute augmentation doit tenir compte du coût de la validation humaine et ne pas présenter
+les annotations automatisées supplémentaires comme un gold standard.
+
+### 13.4 Autres annotations globales
+
+Les pistes suivantes restent possibles, mais ne sont pas nécessaires à la question
+actuelle :
+
+- extraction ordonnée des personnages, lieux et événements pour étudier leurs
+  introductions, retours et disparitions ;
+- typologie des arcs narratifs et des modes d'expérience ;
+- résolution des références et suivi explicite des états narratifs ;
+- progression, tension, préparation de l'issue et répétitions ;
+- comparaison exhaustive de toutes les paires et agrégation de préférences.
+
+Ces catégories demanderaient chacune un construit, un codebook et une validation propres.
+Elles ne doivent pas être ajoutées à une grille unique sous prétexte qu'un LLM peut
+techniquement les produire.
+
+### 13.5 Modèles et tests de robustesse supplémentaires
+
+Qwen3.6-27B est le seul modèle fixé pour l'itération courante. Un article plus développé
+pourrait comparer :
+
+- une autre famille locale à poids ouverts ;
+- plusieurs tailles ou quantifications du même modèle ;
+- thinking activé et désactivé ;
+- plusieurs formulations théoriquement équivalentes du prompt ;
+- un modèle frontière utilisé seulement comme point de comparaison.
+
+Ces comparaisons devraient être évaluées sur les annotations humaines et la stabilité des
+preuves, jamais sur leur capacité à produire les conclusions les plus intéressantes.
