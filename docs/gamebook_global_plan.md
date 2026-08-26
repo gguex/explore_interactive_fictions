@@ -441,6 +441,9 @@ l'extraction du layout ni les calculs BoP.
 
 ### Phase 5 — Analyse des trajectoires complètes avec un LLM
 
+La position épistémologique, les exigences de reproductibilité et le protocole local
+envisagé pour cette phase sont détaillés dans `docs/llm_digital_humanities.md`.
+
 Cette phase passe de la structure probabiliste du livre aux histoires effectivement
 produites par ses parcours. Elle devra :
 
@@ -515,6 +518,7 @@ reste à préciser :
 - `graph_model.md` : pré-graphe, annotation et compilation de $W$ ;
 - `phase4_indices.md` : formules, tables canoniques et validation des indices BoP ;
 - `phase4_presentation.md` : sélection finale, figures et messages pour la présentation ;
+- `llm_digital_humanities.md` : rôle, limites, audit et sources pour l'usage local des LLM ;
 - `future_improvements.md` : limites connues et extensions reportées du pipeline ;
 - `progress_log.md` : journal chronologique ;
 - `notes.md` : questions de travail ;

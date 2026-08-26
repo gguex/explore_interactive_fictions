@@ -18,7 +18,7 @@
 | Construction du pré-graphe | Terminée pour LW01 | 352 nœuds, 602 arêtes et aucune transition de phase 1 non classée. |
 | Compilation de \(W\) | Terminée pour LW01 | 27 matrices valides ; résultats par profil et par axe synthétisés. |
 | Bag-of-Paths et indices | Terminée pour LW01 | Calcul, synthèses et package de trois diapositives validés. |
-| Analyse des histoires par LLM | Phase 5 — à faire | Phase distincte ; sélection des trajectoires et protocole hybride à préciser. |
+| Analyse des histoires par LLM | Phase 5 — à faire | Position méthodologique et protocole local documentés ; implémentation à faire. |
 
 ## Historique
 
@@ -445,8 +445,19 @@
 - Documentation des choix, des phrases proposées et des résultats volontairement laissés
   en annexe dans `docs/phase4_presentation.md`. La phase 4 est terminée pour LW01.
 
+### 26.08.2026 — Position méthodologique pour les LLM en Humanités numériques
+
+- Adoption pour la phase 5 d'un LLM local à poids ouverts comme instrument d'annotation
+  interprétative, sans l'assimiler à un lecteur autonome ni à un système intrinsèquement
+  explicable.
+- Définition d'un protocole court et auditable : petit échantillon de trajectoires,
+  pré-annotation humaine, calibration comparative, répétitions, preuves par paragraphes et
+  contrôle humain complet.
+- Consignation des exigences de reproductibilité, des formulations pour la présentation
+  et des sources dans `docs/llm_digital_humanities.md`.
+
 ## Prochaine étape
 
-Définir la sélection des trajectoires représentatives et l'analyse LLM des histoires
-complètes de la phase 5, en réutilisant notamment les flux conditionnés produits en
-phase 4.
+Implémenter la sélection des trajectoires représentatives et préparer le pilote humain de
+la phase 5 selon `docs/llm_digital_humanities.md`, en réutilisant notamment les flux
+conditionnés produits en phase 4.
