@@ -433,14 +433,16 @@ Une étude future pourrait les reprendre en combinant :
 
 ### 13.3 Corpus de trajectoires plus large
 
-Le plan actuel isole les effets principaux avec sept profils et une trajectoire MAP par
-profil–issue. Ce choix déterministe évite de surinterpréter trois tirages, mais ne mesure
-pas la dispersion des expériences possibles. Les extensions possibles sont :
+Le plan actuel isole les effets principaux avec sept profils et un médoïde empirique par
+profil–issue, choisi sur 2 000 tirages conditionnels. Cette sélection donne une histoire
+centrale pour une preuve de concept, mais ne mesure pas complètement la dispersion des
+expériences possibles. Les extensions possibles sont :
 
 - les 27 profils du plan factoriel complet afin d'étudier les interactions entre axes ;
-- un échantillon conditionnel assez grand par cellule pour estimer la variabilité interne ;
-- des médoïdes, des familles de trajectoires et des cas périphériques, avec leur masse
-  probabiliste, clairement distingués de la trajectoire MAP actuelle ;
+- plusieurs graines ou un échantillon conditionnel plus grand pour quantifier la stabilité
+  des médoïdes et la variabilité interne ;
+- plusieurs médoïdes, des familles de trajectoires et des cas périphériques, avec leur
+  masse probabiliste et une analyse explicite de la dispersion ;
 - des trajectoires rares ou contrastives sélectionnées par une règle fixée à l'avance ;
 - plusieurs livres afin de tester la portabilité du codebook et la stabilité des axes.
 

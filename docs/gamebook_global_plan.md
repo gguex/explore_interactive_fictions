@@ -455,15 +455,18 @@ produites par ses parcours. Elle devra :
 4. comparer les histoires entre elles et relier les résultats qualitatifs aux indices
    BoP de la phase 4.
 
-Le corpus comprendra 14 trajectoires : sept profils contrôlés — neutre et les deux
-extrêmes de chacun des trois axes — croisés avec `Win` et `Death`. Chaque cellule est
-représentée par sa trajectoire conditionnelle la plus probable (MAP). Elle est calculée
-exactement dans le multigraphe comme un plus court chemin de coûts $-\log w(e)$, où
-$w(e)$ est le poids compilé de l'arête ; il n'y a ni tirage aléatoire ni sélection après
-lecture. Cette trajectoire modale ne doit pas être confondue
-avec un médoïde et ne résume pas toute la masse des chemins possibles. Les embeddings sont
-exclus : ils ajouteraient un second instrument sémantique sans être nécessaires à ce plan
-contrôlé.
+Le corpus comprend 14 trajectoires : sept profils contrôlés — neutre et les deux extrêmes
+de chacun des trois axes — croisés avec `Win` et `Death`. Chaque cellule est représentée
+par le médoïde empirique de 2 000 trajectoires conditionnées par l'issue, tirées par
+transformation de Doob. La distance fixée est la distance LCS normalisée entre suites de
+paragraphes. Le chemin retenu est observé dans l'échantillon et minimise sa distance
+moyenne aux autres tirages ; aucune sélection n'intervient après lecture du texte. Les
+embeddings sont exclus : ils ajouteraient un second instrument sémantique sans être
+nécessaires à ce plan contrôlé.
+
+L'étape 5.0 est terminée pour LW01 : les tirages et les 14 médoïdes ont été calculés et
+validés indépendamment. Les premiers résultats et les limites liées à l'échantillonnage
+sont consignés dans `docs/phase5_results.md`.
 
 #### Méthodes potentielles
 
@@ -472,7 +475,7 @@ contrôlé.
 | **Distances structurelles** | Comparer les suites de paragraphes, leur longueur, leur issue et leur chevauchement. | Ne mesure pas la similarité du contenu narratif. | **Oui — comparaison indépendante** |
 | **Embeddings des histoires** | Regrouper un grand nombre de trajectoires par proximité sémantique. | Ajoute un modèle et une mesure difficile à interpréter ; inutile pour le petit pilote. | **Non — abandonné pour cette recherche** |
 | **Évaluation LLM structurée** | Inférer les trois axes du profil et contrôler continuité causale et cohérence du profil sur les histoires complètes. | Sensible au modèle et au prompt. | **Oui — méthode principale** |
-| **Comparaisons LLM par paires** | Comparer les trajectoires MAP des extrêmes de chaque axe à issue identique. | Sensible à l'ordre A/B. | **Oui — 6 paires, évaluées dans les deux ordres** |
+| **Comparaisons LLM par paires** | Comparer les médoïdes des extrêmes de chaque axe à issue identique. | Sensible à l'ordre A/B. | **Oui — 6 paires, évaluées dans les deux ordres** |
 | **Extraction d'événements, entités et lieux** | Vérifier la continuité des personnages, objets, lieux et événements le long du parcours. | Demande une nouvelle annotation et une métrique de séquence. | **Non — extension future** |
 | **Évaluation humaine** | Vérifier la validité d'un petit échantillon de jugements du LLM. | Coûteuse et difficile à étendre. | **Oui — contrôle requis sur 14 histoires et 6 paires** |
 
@@ -486,7 +489,7 @@ annotation sémantique ni indice BoP. Les justifications devront citer des choix
 paragraphes vérifiables. Les quatorze histoires et les six paires seront annotées
 humainement ; les comparaisons seront inversées pour détecter le biais de position.
 
-Les résultats principaux seront la manifestation des trois axes sur ces chemins modaux,
+Les résultats principaux seront la manifestation des trois axes sur ces chemins centraux,
 la récupération des contrastes, la fuite entre axes et la confrontation descriptive
 entre différence structurelle et `narrative_distinctness`. Ils seront rapportés comme des
 effectifs sur des trajectoires sélectionnées, non comme une estimation de la distribution
@@ -509,8 +512,9 @@ générales des adaptations propres à LW01.
 
 ## 8. Questions restant à traiter dans la phase 5
 
-Le corpus, les grilles, Qwen3.6-27B et les contrôles sont fixés. Il reste à implémenter le
-pipeline, puis à vérifier empiriquement la longueur des contextes, la stabilité des sorties
+Le corpus, les grilles, Qwen3.6-27B et les contrôles sont fixés, et les médoïdes sont
+calculés. Il reste à reconstruire les histoires, implémenter l'échange avec le
+cluster, puis vérifier empiriquement la longueur des contextes, la stabilité des sorties
 et l'utilité des deux champs complémentaires avant de choisir le contenu de la diapositive.
 
 ## 9. Documentation active
@@ -521,6 +525,7 @@ et l'utilité des deux champs complémentaires avant de choisir le contenu de la
 - `phase4_presentation.md` : sélection finale, figures et messages pour la présentation ;
 - `phase5_protocol.md` : corpus, grilles, modèle, validation et sorties de la phase 5 ;
 - `phase5_implementation_plan.md` : scripts locaux, paquet cluster et artefacts attendus ;
+- `phase5_results.md` : résultats de la sélection des médoïdes et limites d'interprétation ;
 - `llm_digital_humanities.md` : rôle, limites, audit et sources pour l'usage local des LLM ;
 - `future_improvements.md` : limites connues et extensions reportées du pipeline ;
 - `progress_log.md` : journal chronologique ;

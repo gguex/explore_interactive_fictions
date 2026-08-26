@@ -96,9 +96,8 @@ La spécification complète et canonique se trouve dans `docs/phase5_protocol.md
 décisions centrales sont :
 
 - 14 histoires complètes : sept profils contrôlés et deux issues ;
-- sélection exacte, sans tirage ni lecture préalable, de la trajectoire conditionnelle
-  la plus probable pour chaque cellule profil–issue par plus court chemin sur
-  les coûts d'arêtes $-\log w(e)$ ;
+- sélection sans lecture préalable du médoïde empirique de 2 000 trajectoires par cellule,
+  tirées depuis la chaîne conditionnée par l'issue et comparées par distance LCS ;
 - annotation locale par `Qwen/Qwen3.6-27B`, sans accès aux profils, annotations d'arêtes,
   probabilités ou indices BoP ;
 - grille individuelle limitée à `risk`, `morality`, `action`, `causal_continuity` et
@@ -157,8 +156,9 @@ Complément oral utile :
 
 Cette phase ne permettra pas de démontrer une qualité littéraire objective, une réception
 réelle par des lecteurs, ni la diversité de toutes les expériences possibles. Elle portera
-sur un livre, 14 trajectoires conditionnelles modales, une grille et un modèle local fixé.
-La trajectoire MAP est reproductible, mais elle ne représente ni une trajectoire médiane,
+sur un livre, 14 médoïdes empiriques conditionnels, une grille et un modèle local fixé.
+Chaque médoïde est reproductible avec l'échantillon et la graine archivés, mais dépend de
+la distance LCS et d'un échantillon fini ; il ne représente ni une majorité de lecteurs,
 ni toute la masse des chemins possibles. Les conclusions devront demeurer descriptives et
 exploratoires.
 

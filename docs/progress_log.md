@@ -486,8 +486,37 @@
   de l'histoire individuellement la plus probable, sans prétendre résumer la masse ou la
   diversité de tous les chemins.
 
+### 26.08.2026 — Phase 5.0 : trajectoires MAP calculées
+
+- Implémentation de `scripts/5.0_compute_map_trajectories.py` sur les multiarêtes compilées,
+  avec Dijkstra sur $-\log w(e)$, conservation des arêtes parallèles, détection des cycles
+  de coût nul, comptage des optima et départage canonique.
+- Production de 14 trajectoires et d'un manifeste avec empreintes, probabilités brutes,
+  probabilités d'issue et masses conditionnelles sous `data/processed/phase5/LW01/`.
+- Ajout d'un validateur indépendant fondé sur Bellman–Ford, la reconstruction de `W` et le
+  recalcul matriciel des probabilités d'absorption.
+- Les victoires MAP comptent 31 à 40 transitions et toutes possèdent plusieurs optima ;
+  les sept morts MAP suivent `1 → 85 → 229 → Death`. Les paires de mort seront conservées
+  comme contrôles négatifs.
+- Résultats et limites détaillés dans `docs/phase5_results.md`.
+
+### 26.08.2026 — Phase 5.0 révisée : adoption des médoïdes empiriques
+
+- Le diagnostic a montré que le MAP favorisait les chemins courts et produisait sept
+  morts identiques de trois transitions, peu utiles pour l'analyse narrative.
+- Remplacement de la sélection canonique par un médoïde empirique dans chacune des 14
+  cellules : 2 000 trajectoires conditionnées par transformation de Doob, distance LCS
+  normalisée entre suites de nœuds et départage canonique des égalités.
+- Archivage des 25 514 chemins uniques et de leurs effectifs, des graines et des empreintes.
+  Le MAP subsiste uniquement comme diagnostic dans le rapport, jamais comme texte envoyé
+  au LLM.
+- Ajout d'un validateur indépendant qui reconstruit les matrices, régénère exactement les
+  tirages et recalcule les objectifs des 14 médoïdes.
+- Les 14 chemins retenus sont distincts ; les victoires comptent 39 à 49 transitions et
+  les morts 19 à 32. Le choix MAP précédent est donc remplacé dans le protocole actif.
+
 ## Prochaine étape
 
-Implémenter le calcul exact des trajectoires conditionnelles MAP, la reconstruction des
-histoires et les grilles de la phase 5 selon `docs/phase5_protocol.md`, en réutilisant les
-matrices et résultats structurels de la phase 4.
+Implémenter l'étape 5.1 : reconstruire les histoires complètes et les six paires à partir
+des médoïdes empiriques, puis produire les gabarits d'annotation humaine selon
+`docs/phase5_protocol.md`.

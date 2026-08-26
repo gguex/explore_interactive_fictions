@@ -1,7 +1,7 @@
 # Phase 5 — Découpage des scripts et échanges avec le cluster
 
-> **Statut au 26.08.2026 : note d'implémentation, scripts à créer.** Le protocole
-> scientifique reste défini dans `docs/phase5_protocol.md`. Cette note décrit seulement
+> **Statut au 26.08.2026 : étape 5.0 implémentée et validée ; étapes 5.1–5.5 à créer.**
+> Le protocole scientifique reste défini dans `docs/phase5_protocol.md`. Cette note décrit
 > les étapes techniques et les fichiers qui circuleront entre la machine locale et le
 > serveur universitaire.
 
@@ -10,7 +10,7 @@
 ```text
 matrices et textes locaux
         ↓
-5.0 calculer les trajectoires conditionnelles MAP
+5.0 échantillonner et sélectionner les médoïdes conditionnels
         ↓
 5.1 reconstruire les histoires et préparer l'annotation humaine
         ↓
@@ -33,7 +33,7 @@ opaques, les prompts, les schémas et les paramètres nécessaires à l'inféren
 
 | Script | Rôle | Entrées principales | Sorties principales |
 | :--- | :--- | :--- | :--- |
-| `scripts/5.0_compute_map_trajectories.py` | Transformer chaque `compiled_weight` en coût $-\log w(e)$ et calculer les 14 trajectoires MAP, une par profil et par issue. | Tables de multiarêtes compilées, profils, probabilités d'absorption. | Trajectoires, probabilités MAP, métadonnées cachées et rapport de sélection. |
+| `scripts/5.0_select_medoid_trajectories.py` — **fait** | Tirer 2 000 trajectoires conditionnelles par cellule avec la transformation de Doob et sélectionner le chemin observé minimisant la distance LCS moyenne. | Matrices, multiarêtes compilées, profils et probabilités d'absorption. | `medoid_trajectories.jsonl`, `conditional_path_counts.jsonl` et `medoid_selection_report.json`. |
 | `scripts/5.1_build_trajectory_corpus.py` | Reconstituer chaque histoire complète avec paragraphes, choix disponibles, choix suivi et type de transition ; former les six paires dans les deux ordres. | Trajectoires, nœuds, arêtes et textes. | Corpus individuel, corpus pairwise, gabarits humains et mesures de longueur. |
 | `scripts/5.2_build_phase5_bundle.py` | Produire un paquet autonome sans fuite des profils ou résultats BoP. | Corpus, prompts figés, schémas et configuration du modèle. | Paquet `pilot` ou `final` avec manifeste et empreintes. |
 | `scripts/5.3_import_phase5_annotations.py` | Importer les sorties revenues du cluster, contrôler les schémas et normaliser les résultats valides. | Dossier de sortie du cluster et manifeste du paquet. | Annotations canoniques, quarantaine et rapport de validation. |
@@ -44,7 +44,7 @@ Chaque script doit relire les fichiers de l'étape précédente plutôt que réi
 calcul. Les validateurs indépendants suivent les conventions existantes :
 
 ```text
-scripts/tests/test_5_0_compute_map_trajectories.py
+scripts/tests/test_5_0_select_medoid_trajectories.py
 scripts/tests/test_5_1_build_trajectory_corpus.py
 scripts/tests/test_5_2_build_phase5_bundle.py
 scripts/tests/test_5_3_import_phase5_annotations.py
@@ -150,9 +150,11 @@ Les sorties canoniques sont regroupées sous :
 
 ```text
 data/processed/phase5/LW01/
+├── medoid_trajectories.jsonl
+├── conditional_path_counts.jsonl
 ├── trajectories.jsonl
 ├── trajectory_private_metadata.jsonl
-├── map_selection_report.json
+├── medoid_selection_report.json
 ├── trajectory_annotations.jsonl
 ├── pairwise_annotations.jsonl
 ├── pair_structural_metrics.csv
@@ -182,12 +184,13 @@ les contrôles définis dans `docs/phase5_protocol.md` les déclarent suffisamme
 
 Le pipeline s'arrête notamment si :
 
-- les 14 trajectoires MAP ou les six paires attendues ne sont pas présentes ;
-- une trajectoire n'est pas le plus court chemin selon les coûts $-\log w(e)$ ;
+- les 14 médoïdes ou les six paires attendues ne sont pas présents ;
+- les effectifs archivés ne totalisent pas 2 000 tirages dans chaque cellule ;
+- les tirages ne peuvent pas être régénérés à partir des graines consignées ;
+- une trajectoire retenue ne minimise pas la distance LCS moyenne à son échantillon ;
 - sa probabilité recomposée ne correspond pas au produit de ses `compiled_weight` ou sa
   probabilité conditionnelle ne correspond pas à $P(\pi)/P(o)$ ;
-- plusieurs chemins optimaux sont à égalité sans départage canonique consigné ;
-- un cycle atteignable de coût nul rend la sélection modale ambiguë ;
+- plusieurs candidats sont à égalité sans départage canonique consigné ;
 - une trajectoire n'atteint pas l'issue demandée ;
 - une histoire est tronquée ou dépasse la fenêtre configurée ;
 - une donnée cachée apparaît dans le paquet serveur ;
@@ -198,10 +201,11 @@ Le pipeline s'arrête notamment si :
 
 ## 9. Ordre d'implémentation
 
-1. Implémenter et valider `5.0` puis `5.1`.
-2. Remplir les annotations humaines de calibration.
-3. Créer l'exécuteur du cluster et `5.2`, puis lancer le paquet `pilot`.
-4. Figer les prompts après le pilote et produire le paquet `final`.
-5. Récupérer les sorties et implémenter `5.3`.
-6. Implémenter `5.4` seulement lorsque toutes les annotations sont valides.
-7. Construire la diapositive avec `5.5` en dernier.
+1. **Fait :** implémenter et valider `5.0`.
+2. Implémenter et valider `5.1` à partir des 14 médoïdes distincts.
+3. Remplir les annotations humaines de calibration.
+4. Créer l'exécuteur du cluster et `5.2`, puis lancer le paquet `pilot`.
+5. Figer les prompts après le pilote et produire le paquet `final`.
+6. Récupérer les sorties et implémenter `5.3`.
+7. Implémenter `5.4` seulement lorsque toutes les annotations sont valides.
+8. Construire la diapositive avec `5.5` en dernier.

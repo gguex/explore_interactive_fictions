@@ -1,10 +1,10 @@
 # Phase 5 — Protocole d'annotation des trajectoires complètes
 
-> **Statut au 26.08.2026 : protocole validé, implémentation à faire.** Cette phase reste
+> **Statut au 26.08.2026 : protocole validé, étape 5.0 implémentée.** Cette phase reste
 > une preuve de concept courte. Elle privilégie quelques annotations bornées, vérifiables
 > et directement reliées aux profils et aux résultats BoP de la phase 4. Chaque cellule
-> profil–issue est représentée par sa trajectoire conditionnelle la plus probable (MAP),
-> calculée exactement et non tirée au hasard.
+> profil–issue est représentée par un médoïde empirique de 2 000 trajectoires
+> conditionnées par l'issue.
 
 Le découpage des futurs scripts, le paquet envoyé au cluster et les fichiers attendus au
 retour sont décrits dans `docs/phase5_implementation_plan.md`.
@@ -47,68 +47,79 @@ Sept profils isolent les trois axes sans faire varier les deux autres :
 
 ### 2.2 Issues et trajectoires retenues
 
-Pour chaque profil, une trajectoire conditionnelle la plus probable est calculée vers
-`Win` et une autre vers `Death` :
+Pour chaque profil, un médoïde empirique est sélectionné vers `Win` et un autre vers
+`Death` :
 
 $$
 7\ \text{profils} \times 2\ \text{issues}
-= 14\ \text{trajectoires MAP}.
+= 14\ \text{médoïdes empiriques}.
 $$
 
-Le corpus ne vise donc ni à estimer la variabilité interne d'une cellule, ni à représenter
-toute la masse des chemins possibles. Il répond à une question plus étroite et
-reproductible : quelle histoire complète est individuellement la plus probable pour ce
-profil, sachant que l'issue fixée est atteinte ?
+Le corpus ne vise pas à estimer toute la variabilité interne d'une cellule. Il répond à
+une question plus étroite : parmi un grand échantillon conditionné par l'issue, quelle
+histoire réelle occupe la position la plus centrale sous une distance séquentielle fixée ?
 
-### 2.3 Calcul exact de la trajectoire conditionnelle MAP
+### 2.3 Échantillonnage conditionnel
 
-Pour une trajectoire étiquetée $\pi=(e_1,\ldots,e_m)$ conduisant du départ à l'issue $o$,
-où $w(e)$ est le `compiled_weight` de l'arête, le modèle attribue le poids :
+Pour une issue $o$, on calcule d'abord le potentiel :
 
 $$
-P(\pi)=\prod_{k=1}^{m}w(e_k).
+h_o(i)=P(\text{atteindre }o\mid X_0=i).
 $$
 
-Le conditionnement sur l'issue ne change pas le chemin maximisant cette quantité :
+La transformation de Doob donne alors, pour chaque arête étiquetée $e:i\to j$ :
 
 $$
-P(\pi\mid o)=\frac{P(\pi)}{P(o)},
+P_o(e\mid i)=\frac{w(e)h_o(j)}{h_o(i)}.
 $$
 
-car $P(o)$ est constant pour tous les chemins comparés. La même conclusion découle de la
-transformation de Doob : ses facteurs $h_o(j)/h_o(i)$ se télescopent le long d'une
-trajectoire terminée en $o$.
+Cette chaîne permet de tirer directement des trajectoires complètes sachant qu'elles se
+terminent en $o$, sans rejeter les trajectoires de l'autre issue. Les multiarêtes restent
+distinctes par `edge_id`. Dans chaque cellule, `5.0` produit exactement 2 000 tirages avec
+une graine dérivée de la graine de base 42, de l'indice du profil et de l'issue.
 
-Le produit est transformé en somme en donnant à chaque arête de probabilité strictement
-positive le coût :
+### 2.4 Distance et médoïde empirique
+
+Une trajectoire est représentée par sa suite ordonnée de nœuds, départ et issue compris.
+Pour deux trajectoires $A$ et $B$, la distance fixée est :
 
 $$
-c(e)=-\log w(e).
+d(A,B)=1-\frac{2\,LCS(A,B)}{|A|+|B|},
 $$
 
-La trajectoire MAP est alors un plus court chemin dans le multigraphe pondéré. Les arêtes
-de poids nul sont exclues. Comme $0<w(e)\leq1$, les coûts sont non négatifs et un
-algorithme de Dijkstra suffit. Le calcul part de `compiled_edges.csv`, plutôt que de la
-matrice dense qui agrège les arêtes de mêmes extrémités : les arêtes parallèles conservent
-ainsi leur identité et leur choix narratif. Les règles suivantes sont fixées avant toute
-annotation :
+où $LCS$ est la plus longue sous-séquence commune. Cette mesure conserve l'ordre des
+paragraphes, tolère des détours de longueurs différentes, vaut zéro pour deux suites
+identiques et reste interprétable sans modèle sémantique supplémentaire.
 
-- le même algorithme et la même règle de départage déterministe sont employés dans les
-  quatorze cellules ;
+Parmi les trajectoires distinctes observées, le médoïde empirique est :
+
+$$
+\hat\pi^* = \arg\min_{\pi\in S}
+\frac{1}{N}\sum_{\rho\in S} n(\rho)d(\pi,\rho),
+$$
+
+où $n(\rho)$ est l'effectif du chemin $\rho$ dans les $N=2\,000$ tirages. Le chemin retenu
+est donc une trajectoire possible et effectivement observée, contrairement à une suite
+« moyenne » artificielle. Les règles suivantes sont fixées avant l'annotation :
+
+- le nombre de tirages, la distance, les graines et la règle de départage sont identiques
+  dans les quatorze cellules ;
 - aucune trajectoire n'est remplacée selon son intérêt narratif ou après lecture du texte ;
-- le produit des poids $P(\pi)$, son logarithme, la probabilité de l'issue $P(o)$ et la
-  part conditionnelle $P(\pi\mid o)=P(\pi)/P(o)$ sont consignés ;
-- toute égalité entre plusieurs chemins optimaux est signalée et résolue par un ordre
-  canonique des identifiants d'arêtes ;
-- tout cycle atteignable de coût nul est une erreur bloquante, car il rendrait la
-  trajectoire modale ambiguë ;
-- chaque trajectoire doit atteindre l'issue demandée et être reproductible depuis la
-  matrice $W$ archivée.
+- tous les chemins uniques et leurs effectifs sont archivés ;
+- toute égalité de l'objectif est signalée et résolue par l'ordre lexicographique de la
+  suite complète des `edge_id` ;
+- la probabilité brute et conditionnelle du chemin retenu est consignée comme information,
+  mais ne détermine pas la sélection ;
+- le validateur régénère l'échantillon depuis la graine et recalcule le médoïde ;
+- le MAP est calculé uniquement comme diagnostic de concentration et n'est jamais envoyé
+  au LLM comme trajectoire à annoter.
 
-Cette sélection produit un **mode**, et non une médiane ou un médoïde. Le chemin le plus
-probable peut être court ou isolé alors qu'une famille de chemins voisins concentre une
-masse totale supérieure. Cette limite est explicitement conservée dans l'interprétation ;
-les médoïdes et l'étude de la dispersion sont reportés à une extension ultérieure.
+Il s'agit d'un **médoïde empirique** : une autre graine peut sélectionner un chemin exact
+différent, et le chemin central n'est ni le plus fréquent, ni la « trajectoire moyenne »,
+ni le médoïde exact d'une distribution infinie. Un contrôle préliminaire à deux graines
+sur le profil neutre a toutefois retrouvé des familles proches (similarité LCS 0,759 pour
+`Win` et 0,831 pour `Death`). Cette limite est déclarée plutôt que présentée comme une
+analyse de robustesse complète.
 
 ## 3. Reconstruction des histoires
 
@@ -260,7 +271,7 @@ par le script d'analyse, entre `perceived_profile` et les métadonnées cachées
 
 ## 5. Comparaisons par paires
 
-Les profils extrêmes sont comparés à issue identique, en utilisant leurs trajectoires MAP :
+Les profils extrêmes sont comparés à issue identique, en utilisant leurs médoïdes :
 
 | Axe | Paire |
 | :--- | :--- |
@@ -359,7 +370,7 @@ figé avant l'analyse du reste du corpus.
 
 ## 8. Validation humaine et stabilité de l'instrument
 
-Les 14 trajectoires MAP sont annotées humainement avant de consulter Qwen :
+Les 14 trajectoires médoïdes sont annotées humainement avant de consulter Qwen :
 
 - quatre histoires servent à la calibration ;
 - dix histoires restent un petit ensemble de validation ;
@@ -379,9 +390,9 @@ confiance déclarée par le modèle n'est pas utilisée comme mesure de fiabilit
 
 ### 9.1 Résultats principaux
 
-1. **Manifestation sur les trajectoires modales** : effectif des 14 trajectoires MAP dont
+1. **Manifestation sur les trajectoires centrales** : effectif des 14 médoïdes dont
    le profil perçu correspond au niveau générateur, séparément pour `risk`, `morality` et
-   `action`, avec les `unclear` rapportés à part. Ce résultat décrit les chemins modaux
+   `action`, avec les `unclear` rapportés à part. Ce résultat décrit les chemins centraux
    retenus ; ce n'est ni une accuracy du modèle ni une estimation de toutes les
    trajectoires possibles.
 2. **Récupération du contraste** : effectif des six paires où la direction attendue de
@@ -410,12 +421,14 @@ confiance déclarée par le modèle n'est pas utilisée comme mesure de fiabilit
 
 ## 10. Sorties attendues
 
-Les noms restent indicatifs jusqu'à l'implémentation :
+Les noms de 5.0 sont désormais fixés ; les suivants restent indicatifs :
 
 | Fichier | Contenu |
 | :--- | :--- |
-| `trajectories.jsonl` | Textes complets, choix, issues, profils cachés au modèle, probabilités MAP et empreintes. |
-| `map_selection_report.json` | Algorithme, coûts, probabilités brutes et conditionnelles des chemins, égalités et règle de départage. |
+| `medoid_trajectories.jsonl` | Séquences des 14 médoïdes, profils, issues, objectif, probabilités, graines et empreintes produites par 5.0. |
+| `conditional_path_counts.jsonl` | Chemins conditionnels uniques, effectifs et probabilités permettant d'auditer les médoïdes. |
+| `trajectories.jsonl` | Textes complets et choix reconstruits par 5.1, avec les données privées séparées avant l'inférence. |
+| `medoid_selection_report.json` | Conditionnement, tirages, distance, règles de sélection, empreintes et MAP diagnostiques. |
 | `trajectory_annotations.jsonl` | Sorties individuelles brutes et normalisées de Qwen. |
 | `pairwise_annotations.jsonl` | Comparaisons A/B et B/A. |
 | `human_annotations.jsonl` | Calibration et validation humaines, séparées des sorties du modèle. |
@@ -427,8 +440,8 @@ Les noms restent indicatifs jusqu'à l'implémentation :
 
 La phase 5 doit tenir sur une seule diapositive :
 
-1. le plan `7 profils × 2 issues = 14 trajectoires conditionnelles MAP` ;
-2. la manifestation modale et la récupération des trois axes ;
+1. le plan `7 profils × 2 issues = 14 médoïdes conditionnels` ;
+2. la manifestation des profils sur ces histoires centrales et la récupération des axes ;
 3. une confrontation courte entre distance structurelle et différence narrative ;
 4. une ligne donnant l'accord humain et la stabilité.
 

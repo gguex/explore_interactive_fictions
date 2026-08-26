@@ -19,8 +19,9 @@ narrative analysis.
 | `docs/phase3_results.md` | Validation and comparative results for all 27 profiles. |
 | `docs/phase4_indices.md` | Canonical phase-4 BoP metrics, output tables and independent validation. |
 | `docs/phase4_presentation.md` | Final three-slide phase-4 selection, speaking points and generated artifacts. |
-| `docs/phase5_protocol.md` | Validated conditional-MAP trajectory selection, annotation grids, validation checks and outputs. |
+| `docs/phase5_protocol.md` | Validated conditional-medoid trajectory selection, annotation grids, validation checks and outputs. |
 | `docs/phase5_implementation_plan.md` | Proposed local/cluster script split and files exchanged for phase 5. |
+| `docs/phase5_results.md` | Initial phase-5.0 empirical-medoid results and interpretation limits. |
 | `docs/llm_digital_humanities.md` | Critical and reproducible use of local LLMs in digital humanities; phase-5 protocol and sources. |
 | `docs/future_improvements.md` | Deferred improvements: extraction schema, portability, mechanics and trajectory analysis. |
 | `docs/progress_log.md` | Append-only progress journal and current project status. |
@@ -60,9 +61,10 @@ results/         cluster outputs and calibration history
 4. **BoP indices** (done for LW01): the selected local and global structural indices are
    calculated and independently validated for all 27 profiles. A concise three-slide
    presentation package and an optional key-number table are generated reproducibly.
-5. **LLM trajectory analysis**: the protocol is fixed; compute one conditional maximum-
-   probability path for each of seven controlled profiles and two outcomes (14 complete
-   stories), then apply a structured, fully human-checked Qwen3.6-27B annotation.
+5. **LLM trajectory analysis**: step 5.0 has sampled 2,000 outcome-conditioned paths per
+   cell and independently validated one empirical medoid for each of seven controlled
+   profiles and two outcomes (14 paths). Story reconstruction and structured
+   Qwen3.6-27B annotation remain to be implemented.
 6. **Generalization**: apply the reusable pipeline to another book or corpus.
 
 ## Setup
@@ -94,6 +96,8 @@ uv run python scripts/4.2_summarize_bop_indices.py --book LW01
 uv run python scripts/tests/test_4_2_summarize_bop_indices.py --book LW01
 uv run python scripts/4.3_build_bop_presentation.py --book LW01
 uv run python scripts/tests/test_4_3_build_bop_presentation.py --book LW01
+uv run python scripts/5.0_select_medoid_trajectories.py --book LW01
+uv run python scripts/tests/test_5_0_select_medoid_trajectories.py --book LW01
 ```
 
 The same commands accept another Lone Wolf identifier, such as `--book LW02`, provided
