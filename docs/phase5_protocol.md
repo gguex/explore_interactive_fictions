@@ -4,6 +4,9 @@
 > une preuve de concept courte. Elle privilégie quelques annotations bornées, vérifiables
 > et directement reliées aux profils et aux résultats BoP de la phase 4.
 
+Le découpage des futurs scripts, le paquet envoyé au cluster et les fichiers attendus au
+retour sont décrits dans `docs/phase5_implementation_plan.md`.
+
 ## 1. Question de recherche et périmètre
 
 La phase 5 demande :

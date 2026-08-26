@@ -515,6 +515,7 @@ et l'utilité des deux champs complémentaires avant de choisir le contenu de la
 - `phase4_indices.md` : formules, tables canoniques et validation des indices BoP ;
 - `phase4_presentation.md` : sélection finale, figures et messages pour la présentation ;
 - `phase5_protocol.md` : corpus, grilles, modèle, validation et sorties de la phase 5 ;
+- `phase5_implementation_plan.md` : scripts locaux, paquet cluster et artefacts attendus ;
 - `llm_digital_humanities.md` : rôle, limites, audit et sources pour l'usage local des LLM ;
 - `future_improvements.md` : limites connues et extensions reportées du pipeline ;
 - `progress_log.md` : journal chronologique ;

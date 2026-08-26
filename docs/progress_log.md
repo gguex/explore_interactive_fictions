@@ -466,6 +466,10 @@
 - Adoption de 18 comparaisons extrême–extrême, de mesures structurelles indépendantes et
   d'un sous-ensemble humain de validation. Spécification complète dans
   `docs/phase5_protocol.md` ; extensions reportées dans `docs/future_improvements.md`.
+- Découpage proposé de l'implémentation en six scripts locaux (`5.0` à `5.5`) et un
+  exécuteur Qwen autonome sur le cluster. Les fichiers transmis et récupérés, les
+  manifestes et l'ordre des étapes sont définis dans
+  `docs/phase5_implementation_plan.md`.
 
 ## Prochaine étape
 

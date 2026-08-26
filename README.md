@@ -20,6 +20,7 @@ narrative analysis.
 | `docs/phase4_indices.md` | Canonical phase-4 BoP metrics, output tables and independent validation. |
 | `docs/phase4_presentation.md` | Final three-slide phase-4 selection, speaking points and generated artifacts. |
 | `docs/phase5_protocol.md` | Validated complete-trajectory sampling, annotation grids, robustness checks and outputs. |
+| `docs/phase5_implementation_plan.md` | Proposed local/cluster script split and files exchanged for phase 5. |
 | `docs/llm_digital_humanities.md` | Critical and reproducible use of local LLMs in digital humanities; phase-5 protocol and sources. |
 | `docs/future_improvements.md` | Deferred improvements: extraction schema, portability, mechanics and trajectory analysis. |
 | `docs/progress_log.md` | Append-only progress journal and current project status. |
