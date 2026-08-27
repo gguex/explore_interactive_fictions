@@ -437,6 +437,19 @@ surajustement auditable ; elle ne démontre pas la transférabilité à LW02. Le
 sur le petit ensemble humain sont donc rapportées comme **concordances de calibration**,
 jamais comme accuracy ou validation hors échantillon.
 
+Après le pilote, un comparateur déterministe met côte à côte les annotations humaines et
+Qwen. Pour chaque label individuel ou pairwise, il produit uniquement `match`,
+`disagreement`, `human_abstention` ou `model_abstention`. Il contrôle aussi l'existence des
+preuves citées et affiche les références des deux annotations, sans exiger qu'elles soient
+identiques. Les justifications restent destinées à une lecture humaine : aucun second LLM
+ne les note et aucun désaccord n'est automatiquement attribué à une erreur de Qwen.
+
+Ce rapport sert à repérer rapidement une incompréhension du codebook avant le gel du
+prompt. Toute modification doit formuler une règle générique, être consignée et provoquer
+un nouveau pilote ; aucune règle ne peut citer une trajectoire, un personnage ou un
+paragraphe de LW01. Les effectifs sont trop petits et calibrés pour être présentés comme
+une accuracy.
+
 Le run individuel couvre une seule fois les 14 histoires avec le prompt figé. Les six
 paires sont toutes évaluées dans les deux ordres afin de contrôler le biais de position,
 qui concerne directement la tâche comparative.
@@ -497,6 +510,9 @@ Les noms de 5.0 et 5.1 sont désormais fixés ; les suivants restent indicatifs 
 | `pairwise_annotations.jsonl` | Comparaisons A/B et B/A. |
 | `human_trajectory_annotations.jsonl` | Quatre annotations humaines individuelles de calibration, séparées des sorties du modèle. |
 | `human_pairwise_annotations.jsonl` | Trois annotations humaines pairwise de calibration, séparées des sorties du modèle. |
+| `calibration_diff.csv` | Comparaison champ par champ entre annotations humaines et Qwen du pilote. |
+| `calibration_diff.md` | Rapport lisible des concordances, désaccords, abstentions et preuves associées. |
+| `calibration_summary.json` | Effectifs descriptifs et empreintes des entrées du comparateur. |
 | `pair_structural_metrics.csv` | Chevauchements, distances séquentielles et divergences BoP. |
 | `phase5_summary.csv` | Indicateurs principaux, complémentaires et contrôles. |
 | `phase5_manifest.json` | Modèle, révision, prompt, paramètres, matériel, durées et empreintes. |

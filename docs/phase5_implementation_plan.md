@@ -1,6 +1,6 @@
 # Phase 5 — Découpage des scripts et échanges avec le cluster
 
-> **Statut au 26.08.2026 : étapes 5.0 et 5.1 implémentées et validées ; étapes 5.2–5.5 à créer.**
+> **Statut au 27.08.2026 : étapes 5.0 et 5.1 implémentées et validées ; étapes 5.2–5.5 et comparateur à créer.**
 > Le protocole scientifique reste défini dans `docs/phase5_protocol.md`. Cette note décrit
 > les étapes techniques et les fichiers qui circuleront entre la machine locale et le
 > serveur universitaire.
@@ -15,10 +15,14 @@ matrices et textes locaux
 5.1 reconstruire les histoires et préparer l'annotation humaine
         ↓
 5.2 construire un paquet aveugle et autonome
-        ↓ upload
-exécuter Qwen3.6-27B sur le cluster
-        ↓ download
-5.3 importer et valider les sorties
+        ↓ pilote sur le cluster
+5.3 importer et valider le pilote
+        ↓
+compare_phase5_calibration comparer humain et Qwen
+        ↓ examen manuel et gel du prompt
+5.2 construire le paquet final
+        ↓ run final sur le cluster
+5.3 importer et valider le run final
         ↓
 5.4 calculer les résultats de phase 5
         ↓
@@ -35,8 +39,9 @@ opaques, les prompts, les schémas et les paramètres nécessaires à l'inféren
 | :--- | :--- | :--- | :--- |
 | `scripts/5.0_select_medoid_trajectories.py` — **fait** | Tirer 2 000 trajectoires conditionnelles par cellule avec la transformation de Doob et sélectionner le chemin observé minimisant la distance LCS moyenne. | Matrices, multiarêtes compilées, profils et probabilités d'absorption. | `medoid_trajectories.jsonl`, `conditional_path_counts.jsonl` et `medoid_selection_report.json`. |
 | `scripts/5.1_build_trajectory_corpus.py` — **fait** | Reconstituer chaque histoire complète avec paragraphes, choix disponibles, choix suivi et type de transition ; former les six paires dans les deux ordres. | Médoïdes, nœuds, arêtes originales et compilées, métriques BoP. | Corpus aveugle, métadonnées privées, paires A/B et B/A, gabarits humains, distances structurelles et rapport. |
-| `scripts/5.2_build_phase5_bundle.py` | Produire un paquet autonome sans fuite des profils ou résultats BoP. | Corpus, prompts figés, schémas et configuration du modèle. | Paquet `pilot` ou `final` avec manifeste et empreintes. |
+| `scripts/5.2_build_phase5_bundle.py` | Produire un paquet autonome sans fuite des profils ou résultats BoP. | Corpus, prompts versionnés, schémas et configuration du modèle. | Paquet `pilot` ou `final` avec manifeste et empreintes. |
 | `scripts/5.3_import_phase5_annotations.py` | Importer les sorties revenues du cluster, contrôler les schémas et normaliser les résultats valides. | Dossier de sortie du cluster et manifeste du paquet. | Annotations canoniques, quarantaine et rapport de validation. |
+| `scripts/utils/compare_phase5_calibration.py` | Comparer rapidement les annotations humaines et Qwen du pilote, sans modifier ni arbitrer les annotations. | Sorties normalisées du pilote et deux fichiers humains. | `calibration_diff.csv`, `calibration_diff.md` et `calibration_summary.json`. |
 | `scripts/5.4_compute_phase5_results.py` | Réunir annotations Qwen, métadonnées cachées, annotations humaines et distances structurelles ; calculer les indicateurs. | Sorties 5.0–5.3 et fichiers humains. | Tables individuelles, pairwise, qualité et synthèse. |
 | `scripts/5.5_build_phase5_presentation.py` | Extraire uniquement les résultats stables et produire les supports présentables. | Tables canoniques de 5.4. | Figures PNG/SVG, tableau de chiffres clés et manifeste. |
 
@@ -48,6 +53,7 @@ scripts/tests/test_5_0_select_medoid_trajectories.py
 scripts/tests/test_5_1_build_trajectory_corpus.py  # fait
 scripts/tests/test_5_2_build_phase5_bundle.py
 scripts/tests/test_5_3_import_phase5_annotations.py
+scripts/tests/test_compare_phase5_calibration.py
 scripts/tests/test_5_4_compute_phase5_results.py
 scripts/tests/test_5_5_build_phase5_presentation.py
 ```
@@ -82,6 +88,27 @@ Après examen du pilote, le codebook et les prompts sont figés et empreintés. 
 Les dix histoires individuelles et trois paires sans annotation humaine ne sont pas
 appelées « validation ». Les résultats complets restent exploratoires ; les comparaisons
 avec l'humain sont des concordances de calibration.
+
+Après l'import du pilote, `scripts/utils/compare_phase5_calibration.py` confronte les
+quatre annotations individuelles et les trois comparaisons aux réponses Qwen. Il produit
+un tableau par champ avec les états `match`, `disagreement`, `human_abstention` ou
+`model_abstention`, affiche les preuves des deux annotations côte à côte et vérifie leurs
+références. Il ne compare pas automatiquement le sens des justifications, ne calcule pas
+d'accuracy et ne désigne aucun désaccord comme une erreur du modèle.
+
+Les sorties sont écrites dans :
+
+```text
+results/phase5/LW01/calibration/
+├── calibration_diff.csv
+├── calibration_diff.md
+└── calibration_summary.json
+```
+
+Chaque désaccord est ensuite relu dans le texte. Une modification du prompt n'est admise
+que si elle exprime une règle générique ; elle est consignée avant un nouveau pilote. Une
+fois le pilote jugé compréhensible, le prompt est gelé avant la construction du paquet
+final.
 
 ## 4. Fichiers envoyés au serveur
 
@@ -215,10 +242,12 @@ Le pipeline s'arrête notamment si :
 
 1. **Fait :** implémenter et valider `5.0`.
 2. **Fait :** implémenter et valider `5.1` à partir des 14 médoïdes distincts.
-3. Remplir les quatre annotations individuelles et les trois comparaisons humaines de
-   calibration à partir des gabarits produits.
+3. **Fait :** remplir et valider les quatre annotations individuelles et les trois
+   comparaisons humaines de calibration.
 4. Créer l'exécuteur du cluster et `5.2`, puis lancer le paquet `pilot`.
-5. Figer les prompts après le pilote et produire le paquet `final`.
-6. Récupérer les sorties et implémenter `5.3`.
-7. Implémenter `5.4` seulement lorsque toutes les annotations sont valides.
-8. Construire la diapositive avec `5.5` en dernier.
+5. Importer le pilote avec `5.3`, exécuter le comparateur de calibration et examiner les
+   désaccords dans le texte.
+6. Figer les prompts après le pilote et produire le paquet `final` avec `5.2`.
+7. Lancer le run final et l'importer avec `5.3`.
+8. Implémenter `5.4` seulement lorsque toutes les annotations sont valides.
+9. Construire la diapositive avec `5.5` en dernier.

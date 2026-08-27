@@ -514,6 +514,12 @@ figé avant le run complet et les comparaisons sont inversées pour détecter le
 position. Les concordances humaines restent des résultats de calibration et ne mesurent
 pas une généralisation hors échantillon.
 
+Après le pilote, un petit script déterministe compare les annotations humaines et Qwen
+champ par champ. Il signale `match`, `disagreement`, `human_abstention` et
+`model_abstention`, contrôle les preuves citées et génère un rapport lisible avant le gel
+du prompt. Il n'arbitre pas automatiquement les désaccords, ne juge pas les justifications
+avec un autre LLM et ne calcule pas d'accuracy sur ce corpus de calibration.
+
 Une extension ultérieure associera plusieurs formulations équivalentes du prompt à un
 véritable jeu humain tenu à l'écart de la calibration. Ces deux contrôles sont reportés
 ensemble : tester seulement un second prompt sur le corpus de calibration ne suffirait pas

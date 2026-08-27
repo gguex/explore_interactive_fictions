@@ -547,9 +547,13 @@
 - Suppression du second prompt individuel dans le protocole actif. Une étude de sensibilité
   à plusieurs formulations n'aura de valeur qu'avec un jeu humain séparé de la calibration
   et est reportée aux extensions futures.
+- Ajout au workflow d'un comparateur déterministe humain–Qwen pour le pilote. Il produira
+  des concordances, désaccords et abstentions par champ avec les preuves côte à côte, sans
+  correction automatique ni accuracy.
 
 ## Prochaine étape
 
 Les quatre annotations individuelles et les trois annotations pairwise de calibration
 sont remplies et validées. Implémenter `5.2` avec un seul prompt individuel pour construire
-le paquet aveugle destiné au cluster selon `docs/phase5_protocol.md`.
+le paquet aveugle destiné au cluster, puis `5.3` et le comparateur de calibration selon
+`docs/phase5_protocol.md`.
