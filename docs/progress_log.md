@@ -551,9 +551,30 @@
   des concordances, désaccords et abstentions par champ avec les preuves côte à côte, sans
   correction automatique ni accuracy.
 
+### 27.08.2026 — Phase 5.2 : paquet pilote aveugle prêt
+
+- Écriture de deux prompts anglais et génériques appliquant le codebook validé aux
+  histoires individuelles et aux comparaisons pairwise. Aucun exemple annoté, profil
+  générateur, résultat BoP ou règle propre à LW01 n'y est inclus.
+- Définition de deux schémas JSON fermés pour les sorties structurées vLLM, accompagnés de
+  validateurs Python qui contrôlent aussi les identifiants et les preuves par rapport au
+  texte exact présenté au modèle.
+- Implémentation de `scripts/5.2_build_phase5_bundle.py` et de son validateur indépendant.
+  Le constructeur produit les stades `pilot` et `final`, refuse d'écraser un paquet et
+  empreinte chaque fichier transmis.
+- Création de l'exécuteur autonome `cluster_scripts/phase5/run_phase5.py` : validation des
+  empreintes avant chargement du modèle, sortie contrainte, mesure exacte du contexte sans
+  troncature, écriture progressive, quarantaine, reprise validée et manifeste matériel.
+- Production de
+  `data/for_trajectory_annotation/LW01/server_bundle/LW01_phase5_pilot_v1/` avec quatre
+  tâches individuelles, trois comparaisons A/B et aucune inversion B/A. L'estimation
+  maximale atteint 15 782 tokens d'entrée, sous la fenêtre configurée de 32k ; le tokenizer
+  exact effectuera le contrôle bloquant sur le cluster.
+- Validation locale du paquet, de ses empreintes et de son aveuglement. L'inférence Qwen
+  n'a pas été lancée localement : elle requiert l'environnement GPU/vLLM du cluster.
+
 ## Prochaine étape
 
-Les quatre annotations individuelles et les trois annotations pairwise de calibration
-sont remplies et validées. Implémenter `5.2` avec un seul prompt individuel pour construire
-le paquet aveugle destiné au cluster, puis `5.3` et le comparateur de calibration selon
+Transférer et exécuter le paquet pilote `LW01_phase5_pilot_v1` sur le cluster, rapatrier le
+dossier de sortie complet, puis implémenter `5.3` et le comparateur de calibration selon
 `docs/phase5_protocol.md`.

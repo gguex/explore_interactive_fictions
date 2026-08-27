@@ -386,8 +386,11 @@ Une histoire ou une paire dépassant la fenêtre configurée est signalée, jama
 
 ### 7.2 Prompt sans exemple de trajectoire complète
 
-Le prompt contient le codebook, le schéma JSON, les règles de preuve et quelques
-contre-exemples courts. Il ne contient pas une trajectoire complète déjà annotée.
+Le prompt contient le codebook et les règles de preuve. Le schéma JSON contraint est
+fourni séparément au moteur vLLM : il fixe les champs, les valeurs autorisées, les formats
+de références, les cardinalités et l'interdiction de champs supplémentaires. Le prompt ne
+contient ni trajectoire annotée, ni règle propre à LW01. Les formulations génériques
+ci-dessous illustrent les frontières du codebook, sans servir de démonstrations annotées.
 
 Exemples de règles :
 
@@ -494,7 +497,8 @@ elle devra faire l'objet d'une réplication ultérieure avec le prompt figé.
 
 ## 10. Sorties attendues
 
-Les noms de 5.0 et 5.1 sont désormais fixés ; les suivants restent indicatifs :
+Les noms de 5.0 à 5.2, des prompts et des schémas sont désormais fixés ; les sorties
+postérieures à l'inférence restent indicatives :
 
 | Fichier | Contenu |
 | :--- | :--- |

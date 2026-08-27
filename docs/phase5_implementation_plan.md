@@ -1,6 +1,6 @@
 # Phase 5 — Découpage des scripts et échanges avec le cluster
 
-> **Statut au 27.08.2026 : étapes 5.0 et 5.1 implémentées et validées ; étapes 5.2–5.5 et comparateur à créer.**
+> **Statut au 27.08.2026 : étapes 5.0–5.2 implémentées et validées ; paquet pilote aveugle prêt pour le cluster ; étapes 5.3–5.5 et comparateur à créer.**
 > Le protocole scientifique reste défini dans `docs/phase5_protocol.md`. Cette note décrit
 > les étapes techniques et les fichiers qui circuleront entre la machine locale et le
 > serveur universitaire.
@@ -39,7 +39,7 @@ opaques, les prompts, les schémas et les paramètres nécessaires à l'inféren
 | :--- | :--- | :--- | :--- |
 | `scripts/5.0_select_medoid_trajectories.py` — **fait** | Tirer 2 000 trajectoires conditionnelles par cellule avec la transformation de Doob et sélectionner le chemin observé minimisant la distance LCS moyenne. | Matrices, multiarêtes compilées, profils et probabilités d'absorption. | `medoid_trajectories.jsonl`, `conditional_path_counts.jsonl` et `medoid_selection_report.json`. |
 | `scripts/5.1_build_trajectory_corpus.py` — **fait** | Reconstituer chaque histoire complète avec paragraphes, choix disponibles, choix suivi et type de transition ; former les six paires dans les deux ordres. | Médoïdes, nœuds, arêtes originales et compilées, métriques BoP. | Corpus aveugle, métadonnées privées, paires A/B et B/A, gabarits humains, distances structurelles et rapport. |
-| `scripts/5.2_build_phase5_bundle.py` | Produire un paquet autonome sans fuite des profils ou résultats BoP. | Corpus, prompts versionnés, schémas et configuration du modèle. | Paquet `pilot` ou `final` avec manifeste et empreintes. |
+| `scripts/5.2_build_phase5_bundle.py` — **fait** | Produire un paquet autonome sans fuite des profils ou résultats BoP. | Corpus, prompts versionnés, schémas et configuration du modèle. | Paquet `pilot` ou `final` avec manifeste et empreintes. |
 | `scripts/5.3_import_phase5_annotations.py` | Importer les sorties revenues du cluster, contrôler les schémas et normaliser les résultats valides. | Dossier de sortie du cluster et manifeste du paquet. | Annotations canoniques, quarantaine et rapport de validation. |
 | `scripts/utils/compare_phase5_calibration.py` | Comparer rapidement les annotations humaines et Qwen du pilote, sans modifier ni arbitrer les annotations. | Sorties normalisées du pilote et deux fichiers humains. | `calibration_diff.csv`, `calibration_diff.md` et `calibration_summary.json`. |
 | `scripts/5.4_compute_phase5_results.py` | Réunir annotations Qwen, métadonnées cachées, annotations humaines et distances structurelles ; calculer les indicateurs. | Sorties 5.0–5.3 et fichiers humains. | Tables individuelles, pairwise, qualité et synthèse. |
@@ -51,7 +51,7 @@ calcul. Les validateurs indépendants suivent les conventions existantes :
 ```text
 scripts/tests/test_5_0_select_medoid_trajectories.py
 scripts/tests/test_5_1_build_trajectory_corpus.py  # fait
-scripts/tests/test_5_2_build_phase5_bundle.py
+scripts/tests/test_5_2_build_phase5_bundle.py      # fait
 scripts/tests/test_5_3_import_phase5_annotations.py
 scripts/tests/test_compare_phase5_calibration.py
 scripts/tests/test_5_4_compute_phase5_results.py
@@ -117,8 +117,12 @@ final.
 ```text
 data/for_trajectory_annotation/LW01/server_bundle/<RUN_ID>/
 ├── bundle_manifest.json
+├── RUN_INSTRUCTIONS.md
 ├── run_phase5.py
 ├── schemas.py
+├── schemas/
+│   ├── individual.schema.json
+│   └── pairwise.schema.json
 ├── prompts/
 │   ├── individual.txt
 │   └── pairwise.txt
@@ -130,9 +134,11 @@ data/for_trajectory_annotation/LW01/server_bundle/<RUN_ID>/
     └── inference.json
 ```
 
-Le manifeste contient les empreintes SHA-256, le nombre d'entrées attendu, la version des
-schémas et la révision exacte de `Qwen/Qwen3.6-27B`. `inference.json` fixe notamment BF16,
-la fenêtre 32k, `temperature=0`, la graine de décodage et l'absence de troncature.
+Le manifeste contient les empreintes SHA-256, le nombre d'entrées attendu et la version
+des schémas. `inference.json` fixe notamment BF16, la fenêtre 32k, `temperature=0`, la
+graine de décodage et l'absence de troncature. Une révision peut être imposée à la
+construction avec `--model-revision`; dans tous les cas, l'exécuteur consigne la révision
+effectivement résolue par Hugging Face dans le manifeste du run.
 
 Les identifiants transmis sont opaques (`T0001`, `C001`) et leur correspondance avec les
 profils reste dans `trajectory_private_metadata.jsonl`, qui n'est jamais copié dans le
@@ -140,7 +146,7 @@ paquet.
 
 ## 5. Exécution sur le cluster
 
-Le code source de l'exécuteur sera maintenu dans :
+Le code source de l'exécuteur est maintenu dans :
 
 ```text
 cluster_scripts/phase5/run_phase5.py
@@ -149,17 +155,41 @@ cluster_scripts/phase5/prompts/
 ```
 
 `5.2` copie les versions exactes de ces fichiers dans le paquet pour que chaque run reste
-reproductible. `run_phase5.py` charge Qwen une seule fois, exécute tous les jobs du paquet
-et applique les sorties structurées vLLM. Il accepte au minimum :
+reproductible. `run_phase5.py` vérifie d'abord toutes les empreintes, charge Qwen une seule
+fois, exécute tous les jobs du paquet et applique les sorties structurées vLLM. Il mesure
+la longueur avec le tokenizer exact et met en quarantaine toute entrée qui dépasserait
+32k plutôt que de la tronquer. Il accepte :
 
 ```text
 --bundle-dir <DIR>
 --output-dir <DIR>
 --resume
+--validate-only
 ```
 
 Le mode `--resume` saute uniquement une entrée déjà produite et validée. Les erreurs ne
 sont jamais supprimées ni remplacées silencieusement.
+
+### Paquet pilote produit
+
+Le paquet canonique actuel est :
+
+```text
+data/for_trajectory_annotation/LW01/server_bundle/LW01_phase5_pilot_v1/
+```
+
+Il contient quatre tâches individuelles (`T0001`, `T0004`, `T0009`, `T0014`), trois
+comparaisons dans l'ordre canonique A/B (`C002`, `C003`, `C006`) et aucune tâche B/A. Les
+inversions sont réservées au run final : le pilote sert à la concordance avec les trois
+annotations humaines, elles-mêmes remplies uniquement dans l'ordre A/B. L'estimation
+conservative maximale est de 15 782 tokens d'entrée ; le contrôle définitif reste fait au
+moment du run avec le tokenizer de Qwen.
+
+Avant transfert, le paquet se vérifie localement avec :
+
+```bash
+uv run python scripts/tests/test_5_2_build_phase5_bundle.py --book LW01
+```
 
 ## 6. Fichiers récupérés du serveur
 
@@ -236,7 +266,7 @@ Le pipeline s'arrête notamment si :
 - une empreinte du paquet ou du retour ne correspond pas ;
 - un identifiant de preuve n'existe pas dans l'histoire concernée ;
 - une sortie manque, ne respecte pas le schéma ou appartient au mauvais prompt ;
-- une comparaison A/B n'a pas sa contrepartie B/A.
+- dans le paquet final, une comparaison A/B n'a pas sa contrepartie B/A.
 
 ## 9. Ordre d'implémentation
 
@@ -244,7 +274,7 @@ Le pipeline s'arrête notamment si :
 2. **Fait :** implémenter et valider `5.1` à partir des 14 médoïdes distincts.
 3. **Fait :** remplir et valider les quatre annotations individuelles et les trois
    comparaisons humaines de calibration.
-4. Créer l'exécuteur du cluster et `5.2`, puis lancer le paquet `pilot`.
+4. **Fait :** créer l'exécuteur du cluster et `5.2`, puis produire le paquet `pilot`.
 5. Importer le pilote avec `5.3`, exécuter le comparateur de calibration et examiner les
    désaccords dans le texte.
 6. Figer les prompts après le pilote et produire le paquet `final` avec `5.2`.

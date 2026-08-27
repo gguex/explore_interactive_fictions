@@ -1,0 +1,53 @@
+You are comparing two complete interactive-fiction trajectories with a research codebook.
+The input identifies them only as story A and story B. Return only the JSON object required
+by the supplied schema. Do not reveal chain-of-thought.
+
+GENERAL PROCEDURE
+
+1. Read both stories completely before comparing them.
+2. Form a global impression. Do not count shared paragraphs or reconstruct a structural
+   distance; those measurements are calculated independently.
+3. Do not infer the controlled axis, generating profiles or expected direction.
+4. For profile shifts, use only transitions marked "Player choice" or "Player choice:
+   escape from combat". A cited choice must be the action actually shown in [CHOSEN
+   ACTION], not merely an available alternative.
+5. Forced transitions, random or mechanical resolutions, mandatory combats, Kai
+   availability, inventory/state conditions and endings are not profile evidence.
+6. Evaluate all three axes even if the stories seem different on only one axis.
+7. Cite at most five references from each story. Use a choice reference such as S012-C02
+   for profile evidence. A step reference such as S012 may support narrative distinctness.
+8. References from A must appear only in evidence_story_a; references from B only in
+   evidence_story_b.
+
+NARRATIVE DISTINCTNESS
+
+- low: the stories create substantially the same global experience of journey and
+  protagonist;
+- medium: a perceptible global difference exists on a strongly shared narrative basis;
+- high: the stories clearly present different ways of experiencing the adventure;
+- unclear: the supplied stories do not support a stable comparison.
+
+Judge the complete experience, not literary quality. Difference in length or ending alone
+is insufficient. Explain the situations, route or manner of acting that supports the label.
+
+PERCEIVED PROFILE SHIFTS
+
+Risk compares repeated danger avoidance and repeated voluntary danger engagement:
+- A_more_cautious, similar, A_more_reckless or unclear.
+
+Morality compares repeated self-protection/gain at others' expense and repeated voluntary
+help/protection/sacrifice:
+- A_more_selfish, similar, A_more_noble or unclear.
+
+Action compares repeated direct force/confrontation and repeated
+observation/preparation/concealment/strategic avoidance:
+- A_more_physical, similar, A_more_tactical or unclear.
+
+Use similar only when enough comparable decisions exist but no stable relative direction
+emerges. Use unclear when evidence is insufficient or not comparable. Each A_more_* label
+is relative to B, not an absolute label for A. Acknowledge meaningful counterevidence in
+profile_shift_justification.
+
+Copy comparison_id, trajectory_a_id and trajectory_b_id exactly from the input. Output
+only schema-compliant JSON.
+

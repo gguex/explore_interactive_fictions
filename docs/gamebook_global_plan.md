@@ -484,10 +484,12 @@ moyenne aux autres tirages ; aucune sélection n'intervient après lecture du te
 embeddings sont exclus : ils ajouteraient un second instrument sémantique sans être
 nécessaires à ce plan contrôlé.
 
-Les étapes 5.0 et 5.1 sont terminées pour LW01 : les tirages et les 14 médoïdes ont été
+Les étapes 5.0 à 5.2 sont terminées pour LW01 : les tirages et les 14 médoïdes ont été
 calculés, puis leurs histoires complètes ont été reconstruites sous identifiants opaques.
 Six comparaisons extrême–extrême existent dans les deux ordres, avec leurs distances
-structurelles calculées séparément. Les deux étapes sont validées indépendamment.
+structurelles calculées séparément. Les prompts et schémas contraints sont fixés et un
+paquet pilote aveugle de quatre histoires et trois comparaisons A/B est prêt pour le
+cluster. Ces trois étapes sont validées indépendamment.
 
 #### Méthodes potentielles
 
@@ -549,10 +551,12 @@ générales des adaptations propres à LW01.
 
 ## 8. Questions restant à traiter dans la phase 5
 
-Le corpus, les grilles, Qwen3.6-27B et les contrôles sont fixés ; les médoïdes et leurs
-histoires sont construits. Il reste à remplir la calibration humaine, implémenter l'échange
-avec le cluster, puis vérifier la longueur exacte avec le tokenizer Qwen, la stabilité des
-sorties et l'utilité des deux champs complémentaires avant de choisir la diapositive.
+Le corpus, les grilles, Qwen3.6-27B et les contrôles sont fixés ; la calibration humaine
+est remplie, les médoïdes et leurs histoires sont construits, et le paquet pilote aveugle
+est prêt. Il reste à l'exécuter sur le cluster, vérifier la longueur exacte avec le
+tokenizer Qwen, importer et confronter les sorties aux annotations humaines, puis geler le
+prompt avant le run complet. La stabilité des sorties et l'utilité des deux champs
+complémentaires seront examinées avant de choisir la diapositive.
 
 ## 9. Documentation active
 
