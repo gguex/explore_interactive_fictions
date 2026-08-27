@@ -241,6 +241,10 @@ def validate_schemas(bundle_dir: Path) -> None:
             raise ValueError(f"Missing {name} schema properties")
         if set(exported.get("required", [])) != set(properties):
             raise ValueError(f"Required {name} fields differ from properties")
+        if "uniqueItems" in json.dumps(exported, ensure_ascii=False):
+            raise ValueError(
+                f"{name} schema uses uniqueItems, unsupported by vLLM 0.28"
+            )
 
 
 def validate_individual_inputs(
@@ -372,7 +376,7 @@ def main() -> None:
         Path("data/for_trajectory_annotation") / book_id
     )
     bundle_dir = args.bundle_dir or (
-        annotation_dir / "server_bundle" / f"{book_id}_phase5_pilot_v1"
+        annotation_dir / "server_bundle" / f"{book_id}_phase5_pilot_v2"
     )
     manifest = read_json(bundle_dir / "bundle_manifest.json")
     if manifest.get("schema_version") != "1.0" or manifest.get("phase") != "5.2":
@@ -453,4 +457,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

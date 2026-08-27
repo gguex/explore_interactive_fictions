@@ -573,8 +573,20 @@
 - Validation locale du paquet, de ses empreintes et de son aveuglement. L'inférence Qwen
   n'a pas été lancée localement : elle requiert l'environnement GPU/vLLM du cluster.
 
+### 27.08.2026 — Phase 5.2 : correction de compatibilité vLLM 0.28
+
+- Le premier job H100 a chargé correctement les 51,75 Gio de poids et disposait de 29,24
+  Gio de cache KV, mais le backend de sortie structurée a refusé `uniqueItems` au premier
+  lot avant toute génération.
+- Retrait de `uniqueItems` du schéma transmis à vLLM. L'unicité des références reste une
+  règle bloquante du validateur Python exécuté immédiatement après chaque génération.
+- Suppression de l'ancienne variable `VLLM_GDN_PREFILL_BACKEND`, inconnue de vLLM 0.28 ;
+  le backend automatique avait néanmoins fonctionné correctement.
+- Production et validation de `LW01_phase5_pilot_v2`. Le paquet `pilot_v1` est conservé
+  pour l'audit, mais ne doit plus être exécuté.
+
 ## Prochaine étape
 
-Transférer et exécuter le paquet pilote `LW01_phase5_pilot_v1` sur le cluster, rapatrier le
+Transférer et exécuter le paquet pilote `LW01_phase5_pilot_v2` sur le cluster, rapatrier le
 dossier de sortie complet, puis implémenter `5.3` et le comparateur de calibration selon
 `docs/phase5_protocol.md`.

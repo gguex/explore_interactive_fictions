@@ -175,7 +175,7 @@ sont jamais supprimées ni remplacées silencieusement.
 Le paquet canonique actuel est :
 
 ```text
-data/for_trajectory_annotation/LW01/server_bundle/LW01_phase5_pilot_v1/
+data/for_trajectory_annotation/LW01/server_bundle/LW01_phase5_pilot_v2/
 ```
 
 Il contient quatre tâches individuelles (`T0001`, `T0004`, `T0009`, `T0014`), trois
@@ -184,6 +184,12 @@ inversions sont réservées au run final : le pilote sert à la concordance avec
 annotations humaines, elles-mêmes remplies uniquement dans l'ordre A/B. L'estimation
 conservative maximale est de 15 782 tokens d'entrée ; le contrôle définitif reste fait au
 moment du run avec le tokenizer de Qwen.
+
+`pilot_v2` remplace `pilot_v1`, dont le schéma utilisait `uniqueItems`. Cette contrainte
+JSON Schema n'est pas prise en charge par le backend de sorties structurées de vLLM 0.28.
+Elle a été retirée uniquement du schéma de génération ; le validateur Python conserve le
+contrôle d'unicité après génération. `pilot_v1` est gardé comme artefact historique mais ne
+doit plus être exécuté.
 
 Avant transfert, le paquet se vérifie localement avec :
 

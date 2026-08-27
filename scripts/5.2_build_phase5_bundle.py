@@ -265,7 +265,8 @@ def main() -> None:
     args = parse_args()
     book_id = str(args.book)
     stage = str(args.stage)
-    run_id = args.run_id or f"{book_id}_phase5_{stage}_v1"
+    default_version = "v2" if stage == "pilot" else "v1"
+    run_id = args.run_id or f"{book_id}_phase5_{stage}_{default_version}"
     phase5_dir = args.phase5_dir or Path("data/processed/phase5") / book_id
     annotation_dir = args.annotation_dir or (
         Path("data/for_trajectory_annotation") / book_id
