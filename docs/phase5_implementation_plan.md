@@ -54,15 +54,20 @@ scripts/tests/test_5_5_build_phase5_presentation.py
 
 ## 3. Étape humaine et calibration
 
-`5.1` produit deux gabarits dans `data/for_trajectory_annotation/LW01/` :
+`5.1` produit deux gabarits ciblés dans `data/for_trajectory_annotation/LW01/` :
 
-- `human_trajectory_annotations.jsonl` pour les 14 histoires sélectionnées ;
-- `human_pairwise_annotations.jsonl` pour les six paires.
+- `human_trajectory_annotations.jsonl` pour `T0001`, `T0004`, `T0009` et `T0014` ;
+- `human_pairwise_annotations.jsonl` pour `C002`, `C003` et `C006`.
 
-Les annotations humaines sont remplies avant de consulter Qwen. Quatre histoires sont
-marquées `calibration` et dix `validation`. Le premier paquet produit par
-`5.2 --stage pilot` ne contient que les quatre histoires de calibration, sans leurs
-réponses humaines.
+Il produit aussi `TRAJECTORIES_FOR_ANNOTATION.md`, une annexe aveugle et lisible contenant
+uniquement les sept histoires qu'il faut lire : les quatre histoires annotées
+individuellement et `T0006`, `T0007`, `T0012`, nécessaires comme seconds membres des
+trois paires. Les paragraphes, choix, actions suivies et références y sont mis en page.
+
+Les annotations humaines sont remplies avant de consulter Qwen. Il n'existe pas de jeu
+humain de validation dans cette itération : les quatre histoires et trois paires servent
+uniquement à calibrer la grille et les prompts. Le paquet produit par
+`5.2 --stage pilot` contient ces entrées sans leurs réponses humaines.
 
 Les deux fichiers humains sont des artefacts éditables : `5.1` les crée s'ils n'existent
 pas, puis vérifie leurs identifiants sans jamais écraser des annotations déjà remplies.
@@ -74,6 +79,10 @@ Après examen du pilote, le codebook et les prompts sont figés et empreintés. 
 - 14 annotations individuelles avec la variante prédéfinie du prompt ;
 - six comparaisons A/B ;
 - six comparaisons B/A.
+
+Les dix histoires individuelles et trois paires sans annotation humaine ne sont pas
+appelées « validation ». Les résultats complets restent exploratoires ; les comparaisons
+avec l'humain sont des concordances de calibration.
 
 ## 4. Fichiers envoyés au serveur
 
@@ -164,7 +173,8 @@ data/processed/phase5/LW01/
 ├── trajectory_annotations.jsonl
 ├── pairwise_annotations.jsonl
 ├── pair_structural_metrics.csv
-├── human_annotations.jsonl
+├── human_trajectory_annotations.jsonl
+├── human_pairwise_annotations.jsonl
 ├── phase5_summary.csv
 └── phase5_manifest.json
 ```
@@ -183,7 +193,7 @@ results/phase5/LW01/presentation/
 
 `5.5` ne choisit pas automatiquement le résultat le plus spectaculaire. Il applique une
 règle fixée : manifestation des trois axes, confrontation structure–impression et une
-ligne de validation. `causal_continuity` et `profile_coherence` sont ajoutés seulement si
+ligne de calibration/stabilité. `causal_continuity` et `profile_coherence` sont ajoutés seulement si
 les contrôles définis dans `docs/phase5_protocol.md` les déclarent suffisamment stables.
 
 ## 8. Contrôles bloquants
@@ -209,7 +219,8 @@ Le pipeline s'arrête notamment si :
 
 1. **Fait :** implémenter et valider `5.0`.
 2. **Fait :** implémenter et valider `5.1` à partir des 14 médoïdes distincts.
-3. Remplir les annotations humaines de calibration à partir des gabarits produits.
+3. Remplir les quatre annotations individuelles et les trois comparaisons humaines de
+   calibration à partir des gabarits produits.
 4. Créer l'exécuteur du cluster et `5.2`, puis lancer le paquet `pilot`.
 5. Figer les prompts après le pilote et produire le paquet `final`.
 6. Récupérer les sorties et implémenter `5.3`.

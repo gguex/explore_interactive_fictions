@@ -532,7 +532,21 @@
 - Les histoires comptent 19 à 49 étapes et 2 005 à 5 854 mots. L'estimation maximale de
   contexte reste inférieure à 32k tokens, à confirmer avec le tokenizer exact en 5.2.
 
+### 27.08.2026 — Phase 5.1 : calibration humaine réduite et protocole pairwise fixé
+
+- Abandon du jeu humain de validation pour cette preuve de concept courte. Les dix autres
+  trajectoires restent dans l'analyse Qwen mais ne sont plus appelées « validation ».
+- Limitation du canevas individuel à `T0001`, `T0004`, `T0009` et `T0014`.
+- Limitation du canevas pairwise à `C002`, `C003` et `C006`, une paire par axe réutilisant
+  une trajectoire individuelle ; sept histoires distinctes doivent être lues au total.
+- Ajout d'un codebook pairwise : différence narrative globale, directions relatives des
+  trois axes, règles d'abstention, preuves textuelles et ordre A/B figé.
+- Le prompt générique et lisible sera gelé avant le run complet. Cette auditabilité limite
+  le surajustement sans démontrer la transférabilité ; les comparaisons Qwen–humain seront
+  rapportées comme concordances de calibration, jamais comme accuracy.
+
 ## Prochaine étape
 
-Remplir les quatre annotations humaines de calibration, puis implémenter `5.2` pour
-construire le paquet aveugle destiné au cluster selon `docs/phase5_protocol.md`.
+Remplir les quatre annotations individuelles et les trois annotations pairwise de
+calibration, puis implémenter `5.2` pour construire le paquet aveugle destiné au cluster
+selon `docs/phase5_protocol.md`.

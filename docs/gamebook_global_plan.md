@@ -455,6 +455,26 @@ produites par ses parcours. Elle devra :
 4. comparer les histoires entre elles et relier les résultats qualitatifs aux indices
    BoP de la phase 4.
 
+#### Objet exact de l'évaluation
+
+Cette phase n'évalue pas la qualité littéraire du gamebook. Elle teste principalement la
+**validité de construit de bout en bout du pipeline** : les annotations locales de phase 1
+sont transformées en pondérations de profils, puis en trajectoires ; une lecture aveugle
+du texte brut vérifie ensuite si ces différences deviennent perceptibles à l'échelle d'une
+histoire complète. Comme Qwen ne reçoit ni les labels d'arêtes ni les profils générateurs,
+ce contrôle n'est pas une simple recopie des annotations locales. Il reste néanmoins une
+validation indirecte de leur agrégation, et non une vérification indépendante de chaque
+annotation de phase 1.
+
+Un résultat positif permet donc d'affirmer que les préférences annotées et pondérées
+produisent des expériences narratives globalement perceptibles. Il ne permet pas
+d'affirmer que le livre est « bon ». Un résultat négatif ne peut pas non plus être attribué
+au seul gamebook : il peut provenir des annotations de phase 1, de la pondération, de la
+structure du livre, du choix du médoïde ou de l'instrument Qwen. La
+`narrative_distinctness` mesure une variation d'expérience, pas une qualité. Évaluer la
+qualité du livre demanderait une autre grille — agentivité, cohérence, conséquences,
+réception — ainsi que plusieurs livres ou de véritables lecteurs.
+
 Le corpus comprend 14 trajectoires : sept profils contrôlés — neutre et les deux extrêmes
 de chacun des trois axes — croisés avec `Win` et `Death`. Chaque cellule est représentée
 par le médoïde empirique de 2 000 trajectoires conditionnées par l'issue, tirées par
@@ -478,7 +498,7 @@ structurelles calculées séparément. Les deux étapes sont validées indépend
 | **Évaluation LLM structurée** | Inférer les trois axes du profil et contrôler continuité causale et cohérence du profil sur les histoires complètes. | Sensible au modèle et au prompt. | **Oui — méthode principale** |
 | **Comparaisons LLM par paires** | Comparer les médoïdes des extrêmes de chaque axe à issue identique. | Sensible à l'ordre A/B. | **Oui — 6 paires, évaluées dans les deux ordres** |
 | **Extraction d'événements, entités et lieux** | Vérifier la continuité des personnages, objets, lieux et événements le long du parcours. | Demande une nouvelle annotation et une métrique de séquence. | **Non — extension future** |
-| **Évaluation humaine** | Vérifier la validité d'un petit échantillon de jugements du LLM. | Coûteuse et difficile à étendre. | **Oui — contrôle requis sur 14 histoires et 6 paires** |
+| **Évaluation humaine** | Calibrer la grille et contrôler un petit échantillon de jugements du LLM. | Sans jeu séparé, elle ne mesure pas la généralisation. | **Oui — 4 histoires et 3 paires de calibration** |
 
 La grille individuelle contient uniquement le profil perçu sur `risk`, `morality` et
 `action`, la `causal_continuity` et la `profile_coherence`. Les deux derniers champs sont
@@ -487,8 +507,12 @@ d'adéquation choix–conséquence, d'équité de l'issue et de qualité littér
 
 Qwen3.6-27B recevra les histoires complètes et leurs choix, mais aucun profil, poids,
 annotation sémantique ni indice BoP. Les justifications devront citer des choix ou
-paragraphes vérifiables. Les quatorze histoires et les six paires seront annotées
-humainement ; les comparaisons seront inversées pour détecter le biais de position.
+paragraphes vérifiables. L'humain annote quatre histoires et trois paires pour calibrer un
+prompt générique et lisible, puis Qwen annote les 14 histoires et les six paires. Il
+n'existe pas de jeu humain de validation dans cette preuve de concept ; le prompt est
+figé avant le run complet et les comparaisons sont inversées pour détecter le biais de
+position. Les concordances humaines restent des résultats de calibration et ne mesurent
+pas une généralisation hors échantillon.
 
 Les résultats principaux seront la manifestation des trois axes sur ces chemins centraux,
 la récupération des contrastes, la fuite entre axes et la confrontation descriptive
@@ -524,7 +548,7 @@ sorties et l'utilité des deux champs complémentaires avant de choisir la diapo
 - `graph_model.md` : pré-graphe, annotation et compilation de $W$ ;
 - `phase4_indices.md` : formules, tables canoniques et validation des indices BoP ;
 - `phase4_presentation.md` : sélection finale, figures et messages pour la présentation ;
-- `phase5_protocol.md` : corpus, grilles, modèle, validation et sorties de la phase 5 ;
+- `phase5_protocol.md` : corpus, grilles, modèle, calibration, stabilité et sorties de la phase 5 ;
 - `phase5_implementation_plan.md` : scripts locaux, paquet cluster et artefacts attendus ;
 - `phase5_results.md` : résultats de la sélection des médoïdes et limites d'interprétation ;
 - `llm_digital_humanities.md` : rôle, limites, audit et sources pour l'usage local des LLM ;

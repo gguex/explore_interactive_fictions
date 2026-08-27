@@ -449,6 +449,12 @@ expériences possibles. Les extensions possibles sont :
 Toute augmentation doit tenir compte du coût de la validation humaine et ne pas présenter
 les annotations automatisées supplémentaires comme un gold standard.
 
+Le pilote actuel ne possède volontairement aucun jeu humain tenu à l'écart de la
+calibration. Une réplication destinée à soutenir une généralisation devrait figer le
+prompt actuel, l'appliquer sans retouche à LW02 ou à un autre livre, puis faire annoter un
+sous-ensemble indépendant. Cela permettrait de distinguer auditabilité du prompt,
+concordance de calibration et validité hors échantillon.
+
 ### 13.4 Autres annotations globales
 
 Les pistes suivantes restent possibles, mais ne sont pas nécessaires à la question

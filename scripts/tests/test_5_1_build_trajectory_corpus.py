@@ -8,6 +8,7 @@ import hashlib
 import json
 import math
 import re
+import textwrap
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -36,6 +37,7 @@ CALIBRATION_CELLS = {
     ("neutral_noble_neutral", "Win"),
     ("neutral_neutral_tactical", "Death"),
 }
+HUMAN_PAIR_CALIBRATION_IDS = {"C002", "C003", "C006"}
 PUBLIC_STORY_FIELDS = {
     "schema_version",
     "trajectory_id",
@@ -66,7 +68,7 @@ PRIVATE_FIELDS = {
     "morality",
     "action",
     "outcome",
-    "split",
+    "annotation_role",
     "node_ids",
     "edge_ids",
     "medoid_trajectory_sha256",
@@ -96,6 +98,7 @@ PAIR_METRIC_FIELDS = [
     "bop_trajectory_entropy_gap_nats",
 ]
 FORBIDDEN_PUBLIC_KEYS = {
+    "annotation_role",
     "profile_id",
     "risk",
     "morality",
@@ -248,6 +251,120 @@ def render_story(steps: list[dict[str, Any]]) -> str:
             )
         )
     return "\n\n".join(blocks)
+
+
+def render_human_annex(
+    stories: list[dict[str, Any]],
+    individual_ids: set[str],
+    human_pairs: list[dict[str, Any]],
+) -> str:
+    """Independently render the focused human-calibration annex."""
+    story_by_id = {str(story["trajectory_id"]): story for story in stories}
+    pair_only_ids = {
+        str(row[field])
+        for row in human_pairs
+        for field in ("trajectory_a_id", "trajectory_b_id")
+    } - individual_ids
+    selected_ids = sorted(individual_ids | pair_only_ids)
+    lines = [
+        "# Human calibration trajectories — LW01",
+        "",
+        "> Read each complete story before annotating it. Do not consult the private",
+        "> metadata file: profiles and outcomes must remain hidden during annotation.",
+        "",
+        "The choice references shown here should be copied into the annotation file,",
+        "for example `S012-C02`.",
+        "",
+        "## Annotation plan",
+        "",
+        "Individual annotations: "
+        + ", ".join(f"`{public_id}`" for public_id in sorted(individual_ids))
+        + ".",
+        "",
+        "Pairwise annotations:",
+        "",
+    ]
+    for row in human_pairs:
+        lines.append(
+            f"- `{row['comparison_id']}`: story A = `{row['trajectory_a_id']}`; "
+            f"story B = `{row['trajectory_b_id']}`."
+        )
+    lines.extend(
+        (
+            "",
+            "The controlled axis, generating profiles and outcomes are intentionally",
+            "not identified here. Stories used only for a pairwise comparison do not",
+            "require an individual annotation.",
+            "",
+            "## Stories",
+        )
+    )
+    for public_id in selected_ids:
+        story = story_by_id[public_id]
+        role = (
+            "individual and possibly pairwise calibration"
+            if public_id in individual_ids
+            else "pairwise calibration only"
+        )
+        lines.extend(
+            (
+                "",
+                "---",
+                "",
+                f"### {public_id}",
+                "",
+                f"Human task: **{role}**",
+                "",
+                f"{story['step_count']} steps · {story['word_count']} words",
+            )
+        )
+        for step in story["steps"]:
+            lines.extend(
+                (
+                    "",
+                    f"#### {step['step_ref']} — Paragraph {step['paragraph_id']}",
+                    "",
+                    textwrap.fill(str(step["narrative_text"]), width=100),
+                    "",
+                    "Available choices:",
+                    "",
+                )
+            )
+            available = step["available_choices"]
+            if available:
+                for choice in available:
+                    lines.append(
+                        textwrap.fill(
+                            str(choice["text"]),
+                            width=100,
+                            initial_indent=f"- `{choice['choice_ref']}` — ",
+                            subsequent_indent="  ",
+                        )
+                    )
+            else:
+                lines.append("- None.")
+            chosen = step["chosen_action"]
+            chosen_ref = (
+                f"`{chosen['choice_ref']}` — "
+                if chosen["choice_ref"] is not None
+                else ""
+            )
+            lines.extend(
+                (
+                    "",
+                    "Chosen action:",
+                    "",
+                    textwrap.fill(
+                        str(chosen["text"]),
+                        width=100,
+                        initial_indent=f"> {chosen_ref}",
+                        subsequent_indent="> ",
+                    ),
+                    "",
+                    f"Transition type: **{step['transition_type']}**",
+                )
+            )
+    return "\n".join(lines) + "\n"
 
 
 def expected_implicit_action(kind: str, target_id: str) -> str:
@@ -451,36 +568,108 @@ def validate_metric_row(
 def validate_human_templates(
     human_rows: list[dict[str, Any]],
     human_pair_rows: list[dict[str, Any]],
-    public_ids: set[str],
-    comparison_ids: set[str],
+    human_public_ids: set[str],
+    human_comparison_ids: set[str],
     choice_refs: dict[str, set[str]],
+    step_refs: dict[str, set[str]],
 ) -> None:
     """Check human-template coverage and any already-filled evidence references."""
-    if {str(row.get("trajectory_id")) for row in human_rows} != public_ids:
-        raise ValueError("Human trajectory templates do not cover all public stories")
-    if {str(row.get("comparison_id")) for row in human_pair_rows} != comparison_ids:
-        raise ValueError("Human pair templates do not cover all canonical pairs")
+    if {str(row.get("trajectory_id")) for row in human_rows} != human_public_ids:
+        raise ValueError("Human trajectory templates differ from calibration selection")
+    if {
+        str(row.get("comparison_id")) for row in human_pair_rows
+    } != human_comparison_ids:
+        raise ValueError("Human pair templates differ from calibration selection")
     for row in human_rows:
         public_id = str(row["trajectory_id"])
+        if row.get("annotation_role") != "prompt_calibration":
+            raise ValueError(f"Invalid human annotation role for {public_id}")
         if row.get("status") not in {"pending", "complete"}:
             raise ValueError(f"Invalid human status for {public_id}")
         serialized = json.dumps(row, ensure_ascii=False)
         for reference in re.findall(r'"(S\d{3}-C\d{2})"', serialized):
             if reference not in choice_refs[public_id]:
                 raise ValueError(f"Unknown human evidence ref {reference}/{public_id}")
+    for row in human_pair_rows:
+        comparison_id = str(row["comparison_id"])
+        public_a = str(row["trajectory_a_id"])
+        public_b = str(row["trajectory_b_id"])
+        if row.get("status") not in {"pending", "complete"}:
+            raise ValueError(f"Invalid human status for {comparison_id}")
+        shifts = row.get("perceived_profile_shift")
+        if not isinstance(shifts, dict) or set(shifts) != {
+            "risk",
+            "morality",
+            "action",
+        }:
+            raise ValueError(f"Invalid pairwise profile axes for {comparison_id}")
+        if "profile_shift_justification" not in row:
+            raise ValueError(f"Missing pairwise justification for {comparison_id}")
+        if row.get("status") == "complete":
+            distinctness = row.get("narrative_distinctness")
+            if not isinstance(distinctness, dict) or distinctness.get(
+                "label"
+            ) not in {"low", "medium", "high", "unclear"}:
+                raise ValueError(
+                    f"Invalid narrative distinctness for {comparison_id}"
+                )
+            allowed_shifts = {
+                "risk": {
+                    "A_more_cautious",
+                    "similar",
+                    "A_more_reckless",
+                    "unclear",
+                },
+                "morality": {
+                    "A_more_selfish",
+                    "similar",
+                    "A_more_noble",
+                    "unclear",
+                },
+                "action": {
+                    "A_more_physical",
+                    "similar",
+                    "A_more_tactical",
+                    "unclear",
+                },
+            }
+            for axis, allowed in allowed_shifts.items():
+                if shifts[axis] not in allowed:
+                    raise ValueError(
+                        f"Invalid {axis} shift for {comparison_id}"
+                    )
+        for field, public_id in (
+            ("evidence_story_a", public_a),
+            ("evidence_story_b", public_b),
+        ):
+            references = row.get(field, [])
+            if not isinstance(references, list) or len(references) > 5:
+                raise ValueError(f"Invalid evidence list for {comparison_id}/{field}")
+            for reference in references:
+                if not isinstance(reference, str):
+                    raise ValueError(f"Non-text evidence ref for {comparison_id}")
+                choice_ref = re.fullmatch(r"S\d{3}-C\d{2}", reference)
+                step_ref = re.fullmatch(r"S\d{3}", reference)
+                if not (
+                    choice_ref and reference in choice_refs[public_id]
+                ) and not (step_ref and reference in step_refs[public_id]):
+                    raise ValueError(
+                        f"Unknown {field} ref {reference}/{public_id}"
+                    )
 
 
 def validate_report(report_path: Path, output_paths: list[Path]) -> None:
     """Check phase identity, counts and output hashes in the corpus report."""
     report = json.loads(report_path.read_text(encoding="utf-8"))
-    if report.get("schema_version") != "1.0" or report.get("phase") != "5.1":
+    if report.get("schema_version") != "1.1" or report.get("phase") != "5.1":
         raise ValueError("Unexpected phase-5.1 report version")
     expected_counts = {
         "trajectory_count": 14,
-        "calibration_count": 4,
-        "validation_count": 10,
+        "human_calibration_trajectory_count": 4,
+        "model_only_trajectory_count": 10,
         "comparison_count": 6,
         "ordered_pair_count": 12,
+        "human_calibration_pair_count": 3,
     }
     for field, expected in expected_counts.items():
         if report.get(field) != expected:
@@ -533,6 +722,7 @@ def main() -> None:
     report_path = phase5_dir / "trajectory_corpus_report.json"
     human_path = annotation_dir / "human_trajectory_annotations.jsonl"
     human_pairs_path = annotation_dir / "human_pairwise_annotations.jsonl"
+    annex_path = annotation_dir / "TRAJECTORIES_FOR_ANNOTATION.md"
 
     medoids = read_jsonl(medoids_path)
     stories = read_jsonl(trajectories_path)
@@ -544,15 +734,17 @@ def main() -> None:
     metric_fields, metric_rows = read_csv(metrics_path)
     if metric_fields != PAIR_METRIC_FIELDS:
         raise ValueError("Unexpected pair structural metric schema")
-    if not (
-        len(medoids) == len(stories) == len(private_rows) == len(human_rows) == 14
-    ):
-        raise ValueError("The four individual artifacts must each contain 14 rows")
+    if not (len(medoids) == len(stories) == len(private_rows) == 14):
+        raise ValueError("The three complete trajectory artifacts must contain 14 rows")
+    if len(human_rows) != 4:
+        raise ValueError("The human individual template must contain four rows")
     if not (
         len(ordered_pairs) == 12
-        and len(pair_private_rows) == len(metric_rows) == len(human_pair_rows) == 6
+        and len(pair_private_rows) == len(metric_rows) == 6
     ):
         raise ValueError("The pair artifacts have unexpected row counts")
+    if len(human_pair_rows) != 3:
+        raise ValueError("The human pair template must contain three rows")
 
     nodes = load_nodes(nodes_path)
     choices = load_choices(choices_path)
@@ -578,13 +770,13 @@ def main() -> None:
         medoid = medoid_by_source[source_id]
         profile_id = str(private["profile_id"])
         outcome = str(private["outcome"])
-        expected_split = (
-            "calibration"
+        expected_role = (
+            "human_calibration"
             if (profile_id, outcome) in CALIBRATION_CELLS
-            else "validation"
+            else "model_analysis"
         )
-        if private["split"] != expected_split:
-            raise ValueError(f"Wrong calibration split for {public_id}")
+        if private["annotation_role"] != expected_role:
+            raise ValueError(f"Wrong annotation role for {public_id}")
         compiled = load_compiled_edges(
             graph_dir / profile_id / "compiled_edges.csv"
         )
@@ -612,6 +804,9 @@ def main() -> None:
     if set(pair_private_by_id) != canonical_ids or set(metrics_by_id) != canonical_ids:
         raise ValueError("Canonical pair identifiers are incomplete")
     ordered_by_id = {str(row["comparison_id"]): row for row in ordered_pairs}
+    human_pair_by_id = {
+        str(row["comparison_id"]): row for row in human_pair_rows
+    }
     if len(ordered_by_id) != 12:
         raise ValueError("Ordered pair identifiers are duplicated")
 
@@ -639,6 +834,15 @@ def main() -> None:
             }
             if private != expected_private:
                 raise ValueError(f"Private pair mapping differs for {comparison_id}")
+            if comparison_id in HUMAN_PAIR_CALIBRATION_IDS:
+                human_pair = human_pair_by_id[comparison_id]
+                if (
+                    human_pair["trajectory_a_id"] != public_a
+                    or human_pair["trajectory_b_id"] != public_b
+                ):
+                    raise ValueError(
+                        f"Human A/B mapping differs for {comparison_id}"
+                    )
             ab = ordered_by_id[f"{comparison_id}_AB"]
             ba = ordered_by_id[f"{comparison_id}_BA"]
             assert_no_private_keys(ab, f"{comparison_id}_AB")
@@ -674,16 +878,37 @@ def main() -> None:
     validate_human_templates(
         human_rows,
         human_pair_rows,
-        expected_public_ids,
-        canonical_ids,
+        {
+            public_id
+            for public_id, row in private_by_public.items()
+            if row["annotation_role"] == "human_calibration"
+        },
+        HUMAN_PAIR_CALIBRATION_IDS,
         choice_refs,
+        {
+            public_id: {
+                str(step["step_ref"])
+                for step in story_by_public[public_id]["steps"]
+            }
+            for public_id in story_by_public
+        },
     )
+    expected_annex = render_human_annex(
+        stories,
+        {str(row["trajectory_id"]) for row in human_rows},
+        human_pair_rows,
+    )
+    if annex_path.read_text(encoding="utf-8") != expected_annex:
+        raise ValueError(
+            "Human-readable trajectory annex differs from the public corpus"
+        )
     output_paths = [
         trajectories_path,
         private_path,
         pairs_path,
         pair_private_path,
         metrics_path,
+        annex_path,
     ]
     validate_report(report_path, output_paths)
     print("OK: all 14 stories and 6 bidirectional comparisons validated")

@@ -8,6 +8,7 @@ import hashlib
 import json
 import math
 import re
+import textwrap
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -49,6 +50,7 @@ CALIBRATION_CELLS = {
     ("neutral_noble_neutral", "Win"),
     ("neutral_neutral_tactical", "Death"),
 }
+HUMAN_PAIR_CALIBRATION_IDS = {"C002", "C003", "C006"}
 NODE_FIELDS = [
     "node_id",
     "text_content",
@@ -321,6 +323,120 @@ def render_story(steps: list[dict[str, Any]]) -> str:
     return "\n\n".join(blocks)
 
 
+def render_human_annex(
+    stories: list[dict[str, Any]],
+    individual_ids: set[str],
+    human_pairs: list[dict[str, Any]],
+) -> str:
+    """Render only the blinded stories needed for human calibration."""
+    story_by_id = {str(story["trajectory_id"]): story for story in stories}
+    pair_only_ids = {
+        str(row[field])
+        for row in human_pairs
+        for field in ("trajectory_a_id", "trajectory_b_id")
+    } - individual_ids
+    selected_ids = sorted(individual_ids | pair_only_ids)
+    lines = [
+        "# Human calibration trajectories — LW01",
+        "",
+        "> Read each complete story before annotating it. Do not consult the private",
+        "> metadata file: profiles and outcomes must remain hidden during annotation.",
+        "",
+        "The choice references shown here should be copied into the annotation file,",
+        "for example `S012-C02`.",
+        "",
+        "## Annotation plan",
+        "",
+        "Individual annotations: "
+        + ", ".join(f"`{public_id}`" for public_id in sorted(individual_ids))
+        + ".",
+        "",
+        "Pairwise annotations:",
+        "",
+    ]
+    for row in human_pairs:
+        lines.append(
+            f"- `{row['comparison_id']}`: story A = `{row['trajectory_a_id']}`; "
+            f"story B = `{row['trajectory_b_id']}`."
+        )
+    lines.extend(
+        (
+            "",
+            "The controlled axis, generating profiles and outcomes are intentionally",
+            "not identified here. Stories used only for a pairwise comparison do not",
+            "require an individual annotation.",
+            "",
+            "## Stories",
+        )
+    )
+    for public_id in selected_ids:
+        story = story_by_id[public_id]
+        role = (
+            "individual and possibly pairwise calibration"
+            if public_id in individual_ids
+            else "pairwise calibration only"
+        )
+        lines.extend(
+            (
+                "",
+                "---",
+                "",
+                f"### {public_id}",
+                "",
+                f"Human task: **{role}**",
+                "",
+                f"{story['step_count']} steps · {story['word_count']} words",
+            )
+        )
+        for step in story["steps"]:
+            lines.extend(
+                (
+                    "",
+                    f"#### {step['step_ref']} — Paragraph {step['paragraph_id']}",
+                    "",
+                    textwrap.fill(str(step["narrative_text"]), width=100),
+                    "",
+                    "Available choices:",
+                    "",
+                )
+            )
+            available = step["available_choices"]
+            if available:
+                for choice in available:
+                    lines.append(
+                        textwrap.fill(
+                            str(choice["text"]),
+                            width=100,
+                            initial_indent=f"- `{choice['choice_ref']}` — ",
+                            subsequent_indent="  ",
+                        )
+                    )
+            else:
+                lines.append("- None.")
+            chosen = step["chosen_action"]
+            chosen_ref = (
+                f"`{chosen['choice_ref']}` — "
+                if chosen["choice_ref"] is not None
+                else ""
+            )
+            lines.extend(
+                (
+                    "",
+                    "Chosen action:",
+                    "",
+                    textwrap.fill(
+                        str(chosen["text"]),
+                        width=100,
+                        initial_indent=f"> {chosen_ref}",
+                        subsequent_indent="> ",
+                    ),
+                    "",
+                    f"Transition type: **{step['transition_type']}**",
+                )
+            )
+    return "\n".join(lines) + "\n"
+
+
 def build_story(
     public_id: str,
     trajectory: dict[str, Any],
@@ -517,7 +633,7 @@ def structural_metrics(
     }
 
 
-def individual_annotation_template(public_id: str, split: str) -> dict[str, Any]:
+def individual_annotation_template(public_id: str) -> dict[str, Any]:
     """Return one empty human-annotation record using the canonical grid."""
     axis_template: dict[str, Any] = {
         "label": None,
@@ -528,7 +644,7 @@ def individual_annotation_template(public_id: str, split: str) -> dict[str, Any]
     }
     return {
         "trajectory_id": public_id,
-        "split": split,
+        "annotation_role": "prompt_calibration",
         "annotator_id": "",
         "status": "pending",
         "perceived_profile": {
@@ -560,6 +676,7 @@ def pair_annotation_template(
         "status": "pending",
         "narrative_distinctness": {"label": None, "justification": ""},
         "perceived_profile_shift": {axis: None for axis in PROFILE_AXES},
+        "profile_shift_justification": "",
         "evidence_story_a": [],
         "evidence_story_b": [],
     }
@@ -624,7 +741,9 @@ def main() -> None:
         story = build_story(
             public_id, medoid, nodes, original_choices, compiled_edges
         )
-        split = "calibration" if cell in CALIBRATION_CELLS else "validation"
+        annotation_role = (
+            "human_calibration" if cell in CALIBRATION_CELLS else "model_analysis"
+        )
         private_rows.append(
             {
                 "trajectory_id": public_id,
@@ -635,7 +754,7 @@ def main() -> None:
                 "morality": medoid["morality"],
                 "action": medoid["action"],
                 "outcome": outcome,
-                "split": split,
+                "annotation_role": annotation_role,
                 "node_ids": medoid["node_ids"],
                 "edge_ids": medoid["edge_ids"],
                 "medoid_trajectory_sha256": medoid["trajectory_sha256"],
@@ -643,7 +762,8 @@ def main() -> None:
             }
         )
         stories.append(story)
-        human_rows.append(individual_annotation_template(public_id, split))
+        if cell in CALIBRATION_CELLS:
+            human_rows.append(individual_annotation_template(public_id))
         medoid_by_cell[cell] = medoid
         public_by_cell[cell] = public_id
         story_by_public_id[public_id] = story
@@ -706,9 +826,10 @@ def main() -> None:
                     bop_pairs[bop_key],
                 )
             )
-            human_pair_rows.append(
-                pair_annotation_template(comparison_id, public_a, public_b)
-            )
+            if comparison_id in HUMAN_PAIR_CALIBRATION_IDS:
+                human_pair_rows.append(
+                    pair_annotation_template(comparison_id, public_a, public_b)
+                )
 
     trajectories_path = phase5_dir / "trajectories.jsonl"
     private_path = phase5_dir / "trajectory_private_metadata.jsonl"
@@ -717,6 +838,7 @@ def main() -> None:
     metrics_path = phase5_dir / "pair_structural_metrics.csv"
     human_path = annotation_dir / "human_trajectory_annotations.jsonl"
     human_pairs_path = annotation_dir / "human_pairwise_annotations.jsonl"
+    annex_path = annotation_dir / "TRAJECTORIES_FOR_ANNOTATION.md"
     report_path = phase5_dir / "trajectory_corpus_report.json"
     write_jsonl(trajectories_path, stories)
     write_jsonl(private_path, private_rows)
@@ -729,6 +851,15 @@ def main() -> None:
     human_pair_status = preserve_or_create_template(
         human_pairs_path, human_pair_rows, "comparison_id"
     )
+    annex_path.parent.mkdir(parents=True, exist_ok=True)
+    annex_path.write_text(
+        render_human_annex(
+            stories,
+            {str(row["trajectory_id"]) for row in human_rows},
+            human_pair_rows,
+        ),
+        encoding="utf-8",
+    )
 
     outputs = [
         trajectories_path,
@@ -736,24 +867,32 @@ def main() -> None:
         pairs_path,
         pair_private_path,
         metrics_path,
+        annex_path,
     ]
     report = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "book_id": book_id,
         "phase": "5.1",
         "status": "complete",
         "trajectory_count": len(stories),
-        "calibration_count": sum(
-            row["split"] == "calibration" for row in private_rows
+        "human_calibration_trajectory_count": sum(
+            row["annotation_role"] == "human_calibration" for row in private_rows
         ),
-        "validation_count": sum(row["split"] == "validation" for row in private_rows),
+        "model_only_trajectory_count": sum(
+            row["annotation_role"] == "model_analysis" for row in private_rows
+        ),
         "comparison_count": len(pair_private_rows),
         "ordered_pair_count": len(pair_rows),
+        "human_calibration_pair_count": len(human_pair_rows),
         "transition_labels": TRANSITION_LABELS,
         "player_choice_kinds": sorted(PLAYER_CHOICE_KINDS),
-        "calibration_rule": (
+        "human_calibration_rule": (
             "neutral/Win plus one controlled pole per axis, alternating outcomes: "
             "cautious/Death, noble/Win, tactical/Death"
+        ),
+        "human_pair_calibration_rule": (
+            "one blinded pair per axis, reusing a human-calibrated trajectory: "
+            "C002, C003 and C006"
         ),
         "length_summary": {
             "minimum_steps": min(int(story["step_count"]) for story in stories),
@@ -794,8 +933,9 @@ def main() -> None:
 
     print(f"Blinded complete stories: {len(stories)}")
     print(
-        "Calibration/validation: "
-        f"{report['calibration_count']}/{report['validation_count']}"
+        "Human calibration/model-only stories: "
+        f"{report['human_calibration_trajectory_count']}/"
+        f"{report['model_only_trajectory_count']}"
     )
     print(f"Ordered pair documents: {len(pair_rows)} ({len(pair_private_rows)} pairs)")
     print(

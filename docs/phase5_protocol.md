@@ -1,6 +1,6 @@
 # Phase 5 — Protocole d'annotation des trajectoires complètes
 
-> **Statut au 26.08.2026 : protocole validé, étape 5.0 implémentée.** Cette phase reste
+> **Statut au 27.08.2026 : protocole validé, étapes 5.0 et 5.1 implémentées.** Cette phase reste
 > une preuve de concept courte. Elle privilégie quelques annotations bornées, vérifiables
 > et directement reliées aux profils et aux résultats BoP de la phase 4. Chaque cellule
 > profil–issue est représentée par un médoïde empirique de 2 000 trajectoires
@@ -28,9 +28,10 @@ Cette itération exclut :
 - les scores généraux de qualité littéraire, de tension ou de richesse ;
 - toute prétention à mesurer une réception réelle par les lecteurs.
 
-Les sorties du LLM sont des annotations conditionnées par un modèle et un codebook. Elles
-doivent être vérifiées contre des annotations humaines et ne constituent pas des mesures
-objectives au sens fort.
+Les sorties du LLM sont des annotations conditionnées par un modèle et un codebook. Un
+petit ensemble humain sert à calibrer l'instrument, mais il n'existe pas de jeu humain de
+validation dans cette preuve de concept. Les résultats ne constituent donc ni une mesure
+objective au sens fort, ni une performance de généralisation démontrée.
 
 ## 2. Corpus de trajectoires
 
@@ -301,6 +302,7 @@ compte pas les paragraphes communs et ne reçoit aucune distance structurelle.
     "morality": "A_more_selfish|similar|A_more_noble|unclear",
     "action": "A_more_physical|similar|A_more_tactical|unclear"
   },
+  "profile_shift_justification": "...",
   "evidence_story_a": ["..."],
   "evidence_story_b": ["..."]
 }
@@ -315,6 +317,40 @@ compte pas les paragraphes communs et ne reçoit aucune distance structurelle.
 
 Chaque paire est réévaluée dans l'ordre B/A. Un résultat qui ne s'inverse pas correctement
 est marqué `order_sensitive` et n'est pas utilisé comme comparaison stable.
+
+### 5.1 Règles d'annotation pairwise
+
+L'annotation porte sur l'**impression globale produite par les deux histoires complètes**.
+Elle ne cherche pas à refaire les distances structurelles de la phase 4. L'annotateur :
+
+1. lit A puis B entièrement avant de remplir la ligne ;
+2. ignore les profils générateurs, l'axe contrôlé, les poids BoP et les annotations
+   individuelles déjà produites ;
+3. évalue `narrative_distinctness` à partir du parcours, des situations rencontrées et de
+   la manière d'agir du protagoniste, sans compter manuellement les paragraphes communs ;
+4. renseigne les trois directions de `perceived_profile_shift`, même lorsqu'un seul axe
+   a été volontairement contrasté ;
+5. utilise `similar` lorsque les histoires fournissent assez de preuves mais ne montrent
+   pas de direction stable, et `unclear` lorsque les preuves sont insuffisantes ou non
+   comparables ;
+6. fonde les axes uniquement sur les décisions `Player choice` ou
+   `Player choice: escape from combat`, jamais sur un combat imposé, un tirage ou l'issue ;
+7. résume le contraste des trois axes dans `profile_shift_justification`, puis cite au
+   plus cinq références par histoire dans `evidence_story_a` et
+   `evidence_story_b`. Une référence de choix (`S012-C02`) étaye un déplacement de profil ;
+   une référence d'étape (`S012`) peut étayer une différence narrative globale.
+
+Les directions autorisées sont :
+
+| Axe | Valeurs autorisées |
+| :--- | :--- |
+| `risk` | `A_more_cautious`, `similar`, `A_more_reckless`, `unclear` |
+| `morality` | `A_more_selfish`, `similar`, `A_more_noble`, `unclear` |
+| `action` | `A_more_physical`, `similar`, `A_more_tactical`, `unclear` |
+
+Les preuves doivent concerner les histoires dans l'ordre indiqué par le canevas humain.
+L'inversion B/A est un contrôle automatisé appliqué à Qwen ; l'humain n'annote qu'un seul
+ordre par paire.
 
 ## 6. Mesures structurelles indépendantes
 
@@ -364,19 +400,42 @@ contain an unsupported dependency or an explicit contradiction.
 Use unclear or insufficient_evidence when the trajectory does not support a label.
 ```
 
-Quatre histoires humaines de calibration servent à corriger le codebook et les consignes,
-mais ne sont pas insérées comme longues démonstrations dans le prompt. Le prompt final est
-figé avant l'analyse du reste du corpus.
+Quatre histoires humaines et trois paires de calibration servent à corriger le codebook et
+les consignes, mais ne sont pas insérées comme longues démonstrations dans le prompt. Le
+prompt final est figé avant l'analyse du corpus complet.
 
-## 8. Validation humaine et stabilité de l'instrument
+## 8. Calibration humaine et stabilité de l'instrument
 
-Les 14 trajectoires médoïdes sont annotées humainement avant de consulter Qwen :
+Cette preuve de concept ne comporte pas de jeu humain de validation séparé. Avant de
+consulter Qwen, l'annotation humaine est limitée à `T0001`, `T0004`, `T0009` et
+`T0014`. Ces cellules sont choisies avant lecture afin de couvrir le neutre, un pôle de
+chacun des trois axes et les deux issues. La correspondance exacte avec les profils et les
+issues reste dans les métadonnées privées pendant l'annotation. Les dix autres
+trajectoires sont analysées par Qwen mais ne sont pas présentées comme des données de
+validation humaine.
 
-- quatre histoires servent à la calibration ;
-- dix histoires restent un petit ensemble de validation ;
+L'annotation humaine pairwise est limitée à une paire par axe :
 
-Les six comparaisons, trois axes par deux issues, sont également annotées humainement. Les
-preuves citées peuvent ainsi être contrôlées sur la totalité du corpus retenu.
+| Comparaison | Histoires dans le canevas |
+| :--- | :--- |
+| `C002` | A = `T0004`, B = `T0006` |
+| `C003` | A = `T0007`, B = `T0009` |
+| `C006` | A = `T0012`, B = `T0014` |
+
+Ce plan exige donc quatre annotations individuelles, trois annotations pairwise et la
+lecture de sept histoires distinctes. La sélection couvre exactement un contraste de
+chaque axe, à issue identique, et réutilise une histoire individuellement annotée dans
+chaque paire. L'axe et l'issue associés à chaque identifiant ne figurent ni dans le guide
+ni dans l'annexe aveugle utilisés pendant l'annotation.
+
+L'absence de validation séparée est acceptable ici parce que l'objectif est une
+démonstration méthodologique exploratoire et non l'estimation d'une performance
+prédictive. Elle est compensée partiellement, mais non annulée, par un codebook générique,
+un prompt entièrement lisible et archivé, l'absence de règles propres aux personnages ou
+paragraphes de LW01, et le gel du prompt avant le run complet. La lisibilité rend le
+surajustement auditable ; elle ne démontre pas la transférabilité à LW02. Les concordances
+sur le petit ensemble humain sont donc rapportées comme **concordances de calibration**,
+jamais comme accuracy ou validation hors échantillon.
 
 Le run primaire couvre les 14 histoires. Une variante prédéfinie du prompt, qui conserve
 exactement les mêmes définitions et ne change que leur ordre de présentation, est appliquée
@@ -411,13 +470,16 @@ confiance déclarée par le modèle n'est pas utilisée comme mesure de fiabilit
 
 ### 9.3 Contrôles de qualité
 
-- accord exact Qwen–humain sur les dix histoires de validation ;
-- accord sur les six comparaisons humaines ;
+- concordance descriptive Qwen–humain sur les quatre histoires de calibration ;
+- concordance descriptive sur les trois comparaisons pairwise de calibration ;
 - taux de `unclear` et `insufficient_evidence` ;
 - validité et pertinence des références citées ;
 - stabilité entre les deux formulations sur les 14 histoires ;
 - stabilité après inversion A/B ;
 - taux de sorties JSON valides et non tronquées.
+
+La transférabilité à un autre livre n'est pas un contrôle réalisé dans cette itération ;
+elle devra faire l'objet d'une réplication ultérieure avec le prompt figé.
 
 ## 10. Sorties attendues
 
@@ -432,10 +494,11 @@ Les noms de 5.0 et 5.1 sont désormais fixés ; les suivants restent indicatifs 
 | `trajectory_pairs.jsonl` | Six comparaisons extrême–extrême matérialisées dans les ordres A/B et B/A. |
 | `pair_private_metadata.jsonl` | Axe, issue et profils générateurs des six paires, conservés localement. |
 | `medoid_selection_report.json` | Conditionnement, tirages, distance, règles de sélection, empreintes et MAP diagnostiques. |
-| `trajectory_corpus_report.json` | Sources, empreintes, tailles du corpus, répartition calibration–validation et estimation des longueurs. |
+| `trajectory_corpus_report.json` | Sources, empreintes, tailles du corpus, sélection de calibration humaine et estimation des longueurs. |
 | `trajectory_annotations.jsonl` | Sorties individuelles brutes et normalisées de Qwen. |
 | `pairwise_annotations.jsonl` | Comparaisons A/B et B/A. |
-| `human_annotations.jsonl` | Calibration et validation humaines, séparées des sorties du modèle. |
+| `human_trajectory_annotations.jsonl` | Quatre annotations humaines individuelles de calibration, séparées des sorties du modèle. |
+| `human_pairwise_annotations.jsonl` | Trois annotations humaines pairwise de calibration, séparées des sorties du modèle. |
 | `pair_structural_metrics.csv` | Chevauchements, distances séquentielles et divergences BoP. |
 | `phase5_summary.csv` | Indicateurs principaux, complémentaires et contrôles. |
 | `phase5_manifest.json` | Modèle, révision, prompt, paramètres, matériel, durées et empreintes. |
@@ -447,7 +510,7 @@ La phase 5 doit tenir sur une seule diapositive :
 1. le plan `7 profils × 2 issues = 14 médoïdes conditionnels` ;
 2. la manifestation des profils sur ces histoires centrales et la récupération des axes ;
 3. une confrontation courte entre distance structurelle et différence narrative ;
-4. une ligne donnant l'accord humain et la stabilité.
+4. une ligne donnant la concordance de calibration et la stabilité A/B–B/A.
 
 `causal_continuity` et `profile_coherence` sont calculés mais ne seront montrés que si leur
 résultat est à la fois stable et utile. Aucun exemple n'est choisi après coup sans que sa

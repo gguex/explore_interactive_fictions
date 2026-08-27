@@ -66,10 +66,11 @@ La phase 5 confronte donc les structures mesurées au texte effectivement lu le 
 trajectoires. Elle complète la phase 4 ; elle ne la valide pas rétroactivement et ne
 remplace pas la lecture rapprochée.
 
-Un sous-ensemble contrôlé des trajectoires sera lu humainement. Le bénéfice du LLM n'est
-pas de supprimer cette lecture : il est de rendre la grille explicite, répétable et
-réutilisable sur un corpus un peu plus large, tout en donnant accès aux accords et
-désaccords entre plusieurs annotations.
+Un petit sous-ensemble de calibration sera lu humainement. Le bénéfice du LLM n'est pas
+de supprimer cette lecture : il est de rendre la grille explicite, répétable et
+réutilisable sur un corpus un peu plus large. Cette itération ne comporte toutefois pas
+de jeu humain de validation et ne permettra donc pas d'estimer une généralisation hors
+échantillon.
 
 ## 4. Statut épistémologique des sorties
 
@@ -103,14 +104,24 @@ décisions centrales sont :
 - grille individuelle limitée à `risk`, `morality`, `action`, `causal_continuity` et
   `profile_coherence` ;
 - six comparaisons des profils extrêmes à issue identique, évaluées dans les deux ordres ;
-- quatorze histoires et six paires préannotées humainement ;
+- quatre histoires (`T0001`, `T0004`, `T0009`, `T0014`) et trois paires (`C002`,
+  `C003`, `C006`) annotées humainement pour calibrer l'instrument ;
+- aucun jeu humain de validation séparé dans cette preuve de concept ;
 - mesures structurelles calculées séparément, puis confrontées aux annotations globales ;
 - une seule diapositive éventuelle, centrée sur les résultats les plus stables.
 
 Le prompt est traité comme un instrument de mesure : définitions, abstention, preuves et
 contre-exemples courts sont fixés avant le run principal. Aucune trajectoire complète déjà
-annotée n'est placée dans le prompt. Une variante prédéfinie est testée sur le sous-ensemble
-humain pour estimer la sensibilité à la formulation.
+annotée n'est placée dans le prompt. Une variante prédéfinie estime la sensibilité à la
+formulation et l'inversion A/B contrôle le biais de position.
+
+L'absence de validation séparée est un compromis assumé pour une démonstration courte. Le
+prompt reste entièrement lisible, archivé et générique : aucune règle ne doit mentionner
+un personnage, un événement ou un paragraphe propre à LW01, et le prompt est gelé avant
+le run complet. Cette auditabilité limite le risque de surajustement sans le supprimer.
+Les comparaisons Qwen–humain sont appelées **concordances de calibration**, jamais accuracy
+ou validation. La transférabilité devra être testée ultérieurement sur un autre livre avec
+le prompt figé.
 
 ## 6. Journal de reproductibilité à conserver
 
@@ -139,13 +150,14 @@ La publication des réussites seules produirait une fausse impression de stabili
 | « Le score mesure la cohérence. » | « Le score est une observation du modèle sur un construit opérationnalisé par la grille. » |
 | « Le LLM remplace la lecture humaine. » | « Le LLM signale et annote ; la chercheuse ou le chercheur vérifie et interprète. » |
 | « Le LLM confirme les indices BoP. » | « Les lectures de trajectoires sont mises en relation avec les résultats structurels de la phase 4. » |
-| « Les résultats sont objectifs. » | « Les résultats sont situés, documentés, contrôlés humainement et soumis à des tests de stabilité de l'instrument. » |
+| « Les résultats sont objectifs. » | « Les résultats sont situés, documentés, calibrés sur un petit sous-ensemble humain et soumis à des tests de stabilité de l'instrument. » |
+| « Le prompt lisible empêche l'overfitting. » | « Un prompt générique et lisible rend le surajustement auditable ; sa transférabilité reste à tester. » |
 
 Phrase courte proposée pour la présentation :
 
 > We use a locally hosted open-weight model not as an autonomous literary critic, but as
-> a reproducible annotation instrument: every claim must cite the relevant paragraphs and
-> is checked against human reading.
+> a reproducible annotation instrument: every claim must cite the relevant paragraphs,
+> and a small human subset is used to calibrate the protocol.
 
 Complément oral utile :
 
@@ -164,10 +176,10 @@ exploratoires.
 
 Cette modestie n'affaiblit pas la recherche. Elle en constitue l'apport : montrer comment
 un LLM peut être inséré dans une chaîne de preuve où ses décisions sont bornées,
-référencées, contestables et comparées aux mesures structurelles comme à la lecture
-humaine. Les désaccords et les échecs ne sont pas seulement des défauts techniques ; ils
-peuvent révéler l'instabilité d'une catégorie, une ambiguïté du texte ou un biais de
-l'instrument.
+référencées, contestables et comparées aux mesures structurelles comme à une calibration
+humaine limitée. Les désaccords et les échecs ne sont pas seulement des défauts
+techniques ; ils peuvent révéler l'instabilité d'une catégorie, une ambiguïté du texte ou
+un biais de l'instrument.
 
 ## 9. Sources et lectures mobilisées
 

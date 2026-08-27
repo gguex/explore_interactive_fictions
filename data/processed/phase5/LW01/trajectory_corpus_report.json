@@ -1,20 +1,22 @@
 {
   "book_id": "LW01",
-  "calibration_count": 4,
-  "calibration_rule": "neutral/Win plus one controlled pole per axis, alternating outcomes: cautious/Death, noble/Win, tactical/Death",
   "comparison_count": 6,
   "editable_human_templates": {
     "data/for_trajectory_annotation/LW01/human_pairwise_annotations.jsonl": {
-      "rows": 6,
-      "sha256_at_report_time": "f4938d155f074884479d415c54a5b767e6dcafe2655e86434e9df801a9464fd8",
+      "rows": 3,
+      "sha256_at_report_time": "186fea05dd8656020c674200c1fba8ceea92240951afcb4d37ef203341db05a0",
       "status": "preserved"
     },
     "data/for_trajectory_annotation/LW01/human_trajectory_annotations.jsonl": {
-      "rows": 14,
-      "sha256_at_report_time": "caec2092b190a1c20b258675fe5c71fc95d405bc71f2ee4dd5714398766a29ff",
+      "rows": 4,
+      "sha256_at_report_time": "9c19cf165d3048ad53089323169d3961e4f0f02e3933de4d30ccc3efd6848354",
       "status": "preserved"
     }
   },
+  "human_calibration_pair_count": 3,
+  "human_calibration_rule": "neutral/Win plus one controlled pole per axis, alternating outcomes: cautious/Death, noble/Win, tactical/Death",
+  "human_calibration_trajectory_count": 4,
+  "human_pair_calibration_rule": "one blinded pair per axis, reusing a human-calibrated trajectory: C002, C003 and C006",
   "inputs": {
     "data/processed/bop/LW01/profile_pair_metrics.csv": "1a5d48961478c953aadfd776251b4e9740a3323f94546ef1912993d56c1d9547",
     "data/processed/graph/LW01/cautious_neutral_neutral/compiled_edges.csv": "97bb7409b4df3fc3bb05a2d0d7536e09544fecfa058e452a39739417a17b41ec",
@@ -36,8 +38,12 @@
     "minimum_words": 2005,
     "token_estimate_warning": "Character-count/4 is only a planning estimate; 5.2 must use the exact Qwen tokenizer after adding the prompt."
   },
+  "model_only_trajectory_count": 10,
   "ordered_pair_count": 12,
   "outputs": {
+    "data/for_trajectory_annotation/LW01/TRAJECTORIES_FOR_ANNOTATION.md": {
+      "sha256": "6c14dec95ba2118e49b7342d3ec8c107cce0d13502f4fec2a6d760c7cd1ba90a"
+    },
     "data/processed/phase5/LW01/pair_private_metadata.jsonl": {
       "sha256": "e27bb079b1bc4254ce7c73fc2d647b3e8d385c2cf1d5d27ffa6d0945cf7f79ea"
     },
@@ -51,7 +57,7 @@
       "sha256": "08c870268a7708d876b14a51d9b8f7e51b66d9e727e12bcdd063f73799e0777b"
     },
     "data/processed/phase5/LW01/trajectory_private_metadata.jsonl": {
-      "sha256": "56dd68387db5a219483b12c761d598234b01e66242d07c481d0b1aaa909a4d22"
+      "sha256": "1b71f9c677ee4a19383254777f022b9fb0c906c90dc6005de356817f16d303e7"
     }
   },
   "phase": "5.1",
@@ -59,7 +65,7 @@
     "escape",
     "profile_choice"
   ],
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "complete",
   "trajectory_count": 14,
   "transition_labels": {
@@ -71,6 +77,5 @@
     "profile_choice": "Player choice",
     "random": "Random or mechanical resolution",
     "state_condition": "Inventory or state-dependent route"
-  },
-  "validation_count": 10
+  }
 }
