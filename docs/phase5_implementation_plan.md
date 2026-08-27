@@ -75,8 +75,7 @@ pas, puis vérifie leurs identifiants sans jamais écraser des annotations déj�
 Après examen du pilote, le codebook et les prompts sont figés et empreintés. Le paquet
 `final` contient alors :
 
-- 14 annotations individuelles primaires ;
-- 14 annotations individuelles avec la variante prédéfinie du prompt ;
+- 14 annotations individuelles ;
 - six comparaisons A/B ;
 - six comparaisons B/A.
 
@@ -94,12 +93,10 @@ data/for_trajectory_annotation/LW01/server_bundle/<RUN_ID>/
 ├── run_phase5.py
 ├── schemas.py
 ├── prompts/
-│   ├── individual_primary.txt
-│   ├── individual_variant.txt
+│   ├── individual.txt
 │   └── pairwise.txt
 ├── inputs/
-│   ├── individual_primary.jsonl
-│   ├── individual_variant.jsonl
+│   ├── individual.jsonl
 │   ├── pairwise_ab.jsonl
 │   └── pairwise_ba.jsonl
 └── config/
@@ -143,8 +140,7 @@ Le dossier complet suivant revient sur la machine locale :
 
 ```text
 outputs/<RUN_ID>/
-├── individual_primary.jsonl
-├── individual_variant.jsonl
+├── individual.jsonl
 ├── pairwise_ab.jsonl
 ├── pairwise_ba.jsonl
 ├── quarantine.jsonl

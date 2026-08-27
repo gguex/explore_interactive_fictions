@@ -471,15 +471,34 @@ Ces catégories demanderaient chacune un construit, un codebook et une validatio
 Elles ne doivent pas être ajoutées à une grille unique sous prétexte qu'un LLM peut
 techniquement les produire.
 
-### 13.5 Modèles et tests de robustesse supplémentaires
+### 13.5 Jeu de validation et sensibilité au prompt
 
-Qwen3.6-27B est le seul modèle fixé pour l'itération courante. Un article plus développé
-pourrait comparer :
+Le second prompt individuel, initialement envisagé dans le pilote, est reporté à une
+extension où il pourra être interprété avec un véritable jeu humain de validation. Tester
+plusieurs formulations uniquement sur les exemples ayant servi à calibrer le codebook ne
+permettrait pas de distinguer robustesse et surajustement.
+
+Le protocole futur devrait :
+
+1. séparer avant toute inférence un ensemble de calibration et un ensemble humain de
+   validation, idéalement issu d'un autre livre ;
+2. ajuster le codebook et le prompt principal uniquement sur la calibration ;
+3. définir à l'avance une ou plusieurs formulations théoriquement équivalentes, sans
+   consulter les réponses du jeu de validation ;
+4. figer les prompts, le modèle, les paramètres et les schémas ;
+5. appliquer toutes les formulations au même jeu de validation ;
+6. comparer les labels, les abstentions et la validité des preuves, puis rapporter
+   séparément concordance humaine hors calibration et sensibilité à la formulation.
+
+Ce dispositif permettrait de parler prudemment de robustesse du prompt et de
+transférabilité. Il n'appartient pas à la preuve de concept actuelle.
+
+Qwen3.6-27B reste le seul modèle fixé pour l'itération courante. Un article plus développé
+pourrait également comparer :
 
 - une autre famille locale à poids ouverts ;
 - plusieurs tailles ou quantifications du même modèle ;
 - thinking activé et désactivé ;
-- plusieurs formulations théoriquement équivalentes du prompt ;
 - un modèle frontière utilisé seulement comme point de comparaison.
 
 Ces comparaisons devraient être évaluées sur les annotations humaines et la stabilité des

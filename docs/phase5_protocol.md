@@ -437,10 +437,9 @@ surajustement auditable ; elle ne démontre pas la transférabilité à LW02. Le
 sur le petit ensemble humain sont donc rapportées comme **concordances de calibration**,
 jamais comme accuracy ou validation hors échantillon.
 
-Le run primaire couvre les 14 histoires. Une variante prédéfinie du prompt, qui conserve
-exactement les mêmes définitions et ne change que leur ordre de présentation, est appliquée
-aux 14 histoires pour estimer la sensibilité à la formulation. Les six paires sont
-toutes évaluées dans les deux ordres.
+Le run individuel couvre une seule fois les 14 histoires avec le prompt figé. Les six
+paires sont toutes évaluées dans les deux ordres afin de contrôler le biais de position,
+qui concerne directement la tâche comparative.
 
 Les résultats sont rapportés en effectifs bruts lorsque les sous-ensembles sont petits. La
 confiance déclarée par le modèle n'est pas utilisée comme mesure de fiabilité.
@@ -474,7 +473,6 @@ confiance déclarée par le modèle n'est pas utilisée comme mesure de fiabilit
 - concordance descriptive sur les trois comparaisons pairwise de calibration ;
 - taux de `unclear` et `insufficient_evidence` ;
 - validité et pertinence des références citées ;
-- stabilité entre les deux formulations sur les 14 histoires ;
 - stabilité après inversion A/B ;
 - taux de sorties JSON valides et non tronquées.
 

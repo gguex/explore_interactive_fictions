@@ -112,8 +112,8 @@ décisions centrales sont :
 
 Le prompt est traité comme un instrument de mesure : définitions, abstention, preuves et
 contre-exemples courts sont fixés avant le run principal. Aucune trajectoire complète déjà
-annotée n'est placée dans le prompt. Une variante prédéfinie estime la sensibilité à la
-formulation et l'inversion A/B contrôle le biais de position.
+annotée n'est placée dans le prompt. L'inversion A/B contrôle le biais de position propre
+aux comparaisons. Le pilote ne multiplie pas les formulations du prompt individuel.
 
 L'absence de validation séparée est un compromis assumé pour une démonstration courte. Le
 prompt reste entièrement lisible, archivé et générique : aucune règle ne doit mentionner

@@ -514,6 +514,12 @@ figé avant le run complet et les comparaisons sont inversées pour détecter le
 position. Les concordances humaines restent des résultats de calibration et ne mesurent
 pas une généralisation hors échantillon.
 
+Une extension ultérieure associera plusieurs formulations équivalentes du prompt à un
+véritable jeu humain tenu à l'écart de la calibration. Ces deux contrôles sont reportés
+ensemble : tester seulement un second prompt sur le corpus de calibration ne suffirait pas
+à établir sa robustesse. Le protocole futur est consigné dans
+`docs/future_improvements.md`.
+
 Les résultats principaux seront la manifestation des trois axes sur ces chemins centraux,
 la récupération des contrastes, la fuite entre axes et la confrontation descriptive
 entre différence structurelle et `narrative_distinctness`. Ils seront rapportés comme des

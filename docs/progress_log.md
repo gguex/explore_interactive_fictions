@@ -544,9 +544,12 @@
 - Le prompt générique et lisible sera gelé avant le run complet. Cette auditabilité limite
   le surajustement sans démontrer la transférabilité ; les comparaisons Qwen–humain seront
   rapportées comme concordances de calibration, jamais comme accuracy.
+- Suppression du second prompt individuel dans le protocole actif. Une étude de sensibilité
+  à plusieurs formulations n'aura de valeur qu'avec un jeu humain séparé de la calibration
+  et est reportée aux extensions futures.
 
 ## Prochaine étape
 
-Remplir les quatre annotations individuelles et les trois annotations pairwise de
-calibration, puis implémenter `5.2` pour construire le paquet aveugle destiné au cluster
-selon `docs/phase5_protocol.md`.
+Les quatre annotations individuelles et les trois annotations pairwise de calibration
+sont remplies et validées. Implémenter `5.2` avec un seul prompt individuel pour construire
+le paquet aveugle destiné au cluster selon `docs/phase5_protocol.md`.
