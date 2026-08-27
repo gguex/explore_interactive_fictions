@@ -1,0 +1,92 @@
+{
+  "book_id": "LW01",
+  "context_planning": {
+    "inputs_may_be_truncated": false,
+    "maximum_estimated_input_tokens": 16072,
+    "method": "ceil((prompt characters + story characters + 500) / 4)",
+    "runtime_exact_token_check_required": true
+  },
+  "created_at_utc": "2026-08-27T14:09:02.215189+00:00",
+  "files": {
+    "RUN_INSTRUCTIONS.md": {
+      "bytes": 740,
+      "sha256": "4e885a981570ff56baa3f6897a2835da318e614b7363616727c5d48ab3455ed1"
+    },
+    "config/inference.json": {
+      "bytes": 505,
+      "sha256": "30f4b22e6e2f38e1135f89bd4ef38a83178f299c76e621e906977826c07add79"
+    },
+    "inputs/individual.jsonl": {
+      "bytes": 104688,
+      "sha256": "b5119369e8050856fcf67ecbc6f8860d61a00bf98440d6421b0c4d365ddba5ce"
+    },
+    "inputs/pairwise_ab.jsonl": {
+      "bytes": 140896,
+      "sha256": "67b1a55b451d34726924c16502696f44c2a3448358695962c16269d51dfd5c4e"
+    },
+    "inputs/pairwise_ba.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "prompts/individual.txt": {
+      "bytes": 4851,
+      "sha256": "dbc914d8631deaacbed19dd6ff52422a2967c80b8bfd2f26736f0923f5903ee8"
+    },
+    "prompts/pairwise.txt": {
+      "bytes": 3420,
+      "sha256": "eacab79035d01fa00341250384e50513f2df7c76033ab57f40dbd0493f949572"
+    },
+    "run_phase5.py": {
+      "bytes": 30217,
+      "sha256": "32ec6c6d43bf379d939a5372857bb96316f4e8207ff4efcac4f9b20ae21391e3"
+    },
+    "schemas.py": {
+      "bytes": 15848,
+      "sha256": "8e277569aa5675244fdc8c7a96740ab319e6821a0838f0901c5f789177347573"
+    },
+    "schemas/individual.schema.json": {
+      "bytes": 6475,
+      "sha256": "f9c98e9bb9b182fa78f39b49c4cc55390c1bbd9d4c78645e22210b63a466d3f3"
+    },
+    "schemas/pairwise.schema.json": {
+      "bytes": 2494,
+      "sha256": "0d4f4368167312da69f34acf3f468784dd64fb9c9987724bbf4617905d62f007"
+    }
+  },
+  "job_counts": {
+    "individual": 4,
+    "pairwise_ab": 3,
+    "pairwise_ba": 0,
+    "total": 7
+  },
+  "phase": "5.2",
+  "privacy": {
+    "bop_metrics_included": false,
+    "human_annotations_included": false,
+    "opaque_identifiers_only": true,
+    "phase1_semantic_labels_included": false,
+    "private_metadata_included": false
+  },
+  "run_id": "LW01_phase5_pilot_p02",
+  "schema_version": "1.0",
+  "selection": {
+    "base_comparison_ids": [
+      "C002",
+      "C003",
+      "C006"
+    ],
+    "pilot_pair_order": "AB only",
+    "trajectory_ids": [
+      "T0001",
+      "T0004",
+      "T0009",
+      "T0014"
+    ]
+  },
+  "source_artifacts": {
+    "data/processed/phase5/LW01/trajectories.jsonl": "9360e5b50a9b7196e4c35b87c846666d526785275d5037e69d3fc658262dc09f",
+    "data/processed/phase5/LW01/trajectory_pairs.jsonl": "08c870268a7708d876b14a51d9b8f7e51b66d9e727e12bcdd063f73799e0777b"
+  },
+  "stage": "pilot",
+  "status": "ready"
+}

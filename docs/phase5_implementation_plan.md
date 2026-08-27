@@ -1,6 +1,6 @@
 # Phase 5 — Découpage des scripts et échanges avec le cluster
 
-> **Statut au 27.08.2026 : étapes 5.0–5.2 implémentées et validées ; paquet pilote aveugle prêt pour le cluster ; étapes 5.3–5.5 et comparateur à créer.**
+> **Statut au 27.08.2026 : étapes 5.0–5.3 et calibration P01–P03 validées ; instrument P03 gelé ; paquet final de 26 tâches à produire avant 5.4–5.5.**
 > Le protocole scientifique reste défini dans `docs/phase5_protocol.md`. Cette note décrit
 > les étapes techniques et les fichiers qui circuleront entre la machine locale et le
 > serveur universitaire.
@@ -40,8 +40,8 @@ opaques, les prompts, les schémas et les paramètres nécessaires à l'inféren
 | `scripts/5.0_select_medoid_trajectories.py` — **fait** | Tirer 2 000 trajectoires conditionnelles par cellule avec la transformation de Doob et sélectionner le chemin observé minimisant la distance LCS moyenne. | Matrices, multiarêtes compilées, profils et probabilités d'absorption. | `medoid_trajectories.jsonl`, `conditional_path_counts.jsonl` et `medoid_selection_report.json`. |
 | `scripts/5.1_build_trajectory_corpus.py` — **fait** | Reconstituer chaque histoire complète avec paragraphes, choix disponibles, choix suivi et type de transition ; former les six paires dans les deux ordres. | Médoïdes, nœuds, arêtes originales et compilées, métriques BoP. | Corpus aveugle, métadonnées privées, paires A/B et B/A, gabarits humains, distances structurelles et rapport. |
 | `scripts/5.2_build_phase5_bundle.py` — **fait** | Produire un paquet autonome sans fuite des profils ou résultats BoP. | Corpus, prompts versionnés, schémas et configuration du modèle. | Paquet `pilot` ou `final` avec manifeste et empreintes. |
-| `scripts/5.3_import_phase5_annotations.py` | Importer les sorties revenues du cluster, contrôler les schémas et normaliser les résultats valides. | Dossier de sortie du cluster et manifeste du paquet. | Annotations canoniques, quarantaine et rapport de validation. |
-| `scripts/utils/compare_phase5_calibration.py` | Comparer rapidement les annotations humaines et Qwen du pilote, sans modifier ni arbitrer les annotations. | Sorties normalisées du pilote et deux fichiers humains. | `calibration_diff.csv`, `calibration_diff.md` et `calibration_summary.json`. |
+| `scripts/5.3_import_phase5_annotations.py` — **fait** | Importer les sorties revenues du cluster, contrôler les schémas et normaliser les résultats valides. | Dossier de sortie du cluster et manifeste du paquet. | Annotations canoniques et rapport de validation. |
+| `scripts/utils/compare_phase5_calibration.py` — **fait** | Comparer rapidement les annotations humaines et Qwen du pilote, sans modifier ni arbitrer les annotations. | Sorties normalisées du pilote et deux fichiers humains. | `calibration_diff.csv`, `calibration_diff.md` et `calibration_summary.json`. |
 | `scripts/5.4_compute_phase5_results.py` | Réunir annotations Qwen, métadonnées cachées, annotations humaines et distances structurelles ; calculer les indicateurs. | Sorties 5.0–5.3 et fichiers humains. | Tables individuelles, pairwise, qualité et synthèse. |
 | `scripts/5.5_build_phase5_presentation.py` | Extraire uniquement les résultats stables et produire les supports présentables. | Tables canoniques de 5.4. | Figures PNG/SVG, tableau de chiffres clés et manifeste. |
 
@@ -52,8 +52,8 @@ calcul. Les validateurs indépendants suivent les conventions existantes :
 scripts/tests/test_5_0_select_medoid_trajectories.py
 scripts/tests/test_5_1_build_trajectory_corpus.py  # fait
 scripts/tests/test_5_2_build_phase5_bundle.py      # fait
-scripts/tests/test_5_3_import_phase5_annotations.py
-scripts/tests/test_compare_phase5_calibration.py
+scripts/tests/test_5_3_import_phase5_annotations.py  # fait
+scripts/tests/test_compare_phase5_calibration.py     # fait
 scripts/tests/test_5_4_compute_phase5_results.py
 scripts/tests/test_5_5_build_phase5_presentation.py
 ```
@@ -175,7 +175,7 @@ sont jamais supprimées ni remplacées silencieusement.
 Le paquet canonique actuel est :
 
 ```text
-data/for_trajectory_annotation/LW01/server_bundle/LW01_phase5_pilot_v2/
+data/for_trajectory_annotation/LW01/server_bundle/LW01_phase5_pilot_p03/
 ```
 
 Il contient quatre tâches individuelles (`T0001`, `T0004`, `T0009`, `T0014`), trois
@@ -190,6 +190,45 @@ JSON Schema n'est pas prise en charge par le backend de sorties structurées de 
 Elle a été retirée uniquement du schéma de génération ; le validateur Python conserve le
 contrôle d'unicité après génération. `pilot_v1` est gardé comme artefact historique mais ne
 doit plus être exécuté.
+
+Le run `pilot_v2` est terminé sur un H100 avec Qwen révision
+`6a9e13bd6fc8f0983b9b99948120bc37f49c13e9`, vLLM 0.28.0 et zéro quarantaine. Les quatre
+annotations individuelles et trois comparaisons A/B ont été importées sous
+`data/processed/phase5/LW01/annotations/LW01_phase5_pilot_v2/`.
+
+La calibration compare 44 champs : 31 concordances, 11 désaccords et deux abstentions
+humaines. Elle détecte en plus 14 citations Qwen de transitions exclues comme preuves de
+profil — Kai, transitions forcées, résolutions aléatoires ou combats — contre zéro dans
+les annotations humaines. Le prompt ne doit donc pas encore être gelé ni le paquet final
+produit. Le rapport complet est dans `results/phase5/LW01/calibration/`.
+Les essais successifs sont consignés dans `prompt_iteration_log.csv` et sa version
+présentable `prompt_iteration_log.md`. Chaque ligne fixe le run, les empreintes des
+prompts, les problèmes observés, la modification générique proposée et la décision.
+
+Le paquet `LW01_phase5_pilot_p02` a conservé exactement les sept tâches, les paramètres
+et la révision Qwen de P01. Chaque histoire a reçu une liste
+`eligible_profile_choice_refs`, dérivée uniquement des transitions `Player choice` et
+`Player choice: escape from combat`. Le prompt interdit toute autre preuve pour les
+profils et leur cohérence, tandis que le runner applique la même règle comme contrôle
+bloquant. Les seuils `clear` et `coherent` sont aussi formulés plus conservativement.
+
+P02 produit cinq sorties valides et en met deux en quarantaine : `T0001` et `C003_AB`
+citent tous deux la même résolution de combat inadmissible. Sur les cinq sorties valides,
+26 champs sur 32 concordent avec l'annotation humaine, contre 25 sur 32 pour les mêmes cas
+avec P01 ; ces nombres servent à calibrer le prompt et ne constituent pas une accuracy.
+Le paquet P03 applique cette séparation uniquement
+dans la projection destinée au modèle : `[AVAILABLE CHOICES]`, `[CHOSEN ACTION]` et les
+références `Sxxx-Cxx` sont réservés aux décisions admissibles ; les autres étapes montrent
+un marqueur de transition résolue et son texte sans référence de choix. Le corpus 5.1
+reste inchangé afin de préserver les empreintes d'audit de P01 et P02. Les prompts,
+l'allow-list, le modèle, les paramètres et les schémas de sortie restent identiques.
+
+P03 produit sept sorties valides, aucune quarantaine et aucune preuve inadmissible. La
+comparaison descriptive compte 32 concordances, 10 désaccords et deux abstentions humaines
+sur 44 champs ; les désaccords restants sont des lectures textuelles concurrentes, pas une
+défaillance structurelle du protocole. Les critères préenregistrés sont atteints. Pour
+éviter de calibrer davantage sur seulement quatre histoires humaines, l'instrument P03
+est gelé avant le run complet de 26 tâches.
 
 Avant transfert, le paquet se vérifie localement avec :
 
@@ -281,8 +320,9 @@ Le pipeline s'arrête notamment si :
 3. **Fait :** remplir et valider les quatre annotations individuelles et les trois
    comparaisons humaines de calibration.
 4. **Fait :** créer l'exécuteur du cluster et `5.2`, puis produire le paquet `pilot`.
-5. Importer le pilote avec `5.3`, exécuter le comparateur de calibration et examiner les
-   désaccords dans le texte.
+5. **Fait :** importer le pilote avec `5.3` et exécuter le comparateur de calibration.
+   **À faire :** examiner les désaccords et corriger génériquement l'admissibilité des
+   preuves avant un nouveau pilote.
 6. Figer les prompts après le pilote et produire le paquet `final` avec `5.2`.
 7. Lancer le run final et l'importer avec `5.3`.
 8. Implémenter `5.4` seulement lorsque toutes les annotations sont valides.

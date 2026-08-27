@@ -487,9 +487,19 @@ nécessaires à ce plan contrôlé.
 Les étapes 5.0 à 5.2 sont terminées pour LW01 : les tirages et les 14 médoïdes ont été
 calculés, puis leurs histoires complètes ont été reconstruites sous identifiants opaques.
 Six comparaisons extrême–extrême existent dans les deux ordres, avec leurs distances
-structurelles calculées séparément. Les prompts et schémas contraints sont fixés et un
-paquet pilote aveugle de quatre histoires et trois comparaisons A/B est prêt pour le
-cluster. Ces trois étapes sont validées indépendamment.
+structurelles calculées séparément. Le paquet pilote aveugle de quatre histoires et trois
+comparaisons A/B a été exécuté, importé et comparé aux annotations humaines. Les étapes
+5.0 à 5.3 sont validées indépendamment, mais le prompt n'est pas encore gelé : Qwen a cité
+14 transitions mécaniques exclues comme preuves de profil. P02 a ramené ces violations à
+deux, mais `T0001` et `C003_AB` ont été mis en quarantaine pour la même citation d'une
+résolution de combat. Sur les cinq sorties valides, la concordance descriptive passe de
+25 à 26 champs sur 32 par rapport aux mêmes sorties P01 ; il ne s'agit pas d'une accuracy.
+P03 rend la distinction entre choix et transitions automatiques explicite dans la
+projection fournie au modèle, sans règle propre à LW01 et sans modifier le corpus canonique
+utilisé pour auditer P01/P02. Il produit sept sorties valides et aucune preuve inadmissible.
+Les 32 concordances, 10 désaccords et deux abstentions humaines servent uniquement à la
+calibration. Les différences restantes étant textuellement traçables, l'instrument P03 est
+gelé afin d'éviter un ajustement supplémentaire aux quatre histoires humaines.
 
 #### Méthodes potentielles
 
@@ -551,12 +561,11 @@ générales des adaptations propres à LW01.
 
 ## 8. Questions restant à traiter dans la phase 5
 
-Le corpus, les grilles, Qwen3.6-27B et les contrôles sont fixés ; la calibration humaine
-est remplie, les médoïdes et leurs histoires sont construits, et le paquet pilote aveugle
-est prêt. Il reste à l'exécuter sur le cluster, vérifier la longueur exacte avec le
-tokenizer Qwen, importer et confronter les sorties aux annotations humaines, puis geler le
-prompt avant le run complet. La stabilité des sorties et l'utilité des deux champs
-complémentaires seront examinées avant de choisir la diapositive.
+Le corpus, les grilles et Qwen3.6-27B sont fixés ; P01 à P03 sont exécutés et l'instrument
+P03 est gelé après sept sorties valides et zéro violation d'admissibilité. Il reste à
+produire et exécuter le paquet complet. La stabilité
+A/B–B/A et l'utilité des deux champs complémentaires viendront ensuite, avant le choix de
+la diapositive.
 
 ## 9. Documentation active
 

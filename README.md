@@ -61,10 +61,14 @@ results/         cluster outputs and calibration history
 4. **BoP indices** (done for LW01): the selected local and global structural indices are
    calculated and independently validated for all 27 profiles. A concise three-slide
    presentation package and an optional key-number table are generated reproducibly.
-5. **LLM trajectory analysis**: steps 5.0–5.2 selected 14 empirical medoids,
+5. **LLM trajectory analysis**: steps 5.0–5.3 selected 14 empirical medoids,
    reconstructed their complete blinded stories, defined constrained individual and
-   pairwise annotation prompts, and produced a validated seven-job pilot bundle for local
-   Qwen3.6-27B inference on the cluster. Pilot execution and import remain.
+   pairwise annotation prompts, and executed and imported a seven-job Qwen3.6-27B pilot.
+   Human comparison identified a general evidence-admissibility issue. P02 reduced the
+   violations from 14 to 2, but two of its seven outputs were quarantined. The controlled
+   P03 generically separates player decisions from resolved transitions and produced
+   seven valid outputs with no inadmissible evidence. The auditable instrument is now
+   frozen; the next step is the complete 26-task annotation run.
 6. **Generalization**: apply the reusable pipeline to another book or corpus.
 
 ## Setup
@@ -102,6 +106,10 @@ uv run python scripts/5.1_build_trajectory_corpus.py --book LW01
 uv run python scripts/tests/test_5_1_build_trajectory_corpus.py --book LW01
 uv run python scripts/5.2_build_phase5_bundle.py --book LW01 --stage pilot
 uv run python scripts/tests/test_5_2_build_phase5_bundle.py --book LW01
+uv run python scripts/5.3_import_phase5_annotations.py --book LW01
+uv run python scripts/tests/test_5_3_import_phase5_annotations.py --book LW01
+uv run python scripts/utils/compare_phase5_calibration.py --book LW01
+uv run python scripts/tests/test_compare_phase5_calibration.py --book LW01
 ```
 
 The same commands accept another Lone Wolf identifier, such as `--book LW02`, provided

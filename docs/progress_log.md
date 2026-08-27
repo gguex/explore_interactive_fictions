@@ -585,8 +585,81 @@
 - Production et validation de `LW01_phase5_pilot_v2`. Le paquet `pilot_v1` est conservé
   pour l'audit, mais ne doit plus être exécuté.
 
+### 27.08.2026 — Phase 5.3 : pilote importé et calibration comparée
+
+- Exécution réussie des sept tâches sur H100 avec Qwen révision
+  `6a9e13bd6fc8f0983b9b99948120bc37f49c13e9`, vLLM 0.28.0, 6 706 à 18 390 tokens
+  d'entrée et aucune sortie tronquée ou mise en quarantaine.
+- Implémentation et validation indépendante de `5.3` : empreintes du paquet et du retour,
+  identités, prompts, JSON brut, preuves et projection canonique contrôlés sans modifier
+  les résultats du cluster.
+- Implémentation du comparateur humain–Qwen et de son validateur : 44 champs comparés,
+  avec 31 concordances, 11 désaccords, deux abstentions humaines et aucune accuracy.
+- Les directions pairwise sont concordantes sur 10 champs sur 12. Les désaccords les plus
+  récurrents concernent le degré de support et la `profile_coherence`, Qwen étant souvent
+  plus affirmatif que l'humain.
+- Contrôle objectif supplémentaire : Qwen cite 14 fois des transitions Kai, forcées,
+  aléatoires ou de combat comme preuves de profil, contre zéro pour l'humain. Le prompt
+  n'est donc pas gelé ; cette règle générique doit être renforcée puis le pilote relancé.
+
+### 27.08.2026 — Phase 5 : essai P02 préparé
+
+- Pré-enregistrement de P02 dans le tableau d'itération, avec le même corpus de sept
+  tâches, la même révision Qwen et les mêmes paramètres que P01.
+- Ajout à chaque entrée d'une liste exhaustive `eligible_profile_choice_refs`, calculée à
+  partir des seuls types de transition publics. Aucune information de profil, d'issue ou
+  de BoP n'est ajoutée.
+- Renforcement générique des prompts : preuves hors liste interdites, mécanique réservée
+  à la continuité causale, seuils `clear` et `coherent` plus conservateurs, inférences
+  morales neutres limitées et frontière `medium`/`high` explicitée.
+- Le runner vérifie l'exactitude de chaque liste et bloque toute citation inadmissible. Les
+  14 violations de P01 sont toutes rejetées par ce nouveau contrôle.
+- Production et validation du paquet aveugle `LW01_phase5_pilot_p02`, prêt à transférer.
+
+### 27.08.2026 — Phase 5 : essai P02 exécuté
+
+- Exécution complète sur H100 avec la même révision Qwen que P01.
+- Cinq sorties valides et deux sorties mises en quarantaine (`T0001`, `C003_AB`).
+- Les deux rejets proviennent de la même preuve inadmissible, `S030-C01`, qui correspond à
+  une résolution de combat et non à une décision du joueur.
+- La liste exhaustive et le contrôle réduisent donc les violations de 14 à 2, sans les
+  éliminer comme l'exigeait le critère préenregistré.
+- Sur les cinq sorties valides, 26 champs sur 32 concordent avec l'annotation humaine,
+  contre 25 sur 32 pour les mêmes sorties P01. Cette comparaison sert à la calibration et
+  ne constitue ni une accuracy ni un jeu de validation.
+- Décision : ne pas geler P02. P03 distinguera les décisions et les transitions résolues
+  directement dans le rendu générique de l'histoire, sans règle spécifique à LW01.
+
+### 27.08.2026 — Phase 5 : essai P03 préparé
+
+- Conservation du corpus canonique 5.1 afin de ne pas invalider les empreintes d'audit de
+  P01 et P02.
+- Ajout dans 5.2 d'une projection déterministe réservant `[AVAILABLE CHOICES]`,
+  `[CHOSEN ACTION]` et les références `Sxxx-Cxx` aux véritables décisions du joueur.
+- Les transitions Kai, forcées, aléatoires, de combat, d'état et d'issue montrent seulement
+  `[RESOLVED TRANSITION — NOT A PLAYER CHOICE]` et leur texte de résolution.
+- Enveloppe d'entrée `1.2` et contrôle bloquant symétrique dans le runner ; prompts,
+  allow-list, modèle, révision, paramètres et schémas de sortie inchangés.
+- Production du paquet aveugle `LW01_phase5_pilot_p03` : quatre histoires, trois paires
+  A/B, aucun B/A, estimation maximale de 15 225 tokens et validation autonome réussie.
+
+### 27.08.2026 — Phase 5 : essai P03 exécuté et instrument gelé
+
+- Exécution réussie des sept tâches sur H100 avec la même révision Qwen et zéro
+  quarantaine.
+- Import canonique et validation indépendante : quatre annotations individuelles, trois
+  pairwise et aucune preuve inadmissible.
+- Comparaison descriptive : 32 concordances, 10 désaccords, deux abstentions humaines et
+  aucune abstention modèle sur 44 champs ; ces nombres ne constituent pas une accuracy.
+- Sur les cinq sorties valides communes avec P02, 29 champs sur 32 restent identiques.
+- Les différences restantes portent sur des seuils et des lectures concurrentes de choix
+  admissibles ; leurs justifications sont traçables et ne motivent pas une règle nouvelle.
+- Décision préenregistrée appliquée : gel de l'instrument P03 afin d'éviter un ajustement
+  supplémentaire aux quatre histoires humaines. Le prochain artefact est le paquet final
+  de 26 tâches.
+
 ## Prochaine étape
 
-Transférer et exécuter le paquet pilote `LW01_phase5_pilot_v2` sur le cluster, rapatrier le
-dossier de sortie complet, puis implémenter `5.3` et le comparateur de calibration selon
-`docs/phase5_protocol.md`.
+Construire puis valider le paquet final de 26 tâches avec l'instrument P03 gelé : 14
+annotations individuelles et six comparaisons dans les deux ordres A/B et B/A. L'exécuter
+ensuite sans nouvelle modification de calibration.

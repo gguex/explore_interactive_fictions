@@ -1,0 +1,203 @@
+{
+  "accuracy_computed": false,
+  "book_id": "LW01",
+  "compared_field_count": 44,
+  "evidence_rule_check": {
+    "human_violation_count": 0,
+    "human_violations": [],
+    "model_violation_count": 14,
+    "model_violations": [
+      {
+        "input_id": "T0001",
+        "location": "perceived_profile.risk.supporting_choice_refs",
+        "reference": "S001-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Kai availability or mechanical route"
+      },
+      {
+        "input_id": "T0001",
+        "location": "perceived_profile.morality.counterevidence_choice_refs",
+        "reference": "S030-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Combat resolution"
+      },
+      {
+        "input_id": "T0001",
+        "location": "perceived_profile.action.supporting_choice_refs",
+        "reference": "S001-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Kai availability or mechanical route"
+      },
+      {
+        "input_id": "T0001",
+        "location": "perceived_profile.action.supporting_choice_refs",
+        "reference": "S016-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Kai availability or mechanical route"
+      },
+      {
+        "input_id": "T0001",
+        "location": "profile_coherence.supporting_choice_refs",
+        "reference": "S001-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Kai availability or mechanical route"
+      },
+      {
+        "input_id": "T0001",
+        "location": "profile_coherence.supporting_choice_refs",
+        "reference": "S016-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Kai availability or mechanical route"
+      },
+      {
+        "input_id": "T0004",
+        "location": "perceived_profile.action.supporting_choice_refs",
+        "reference": "S001-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Kai availability or mechanical route"
+      },
+      {
+        "input_id": "T0004",
+        "location": "profile_coherence.supporting_choice_refs",
+        "reference": "S001-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Kai availability or mechanical route"
+      },
+      {
+        "input_id": "T0009",
+        "location": "perceived_profile.risk.supporting_choice_refs",
+        "reference": "S003-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Forced transition"
+      },
+      {
+        "input_id": "T0009",
+        "location": "perceived_profile.risk.supporting_choice_refs",
+        "reference": "S038-C02",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Random or mechanical resolution"
+      },
+      {
+        "input_id": "T0009",
+        "location": "perceived_profile.risk.counterevidence_choice_refs",
+        "reference": "S005-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Forced transition"
+      },
+      {
+        "input_id": "T0009",
+        "location": "perceived_profile.action.counterevidence_choice_refs",
+        "reference": "S003-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Forced transition"
+      },
+      {
+        "input_id": "T0014",
+        "location": "perceived_profile.action.supporting_choice_refs",
+        "reference": "S001-C01",
+        "source": "model",
+        "task": "individual",
+        "transition_type": "Kai availability or mechanical route"
+      },
+      {
+        "input_id": "C003",
+        "location": "evidence_story_b",
+        "reference": "S030-C01",
+        "source": "model",
+        "task": "pairwise",
+        "transition_type": "Combat resolution"
+      }
+    ],
+    "rule": "Profile evidence may cite only Player choice or Player choice: escape from combat transitions"
+  },
+  "output_hashes": {
+    "calibration_diff.csv": "b5fab17ecc5a89a10b9980550173cc9f9e710e7140c529d7ea6a55f09b37c88a",
+    "calibration_diff.md": "dc0eff7be6dbecddad1ff787f0141bde87e4ed94f72700bb0bcf8e7265fd192d"
+  },
+  "phase": "5-calibration-comparison",
+  "run_id": "LW01_phase5_pilot_v2",
+  "schema_version": "1.0",
+  "scope": "prompt calibration, not validation",
+  "source_hashes": {
+    "human_pairwise_annotations.jsonl": "341719721bc0bc9299ff88190fd693db1d0a65f9da09693d0632fcc77f6ed080",
+    "human_trajectory_annotations.jsonl": "d3e6360ceb9a5d971eba7ddbcfff1cd7ae77008ea71616d91eea789ee12dd311",
+    "pairwise_annotations.jsonl": "6c7d7bfce57774680f518f1403b37451f14d5a8053f7361cc348fc8584081f6a",
+    "trajectories.jsonl": "9360e5b50a9b7196e4c35b87c846666d526785275d5037e69d3fc658262dc09f",
+    "trajectory_annotations.jsonl": "d3e36d857be9048640a9bcb1081df2f7564abf7f8dbd66fa874079dfec0eeabe"
+  },
+  "status_counts": {
+    "disagreement": 11,
+    "human_abstention": 2,
+    "match": 31
+  },
+  "status_counts_by_field": {
+    "causal_continuity.label": {
+      "match": 4
+    },
+    "narrative_distinctness.label": {
+      "disagreement": 1,
+      "match": 2
+    },
+    "perceived_profile.action.label": {
+      "match": 4
+    },
+    "perceived_profile.action.support": {
+      "disagreement": 2,
+      "match": 2
+    },
+    "perceived_profile.morality.label": {
+      "human_abstention": 1,
+      "match": 3
+    },
+    "perceived_profile.morality.support": {
+      "disagreement": 1,
+      "human_abstention": 1,
+      "match": 2
+    },
+    "perceived_profile.risk.label": {
+      "disagreement": 1,
+      "match": 3
+    },
+    "perceived_profile.risk.support": {
+      "disagreement": 2,
+      "match": 2
+    },
+    "perceived_profile_shift.action": {
+      "match": 3
+    },
+    "perceived_profile_shift.morality": {
+      "match": 3
+    },
+    "perceived_profile_shift.risk": {
+      "disagreement": 1,
+      "match": 2
+    },
+    "profile_coherence.label": {
+      "disagreement": 3,
+      "match": 1
+    }
+  },
+  "status_counts_by_task": {
+    "individual": {
+      "disagreement": 9,
+      "human_abstention": 2,
+      "match": 21
+    },
+    "pairwise": {
+      "disagreement": 2,
+      "match": 10
+    }
+  }
+}

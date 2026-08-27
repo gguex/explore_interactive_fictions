@@ -162,7 +162,7 @@ def validate_input_rows(
                     "story_text",
                 }:
                     raise ValueError(f"Unexpected individual input schema: {identity}")
-                if row.get("task") != task or row.get("schema_version") != "1.2":
+                if row.get("task") != task or row.get("schema_version") != "1.1":
                     raise ValueError(f"Invalid individual envelope: {identity}")
                 if not re.fullmatch(r"T[0-9]{4}", identity):
                     raise ValueError(f"Invalid trajectory identifier: {identity}")
@@ -183,7 +183,7 @@ def validate_input_rows(
                     "story_b",
                 }:
                     raise ValueError(f"Unexpected pairwise input schema: {identity}")
-                if row.get("task") != task or row.get("schema_version") != "1.2":
+                if row.get("task") != task or row.get("schema_version") != "1.1":
                     raise ValueError(f"Invalid pairwise envelope: {identity}")
                 expected_suffix = "AB" if task == "pairwise_ab" else "BA"
                 if not re.fullmatch(rf"C[0-9]{{3}}_{expected_suffix}", identity):
@@ -292,7 +292,7 @@ def valid_story_references(story_text: str) -> tuple[set[str], set[str], set[str
 
 
 def eligible_references_from_story(story_text: str) -> list[str]:
-    """Validate the rendered decision boundary and derive its allow-list."""
+    """Derive the ordered profile-evidence allow-list from story blocks."""
     references: list[str] = []
     block_pattern = re.compile(
         r"(?ms)^\[STEP S[0-9]{3}\]\n(.*?)(?=^\[STEP S[0-9]{3}\]\n|\Z)"
@@ -300,22 +300,8 @@ def eligible_references_from_story(story_text: str) -> list[str]:
     for match in block_pattern.finditer(story_text):
         block = match.group(1)
         transition = re.search(r"\[TRANSITION TYPE\]\n([^\n]+)", block)
-        if transition is None:
-            raise ValueError("Story block has no transition type")
-        if transition.group(1).strip() not in PLAYER_CHOICE_TYPES:
-            if "[AVAILABLE CHOICES]" in block or "[CHOSEN ACTION]" in block:
-                raise ValueError("Non-player transition is rendered as a choice")
-            if block.count("[RESOLVED TRANSITION — NOT A PLAYER CHOICE]") != 1:
-                raise ValueError(
-                    "Non-player transition lacks resolved-transition marker"
-                )
-            if re.search(r"S[0-9]{3}-C[0-9]{2}", block):
-                raise ValueError("Non-player transition exposes a choice reference")
+        if transition is None or transition.group(1).strip() not in PLAYER_CHOICE_TYPES:
             continue
-        if "[AVAILABLE CHOICES]" not in block:
-            raise ValueError("Player-choice block has no available choices")
-        if "[RESOLVED TRANSITION — NOT A PLAYER CHOICE]" in block:
-            raise ValueError("Player choice is rendered as a resolved transition")
         chosen = re.search(
             r"\[CHOSEN ACTION\]\n(S[0-9]{3}-C[0-9]{2})\.", block
         )

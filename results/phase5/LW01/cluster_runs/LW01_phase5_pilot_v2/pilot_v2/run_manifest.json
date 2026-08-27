@@ -1,0 +1,64 @@
+{
+  "bundle_manifest_sha256": "a046dc9b63ecd3e9202324506be2612d79cbbbb14e2487ba0b7acfda1880001c",
+  "completed_at_utc": "2026-08-27T12:27:15.446292+00:00",
+  "configured_model": "Qwen/Qwen3.6-27B",
+  "configured_revision": null,
+  "input_token_summary": {
+    "maximum": 18390,
+    "measured_jobs": 7,
+    "minimum": 6706
+  },
+  "job_results": {
+    "individual": {
+      "quarantined": 0,
+      "written": 4
+    },
+    "pairwise_ab": {
+      "quarantined": 0,
+      "written": 3
+    },
+    "pairwise_ba": {
+      "quarantined": 0,
+      "written": 0
+    }
+  },
+  "output_files": {
+    "individual.jsonl": {
+      "bytes": 27991,
+      "sha256": "a8b3f65b7b0f5965174d5bb7227e0d346e5e4758c47ac59d1d573cd2e0950532"
+    },
+    "pairwise_ab.jsonl": {
+      "bytes": 13426,
+      "sha256": "1b15858738a99f3d02998b51446712ac7e03cd96885d2aef3a51dc2c085491d0"
+    },
+    "pairwise_ba.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "quarantine.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "phase": "5.2-cluster-run",
+  "resolved_model_revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+  "run_id": "LW01_phase5_pilot_v2",
+  "runtime": {
+    "cuda_available": true,
+    "cuda_version": "13.0",
+    "cuda_visible_devices": "0",
+    "gpu_count": 1,
+    "gpus": [
+      "NVIDIA H100"
+    ],
+    "hostname": "dnagpu011",
+    "platform": "Linux-5.14.0-570.132.1.el9_6.x86_64-x86_64-with-glibc2.34",
+    "python": "3.11.14 (main, May  5 2026, 09:14:53) [GCC 11.5.0]",
+    "torch_version": "2.13.0+cu130"
+  },
+  "schema_version": "1.0",
+  "stage": "pilot",
+  "started_at_utc": "2026-08-27T12:23:45.534216+00:00",
+  "status": "complete",
+  "vllm_version": "0.28.0"
+}

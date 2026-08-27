@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import runpy
 import shutil
 from datetime import datetime, timezone
@@ -13,7 +14,9 @@ from typing import Any
 
 DEFAULT_BOOK_ID = "LW01"
 DEFAULT_MODEL = "Qwen/Qwen3.6-27B"
+DEFAULT_MODEL_REVISION = "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9"
 TASKS = ("individual", "pairwise_ab", "pairwise_ba")
+PLAYER_CHOICE_TYPES = {"Player choice", "Player choice: escape from combat"}
 FORBIDDEN_INPUT_KEYS = {
     "action",
     "annotation",
@@ -128,18 +131,95 @@ def completed_human_ids(path: Path, identity_field: str) -> list[str]:
     return identities
 
 
+def eligible_profile_choice_refs(story: dict[str, Any]) -> list[str]:
+    """Return the exhaustive ordered profile-evidence allow-list for one story."""
+    steps = story.get("steps")
+    if not isinstance(steps, list) or not steps:
+        raise ValueError(f"Public story has no steps: {story.get('trajectory_id')}")
+    references: list[str] = []
+    for step in steps:
+        if not isinstance(step, dict):
+            raise ValueError("Public story contains a non-object step")
+        if step.get("transition_type") not in PLAYER_CHOICE_TYPES:
+            continue
+        chosen_action = step.get("chosen_action")
+        if not isinstance(chosen_action, dict):
+            raise ValueError("Player-choice step has no chosen action")
+        reference = chosen_action.get("choice_ref")
+        if not isinstance(reference, str) or not re.fullmatch(
+            r"S[0-9]{3}-C[0-9]{2}", reference
+        ):
+            raise ValueError(f"Invalid eligible choice reference: {reference!r}")
+        references.append(reference)
+    if not references or len(references) != len(set(references)):
+        raise ValueError("Eligible profile-choice references are empty or duplicated")
+    return references
+
+
+def render_model_story(story: dict[str, Any]) -> str:
+    """Render one story with player decisions visually separated from resolutions."""
+    steps = story.get("steps")
+    if not isinstance(steps, list) or not steps:
+        raise ValueError(f"Public story has no steps: {story.get('trajectory_id')}")
+    blocks: list[str] = []
+    for step in steps:
+        if not isinstance(step, dict):
+            raise ValueError("Public story contains a non-object step")
+        transition_type = step.get("transition_type")
+        chosen = step.get("chosen_action")
+        if not isinstance(transition_type, str) or not isinstance(chosen, dict):
+            raise ValueError("Public story step has no transition or chosen action")
+        lines = [
+            f"[STEP {step['step_ref']}]",
+            f"[PARAGRAPH {step['paragraph_id']}]",
+            str(step["narrative_text"]),
+            "",
+        ]
+        if transition_type in PLAYER_CHOICE_TYPES:
+            choices = step.get("available_choices")
+            if not isinstance(choices, list) or not choices:
+                raise ValueError("Player-choice step has no available choices")
+            available = "\n".join(
+                f"{choice['choice_ref']}. {choice['text']}" for choice in choices
+            )
+            choice_ref = chosen.get("choice_ref")
+            if not isinstance(choice_ref, str):
+                raise ValueError("Player-choice step has no chosen reference")
+            lines.extend(
+                (
+                    "[AVAILABLE CHOICES]",
+                    available,
+                    "",
+                    "[CHOSEN ACTION]",
+                    f"{choice_ref}. {chosen['text']}",
+                )
+            )
+        else:
+            lines.extend(
+                (
+                    "[RESOLVED TRANSITION — NOT A PLAYER CHOICE]",
+                    str(chosen["text"]),
+                )
+            )
+        lines.extend(("", "[TRANSITION TYPE]", transition_type))
+        blocks.append("\n".join(lines))
+    return "\n\n".join(blocks)
+
+
 def individual_input(story: dict[str, Any]) -> dict[str, Any]:
     """Return the minimal public individual task envelope."""
-    story_text = story.get("story_text")
-    if not isinstance(story_text, str) or not story_text:
+    source_story_text = story.get("story_text")
+    if not isinstance(source_story_text, str) or not source_story_text:
         raise ValueError(f"Empty public story {story.get('trajectory_id')}")
-    if sha256_text(story_text) != story.get("story_sha256"):
+    if sha256_text(source_story_text) != story.get("story_sha256"):
         raise ValueError(f"Public story hash differs: {story.get('trajectory_id')}")
+    story_text = render_model_story(story)
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.2",
         "task": "individual",
         "trajectory_id": story["trajectory_id"],
-        "story_sha256": story["story_sha256"],
+        "story_sha256": sha256_text(story_text),
+        "eligible_profile_choice_refs": eligible_profile_choice_refs(story),
         "story_text": story_text,
     }
 
@@ -153,7 +233,7 @@ def pairwise_input(
     if suffix not in {"AB", "BA"}:
         raise ValueError(f"Pair has no canonical order suffix: {comparison_id}")
     result: dict[str, Any] = {
-        "schema_version": "1.0",
+        "schema_version": "1.2",
         "task": f"pairwise_{suffix.lower()}",
         "comparison_id": comparison_id,
     }
@@ -167,10 +247,12 @@ def pairwise_input(
             raise ValueError(f"Unknown story {trajectory_id} in {comparison_id}")
         if pair_story.get("story_text") != source.get("story_text"):
             raise ValueError(f"Pair story text differs in {comparison_id}/{side}")
+        story_text = render_model_story(source)
         result[f"story_{side}"] = {
             "trajectory_id": trajectory_id,
-            "story_sha256": source["story_sha256"],
-            "story_text": source["story_text"],
+            "story_sha256": sha256_text(story_text),
+            "eligible_profile_choice_refs": eligible_profile_choice_refs(source),
+            "story_text": story_text,
         }
     if result["story_a"]["trajectory_id"] == result["story_b"]["trajectory_id"]:
         raise ValueError(f"Pair repeats one trajectory: {comparison_id}")
@@ -256,7 +338,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--annotation-dir", type=Path)
     parser.add_argument("--cluster-source-dir", type=Path)
     parser.add_argument("--model", default=DEFAULT_MODEL)
-    parser.add_argument("--model-revision")
+    parser.add_argument("--model-revision", default=DEFAULT_MODEL_REVISION)
     return parser.parse_args()
 
 
@@ -265,7 +347,7 @@ def main() -> None:
     args = parse_args()
     book_id = str(args.book)
     stage = str(args.stage)
-    default_version = "v2" if stage == "pilot" else "v1"
+    default_version = "p03" if stage == "pilot" else "v1"
     run_id = args.run_id or f"{book_id}_phase5_{stage}_{default_version}"
     phase5_dir = args.phase5_dir or Path("data/processed/phase5") / book_id
     annotation_dir = args.annotation_dir or (
@@ -374,13 +456,24 @@ def main() -> None:
         encoding="utf-8"
     )
     estimates = [
-        estimated_input_tokens(individual_prompt, [str(row["story_text"])])
+        estimated_input_tokens(
+            individual_prompt,
+            [
+                str(row["story_text"]),
+                json.dumps(row["eligible_profile_choice_refs"]),
+            ],
+        )
         for row in individual_rows
     ]
     estimates.extend(
         estimated_input_tokens(
             pairwise_prompt,
-            [str(row["story_a"]["story_text"]), str(row["story_b"]["story_text"])],
+            [
+                str(row["story_a"]["story_text"]),
+                json.dumps(row["story_a"]["eligible_profile_choice_refs"]),
+                str(row["story_b"]["story_text"]),
+                json.dumps(row["story_b"]["eligible_profile_choice_refs"]),
+            ],
         )
         for row in pair_inputs
     )

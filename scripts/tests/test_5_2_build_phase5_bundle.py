@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 DEFAULT_BOOK_ID = "LW01"
+PLAYER_CHOICE_TYPES = {"Player choice", "Player choice: escape from combat"}
 EXPECTED_FILES = {
     "RUN_INSTRUCTIONS.md",
     "bundle_manifest.json",
@@ -113,6 +114,73 @@ def completed_ids(path: Path, identity_field: str) -> list[str]:
     return sorted(str(row[identity_field]) for row in rows)
 
 
+def eligible_profile_choice_refs(story: dict[str, Any]) -> list[str]:
+    """Independently derive eligible evidence references from public steps."""
+    return [
+        str(step["chosen_action"]["choice_ref"])
+        for step in story["steps"]
+        if step["transition_type"] in PLAYER_CHOICE_TYPES
+    ]
+
+
+def rendered_model_story(story: dict[str, Any]) -> str:
+    """Independently render the model-facing P03 story."""
+    blocks: list[str] = []
+    for step in story["steps"]:
+        lines = [
+            f"[STEP {step['step_ref']}]",
+            f"[PARAGRAPH {step['paragraph_id']}]",
+            str(step["narrative_text"]),
+            "",
+        ]
+        if step["transition_type"] in PLAYER_CHOICE_TYPES:
+            available = "\n".join(
+                f"{choice['choice_ref']}. {choice['text']}"
+                for choice in step["available_choices"]
+            )
+            chosen = step["chosen_action"]
+            lines.extend(
+                (
+                    "[AVAILABLE CHOICES]",
+                    available,
+                    "",
+                    "[CHOSEN ACTION]",
+                    f"{chosen['choice_ref']}. {chosen['text']}",
+                )
+            )
+        else:
+            lines.extend(
+                (
+                    "[RESOLVED TRANSITION — NOT A PLAYER CHOICE]",
+                    str(step["chosen_action"]["text"]),
+                )
+            )
+        lines.extend(("", "[TRANSITION TYPE]", str(step["transition_type"])))
+        blocks.append("\n".join(lines))
+    return "\n\n".join(blocks)
+
+
+def validate_rendering(story_text: str, story: dict[str, Any]) -> None:
+    """Require choices only in player-choice blocks."""
+    if story_text != rendered_model_story(story):
+        raise ValueError(f"Model rendering differs: {story['trajectory_id']}")
+    blocks = re.split(r"(?=^\[STEP S[0-9]{3}\]$)", story_text, flags=re.MULTILINE)
+    blocks = [block for block in blocks if block]
+    if len(blocks) != len(story["steps"]):
+        raise ValueError(f"Rendered step count differs: {story['trajectory_id']}")
+    for block, step in zip(blocks, story["steps"], strict=True):
+        if step["transition_type"] in PLAYER_CHOICE_TYPES:
+            if "[CHOSEN ACTION]" not in block or "[AVAILABLE CHOICES]" not in block:
+                raise ValueError("Player-choice markers are missing")
+            continue
+        if "[CHOSEN ACTION]" in block or "[AVAILABLE CHOICES]" in block:
+            raise ValueError("Non-player transition exposes choice markers")
+        if "[RESOLVED TRANSITION — NOT A PLAYER CHOICE]" not in block:
+            raise ValueError("Resolved-transition marker is missing")
+        if re.search(r"S[0-9]{3}-C[0-9]{2}", block):
+            raise ValueError("Non-player transition exposes a choice reference")
+
+
 def validate_file_table(bundle_dir: Path, manifest: dict[str, Any]) -> None:
     """Validate exact bundle membership, sizes and hashes."""
     actual = {
@@ -164,6 +232,7 @@ def validate_config(bundle_dir: Path) -> dict[str, Any]:
     expected = {
         "schema_version": "1.0",
         "model": "Qwen/Qwen3.6-27B",
+        "model_revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
         "dtype": "bfloat16",
         "tensor_parallel_size": 1,
         "max_model_len": 32768,
@@ -197,6 +266,7 @@ def validate_prompts(bundle_dir: Path) -> None:
             raise ValueError(f"Corpus identifier leaked into {name} prompt")
         for required in (
             "Player choice",
+            "eligible_profile_choice_refs",
             "forced",
             "unclear",
             "schema-compliant JSON",
@@ -261,6 +331,7 @@ def validate_individual_inputs(
         "task",
         "trajectory_id",
         "story_sha256",
+        "eligible_profile_choice_refs",
         "story_text",
     }
     for row in rows:
@@ -269,14 +340,17 @@ def validate_individual_inputs(
             raise ValueError("Individual input fields differ")
         trajectory_id = str(row["trajectory_id"])
         source = source_stories[trajectory_id]
-        if row["task"] != "individual" or row["schema_version"] != "1.0":
+        if row["task"] != "individual" or row["schema_version"] != "1.2":
             raise ValueError(f"Invalid individual envelope: {trajectory_id}")
-        if row["story_text"] != source["story_text"]:
+        if row["story_text"] != rendered_model_story(source):
             raise ValueError(f"Individual story differs: {trajectory_id}")
-        if row["story_sha256"] != source["story_sha256"]:
-            raise ValueError(f"Individual story digest differs: {trajectory_id}")
         if sha256_text(str(row["story_text"])) != row["story_sha256"]:
             raise ValueError(f"Individual story hash is invalid: {trajectory_id}")
+        validate_rendering(str(row["story_text"]), source)
+        if row["eligible_profile_choice_refs"] != eligible_profile_choice_refs(
+            source
+        ):
+            raise ValueError(f"Individual evidence allow-list differs: {trajectory_id}")
     return rows
 
 
@@ -303,14 +377,19 @@ def validate_pairwise_inputs(
         "story_a",
         "story_b",
     }
-    story_fields = {"trajectory_id", "story_sha256", "story_text"}
+    story_fields = {
+        "trajectory_id",
+        "story_sha256",
+        "eligible_profile_choice_refs",
+        "story_text",
+    }
     for row in rows:
         assert_no_forbidden_keys(row, "pairwise_ab")
         if set(row) != expected_fields:
             raise ValueError("Pairwise input fields differ")
         comparison_id = str(row["comparison_id"])
         source = source_pairs[comparison_id]
-        if row["task"] != "pairwise_ab" or row["schema_version"] != "1.0":
+        if row["task"] != "pairwise_ab" or row["schema_version"] != "1.2":
             raise ValueError(f"Invalid pairwise envelope: {comparison_id}")
         for side in ("story_a", "story_b"):
             story = row[side]
@@ -320,10 +399,17 @@ def validate_pairwise_inputs(
             if trajectory_id != source[side]["trajectory_id"]:
                 raise ValueError(f"Pair identity differs: {comparison_id}/{side}")
             public = source_stories[trajectory_id]
-            if story["story_text"] != public["story_text"]:
+            if story["story_text"] != rendered_model_story(public):
                 raise ValueError(f"Pair story differs: {comparison_id}/{side}")
-            if story["story_sha256"] != public["story_sha256"]:
-                raise ValueError(f"Pair story digest differs: {comparison_id}/{side}")
+            if sha256_text(str(story["story_text"])) != story["story_sha256"]:
+                raise ValueError(f"Pair story hash differs: {comparison_id}/{side}")
+            validate_rendering(str(story["story_text"]), public)
+            if story["eligible_profile_choice_refs"] != (
+                eligible_profile_choice_refs(public)
+            ):
+                raise ValueError(
+                    f"Pair evidence allow-list differs: {comparison_id}/{side}"
+                )
     return rows
 
 
@@ -376,7 +462,7 @@ def main() -> None:
         Path("data/for_trajectory_annotation") / book_id
     )
     bundle_dir = args.bundle_dir or (
-        annotation_dir / "server_bundle" / f"{book_id}_phase5_pilot_v2"
+        annotation_dir / "server_bundle" / f"{book_id}_phase5_pilot_p03"
     )
     manifest = read_json(bundle_dir / "bundle_manifest.json")
     if manifest.get("schema_version") != "1.0" or manifest.get("phase") != "5.2":

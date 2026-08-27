@@ -142,9 +142,21 @@ A. Defend the fallen Prince.
 Player choice
 ```
 
-Les transitions sans décision sont marquées `Forced transition` ou
-`Random or mechanical resolution`. Les options non choisies sont montrées uniquement pour
-donner le contexte de la décision ; leurs conséquences narratives ne sont pas ajoutées.
+Les options non choisies sont montrées uniquement lorsqu'une décision du joueur existe,
+afin de donner son contexte ; leurs conséquences narratives ne sont pas ajoutées. À
+partir de l'essai P03, les transitions sans décision n'exposent ni liste d'options, ni
+référence `Cxx`, ni marqueur `[CHOSEN ACTION]`. Elles sont rendues sous la forme :
+
+```text
+[RESOLVED TRANSITION — NOT A PLAYER CHOICE]
+Resolution text...
+
+[TRANSITION TYPE]
+Forced transition
+```
+
+Cette projection est produite au moment de construire le paquet et ne remplace pas le
+corpus canonique, dont les versions utilisées pour P01 et P02 restent ainsi auditables.
 
 Le modèle ne reçoit jamais :
 
@@ -447,11 +459,27 @@ preuves citées et affiche les références des deux annotations, sans exiger qu
 identiques. Les justifications restent destinées à une lecture humaine : aucun second LLM
 ne les note et aucun désaccord n'est automatiquement attribué à une erreur de Qwen.
 
+Le contrôle des preuves distingue l'existence de la référence et son admissibilité. Pour
+les champs de profil, une référence structurée n'est admissible que si le
+`TRANSITION TYPE` de son étape vaut exactement `Player choice` ou `Player choice: escape
+from combat`. Une transition Kai, forcée, aléatoire ou de combat est signalée même si son
+identifiant existe dans une ancienne version du rendu. Depuis P03, ces transitions sont
+en outre dépourvues de marqueur `[CHOSEN ACTION]` et de référence `Cxx` dans l'entrée du
+modèle ; le runner contrôle cette séparation avant l'inférence.
+
 Ce rapport sert à repérer rapidement une incompréhension du codebook avant le gel du
 prompt. Toute modification doit formuler une règle générique, être consignée et provoquer
 un nouveau pilote ; aucune règle ne peut citer une trajectoire, un personnage ou un
 paragraphe de LW01. Les effectifs sont trop petits et calibrés pour être présentés comme
 une accuracy.
+
+La calibration est arrêtée après P03 : les sept sorties sont valides, aucune preuve
+inadmissible ne subsiste, et les différences restantes relèvent de lectures concurrentes
+du texte admissible. Le résultat descriptif — 32 concordances, 10 désaccords et deux
+abstentions humaines sur 44 champs — n'est pas une accuracy. Aucune règle supplémentaire
+n'est ajoutée : cela risquerait d'ajuster le prompt aux quatre trajectoires humaines. Sont
+gelés pour le run complet les prompts `v2`, le rendu `resolved_transition_render_v1`,
+l'enveloppe d'entrée `v1.2`, les schémas de sortie et les validateurs bloquants.
 
 Le run individuel couvre une seule fois les 14 histoires avec le prompt figé. Les six
 paires sont toutes évaluées dans les deux ordres afin de contrôler le biais de position,

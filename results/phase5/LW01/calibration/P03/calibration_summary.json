@@ -1,0 +1,89 @@
+{
+  "accuracy_computed": false,
+  "book_id": "LW01",
+  "compared_field_count": 44,
+  "evidence_rule_check": {
+    "human_violation_count": 0,
+    "human_violations": [],
+    "model_violation_count": 0,
+    "model_violations": [],
+    "rule": "Profile evidence may cite only Player choice or Player choice: escape from combat transitions"
+  },
+  "output_hashes": {
+    "calibration_diff.csv": "4a63970275f8f3aa6001ab8ba4a21f0d87fb6e5e80117fb891460f45540ee789",
+    "calibration_diff.md": "1b167a4d1ff1182f18a55fdbb4e32af7e536bed2ebb522f73d8e45f46cb6d971"
+  },
+  "phase": "5-calibration-comparison",
+  "run_id": "LW01_phase5_pilot_p03",
+  "schema_version": "1.0",
+  "scope": "prompt calibration, not validation",
+  "source_hashes": {
+    "human_pairwise_annotations.jsonl": "341719721bc0bc9299ff88190fd693db1d0a65f9da09693d0632fcc77f6ed080",
+    "human_trajectory_annotations.jsonl": "d3e6360ceb9a5d971eba7ddbcfff1cd7ae77008ea71616d91eea789ee12dd311",
+    "pairwise_annotations.jsonl": "d16f0ef2994242172d417b7f8680822e7204bbf167db01507c13c13ee8099722",
+    "trajectories.jsonl": "9360e5b50a9b7196e4c35b87c846666d526785275d5037e69d3fc658262dc09f",
+    "trajectory_annotations.jsonl": "4376a0272039998da73f57143a04cc4831497b82fb8bee6dc3c57845478bd1b9"
+  },
+  "status_counts": {
+    "disagreement": 10,
+    "human_abstention": 2,
+    "match": 32
+  },
+  "status_counts_by_field": {
+    "causal_continuity.label": {
+      "match": 4
+    },
+    "narrative_distinctness.label": {
+      "disagreement": 1,
+      "match": 2
+    },
+    "perceived_profile.action.label": {
+      "match": 4
+    },
+    "perceived_profile.action.support": {
+      "disagreement": 2,
+      "match": 2
+    },
+    "perceived_profile.morality.label": {
+      "human_abstention": 1,
+      "match": 3
+    },
+    "perceived_profile.morality.support": {
+      "disagreement": 2,
+      "human_abstention": 1,
+      "match": 1
+    },
+    "perceived_profile.risk.label": {
+      "disagreement": 3,
+      "match": 1
+    },
+    "perceived_profile.risk.support": {
+      "match": 4
+    },
+    "perceived_profile_shift.action": {
+      "match": 3
+    },
+    "perceived_profile_shift.morality": {
+      "match": 3
+    },
+    "perceived_profile_shift.risk": {
+      "disagreement": 1,
+      "match": 2
+    },
+    "profile_coherence.label": {
+      "disagreement": 1,
+      "match": 3
+    }
+  },
+  "status_counts_by_task": {
+    "individual": {
+      "disagreement": 8,
+      "human_abstention": 2,
+      "match": 22
+    },
+    "pairwise": {
+      "disagreement": 2,
+      "match": 10
+    }
+  }
+}

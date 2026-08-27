@@ -1,0 +1,32 @@
+{
+  "book_id": "LW01",
+  "counts": {
+    "individual": 4,
+    "pairwise_ab": 3,
+    "pairwise_ba": 0,
+    "quarantined": 0
+  },
+  "model": "Qwen/Qwen3.6-27B",
+  "model_revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+  "output_hashes": {
+    "pairwise_annotations.jsonl": "6c7d7bfce57774680f518f1403b37451f14d5a8053f7361cc348fc8584081f6a",
+    "trajectory_annotations.jsonl": "d3e36d857be9048640a9bcb1081df2f7564abf7f8dbd66fa874079dfec0eeabe"
+  },
+  "phase": "5.3",
+  "raw_outputs_modified": false,
+  "run_id": "LW01_phase5_pilot_v2",
+  "schema_version": "1.0",
+  "source_bundle_dir": "data/for_trajectory_annotation/LW01/server_bundle/LW01_phase5_pilot_v2",
+  "source_hashes": {
+    "bundle_manifest.json": "a046dc9b63ecd3e9202324506be2612d79cbbbb14e2487ba0b7acfda1880001c",
+    "individual.jsonl": "a8b3f65b7b0f5965174d5bb7227e0d346e5e4758c47ac59d1d573cd2e0950532",
+    "pairwise_ab.jsonl": "1b15858738a99f3d02998b51446712ac7e03cd96885d2aef3a51dc2c085491d0",
+    "pairwise_ba.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "quarantine.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run_manifest.json": "18b618f55ac63293440d6cd3427c85b94e4c222ef57973be5cccce2239a4a1c9"
+  },
+  "source_run_dir": "results/phase5/LW01/cluster_runs/LW01_phase5_pilot_v2/pilot_v2",
+  "stage": "pilot",
+  "status": "valid",
+  "vllm_version": "0.28.0"
+}
