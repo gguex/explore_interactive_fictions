@@ -19,6 +19,7 @@ narrative analysis.
 | `docs/phase3_results.md` | Validation and comparative results for all 27 profiles. |
 | `docs/phase4_indices.md` | Canonical phase-4 BoP metrics, output tables and independent validation. |
 | `docs/phase4_presentation.md` | Final three-slide phase-4 selection, speaking points and generated artifacts. |
+| `docs/phase5_presentation.md` | Four-position phase-5 deck plan and speaking notes for the two generated result slides. |
 | `docs/phase5_protocol.md` | Conditional-medoid selection, annotation grids, human calibration, stability checks and outputs. |
 | `docs/phase5_implementation_plan.md` | Implemented local/cluster split, blinded bundle and files exchanged for phase 5. |
 | `docs/phase5_results.md` | Initial phase-5.0 empirical-medoid results and interpretation limits. |
@@ -71,7 +72,8 @@ results/         cluster outputs and calibration history
    frozen. The 26-task final run completed with no quarantine and was imported and
    independently validated. The controlled contrast is recovered on 5/6 pairs; 18/24
    pairwise labels are stable under A/B reversal. These are descriptive trajectory
-   results, not model accuracy. Presentation extraction (5.5) remains.
+   results, not model accuracy. The two result slides are generated and validated;
+   one or two short procedure/calibration slides will be prepared later.
 6. **Generalization**: apply the reusable pipeline to another book or corpus.
 
 ## Setup

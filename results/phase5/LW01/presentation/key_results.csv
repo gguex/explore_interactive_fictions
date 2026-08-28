@@ -1,0 +1,7 @@
+slide,metric,subgroup,numerator,denominator,display,interpretation
+individual,profile_manifestation,risk,9,14,9/14 (64%),Exact generated risk level
+individual,profile_manifestation,morality,6,14,6/14 (43%),Exact generated morality level
+individual,profile_manifestation,action,2,14,2/14 (14%),Exact generated action level
+comparison,controlled_contrast_recovery,all,5,6,5/6 (83%),Order-stable recovery of the controlled axis
+comparison,ab_ba_order_stability,all_pairwise_labels,18,24,18/24 (75%),Exact A/B–B/A agreement after inversion
+comparison,cross_axis_leakage,non_controlled_axes,9,9,9/9 (100%),Directional shifts among stable off-axis labels

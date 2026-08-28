@@ -1,6 +1,6 @@
 # Phase 5 — Découpage des scripts et échanges avec le cluster
 
-> **Statut au 28.08.2026 : étapes 5.0–5.4 validées ; instrument P03 gelé ; run final de 26 tâches importé sans quarantaine ; 5.5 reste à produire.**
+> **Statut au 28.08.2026 : étapes 5.0–5.5 validées ; les deux slides de résultats sont produites ; une ou deux slides de procédure/calibration seront préparées plus tard.**
 > Le protocole scientifique reste défini dans `docs/phase5_protocol.md`. Cette note décrit
 > les étapes techniques et les fichiers qui circuleront entre la machine locale et le
 > serveur universitaire.
@@ -26,7 +26,7 @@ compare_phase5_calibration comparer humain et Qwen
         ↓
 5.4 calculer les résultats de phase 5
         ↓
-5.5 produire la diapositive et les tableaux
+5.5 produire les deux diapositives de résultats et le tableau
 ```
 
 Les données cachées — profil générateur, probabilités, indices BoP et annotations
@@ -43,7 +43,7 @@ opaques, les prompts, les schémas et les paramètres nécessaires à l'inféren
 | `scripts/5.3_import_phase5_annotations.py` — **fait** | Importer les sorties revenues du cluster, contrôler les schémas et normaliser les résultats valides. | Dossier de sortie du cluster et manifeste du paquet. | Annotations canoniques et rapport de validation. |
 | `scripts/utils/compare_phase5_calibration.py` — **fait** | Comparer rapidement les annotations humaines et Qwen du pilote, sans modifier ni arbitrer les annotations. | Sorties normalisées du pilote et deux fichiers humains. | `calibration_diff.csv`, `calibration_diff.md` et `calibration_summary.json`. |
 | `scripts/5.4_compute_phase5_results.py` — **fait** | Réunir annotations Qwen, métadonnées cachées, calibration et distances structurelles ; calculer les indicateurs préenregistrés. | Sorties 5.0–5.3, métadonnées locales et synthèse P03. | `trajectory_results.csv`, `pairwise_results.csv`, `phase5_summary.csv` et manifeste d'audit. |
-| `scripts/5.5_build_phase5_presentation.py` | Extraire uniquement les résultats stables et produire les supports présentables. | Tables canoniques de 5.4. | Figures PNG/SVG, tableau de chiffres clés et manifeste. |
+| `scripts/5.5_build_phase5_presentation.py` — **fait** | Produire séparément les résultats individuels et pairwise sans masquer les champs sensibles à l'ordre. | Tables canoniques de 5.4. | Deux slides PNG/SVG, tableau de chiffres clés et manifeste. |
 
 Chaque script doit relire les fichiers de l'étape précédente plutôt que réimplémenter son
 calcul. Les validateurs indépendants suivent les conventions existantes :
@@ -55,7 +55,7 @@ scripts/tests/test_5_2_build_phase5_bundle.py      # fait
 scripts/tests/test_5_3_import_phase5_annotations.py  # fait
 scripts/tests/test_5_4_compute_phase5_results.py     # fait
 scripts/tests/test_compare_phase5_calibration.py     # fait
-scripts/tests/test_5_5_build_phase5_presentation.py
+scripts/tests/test_5_5_build_phase5_presentation.py  # fait
 ```
 
 ## 3. Étape humaine et calibration
@@ -314,18 +314,18 @@ Les artefacts présentables sont écrits dans :
 
 ```text
 results/phase5/LW01/presentation/
-├── phase5_slide.png
-├── phase5_slide.svg
-├── profile_manifestation.png
-├── structural_vs_narrative.png
+├── 01_individual_trajectories.png
+├── 01_individual_trajectories.svg
+├── 02_trajectory_comparisons.png
+├── 02_trajectory_comparisons.svg
 ├── key_results.csv
 └── presentation_manifest.json
 ```
 
-`5.5` ne choisit pas automatiquement le résultat le plus spectaculaire. Il applique une
-règle fixée : manifestation des trois axes, confrontation structure–impression et une
-ligne de calibration/stabilité. `causal_continuity` et `profile_coherence` sont ajoutés seulement si
-les contrôles définis dans `docs/phase5_protocol.md` les déclarent suffisamment stables.
+`5.5` ne choisit pas automatiquement le résultat le plus spectaculaire. La première slide
+conserve les trois axes, la continuité causale et la cohérence ; la seconde conserve les
+six paires, leurs distances, les deux ordres et le résultat contrôlé. La procédure et la
+calibration seront présentées dans une ou deux diapositives séparées produites plus tard.
 
 ## 8. Contrôles bloquants
 
@@ -357,4 +357,4 @@ Le pipeline s'arrête notamment si :
 6. **Fait :** produire le paquet `final` avec `5.2`.
 7. **Fait :** lancer le run final et l'importer avec `5.3`.
 8. **Fait :** implémenter et valider `5.4` sur toutes les annotations valides.
-9. Construire la diapositive avec `5.5` en dernier.
+9. **Fait :** construire et valider les deux diapositives de résultats avec `5.5`.

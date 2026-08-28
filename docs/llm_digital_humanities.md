@@ -108,7 +108,8 @@ décisions centrales sont :
   `C003`, `C006`) annotées humainement pour calibrer l'instrument ;
 - aucun jeu humain de validation séparé dans cette preuve de concept ;
 - mesures structurelles calculées séparément, puis confrontées aux annotations globales ;
-- une seule diapositive éventuelle, centrée sur les résultats les plus stables.
+- une ou deux diapositives de procédure/calibration, puis deux diapositives distinctes
+  pour les résultats individuels et pairwise.
 
 Le prompt est traité comme un instrument de mesure : définitions, abstention, preuves et
 contre-exemples courts sont fixés avant le run principal. Aucune trajectoire complète déjà

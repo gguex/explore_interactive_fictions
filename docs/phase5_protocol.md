@@ -551,16 +551,21 @@ postérieures à l'inférence restent indicatives :
 
 ## 11. Présentation
 
-La phase 5 doit tenir sur une seule diapositive :
+La phase 5 occupe trois ou quatre diapositives :
 
-1. le plan `7 profils × 2 issues = 14 médoïdes conditionnels` ;
-2. la manifestation des profils sur ces histoires centrales et la récupération des axes ;
-3. une confrontation courte entre distance structurelle et différence narrative ;
-4. une ligne donnant la concordance de calibration et la stabilité A/B–B/A.
+1. une ou deux diapositives courtes sur la procédure et la calibration, produites plus
+   tard ;
+2. une diapositive sur les 14 trajectoires individuelles ;
+3. une diapositive sur les six comparaisons dans les deux ordres.
 
-`causal_continuity` et `profile_coherence` sont calculés mais ne seront montrés que si leur
-résultat est à la fois stable et utile. Aucun exemple n'est choisi après coup sans que sa
-règle de sélection soit explicitée.
+La calibration reste donc séparée des résultats substantiels. La slide individuelle
+montre la manifestation absolue des trois axes, la continuité causale et la cohérence du
+profil. La slide pairwise montre la récupération du contraste contrôlé, la stabilité
+A/B–B/A, la fuite entre axes et les distances structurelles des six paires. Aucun exemple
+n'est choisi après coup : toutes les trajectoires et toutes les paires sont conservées.
+
+Le plan détaillé et les messages oraux sont consignés dans
+`docs/phase5_presentation.md`.
 
 Phrase proposée :
 

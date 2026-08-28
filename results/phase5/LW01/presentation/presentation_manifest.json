@@ -1,0 +1,63 @@
+{
+  "artifacts": {
+    "01_individual_trajectories.png": {
+      "bytes": 126286,
+      "sha256": "d0bdf8783634a297c23e7b7b4b190ce661ca19ec0bb042e9938d72bff133bb44"
+    },
+    "01_individual_trajectories.svg": {
+      "bytes": 18973,
+      "sha256": "24e8dd6a34add30a08bc1a71970313967e466224799a8a049384f8d06ca861f4"
+    },
+    "02_trajectory_comparisons.png": {
+      "bytes": 154596,
+      "sha256": "b0ebe0afc508715f755da977edae005401a08c0b11ee63b899196d52c2c87809"
+    },
+    "02_trajectory_comparisons.svg": {
+      "bytes": 20963,
+      "sha256": "158805a629d4757de1cc03ffeff6a30c207a1daf7867dbdb4623c70aee4f452d"
+    },
+    "key_results.csv": {
+      "bytes": 651,
+      "sha256": "9aedc4800b7280a61087ddbd148bbe753ec60f6425ec818e52014a0dcb009398"
+    }
+  },
+  "book_id": "LW01",
+  "deck_plan": [
+    {
+      "content": "Procedure and prompt calibration",
+      "position": "1–2",
+      "status": "to be produced later"
+    },
+    {
+      "content": "Individual-trajectory results",
+      "figure": "01_individual_trajectories",
+      "position": "3",
+      "status": "produced"
+    },
+    {
+      "content": "Pairwise trajectory-comparison results",
+      "figure": "02_trajectory_comparisons",
+      "position": "4",
+      "status": "produced"
+    }
+  ],
+  "language": "English",
+  "messages": {
+    "01_individual_trajectories": "Absolute profile manifestation is uneven across axes, while all selected stories remain causally continuous.",
+    "02_trajectory_comparisons": "Relative contrasts are usually recovered, but profile axes co-vary and some judgments remain order-sensitive."
+  },
+  "phase": "5.5",
+  "schema_version": "1.0",
+  "scope": "Descriptive results for 14 conditional medoids and six designed pairs; not model accuracy or a population estimate",
+  "slide_size_pixels": [
+    1920,
+    1080
+  ],
+  "source_hashes": {
+    "data/processed/phase5/LW01/pairwise_results.csv": "2e6dbba13495ee815c7b00726e6246f4dc2ef763ce61c09e72789b716d9077de",
+    "data/processed/phase5/LW01/phase5_manifest.json": "286e2d912fec51a38767e7f87f75056241cd597e9f068df34b18dab8bc2cfbe6",
+    "data/processed/phase5/LW01/phase5_summary.csv": "8563dfbdc32026895cdfab2bcadbfd2873fe33ffbbe7ef5588b94e5b04992749",
+    "data/processed/phase5/LW01/trajectory_results.csv": "cbd6258929dbf0f6f58c8a874d12092eea9dfa142cae006a5848c5953e5e20d8"
+  },
+  "status": "complete"
+}

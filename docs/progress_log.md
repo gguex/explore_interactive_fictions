@@ -688,7 +688,22 @@
 - Tous les effectifs décrivent les médoïdes conditionnels ; aucun n'est rapporté comme
   accuracy du modèle ou comme estimation de l'ensemble des trajectoires.
 
+### 28.08.2026 — Phase 5.5 : deux diapositives de résultats produites
+
+- Abandon du format d'une seule slide pour la phase 5. Le plan comprend désormais une ou
+  deux slides ultérieures de procédure/calibration, une slide individuelle et une slide
+  pairwise.
+- Production en anglais et en 1920 × 1080 de `01_individual_trajectories` : manifestation
+  des trois axes, continuité, cohérence et diagnostic transparent du faible score
+  d'action.
+- Production de `02_trajectory_comparisons` : trois chiffres clés et tableau exhaustif
+  des six paires, avec distance structurelle, jugements A/B–B/A et stabilité du contraste.
+- Création de `key_results.csv` et d'un manifeste fixant le plan des quatre positions,
+  les messages, les sources et toutes les empreintes.
+- Validation indépendante des chiffres, dimensions, titres, artefacts et inspection
+  visuelle des deux diapositives.
+
 ## Prochaine étape
 
-Implémenter `5.5` à partir des seules tables canoniques de 5.4, puis produire et valider
-la diapositive et son tableau de chiffres clés sans sélectionner les résultats après coup.
+Préparer plus tard une ou deux diapositives courtes sur la procédure et la calibration,
+puis intégrer les deux slides de résultats déjà produites dans la présentation complète.

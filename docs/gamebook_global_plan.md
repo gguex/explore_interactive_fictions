@@ -550,7 +550,9 @@ Les résultats principaux seront la manifestation des trois axes sur ces chemins
 la récupération des contrastes, la fuite entre axes et la confrontation descriptive
 entre différence structurelle et `narrative_distinctness`. Ils seront rapportés comme des
 effectifs sur des trajectoires sélectionnées, non comme une estimation de la distribution
-de toutes les histoires. La présentation restera limitée à une seule diapositive.
+de toutes les histoires. La présentation utilisera une ou deux diapositives de
+procédure/calibration, puis une slide de résultats individuels et une slide de
+comparaisons.
 
 ### Phase 6 — Généralisation
 
@@ -569,11 +571,10 @@ générales des adaptations propres à LW01.
 
 ## 8. Question restant à traiter dans la phase 5
 
-Le corpus, les grilles, Qwen3.6-27B et les calculs 5.4 sont fixés et validés. Il reste à
-appliquer la règle de sélection préenregistrée dans `5.5` pour produire une seule
-diapositive concise. La continuité causale, uniforme ici (14/14 `continuous`), est peu
-discriminante ; la cohérence du profil (9/14 `coherent`, 5/14 `mixed`) reste un résultat
-complémentaire et ne doit être montrée que si elle clarifie le message principal.
+Le corpus, les grilles, Qwen3.6-27B et les étapes 5.0–5.5 sont fixés et validés. Les deux
+slides de résultats sont produites : l'une pour les 14 trajectoires individuelles,
+l'autre pour les six comparaisons. Il reste uniquement à concevoir, plus tard, une ou deux
+slides courtes expliquant la procédure et la calibration P01–P03.
 
 ## 9. Documentation active
 
