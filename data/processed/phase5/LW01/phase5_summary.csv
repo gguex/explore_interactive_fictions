@@ -1,0 +1,19 @@
+category,metric,subgroup,numerator,denominator,unclear,order_sensitive,value,note
+main,profile_manifestation,risk,9,14,0,,0.6428571428571429,"Generator-level recovery on the 14 conditional medoids; descriptive, not model accuracy."
+complementary,profile_manifestation_by_outcome,risk:Win,5,7,0,,0.7142857142857143,Descriptive Win/Death split; no causal interpretation.
+complementary,profile_manifestation_by_outcome,risk:Death,4,7,0,,0.5714285714285714,Descriptive Win/Death split; no causal interpretation.
+main,profile_manifestation,morality,6,14,0,,0.42857142857142855,"Generator-level recovery on the 14 conditional medoids; descriptive, not model accuracy."
+complementary,profile_manifestation_by_outcome,morality:Win,4,7,0,,0.5714285714285714,Descriptive Win/Death split; no causal interpretation.
+complementary,profile_manifestation_by_outcome,morality:Death,2,7,0,,0.2857142857142857,Descriptive Win/Death split; no causal interpretation.
+main,profile_manifestation,action,2,14,0,,0.14285714285714285,"Generator-level recovery on the 14 conditional medoids; descriptive, not model accuracy."
+complementary,profile_manifestation_by_outcome,action:Win,1,7,0,,0.14285714285714285,Descriptive Win/Death split; no causal interpretation.
+complementary,profile_manifestation_by_outcome,action:Death,1,7,0,,0.14285714285714285,Descriptive Win/Death split; no causal interpretation.
+main,controlled_contrast_recovery,all,5,6,0,1,0.8333333333333334,A contrast counts only when A/B and B/A agree after canonical inversion.
+main,cross_axis_leakage,non_controlled_axes,9,9,0,3,1.0,Directional shifts among stable non-controlled axes; unclear and order-sensitive fields are separate.
+main,structure_impression_spearman,node_lcs_distance,,4,,2,0.8944271909999159,Descriptive rank association on six designed pairs; no inferential claim.
+complementary,causal_continuity_distribution,continuous,14,14,,,1.0,Distribution across the 14 conditional medoids.
+complementary,profile_coherence_distribution,coherent,9,14,,,0.6428571428571429,Distribution across the 14 conditional medoids.
+complementary,profile_coherence_distribution,mixed,5,14,,,0.35714285714285715,Distribution across the 14 conditional medoids.
+quality,ab_ba_order_stability,all_pairwise_labels,18,24,,6,0.75,Exact agreement after canonical inversion for directional labels.
+quality,human_qwen_calibration_concordance,P03,32,44,2,,0.7272727272727273,"Prompt-calibration concordance, not accuracy or held-out validation."
+quality,valid_output_rate,final_run,26,26,,,1.0,"Schema-valid, non-truncated outputs; zero quarantined."

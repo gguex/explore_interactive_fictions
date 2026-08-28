@@ -61,14 +61,17 @@ results/         cluster outputs and calibration history
 4. **BoP indices** (done for LW01): the selected local and global structural indices are
    calculated and independently validated for all 27 profiles. A concise three-slide
    presentation package and an optional key-number table are generated reproducibly.
-5. **LLM trajectory analysis**: steps 5.0–5.3 selected 14 empirical medoids,
+5. **LLM trajectory analysis**: steps 5.0–5.4 selected 14 empirical medoids,
    reconstructed their complete blinded stories, defined constrained individual and
    pairwise annotation prompts, and executed and imported a seven-job Qwen3.6-27B pilot.
    Human comparison identified a general evidence-admissibility issue. P02 reduced the
    violations from 14 to 2, but two of its seven outputs were quarantined. The controlled
    P03 generically separates player decisions from resolved transitions and produced
    seven valid outputs with no inadmissible evidence. The auditable instrument is now
-   frozen; the next step is the complete 26-task annotation run.
+   frozen. The 26-task final run completed with no quarantine and was imported and
+   independently validated. The controlled contrast is recovered on 5/6 pairs; 18/24
+   pairwise labels are stable under A/B reversal. These are descriptive trajectory
+   results, not model accuracy. Presentation extraction (5.5) remains.
 6. **Generalization**: apply the reusable pipeline to another book or corpus.
 
 ## Setup

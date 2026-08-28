@@ -658,8 +658,37 @@
   supplémentaire aux quatre histoires humaines. Le prochain artefact est le paquet final
   de 26 tâches.
 
+### 28.08.2026 — Phase 5 : paquet final prêt
+
+- Extension du validateur 5.2 aux deux stages : pilote et final.
+- Production de `LW01_phase5_final_v1` avec 14 annotations individuelles, six paires A/B
+  et six inversions B/A, soit 26 tâches.
+- Prompts, configuration, révision Qwen et schémas de sortie strictement identiques à P03 ;
+  les sept entrées pilotes sont reproduites à l'identique dans le paquet final.
+- Estimation maximale de 16 083 tokens d'entrée, sous la fenêtre de 32k et sans troncature
+  autorisée.
+- Validation indépendante et validation autonome du runner réussies pour les 26 tâches.
+
+### 28.08.2026 — Phase 5.3–5.4 : run final importé et résultats calculés
+
+- Exécution finale réussie sur H100 avec Qwen3.6-27B gelé : 14 annotations individuelles,
+  six A/B, six B/A, aucune sortie tronquée ou mise en quarantaine.
+- Import canonique contrôlé par empreintes, schémas, identités et références de preuve.
+  Le validateur 5.3 a été généralisé aux effectifs `pilot` et `final` après avoir révélé
+  une hypothèse résiduelle propre au pilote.
+- Implémentation et validation indépendante de `5.4`. Les sorties séparent les résultats
+  individuels, pairwise et la synthèse longue, avec manifeste de provenance complet.
+- Manifestation du niveau générateur : `risk` 9/14, `morality` 6/14, `action` 2/14.
+- Contraste contrôlé récupéré sur 5/6 paires ; 18/24 labels pairwise stables après
+  inversion canonique B/A.
+- Les neuf jugements stables sur un axe non contrôlé sont directionnels, ce qui indique
+  une forte fuite entre axes dans l'impression narrative des médoïdes.
+- Continuité causale : 14/14 `continuous`. Cohérence du profil : 9/14 `coherent` et 5/14
+  `mixed`. Ces résultats restent complémentaires.
+- Tous les effectifs décrivent les médoïdes conditionnels ; aucun n'est rapporté comme
+  accuracy du modèle ou comme estimation de l'ensemble des trajectoires.
+
 ## Prochaine étape
 
-Construire puis valider le paquet final de 26 tâches avec l'instrument P03 gelé : 14
-annotations individuelles et six comparaisons dans les deux ordres A/B et B/A. L'exécuter
-ensuite sans nouvelle modification de calibration.
+Implémenter `5.5` à partir des seules tables canoniques de 5.4, puis produire et valider
+la diapositive et son tableau de chiffres clés sans sélectionner les résultats après coup.

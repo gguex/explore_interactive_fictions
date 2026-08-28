@@ -1,4 +1,4 @@
-"""Independently validate normalized phase-5.3 pilot annotations."""
+"""Independently validate normalized phase-5.3 annotations."""
 
 from __future__ import annotations
 
@@ -181,17 +181,40 @@ def main() -> None:
         raise ValueError("Run or import is not complete and valid")
     if run_manifest.get("run_id") != run_id or report.get("run_id") != run_id:
         raise ValueError("Run identity differs")
+    stage = str(bundle_manifest.get("stage", ""))
+    if stage not in {"pilot", "final"}:
+        raise ValueError("Unknown bundle stage")
+    if run_manifest.get("stage") != stage or report.get("stage") != stage:
+        raise ValueError("Run, bundle and import stages differ")
     if run_manifest.get("bundle_manifest_sha256") != sha256_file(
         bundle_dir / "bundle_manifest.json"
     ):
         raise ValueError("Bundle hash differs")
-    if bundle_manifest.get("job_counts") != {
-        "individual": 4,
-        "pairwise_ab": 3,
-        "pairwise_ba": 0,
-        "total": 7,
+    expected_counts = (
+        {
+            "individual": 4,
+            "pairwise_ab": 3,
+            "pairwise_ba": 0,
+            "total": 7,
+        }
+        if stage == "pilot"
+        else {
+            "individual": 14,
+            "pairwise_ab": 6,
+            "pairwise_ba": 6,
+            "total": 26,
+        }
+    )
+    if bundle_manifest.get("job_counts") != expected_counts:
+        raise ValueError(f"{stage.title()} bundle counts differ")
+    report_counts = report.get("counts")
+    if not isinstance(report_counts, dict) or report_counts != {
+        "individual": expected_counts["individual"],
+        "pairwise_ab": expected_counts["pairwise_ab"],
+        "pairwise_ba": expected_counts["pairwise_ba"],
+        "quarantined": 0,
     }:
-        raise ValueError("Pilot bundle counts differ")
+        raise ValueError("Import report counts differ")
 
     schema_namespace = runpy.run_path(str(bundle_dir / "schemas.py"))
     individual_validator = cast(
@@ -202,26 +225,45 @@ def main() -> None:
         Callable[[Any], list[str]],
         schema_namespace["validate_pairwise_annotation"],
     )
-    task_specs = {
-        "individual": (
-            "individual.jsonl",
-            "trajectory_annotations.jsonl",
-            individual_validator,
-        ),
-        "pairwise_ab": (
-            "pairwise_ab.jsonl",
-            "pairwise_annotations.jsonl",
-            pairwise_validator,
+    raw_by_task = {
+        "individual": read_jsonl(run_dir / "individual.jsonl"),
+        "pairwise_ab": read_jsonl(run_dir / "pairwise_ab.jsonl"),
+        "pairwise_ba": read_jsonl(
+            run_dir / "pairwise_ba.jsonl", allow_empty=True
         ),
     }
-    for task, (raw_name, canonical_name, validator) in task_specs.items():
-        raw_rows = read_jsonl(run_dir / raw_name)
-        canonical_rows = read_jsonl(output_dir / canonical_name)
-        if canonical_rows != [
-            expected_canonical(row, run_manifest) for row in raw_rows
-        ]:
-            raise ValueError(f"Canonical projection differs for {task}")
-        input_rows = read_jsonl(bundle_dir / "inputs" / f"{task}.jsonl")
+    canonical_individual = read_jsonl(
+        output_dir / "trajectory_annotations.jsonl"
+    )
+    canonical_pairwise = read_jsonl(output_dir / "pairwise_annotations.jsonl")
+    if canonical_individual != [
+        expected_canonical(row, run_manifest)
+        for row in raw_by_task["individual"]
+    ]:
+        raise ValueError("Canonical projection differs for individual")
+    if canonical_pairwise != [
+        expected_canonical(row, run_manifest)
+        for task in ("pairwise_ab", "pairwise_ba")
+        for row in raw_by_task[task]
+    ]:
+        raise ValueError("Canonical projection differs for pairwise")
+
+    canonical_by_task = {
+        "individual": canonical_individual,
+        "pairwise_ab": canonical_pairwise[: expected_counts["pairwise_ab"]],
+        "pairwise_ba": canonical_pairwise[expected_counts["pairwise_ab"] :],
+    }
+    validators = {
+        "individual": individual_validator,
+        "pairwise_ab": pairwise_validator,
+        "pairwise_ba": pairwise_validator,
+    }
+    for task, validator in validators.items():
+        canonical_rows = canonical_by_task[task]
+        input_rows = read_jsonl(
+            bundle_dir / "inputs" / f"{task}.jsonl",
+            allow_empty=task == "pairwise_ba" and stage == "pilot",
+        )
         identity_field = "trajectory_id" if task == "individual" else "comparison_id"
         inputs = {str(row[identity_field]): row for row in input_rows}
         for row in canonical_rows:
@@ -233,7 +275,7 @@ def main() -> None:
                 raise ValueError(f"Schema errors in {row['input_id']}: {errors}")
             validate_references(task, annotation, inputs[str(row["input_id"])])
 
-    if read_jsonl(run_dir / "pairwise_ba.jsonl", allow_empty=True):
+    if stage == "pilot" and raw_by_task["pairwise_ba"]:
         raise ValueError("Pilot unexpectedly contains B/A outputs")
     if read_jsonl(run_dir / "quarantine.jsonl", allow_empty=True):
         raise ValueError("Pilot quarantine is not empty")
@@ -243,9 +285,11 @@ def main() -> None:
     for filename in ("trajectory_annotations.jsonl", "pairwise_annotations.jsonl"):
         if output_hashes.get(filename) != sha256_file(output_dir / filename):
             raise ValueError(f"Canonical output hash differs: {filename}")
+    pairwise_count = expected_counts["pairwise_ab"] + expected_counts["pairwise_ba"]
     print(
-        "OK: phase 5.3 independently validated — 4 individual, "
-        "3 pairwise, 0 quarantined"
+        f"OK: phase 5.3 independently validated — "
+        f"{expected_counts['individual']} individual, {pairwise_count} pairwise, "
+        "0 quarantined"
     )
 
 

@@ -1,0 +1,84 @@
+You are applying a research codebook to one complete interactive-fiction trajectory.
+The input contains an opaque trajectory identifier and the full story in reading order.
+It also contains eligible_profile_choice_refs, an exhaustive allow-list derived from the
+story's explicit transition types. It contains exactly the chosen actions marked
+"Player choice" or "Player choice: escape from combat".
+Return only the JSON object required by the supplied schema. Do not reveal chain-of-thought.
+
+GENERAL EVIDENCE RULES
+
+1. Read the entire trajectory before assigning labels. Evaluate repeated global patterns,
+   not one isolated decision.
+2. For perceived_profile and profile_coherence, reason only from references listed in
+   eligible_profile_choice_refs. This list is exhaustive, not illustrative. Every choice
+   reference in their supporting or counterevidence arrays MUST occur in this allow-list.
+3. A reference outside eligible_profile_choice_refs is never profile evidence, even when
+   it appears under [CHOSEN ACTION]. Forced transitions, random or mechanical resolutions,
+   mandatory combats, Kai availability and inventory/state conditions must not influence
+   profile labels, support levels or profile coherence. They may be considered only when
+   checking causal continuity.
+4. The ending is not evidence of risk, morality or action. Do not judge whether it is fair.
+5. Do not infer a hidden generating profile. Judge only the supplied text.
+6. Use at most three supporting choice references and two counterevidence choice
+   references for each axis. Copy references exactly, for example S012-C02.
+7. A justification must state the repeated admissible pattern and relevant admissible
+   counterevidence. Do not mention an excluded transition as profile evidence in prose.
+8. Do not turn neutral exploration, route following, forced violence or automatic rewards
+   into moral evidence unless an eligible chosen action explicitly helps, harms, protects,
+   sacrifices for or prioritizes someone.
+
+PERCEIVED PROFILE
+
+Risk:
+- cautious: repeated avoidance of avoidable danger or repeated search for protection;
+- reckless: repeated voluntary engagement with avoidable danger;
+- neutral: enough relevant decisions exist, but neither pole dominates;
+- unclear: the trajectory provides too little or incomparable evidence.
+
+Morality:
+- selfish: repeated priority to personal safety or gain at another person's expense;
+- noble: repeated voluntary help, protection or sacrifice for others;
+- neutral: enough relevant decisions exist, but neither pole dominates;
+- unclear: the trajectory provides too little relevant moral evidence.
+
+Action:
+- physical: repeated preference for force, confrontation or direct bodily action;
+- tactical: repeated preference for observation, preparation, concealment, diversion or
+  strategic avoidance;
+- neutral: enough relevant decisions exist, but neither pole dominates;
+- unclear: the trajectory provides too little or incomparable evidence.
+
+For each axis, support is:
+- clear: several convergent decisions with little counterevidence;
+- mixed: a real tendency exists but meaningful competing evidence remains;
+- insufficient: too little relevant evidence supports a stable orientation.
+
+Use clear conservatively. Repeated counterevidence remains meaningful unless the supplied
+text explicitly makes it incomparable; do not dismiss it merely as pragmatic, necessary
+or consistent with an inferred character archetype.
+
+CAUSAL CONTINUITY
+
+- continuous: no verifiable causal problem is found;
+- minor_gap: a required connection is implicit or ambiguous without breaking the story;
+- broken: an unsupported dependency or explicit contradiction damages the sequence;
+- unclear: the supplied text does not permit a decision.
+
+An ellipse, abrupt transition or coincidence is not by itself a causal gap. For minor_gap
+or broken, cite at least two numeric paragraph identifiers that establish the problem.
+For continuous, evidence_paragraph_ids should normally be empty.
+
+PROFILE COHERENCE
+
+- coherent: decisions form a stable global profile with few contextual exceptions;
+- mixed: competing orientations exist, but a partial profile remains readable;
+- incoherent: repeated contradictions prevent a stable profile;
+- insufficient_evidence: too few relevant decisions permit an assessment.
+
+Profile coherence is internal to the story. It is not agreement with a hidden profile.
+Use mixed rather than coherent when admissible choices repeatedly express competing
+orientations, even if those differences could be rationalized after the fact. Never infer
+an archetype, personality or intention that is not established by the eligible choices.
+Do not evaluate literary quality, tension, choice-consequence fit or perceived fairness.
+
+Copy trajectory_id exactly from the input and output only schema-compliant JSON.

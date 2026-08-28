@@ -484,7 +484,7 @@ moyenne aux autres tirages ; aucune sélection n'intervient après lecture du te
 embeddings sont exclus : ils ajouteraient un second instrument sémantique sans être
 nécessaires à ce plan contrôlé.
 
-Les étapes 5.0 à 5.2 sont terminées pour LW01 : les tirages et les 14 médoïdes ont été
+Les étapes 5.0 à 5.4 sont terminées pour LW01 : les tirages et les 14 médoïdes ont été
 calculés, puis leurs histoires complètes ont été reconstruites sous identifiants opaques.
 Six comparaisons extrême–extrême existent dans les deux ordres, avec leurs distances
 structurelles calculées séparément. Le paquet pilote aveugle de quatre histoires et trois
@@ -499,7 +499,15 @@ projection fournie au modèle, sans règle propre à LW01 et sans modifier le co
 utilisé pour auditer P01/P02. Il produit sept sorties valides et aucune preuve inadmissible.
 Les 32 concordances, 10 désaccords et deux abstentions humaines servent uniquement à la
 calibration. Les différences restantes étant textuellement traçables, l'instrument P03 est
-gelé afin d'éviter un ajustement supplémentaire aux quatre histoires humaines.
+gelé afin d'éviter un ajustement supplémentaire aux quatre histoires humaines. Le run
+final compte 26 sorties valides et aucune quarantaine. Après inversion canonique des
+réponses B/A, 18 labels pairwise sur 24 sont stables et le contraste contrôlé est retrouvé
+sur 5 paires sur 6. La manifestation absolue correspond au niveau générateur pour 9/14
+histoires sur `risk`, 6/14 sur `morality` et 2/14 sur `action`. Tous les neuf axes non
+contrôlés disposant d'un jugement stable sont néanmoins perçus comme différents : le
+contrôle probabiliste d'un axe produit donc des impressions narratives liées sur les
+autres axes. Ces effectifs décrivent les médoïdes et ne sont ni une accuracy de Qwen ni
+une estimation de toutes les parties possibles.
 
 #### Méthodes potentielles
 
@@ -559,13 +567,13 @@ générales des adaptations propres à LW01.
 - **Interprétabilité** : chaque poids de $W$ dérive d'une règle du pré-graphe et d'un
   profil identifié.
 
-## 8. Questions restant à traiter dans la phase 5
+## 8. Question restant à traiter dans la phase 5
 
-Le corpus, les grilles et Qwen3.6-27B sont fixés ; P01 à P03 sont exécutés et l'instrument
-P03 est gelé après sept sorties valides et zéro violation d'admissibilité. Il reste à
-produire et exécuter le paquet complet. La stabilité
-A/B–B/A et l'utilité des deux champs complémentaires viendront ensuite, avant le choix de
-la diapositive.
+Le corpus, les grilles, Qwen3.6-27B et les calculs 5.4 sont fixés et validés. Il reste à
+appliquer la règle de sélection préenregistrée dans `5.5` pour produire une seule
+diapositive concise. La continuité causale, uniforme ici (14/14 `continuous`), est peu
+discriminante ; la cohérence du profil (9/14 `coherent`, 5/14 `mixed`) reste un résultat
+complémentaire et ne doit être montrée que si elle clarifie le message principal.
 
 ## 9. Documentation active
 

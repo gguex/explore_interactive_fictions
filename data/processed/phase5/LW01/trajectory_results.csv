@@ -1,0 +1,15 @@
+trajectory_id,profile_id,outcome,expected_risk,perceived_risk,risk_support,risk_status,expected_morality,perceived_morality,morality_support,morality_status,expected_action,perceived_action,action_support,action_status,causal_continuity,profile_coherence
+T0001,neutral_neutral_neutral,Win,neutral,neutral,mixed,match,neutral,neutral,mixed,match,neutral,tactical,clear,mismatch,continuous,mixed
+T0002,neutral_neutral_neutral,Death,neutral,neutral,mixed,match,neutral,selfish,clear,mismatch,neutral,physical,mixed,mismatch,continuous,mixed
+T0003,cautious_neutral_neutral,Win,cautious,cautious,clear,match,neutral,selfish,mixed,mismatch,neutral,tactical,clear,mismatch,continuous,coherent
+T0004,cautious_neutral_neutral,Death,cautious,cautious,clear,match,neutral,selfish,mixed,mismatch,neutral,tactical,clear,mismatch,continuous,coherent
+T0005,reckless_neutral_neutral,Win,reckless,neutral,mixed,mismatch,neutral,noble,clear,mismatch,neutral,physical,clear,mismatch,continuous,coherent
+T0006,reckless_neutral_neutral,Death,reckless,reckless,clear,match,neutral,noble,clear,mismatch,neutral,physical,clear,mismatch,continuous,coherent
+T0007,neutral_selfish_neutral,Win,neutral,cautious,clear,mismatch,selfish,selfish,clear,match,neutral,tactical,clear,mismatch,continuous,coherent
+T0008,neutral_selfish_neutral,Death,neutral,cautious,clear,mismatch,selfish,selfish,clear,match,neutral,tactical,clear,mismatch,continuous,coherent
+T0009,neutral_noble_neutral,Win,neutral,neutral,mixed,match,noble,noble,clear,match,neutral,physical,clear,mismatch,continuous,mixed
+T0010,neutral_noble_neutral,Death,neutral,cautious,mixed,mismatch,noble,noble,clear,match,neutral,tactical,mixed,mismatch,continuous,coherent
+T0011,neutral_neutral_physical,Win,neutral,neutral,mixed,match,neutral,noble,clear,mismatch,physical,tactical,mixed,mismatch,continuous,coherent
+T0012,neutral_neutral_physical,Death,neutral,cautious,clear,mismatch,neutral,selfish,clear,mismatch,physical,tactical,mixed,mismatch,continuous,coherent
+T0013,neutral_neutral_tactical,Win,neutral,neutral,mixed,match,neutral,neutral,mixed,match,tactical,tactical,clear,match,continuous,mixed
+T0014,neutral_neutral_tactical,Death,neutral,neutral,mixed,match,neutral,selfish,clear,mismatch,tactical,tactical,clear,match,continuous,mixed

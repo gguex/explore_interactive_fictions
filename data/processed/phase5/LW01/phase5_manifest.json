@@ -1,0 +1,63 @@
+{
+  "book_id": "LW01",
+  "cluster_run": {
+    "completed_at_utc": "2026-08-28T08:28:15.147802+00:00",
+    "input_token_summary": {
+      "maximum": 17997,
+      "measured_jobs": 26,
+      "minimum": 4368
+    },
+    "runtime": {
+      "cuda_available": true,
+      "cuda_version": "13.0",
+      "cuda_visible_devices": "0",
+      "gpu_count": 1,
+      "gpus": [
+        "NVIDIA H100"
+      ],
+      "hostname": "dnagpu011",
+      "platform": "Linux-5.14.0-570.132.1.el9_6.x86_64-x86_64-with-glibc2.34",
+      "python": "3.11.14 (main, May  5 2026, 09:14:53) [GCC 11.5.0]",
+      "torch_version": "2.13.0+cu130"
+    },
+    "started_at_utc": "2026-08-28T08:21:48.911694+00:00"
+  },
+  "counts": {
+    "base_pairs": 6,
+    "ordered_pair_annotations": 12,
+    "trajectories": 14
+  },
+  "inference": {
+    "individual_prompt_sha256": "dbc914d8631deaacbed19dd6ff52422a2967c80b8bfd2f26736f0923f5903ee8",
+    "model": "Qwen/Qwen3.6-27B",
+    "model_revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+    "pairwise_prompt_sha256": "eacab79035d01fa00341250384e50513f2df7c76033ab57f40dbd0493f949572",
+    "vllm_version": "0.28.0"
+  },
+  "output_hashes": {
+    "pairwise_results.csv": "2e6dbba13495ee815c7b00726e6246f4dc2ef763ce61c09e72789b716d9077de",
+    "phase5_summary.csv": "8563dfbdc32026895cdfab2bcadbfd2873fe33ffbbe7ef5588b94e5b04992749",
+    "trajectory_results.csv": "cbd6258929dbf0f6f58c8a874d12092eea9dfa142cae006a5848c5953e5e20d8"
+  },
+  "phase": "5.4",
+  "rules": {
+    "order_sensitive_use": "order-sensitive pairwise fields are excluded from stable substantive indicators",
+    "order_stability": "B/A directional labels are inverted to canonical A/B orientation before exact comparison",
+    "uncertainty": "unclear values are reported separately, never counted as mismatch or stable leakage"
+  },
+  "run_id": "LW01_phase5_final_v1",
+  "schema_version": "1.0",
+  "scope": "descriptive analysis of conditional medoids; not model accuracy",
+  "source_hashes": {
+    "data/for_trajectory_annotation/LW01/server_bundle/LW01_phase5_final_v1/bundle_manifest.json": "815b5b07b289fb83905b92819631e128484f65fb9e41172dd117e7eda304400c",
+    "data/processed/phase5/LW01/annotations/LW01_phase5_final_v1/pairwise_annotations.jsonl": "8a6770909b31324c65bae095c7ea54a79b3086230025aa6aa953850cbe2678e0",
+    "data/processed/phase5/LW01/annotations/LW01_phase5_final_v1/phase5_import_report.json": "8cb4ea0986acf00a5eb46336ffd3d1f5ffc665dab622cb7a0cf8a3fa26d206e7",
+    "data/processed/phase5/LW01/annotations/LW01_phase5_final_v1/trajectory_annotations.jsonl": "a81cc1b9e5d226ac1380307614c8639dfd50f76b81ee0254ea920c344d9c97a5",
+    "data/processed/phase5/LW01/pair_private_metadata.jsonl": "e27bb079b1bc4254ce7c73fc2d647b3e8d385c2cf1d5d27ffa6d0945cf7f79ea",
+    "data/processed/phase5/LW01/pair_structural_metrics.csv": "e07583793491a396efab0a18ebf002a547078289efd8757cbcefe59362775b6a",
+    "data/processed/phase5/LW01/trajectory_private_metadata.jsonl": "1b71f9c677ee4a19383254777f022b9fb0c906c90dc6005de356817f16d303e7",
+    "results/phase5/LW01/calibration/P03/calibration_summary.json": "22985e10a279119ecae5a4cc19849a3221043267b2c18c3453fe84bc8f68173b",
+    "results/phase5/LW01/cluster_runs/LW01_phase5_final_v1/final_v1/run_manifest.json": "72e4dd6f2be6a03689e38e42f74cb70baaabce6fe394d06e5e4367ffd421bf57"
+  },
+  "status": "complete"
+}

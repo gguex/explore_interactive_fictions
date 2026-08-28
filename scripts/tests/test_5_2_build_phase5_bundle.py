@@ -322,7 +322,7 @@ def validate_individual_inputs(
     source_stories: dict[str, dict[str, Any]],
     expected_ids: list[str],
 ) -> list[dict[str, Any]]:
-    """Validate the exact four public pilot stories."""
+    """Validate the exact selected public stories."""
     rows = read_jsonl(bundle_dir / "inputs" / "individual.jsonl")
     if sorted(str(row.get("trajectory_id")) for row in rows) != expected_ids:
         raise ValueError("Pilot individual selection differs")
@@ -359,17 +359,24 @@ def validate_pairwise_inputs(
     source_pairs: dict[str, dict[str, Any]],
     source_stories: dict[str, dict[str, Any]],
     expected_base_ids: list[str],
+    stage: str,
 ) -> list[dict[str, Any]]:
-    """Validate the three canonical A/B inputs and empty B/A pilot file."""
-    rows = read_jsonl(bundle_dir / "inputs" / "pairwise_ab.jsonl")
+    """Validate canonical pair inputs for the requested stage."""
+    ab_rows = read_jsonl(bundle_dir / "inputs" / "pairwise_ab.jsonl")
     reverse = read_jsonl(
         bundle_dir / "inputs" / "pairwise_ba.jsonl", allow_empty=True
     )
-    if reverse:
+    if stage == "pilot" and reverse:
         raise ValueError("Pilot must not contain B/A jobs")
-    expected_ids = [f"{base}_AB" for base in expected_base_ids]
+    if stage == "final" and not reverse:
+        raise ValueError("Final bundle must contain B/A jobs")
+    rows = ab_rows + reverse
+    orders = ("AB",) if stage == "pilot" else ("AB", "BA")
+    expected_ids = [
+        f"{base}_{order}" for base in expected_base_ids for order in orders
+    ]
     if sorted(str(row.get("comparison_id")) for row in rows) != expected_ids:
-        raise ValueError("Pilot pairwise selection differs")
+        raise ValueError(f"{stage.title()} pairwise selection differs")
     expected_fields = {
         "schema_version",
         "task",
@@ -389,7 +396,8 @@ def validate_pairwise_inputs(
             raise ValueError("Pairwise input fields differ")
         comparison_id = str(row["comparison_id"])
         source = source_pairs[comparison_id]
-        if row["task"] != "pairwise_ab" or row["schema_version"] != "1.2":
+        order = comparison_id.rsplit("_", 1)[-1].lower()
+        if row["task"] != f"pairwise_{order}" or row["schema_version"] != "1.2":
             raise ValueError(f"Invalid pairwise envelope: {comparison_id}")
         for side in ("story_a", "story_b"):
             story = row[side]
@@ -447,6 +455,7 @@ def parse_args() -> argparse.Namespace:
     """Parse validator arguments."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--book", default=DEFAULT_BOOK_ID)
+    parser.add_argument("--stage", choices=("pilot", "final"), default="pilot")
     parser.add_argument("--bundle-dir", type=Path)
     parser.add_argument("--phase5-dir", type=Path)
     parser.add_argument("--annotation-dir", type=Path)
@@ -457,18 +466,22 @@ def main() -> None:
     """Validate the complete phase-5.2 pilot bundle independently."""
     args = parse_args()
     book_id = str(args.book)
+    stage = str(args.stage)
     phase5_dir = args.phase5_dir or Path("data/processed/phase5") / book_id
     annotation_dir = args.annotation_dir or (
         Path("data/for_trajectory_annotation") / book_id
     )
-    bundle_dir = args.bundle_dir or (
-        annotation_dir / "server_bundle" / f"{book_id}_phase5_pilot_p03"
+    default_run_id = (
+        f"{book_id}_phase5_pilot_p03"
+        if stage == "pilot"
+        else f"{book_id}_phase5_final_v1"
     )
+    bundle_dir = args.bundle_dir or annotation_dir / "server_bundle" / default_run_id
     manifest = read_json(bundle_dir / "bundle_manifest.json")
     if manifest.get("schema_version") != "1.0" or manifest.get("phase") != "5.2":
         raise ValueError("Unexpected bundle manifest schema")
-    if manifest.get("book_id") != book_id or manifest.get("stage") != "pilot":
-        raise ValueError("Bundle is not the requested pilot")
+    if manifest.get("book_id") != book_id or manifest.get("stage") != stage:
+        raise ValueError(f"Bundle is not the requested {stage} stage")
     validate_file_table(bundle_dir, manifest)
     config = validate_config(bundle_dir)
     validate_prompts(bundle_dir)
@@ -478,24 +491,39 @@ def main() -> None:
     pair_rows = read_jsonl(phase5_dir / "trajectory_pairs.jsonl")
     source_stories = {str(row["trajectory_id"]): row for row in story_rows}
     source_pairs = {str(row["comparison_id"]): row for row in pair_rows}
-    expected_trajectories = completed_ids(
-        annotation_dir / "human_trajectory_annotations.jsonl", "trajectory_id"
-    )
-    expected_pairs = completed_ids(
-        annotation_dir / "human_pairwise_annotations.jsonl", "comparison_id"
-    )
+    if stage == "pilot":
+        expected_trajectories = completed_ids(
+            annotation_dir / "human_trajectory_annotations.jsonl", "trajectory_id"
+        )
+        expected_pairs = completed_ids(
+            annotation_dir / "human_pairwise_annotations.jsonl", "comparison_id"
+        )
+    else:
+        expected_trajectories = sorted(source_stories)
+        expected_pairs = sorted(
+            {comparison_id.rsplit("_", 1)[0] for comparison_id in source_pairs}
+        )
     individual_rows = validate_individual_inputs(
         bundle_dir, source_stories, expected_trajectories
     )
     pairwise_rows = validate_pairwise_inputs(
-        bundle_dir, source_pairs, source_stories, expected_pairs
+        bundle_dir, source_pairs, source_stories, expected_pairs, stage
     )
-    expected_counts = {
-        "individual": 4,
-        "pairwise_ab": 3,
-        "pairwise_ba": 0,
-        "total": 7,
-    }
+    expected_counts = (
+        {
+            "individual": 4,
+            "pairwise_ab": 3,
+            "pairwise_ba": 0,
+            "total": 7,
+        }
+        if stage == "pilot"
+        else {
+            "individual": 14,
+            "pairwise_ab": 6,
+            "pairwise_ba": 6,
+            "total": 26,
+        }
+    )
     if manifest.get("job_counts") != expected_counts:
         raise ValueError("Pilot job counts differ")
     selection = manifest.get("selection")
@@ -505,6 +533,9 @@ def main() -> None:
         raise ValueError("Manifest trajectory selection differs")
     if selection.get("base_comparison_ids") != expected_pairs:
         raise ValueError("Manifest comparison selection differs")
+    expected_order = "AB only" if stage == "pilot" else None
+    if selection.get("pilot_pair_order") != expected_order:
+        raise ValueError("Manifest pair-order policy differs")
     privacy = manifest.get("privacy")
     if not isinstance(privacy, dict) or not all(
         privacy.get(field) is expected
@@ -536,8 +567,8 @@ def main() -> None:
 
     validate_runner_without_vllm(bundle_dir)
     print(
-        f"OK: pilot {manifest['run_id']} — {len(individual_rows)} individual and "
-        f"{len(pairwise_rows)} canonical A/B jobs; bundle is blinded and autonomous"
+        f"OK: {stage} {manifest['run_id']} — {len(individual_rows)} individual and "
+        f"{len(pairwise_rows)} ordered pairwise jobs; bundle is blinded and autonomous"
     )
 
 
