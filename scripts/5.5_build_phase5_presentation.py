@@ -26,7 +26,7 @@ from matplotlib.patches import FancyBboxPatch  # noqa: E402
 DEFAULT_BOOK_ID = "LW01"
 SLIDE_SIZE = (40 / 3, 7.5)
 SLIDE_DPI = 144
-BACKGROUND = "#F7F4EB"
+BACKGROUND = "#FFFFFF"
 INK = "#243447"
 MUTED = "#64717D"
 LIGHT = "#E5E0D5"

@@ -1,20 +1,20 @@
 {
   "artifacts": {
     "01_individual_trajectories.png": {
-      "bytes": 126286,
-      "sha256": "d0bdf8783634a297c23e7b7b4b190ce661ca19ec0bb042e9938d72bff133bb44"
+      "bytes": 126495,
+      "sha256": "b333f96d36db4689976aeeb431e9831ab646a810c7df06c76e1f1d7d089267ee"
     },
     "01_individual_trajectories.svg": {
       "bytes": 18973,
-      "sha256": "24e8dd6a34add30a08bc1a71970313967e466224799a8a049384f8d06ca861f4"
+      "sha256": "5fe5111ad97c1071247e522e42ab3002c94bd3e3c3a1670ae4eb15039333d053"
     },
     "02_trajectory_comparisons.png": {
-      "bytes": 154596,
-      "sha256": "b0ebe0afc508715f755da977edae005401a08c0b11ee63b899196d52c2c87809"
+      "bytes": 154826,
+      "sha256": "697c75d1a3aa865a370a98d479319bd30728cbdb3ef59baab051a4d4c00f3182"
     },
     "02_trajectory_comparisons.svg": {
       "bytes": 20963,
-      "sha256": "158805a629d4757de1cc03ffeff6a30c207a1daf7867dbdb4623c70aee4f452d"
+      "sha256": "35d24b58d179e6845c88aa9e51b7fd2383608c97a087c02fa43df9efe91a7bfa"
     },
     "key_results.csv": {
       "bytes": 651,

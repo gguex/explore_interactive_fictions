@@ -1,40 +1,40 @@
 {
   "artifacts": {
     "01_profile_landscape.png": {
-      "bytes": 137024,
-      "sha256": "52803416be372aabd734d636de9dad4e49604404b70ad51ed30f0053df7d52dc"
+      "bytes": 132301,
+      "sha256": "5c4700fd95081b518a55b9bda6dea916652ac2651d4d0c439f92e69259813de4"
     },
     "01_profile_landscape.svg": {
       "bytes": 32012,
-      "sha256": "87fa6a27ebc73d187a6202022f1cc80cde71a9ef7dfd9bce230475085f9aba42"
+      "sha256": "0e4afade9a41fd19c653e907b21153a9681e35b49e39578c469ba832504a9b98"
     },
     "02_axis_effects.png": {
-      "bytes": 134396,
-      "sha256": "5e2c198185cd571012481c77a8286ddf1edd15c669eee59dec54d2d57299ad5d"
+      "bytes": 133098,
+      "sha256": "72d8a683144a90dd114160e1a1f966b34d2687ff042159e3812f4c8b237a324c"
     },
     "02_axis_effects.svg": {
       "bytes": 49983,
-      "sha256": "6a820a36e9014b5c2edda594a0a47d79d8d47a9ac04792e733c838a89b706905"
+      "sha256": "4a64d61abe2fd259d8521625787c133790753288f1401cbb846cbe36183597cb"
     },
     "03_local_index_maps.png": {
-      "bytes": 462281,
-      "sha256": "e19badc0d656d57f0ac7eae33cbc9e648e1b1b84cf3325841b3c9b80c04e0ffb"
+      "bytes": 458202,
+      "sha256": "26a822b90eae7766e3c602b33653dd849a9244d2db6179943d1d322a9177a810"
     },
     "03_local_index_maps.svg": {
       "bytes": 991004,
-      "sha256": "de4e19486bd7bf18532582ad99858a3db520a310b210f55aec8e929a50d57942"
+      "sha256": "05a68945650d5c0ca0998d969acfe0cdf8b0851aa90958e64e84272d1cb47523"
     },
     "04_key_numbers.csv": {
       "bytes": 261,
       "sha256": "ef9bd7de8b74c97d65a84c16367c5c114fb46785b39b6907b072bb3b42e95238"
     },
     "04_key_numbers.png": {
-      "bytes": 110811,
-      "sha256": "d66ffb65e6597662db8c2c10c6bf6e369777567a273ffd613d9641ab96c90c8e"
+      "bytes": 111229,
+      "sha256": "7706f11b876f1f7e84f756c524d0143162b9c12101603d644e27abcd52f2a571"
     },
     "04_key_numbers.svg": {
       "bytes": 16221,
-      "sha256": "b1291d381e59a245b2208945765e28e96f7d922b9ae4fbc6ca1b638fa01fd7e1"
+      "sha256": "bda4cb8880de7ad608102199069548bb0c23674a82d5099e79803637bf1deb8f"
     }
   },
   "book_id": "LW01",

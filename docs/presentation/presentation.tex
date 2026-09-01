@@ -1,0 +1,253 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usetheme{metropolis}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{comment}
+\usepackage{diagbox}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
+\usepackage [autostyle, english = american]{csquotes}
+
+\MakeOuterQuote{"}
+
+\setbeamerfont{bibliography item}{size=\tiny}
+\setbeamerfont{bibliography entry author}{size=\tiny}
+\setbeamerfont{bibliography entry title}{size=\tiny}
+\setbeamerfont{bibliography entry location}{size=\tiny}
+\setbeamerfont{bibliography entry note}{size=\tiny}
+
+\definecolor{themecolor}{RGB}{0,116,178}
+\setbeamercolor{title}{fg=themecolor}
+\setbeamercolor{structure}{fg=themecolor}
+\setbeamercolor{section}{fg=themecolor}
+\setbeamercolor{frametitle}{fg=white, bg=themecolor}
+\setbeamercolor{background canvas}{bg=white}
+
+\newcommand{\imp}[1]{\textbf{\color{cyan}#1}}
+\newcommand{\de}[1]{\textbf{\color{red}#1}}
+\newcommand{\source}[1]{%
+	\vfill
+	{\tiny\color{gray}#1}
+}
+
+\newcommand{\TeaserImage}[1]{\raisebox{%
+		.5\dimexpr-\height+\ht\strutbox-\dp\strutbox}{%
+		\includegraphics[width=0.15\textwidth]{#1}}}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=themecolor,
+	filecolor=magenta,      
+	urlcolor=cyan,
+}
+
+\metroset{block=fill}
+
+\title{Refining the Computational Analysis of Interactive Fiction: A Hybrid Framework using Bag-of-Paths 
+Formalism and LLMs}
+\date{}
+\author{Guillaume Guex \href{mailto:guillaume.guex@unil.ch}{\texttt{guillaume.guex@unil.ch}}}
+\institute{University of Lausanne}
+
+\begin{document}
+	
+  	\maketitle
+
+	%-------------------------------------------%
+  		
+  	\section{Introduction}
+  	
+  	%-------------------------------------------%
+  	
+	\begin{frame}{Interactive Fictions and Gamebooks}
+		\footnotesize
+		An \imp{interactive fiction} is a form of narrative in which the reader’s or player’s choices influence the sequence of events, the accessible content, or the story’s outcome. \\
+		\vspace{0.1cm}
+		A \imp{gamebook} is a book-based form of interactive fiction, usually divided into numbered sections connected by choices, rules, and sometimes game mechanics such as combat, inventory, or chance.
+		
+		\begin{center}
+			\fbox{
+			\includegraphics[width=0.8\textheight]{fig/LW01_112.png}
+			} \\
+			{\tiny \textit{Flight from the Dark} by Joe Dever and Gary Chalk \href{www.projectaon.org}{www.projectaon.org}}
+		\end{center}
+	\end{frame}
+  	
+  	%-------------------------------------------%
+  	
+  	\begin{frame}{The classical representation: a graph}
+  	\begin{columns}[T,onlytextwidth]
+  		\begin{column}{0.50\textwidth}			
+  			Interactive fiction is traditionally modeled as a
+  			\imp{directed graph}:
+  			
+  			\vspace{0.4cm}
+  			
+  			\begin{itemize}
+  				\item \imp{Nodes} represent passages or narrative sections;
+  				\item \imp{Edges} represent the choices available to the player.
+  			\end{itemize}
+  		\end{column}
+  		
+  		\begin{column}{0.50\textwidth}
+  			\centering
+  			\begin{tikzpicture}[
+  				node/.style={
+  					circle,
+  					draw=themecolor,
+  					thick,
+  					fill=themecolor!10,
+  					minimum size=7mm,
+  					font=\small
+  				},
+  				edge/.style={
+  					->,
+  					thick,
+  					draw=themecolor
+  				}
+  				]
+  				\node[node] (a) at (0,0) {1};
+  				\node[node] (b) at (-1.2,-1.2) {2};
+  				\node[node] (c) at (1.2,-1.2) {3};
+  				\node[node] (d) at (-1.8,-2.4) {4};
+  				\node[node] (e) at (-0.5,-2.4) {5};
+  				\node[node] (f) at (1.2,-2.4) {6};
+  				\node[node] (g) at (0,-3.6) {7};
+  				
+  				\draw[edge] (a) -- (b);
+  				\draw[edge] (a) -- (c);
+  				\draw[edge] (b) -- (d);
+  				\draw[edge] (b) -- (e);
+  				\draw[edge] (c) -- (f);
+  				\draw[edge] (e) -- (g);
+  				\draw[edge] (f) -- (g);
+  			\end{tikzpicture}
+  		\end{column}
+  		\end{columns}
+  		
+  		\vfill
+  		
+  		\begin{block}{\de{Main limitation}}
+  		This representation makes it possible to study the
+  		\imp{structure} or the \imp{topology} of the work, but the text itself, therefore the \imp{narrative meaning}, is no longer taken into account.
+  		\end{block}
+  	\end{frame}
+  	
+  	%-------------------------------------------%
+  	
+  	\begin{frame}{A hybrid solution: graphs and LLMs}
+  		
+  		\imp{Large Language Models (LLM)} make it possible to reintroduce the semantic content discarded by graph modeling.
+  		
+  		\begin{block}{\de{Our approach : both methods}}
+  			\begin{itemize}
+  				\item The \imp{graph} models the \imp{structure} of the work
+  				\item The \imp{LLM} interprets the \imp{narrative content}
+  			\end{itemize}
+  		\end{block}
+  		
+  		
+  		\begin{center}
+  			\scalebox{0.8}{
+  			\begin{tikzpicture}[
+  				stagebox/.style={
+  					rounded corners,
+  					draw=themecolor,
+  					fill=themecolor!7,
+  					thick,
+  					minimum height=0.65cm,
+  					text width=10cm,
+  					align=center,
+  					font=\small
+  				},
+  				llmbox/.style={
+  					rounded corners,
+  					draw=cyan!70!black,
+  					fill=cyan!10,
+  					thick,
+  					minimum height=0.65cm,
+  					text width=10cm,
+  					align=center,
+  					font=\small
+  				},
+  				flowarrow/.style={
+  					-{Latex[length=2mm]},
+  					thick,
+  					draw=themecolor
+  				},
+  				node distance=0.28cm
+  				]
+  				
+  				\node[stagebox] (text) {
+  					\textbf{Gamebook text}
+  				};
+  				
+  				\node[llmbox, below=of text] (local) {
+  					\textbf{\imp{LLM annotation}}\\
+  					Interpret the transitions offered to the player
+  				};
+  				
+  				\node[stagebox, below=of local] (graph) {
+  					\textbf{\imp{Graph modeling}}\\
+  					Model the structure and produce representative stories
+  				};
+  				
+  				\node[llmbox, below=of graph] (global) {
+  					\textbf{\imp{LLM annotation}}\\
+  					Analyse each resulting story as a whole
+  				};
+  				
+  				\draw[flowarrow] (text) -- (local);
+  				\draw[flowarrow] (local) -- (graph);
+  				\draw[flowarrow] (graph) -- (global);
+  				
+  			\end{tikzpicture}
+  			}
+  		\end{center}
+  		
+  	\end{frame}
+  	
+  	%-------------------------------------------%
+  	
+  	\begin{frame}{Corpus: \emph{Lone Wolf} and Project Aon}
+  		\footnotesize
+  		The studied corpus is the \imp{Lone Wolf series} created by Joe Dever. 
+  		
+  		The \imp{project Aon} (\href{www.projectaon.org}{www.projectaon.org}) provides authorised digital editions of the books. It is already structured with html. 
+  		
+  		There are \imp{several mechanics} in these gamebooks : 
+  		\begin{columns}
+  			\begin{column}[T]{0.48\textwidth}
+  				\begin{itemize}
+	  				\item Branching choices and forced transitions
+	  				\item Random events
+	  				\item Player profile with stats and special powers
+	  				\item Combat with possible evasion
+	  			\end{itemize}
+  			\end{column}
+  			\begin{column}[T]{0.48\textwidth}
+  				\begin{itemize}
+	  				\item Endurance (HP) management
+	  				\item Items and inventory management
+	  				\item Puzzles and hidden links
+	  			\end{itemize}
+  			\end{column}
+  		\end{columns}
+  		
+  		\begin{block}{ \footnotesize \de{Scope of this presentation}}
+  			A complete representation of every mechanic would make the model
+  			highly complex (it requires persistent states).  We use \imp{explicit simplifications} and focus
+  			exclusively on \imp{Book 1: \emph{Flight from the Dark}}.
+  		\end{block}
+  		
+  	\end{frame}
+  	
+  	%-------------------------------------------%
+	
+\end{document}
+

@@ -507,8 +507,8 @@ def render_graph(
         )
         dpi = 120
     figure, axis = plt.subplots(figsize=figure_size, dpi=dpi)
-    figure.patch.set_facecolor("#F7F4EB")
-    axis.set_facecolor("#F7F4EB")
+    figure.patch.set_facecolor("#FFFFFF")
+    axis.set_facecolor("#FFFFFF")
 
     for source_id, target_id, family, weight in narrative_edges:
         source = position[source_id]

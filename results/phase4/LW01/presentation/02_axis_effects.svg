@@ -25,7 +25,7 @@ L 960 540
 L 960 0 
 L 0 0 
 z
-" style="fill: #f7f4eb"/>
+" style="fill: #ffffff"/>
   </g>
   <g id="axes_1">
    <g id="patch_2">
@@ -34,7 +34,7 @@ L 505.6 258.491803
 L 505.6 108 
 L 172.8 108 
 z
-" style="fill: #f7f4eb"/>
+" style="fill: #ffffff"/>
    </g>
    <g id="patch_3">
     <path d="M 339.2 114.840537 
@@ -246,7 +246,7 @@ L 921.6 258.491803
 L 921.6 108 
 L 588.8 108 
 z
-" style="fill: #f7f4eb"/>
+" style="fill: #ffffff"/>
    </g>
    <g id="patch_11">
     <path d="M 755.2 114.840537 
@@ -435,7 +435,7 @@ L 505.6 475.2
 L 505.6 324.708197 
 L 172.8 324.708197 
 z
-" style="fill: #f7f4eb"/>
+" style="fill: #ffffff"/>
    </g>
    <g id="patch_19">
     <path d="M 339.2 331.548733 
@@ -702,7 +702,7 @@ L 921.6 475.2
 L 921.6 324.708197 
 L 588.8 324.708197 
 z
-" style="fill: #f7f4eb"/>
+" style="fill: #ffffff"/>
    </g>
    <g id="patch_27">
     <path d="M 755.2 331.548733 
