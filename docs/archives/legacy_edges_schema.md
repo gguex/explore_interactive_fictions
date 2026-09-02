@@ -2,9 +2,9 @@
 
 > **Status: superseded (July 2026).** This was the original edges schema, produced by
 > rule-based parsing in `scripts/2_parse_simple_gamebook.py`. It has been replaced by the
-> LLM-extracted enhanced edges table (`LWXX_e_edges.csv`) documented in
-> `docs/gamebook_data_schema.md` §3. Kept for reference because
-> `data/processed/nodes_edges/LW01/LW01_edges.csv` was produced with this schema.
+> LLM-extracted enhanced edges table (`LWXX_edges.csv`) documented in
+> `docs/gamebook_data_schema.md` §3. The legacy pipeline historically used the same
+> base filename; the current `LW01_edges.csv` follows the enhanced schema instead.
 
 This table models the transitions connecting the nodes. It explicitly separates
 text-based conditions from stochastic triggers.

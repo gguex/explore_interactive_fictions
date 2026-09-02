@@ -17,7 +17,7 @@ data/processed/nodes_edges/LWXX/LWXX_for_edges_extraction.json   (paragraphs wit
         │
         │  cluster: cluster_scripts/extract.py (vLLM + structured outputs)
         ▼
-data/processed/nodes_edges/LWXX/LWXX_e_edges.csv                 (enhanced edges table, §3)
+data/processed/nodes_edges/LWXX/LWXX_edges.csv                   (enhanced edges table, §3)
 
 data/raw/LWXX/sections/sect*.htm
         │
@@ -30,7 +30,7 @@ File naming: `[SeriesCode][BookNumber]_[DataType].[ext]`
 
 * `SeriesCode`: e.g., `LW` for Lone Wolf, `FF` for Fighting Fantasy.
 * `BookNumber`: two digits, e.g., `01`, `02`.
-* `DataType`: `nodes`, `e_edges`, `for_edges_extraction`, `calibration*` (see §4).
+* `DataType`: `nodes`, `edges`, `for_edges_extraction`, `calibration*` (see §4).
 
 ### Intermediate JSON (`LWXX_for_edges_extraction.json`)
 
@@ -66,7 +66,7 @@ the page, handling multiple entities via JSON-like strings to avoid column bloat
 
 ---
 
-## 3. Enhanced Edges Table (`LWXX_e_edges.csv`)
+## 3. Enhanced Edges Table (`LWXX_edges.csv`)
 
 The reference edges table, produced by the LLM extraction on the cluster
 (`cluster_scripts/extract.py` + `system_prompt_final.txt`, structured outputs enforced by
@@ -97,7 +97,7 @@ Used to calibrate the LLM extraction prompt against a manually annotated gold st
 | File | Content |
 | :--- | :--- |
 | `LWXX_calibration.json` | Manually selected subset of paragraphs, same format as the intermediate JSON (§1). |
-| `LWXX_calibration_edges_gold.csv` | Manually annotated gold edges for this subset, same schema as `LWXX_e_edges.csv` (§3). |
+| `LWXX_calibration_edges_gold.csv` | Manually annotated gold edges for this subset, same schema as `LWXX_edges.csv` (§3). |
 
 Evaluation: `scripts/utils/eval_diff.py` compares a cluster output against the gold and
 writes an error report (`rapport_erreurs_*.csv`, one row per divergence with a

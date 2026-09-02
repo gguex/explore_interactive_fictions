@@ -10,7 +10,7 @@
 | :--- | :--- | :--- |
 | Corpus LW01 | Terminé | 350 sections HTML. |
 | Extraction des nœuds | Terminée | `LW01_nodes.csv`, 350 nœuds. |
-| Extraction des arêtes | Terminée | `LW01_e_edges.csv`, 556 arêtes. |
+| Extraction des arêtes | Terminée | `LW01_edges.csv`, 556 arêtes. |
 | Calibration LLM | Terminée | Structure validée ; le rapport final versionné contient 3 divergences sémantiques douces. |
 | Contrôle qualité | Terminé | Choix complets, IDs valides, 350 nœuds atteignables, 17 fins explicites. |
 | Spécification du pré-graphe | Terminée | Multigraphe direct L0–L2 indépendant des profils, avec les deux issues `Death` et `Win`. |

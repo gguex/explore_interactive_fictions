@@ -116,7 +116,7 @@ def main() -> None:
     book_id = str(args.book)
 
     phase1_dir = Path("data/processed/nodes_edges") / book_id
-    edges_path = phase1_dir / f"{book_id}_e_edges.csv"
+    edges_path = phase1_dir / f"{book_id}_edges.csv"
     nodes_path = phase1_dir / f"{book_id}_nodes.csv"
     pregraph_dir = Path("data/processed/pregraph") / book_id
 

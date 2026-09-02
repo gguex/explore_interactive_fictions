@@ -11,7 +11,7 @@ import json
 from collections import Counter, defaultdict, deque
 
 # --- Configuration ---
-FICHIER_EDGES = "data/processed/nodes_edges/LW01/LW01_e_edges.csv"
+FICHIER_EDGES = "data/processed/nodes_edges/LW01/LW01_edges.csv"
 FICHIER_CORPUS = "data/processed/nodes_edges/LW01/LW01_for_edges_extraction.json"
 FICHIER_NODES = "data/processed/nodes_edges/LW01/LW01_nodes.csv"
 SECTION_DEPART = "1"

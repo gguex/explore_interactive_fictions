@@ -710,7 +710,7 @@ def main() -> None:
         Path("data/processed/nodes_edges") / book_id / f"{book_id}_nodes.csv"
     )
     choices_path = (
-        Path("data/processed/nodes_edges") / book_id / f"{book_id}_e_edges.csv"
+        Path("data/processed/nodes_edges") / book_id / f"{book_id}_edges.csv"
     )
     bop_path = Path("data/processed/bop") / book_id / "profile_pair_metrics.csv"
     medoids_path = phase5_dir / "medoid_trajectories.jsonl"

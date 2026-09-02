@@ -703,7 +703,7 @@ def main() -> None:
         Path("data/processed/nodes_edges") / book_id / f"{book_id}_nodes.csv"
     )
     original_edges_path = args.original_edges or (
-        Path("data/processed/nodes_edges") / book_id / f"{book_id}_e_edges.csv"
+        Path("data/processed/nodes_edges") / book_id / f"{book_id}_edges.csv"
     )
     bop_pairs_path = args.bop_pairs or (
         Path("data/processed/bop") / book_id / "profile_pair_metrics.csv"

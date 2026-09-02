@@ -202,7 +202,7 @@ La phase 1 reste immuable. La compilation ajoute une couche distincte et traçab
 Entrées :
 
 - `LW01_nodes.csv` ;
-- `LW01_e_edges.csv` ;
+- `LW01_edges.csv` ;
 - le JSON balisé et les textes HTML pour les audits ciblés.
 
 Le contrôle qualité existant est exécuté avant chaque compilation. Un identifiant stable,

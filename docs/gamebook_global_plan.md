@@ -191,7 +191,7 @@ Tous les scripts numérotés utilisent `--book <BOOK_ID>` et la même convention
 ```text
 data/raw/<BOOK_ID>/sections/
 data/processed/nodes_edges/<BOOK_ID>/<BOOK_ID>_nodes.csv
-data/processed/nodes_edges/<BOOK_ID>/<BOOK_ID>_e_edges.csv
+data/processed/nodes_edges/<BOOK_ID>/<BOOK_ID>_edges.csv
 data/processed/pregraph/<BOOK_ID>/
 data/for_graph_model/<BOOK_ID>_supervision.csv
 ```

@@ -1,6 +1,6 @@
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
-\usepackage[french]{babel}
+\usepackage[american]{babel}
 \usetheme{metropolis}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -141,10 +141,9 @@ Formalism and LLMs}
   	%-------------------------------------------%
   	
   	\begin{frame}{A hybrid solution: graphs and LLMs}
-  		
-  		\imp{Large Language Models (LLM)} make it possible to reintroduce the semantic content discarded by graph modeling.
-  		
-  		\begin{block}{\de{Our approach : both methods}}
+  		\scriptsize
+  		\imp{Large Language Models (LLM)} make it possible to reintroduce the semantic content discarded by graph modeling. 
+  		\begin{block}{\scriptsize \de{Our approach : both methods}}
   			\begin{itemize}
   				\item The \imp{graph} models the \imp{structure} of the work
   				\item The \imp{LLM} interprets the \imp{narrative content}
@@ -153,7 +152,7 @@ Formalism and LLMs}
   		
   		
   		\begin{center}
-  			\scalebox{0.8}{
+  			\scalebox{0.7}{
   			\begin{tikzpicture}[
   				stagebox/.style={
   					rounded corners,
@@ -199,7 +198,7 @@ Formalism and LLMs}
   				
   				\node[llmbox, below=of graph] (global) {
   					\textbf{\imp{LLM annotation}}\\
-  					Analyse each resulting story as a whole
+  					Analyze each resulting story as a whole
   				};
   				
   				\draw[flowarrow] (text) -- (local);
@@ -210,6 +209,61 @@ Formalism and LLMs}
   			}
   		\end{center}
   		
+  		\begin{block}{\de{\scriptsize Research question}}
+  			How can graph modeling and local LLM annotation be combined to study
+  			both the structural possibilities and the narrative experiences
+  			produced by a gamebook?
+  		\end{block}
+  		
+  	\end{frame}
+  	
+  	%-------------------------------------------%
+  	
+  	\begin{frame}{Methodogical choice : local LLM}
+  		
+  		\scriptsize
+  		
+  		\begin{block}{\de{Methodological choice}}
+  			\begin{itemize}
+  				\item We are going to use exclusively \imp{Qwen3.6-27B}, executed locally on university infrastructure. 
+  				\item The local model is not treated as an autonomous literary critic.
+  				It is used as a \imp{controlled annotation instrument} whose
+  				decisions remain open to inspection.
+  			\end{itemize}
+  		\end{block}
+  		
+  		\begin{columns}[T,onlytextwidth]
+  			\scriptsize
+  			\begin{column}[T]{0.48\textwidth}
+  				\vspace{0pt}
+  				\textbf{Methodological reasons}
+  				
+  				\begin{itemize}
+  					\item No dependency on a proprietary API
+  					\item Prompts and inference settings are documented
+  					\item Outputs can be stored, inspected and reproduced
+  					\item Source texts remain on local infrastructure
+  					\item Lower and predictable financial cost
+  				\end{itemize}
+  			\end{column}
+  			
+  			\begin{column}[T]{0.48\textwidth}
+  				\vspace{0pt}
+  				\textbf{Why is it sufficient?}
+  				
+  				\begin{itemize}
+  					\item The task is a constrained annotation task
+  					\item Categories are defined by an explicit codebook
+  					\item Outputs follow a restricted JSON schema
+  					\item Results are checked against human annotations
+  					\item Frontier-level generative capabilities are overkill
+  				\end{itemize}
+  			\end{column}
+  			
+  		\end{columns}
+  		
+  		\vfill
+  		
   	\end{frame}
   	
   	%-------------------------------------------%
@@ -218,7 +272,7 @@ Formalism and LLMs}
   		\footnotesize
   		The studied corpus is the \imp{Lone Wolf series} created by Joe Dever. 
   		
-  		The \imp{project Aon} (\href{www.projectaon.org}{www.projectaon.org}) provides authorised digital editions of the books. It is already structured with html. 
+  		The \imp{project Aon} (\href{www.projectaon.org}{www.projectaon.org}) provides authorized digital editions of the books. It is already structured with html. 
   		
   		There are \imp{several mechanics} in these gamebooks : 
   		\begin{columns}
@@ -241,13 +295,260 @@ Formalism and LLMs}
   		
   		\begin{block}{ \footnotesize \de{Scope of this presentation}}
   			A complete representation of every mechanic would make the model
-  			highly complex (it requires persistent states).  We use \imp{explicit simplifications} and focus
+  			intractable.  We use \imp{explicit simplifications} and focus
   			exclusively on \imp{Book 1: \emph{Flight from the Dark}}.
   		\end{block}
   		
   	\end{frame}
   	
   	%-------------------------------------------%
+  	
+  	\begin{frame}{Modeling scope: from L0 to L3}
+  		\footnotesize
+  		The goal is to build a tractable \imp{Markovian model}: for a fixed player profile, the next transition depends only on the current node, not on the complete play history.
+  		
+  		\vspace{0.15cm}
+  		
+  		\begin{center}
+  			\tiny
+	  		\begin{tabular}{|c|c|p{0.43\textwidth}|c|}
+	  			
+	  			\hline
+	  			
+	  			\textbf{Level} &
+	  			\textbf{Information} &
+	  			\textbf{Mechanics} &
+	  			\textbf{Decision} \\
+	  			
+	  			\hline
+	  			
+	  			\textbf{L0} &
+	  			Topology &
+	  			Paragraphs, links, forced transitions, Death and Win outcomes &
+	  			\textcolor{green!50!black}{\textbf{Included}} \\
+	  			
+	  			\hline
+	  			
+	  			\textbf{L1} &
+	  			Player agency &
+	  			Choices annotated along the risk, morality and action axes &
+	  			\textcolor{green!50!black}{\textbf{Included}} \\
+	  			
+	  			\hline
+	  			
+	  			\textbf{L2} &
+	  			Uncertainty &
+	  			Random events, combat, evasion, Kai Disciplines (special powers) and conditions &
+	  			\textcolor{orange!80!black}{\textbf{Simplified}} \\
+	  			
+	  			\hline
+	  			
+	  			\textbf{L3} &
+	  			Persistent state &
+	  			Endurance, healing, inventory, gold, equipment and meals &
+	  			\textcolor{red!75!black}{\textbf{Not simulated}} \\
+	  			
+	  			\hline
+	  		\end{tabular}
+  		\end{center}
+  		
+  		\imp{L2 simplifications} :
+  		\begin{itemize}
+  			\item One global combat-win probability
+  			\item One global escape probability
+  			\item Kai Disciplines availability fixed at $0.5$
+  			\item One generic \texttt{has\_condition} probability
+  		\end{itemize}
+  	\end{frame}
+  	
+  	%-------------------------------------------%
+  	
+  	\begin{frame}{Outline of the presentation}
+  		\scriptsize
+  		\imp{1. Paragraph parsing and transition annotation}
+  		
+  		A local LLM reads the choices offered at each paragraph and outputs :
+  		\begin{itemize}
+  			\item Transition types
+  			\item Game mechanics
+  			\item Risk, morality and action labels
+  		\end{itemize}
+  		
+  		\imp{2. Graph modeling and Bag-of-Path formalism}
+  		
+  		The annotations are compiled into weighted graphs for different player profiles, and various objects are computed : 
+  		\begin{itemize}
+  			\item Bag-of-Paths indices
+  			\item Local and global measures
+  			\item Representative trajectories
+  		\end{itemize}
+  		
+  		\imp{3. Trajectory annotation}
+  		
+  		A local LLM reads the stories associated with selected
+  		trajectories and produce : 
+  		\begin{itemize}
+  			\item Whole-story annotations
+  			\item Profile manifestation
+  			\item Pairwise comparisons
+  		\end{itemize}
+  		
+  	\end{frame}
+  	
+  	%-------------------------------------------%
+  	
+  	\section{Paragraph parsing and transition annotation}
+  	
+  	%-------------------------------------------%
+  	
+  	\begin{frame}{Objective: from paragraphs to structured data}
+  		
+  		\begin{block}{\de{Objective}}
+  			\small
+  			Transform each gamebook paragraph into an
+  			\imp{structured representation}, separating
+  			\imp{narrative units} from the \imp{transitions} offered to the player.
+  		\end{block}
+  		
+  		\vspace{0.1cm}
+  		
+  		\begin{columns}[T,onlytextwidth]
+  			
+  			\begin{column}[T]{0.29\textwidth}
+  				\vspace{0pt}
+  				\centering
+  				\textbf{Project Aon page}
+  				
+  				\vspace{0.1cm}
+  				
+  				\fbox{%
+  					\includegraphics[
+  					width=0.92\linewidth,
+  					height=0.49\textheight,
+  					keepaspectratio
+  					]{fig/LW01_112.png}%
+  				}
+  				
+  				\vspace{0.1cm}
+  				
+  				{\tiny Paragraph 112}
+  			\end{column}
+  			
+  			\begin{column}[T]{0.11\textwidth}
+  				\vspace{1.5cm}
+  				\centering
+  				
+  				{\Large $\Longrightarrow$}
+  				
+  				\vspace{0.1cm}
+  				
+  				{\tiny Parsing\\+\\ \vspace{-0.2cm}LLM}
+  			\end{column}
+  			
+  			\begin{column}[T]{0.56\textwidth}
+  				\vspace{0pt}
+  				\centering
+  				
+  				\textbf{\texttt{LW01\_nodes.csv}}
+  				
+  				\vspace{0.1cm}
+  				
+  				{\tiny
+  					\resizebox{\linewidth}{!}{%
+  						\begin{tabular}{|c|c|c|c|}
+  							\hline
+  							\texttt{node\_id} &
+  							\texttt{text\_content} &
+  							\texttt{absorbing\_status} &
+  							\texttt{enemies} \\
+  							\hline
+  							112 &
+  							Suddenly, the large rock\ldots &
+  							\texttt{potential\_death} &
+  							Giak 1; Giak 2 \\
+  							\hline
+  						\end{tabular}
+  				}}
+  				
+  				\vspace{0.5cm}
+  				
+  				\centering
+  				\textbf{\texttt{LW01\_edges.csv}}
+  				
+  				\vspace{0.1cm}
+  				
+  				% First half of the columns
+  				{\tiny
+  					\resizebox{\linewidth}{!}{%
+  						\begin{tabular}{|c|c|c|c|c|}
+  							\hline
+  							\texttt{source\_id} &
+  							\texttt{target\_id} &
+  							\texttt{edge\_text} &
+  							\texttt{transition\_type} &
+  							\texttt{realisation\_value} \\
+  							\hline
+  							
+  							112 &
+  							33 &
+  							If you win, explore the cave\ldots &
+  							\texttt{explicit\_choice} &
+  							\texttt{If you win} \\
+  							
+  							\hline
+  							
+  							112 &
+  							248 &
+  							Leave and descend the hill\ldots &
+  							\texttt{explicit\_choice} &
+  							\texttt{If you win} \\
+  							
+  							\hline
+  						\end{tabular}%
+  				}}
+  				
+  				\vspace{0.15cm}
+  				
+  				% Second half of the columns
+  				{\tiny
+  					\resizebox{\linewidth}{!}{%
+  						\begin{tabular}{|c|c|c|c|c|c|}
+  							\hline
+  							\texttt{source\_id} &
+  							\texttt{target\_id} &
+  							\texttt{semantic\_risk} &
+  							\texttt{semantic\_morality} &
+  							\texttt{semantic\_action} &
+  							\texttt{warnings} \\
+  							\hline
+  							
+  							112 &
+  							33 &
+  							\texttt{reckless} &
+  							\texttt{neutral} &
+  							\texttt{tactical} &
+  							-- \\
+  							
+  							\hline
+  							
+  							112 &
+  							248 &
+  							\texttt{cautious} &
+  							\texttt{selfish} &
+  							\texttt{physical} &
+  							-- \\
+  							
+  							\hline
+  						\end{tabular}%
+  				}}
+  				
+  				\vspace{0.1cm}
+  				
+  			\end{column}
+  			
+  		\end{columns}
+  		
+  	\end{frame}
 	
 \end{document}
 

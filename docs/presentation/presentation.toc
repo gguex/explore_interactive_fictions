@@ -1,2 +1,3 @@
-\babel@toc {french}{}\relax 
+\babel@toc {american}{}\relax 
 \beamer@sectionintoc {1}{Introduction}{2}{0}{1}
+\beamer@sectionintoc {2}{Paragraph parsing and transition annotation}{10}{0}{2}

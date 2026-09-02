@@ -159,7 +159,7 @@ pipelines.
 La collecte de ces effets ne signifie pas que L3 sera simulé. Elle préserve seulement
 l'information pour une extension future ou une analyse de sensibilité.
 
-### 4.2 `<BOOK_ID>_e_edges.csv`
+### 4.2 `<BOOK_ID>_edges.csv`
 
 | Champ | Contenu attendu |
 | :--- | :--- |

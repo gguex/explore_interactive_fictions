@@ -31,7 +31,7 @@ arêtes, et garder l'expansion EP pour l'article.
 ### Phase 1 — Extraction des données (quasi terminée)
 
 Produire, à partir des HTML de Project Aon, les tables `LW01_nodes.csv` et
-`LW01_e_edges.csv` (schémas dans `docs/gamebook_data_schema.md`).
+`LW01_edges.csv` (schémas dans `docs/gamebook_data_schema.md`).
 
 - [x] Parsing HTML des nœuds avec choix balisés `<choice>` (`scripts/1_parse_for_edge_extraction.py`).
 - [x] Jeu de calibration manuel (gold) : `data/for_edge_extraction/LW01_calibration*.{json,csv}`.
@@ -39,7 +39,7 @@ Produire, à partir des HTML de Project Aon, les tables `LW01_nodes.csv` et
       6 itérations, de ~35 divergences à **4 divergences "douces"** (axes sémantiques uniquement,
       aucune erreur structurelle). Historique dans `results/curnagl_results/`.
 - [x] **Extraction complète** des 350 sections de LW01 sur le cluster → 556 arêtes,
-      `LW01_e_edges.csv` (brut dans `results/curnagl_results/csv/LW01_edges_extraction.csv`).
+      `LW01_edges.csv` (brut dans `results/curnagl_results/csv/LW01_edges_extraction.csv`).
 - [x] **Contrôle qualité** (14.07.2026) : zéro écart balises `<choice>` ↔ arêtes, IDs valides,
       graphe entièrement atteignable depuis la section 1, 17 nœuds absorbants cohérents avec
       `LW01_nodes.csv`, zéro violation des règles du schéma. Notes pour la phase 2 : la

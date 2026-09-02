@@ -48,7 +48,7 @@ results/         cluster outputs and calibration history
 ## Pipeline status (August 2026)
 
 1. **Extraction** (phase 1, done): prompt calibrated on Qwen3.6-27B (3 soft divergences
-   vs the gold standard), full book extracted (556 edges, `LW01_e_edges.csv`) and
+   vs the gold standard), full book extracted (556 edges, `LW01_edges.csv`) and
    quality-checked (complete vs `<choice>` tags, fully reachable graph, zero schema
    violations).
 2. **Pregraph construction** (phase 2, done for LW01): 352 nodes and 602 direct
