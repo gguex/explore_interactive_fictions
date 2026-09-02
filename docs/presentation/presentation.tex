@@ -132,10 +132,12 @@ Formalism and LLMs}
   		
   		\vfill
   		
-  		\begin{block}{\de{Main limitation}}
-  		This representation makes it possible to study the
-  		\imp{structure} or the \imp{topology} of the work, but the text itself, therefore the \imp{narrative meaning}, is no longer taken into account.
-  		\end{block}
+  		The \imp{Main limitation} of this representation : 
+  		\begin{itemize}
+  			\item The \imp{structure} or the \imp{topology} of the work can be studied. 
+  			\item The text itself, therefore the \imp{narrative meaning}, is no longer taken into account.
+  		\end{itemize}
+  		
   	\end{frame}
   	
   	%-------------------------------------------%
@@ -548,7 +550,170 @@ Formalism and LLMs}
   			
   		\end{columns}
   		
+  		
+  		
   	\end{frame}
+  	
+  	%-------------------------------------------%
+  	
+	\begin{frame}{Rule-based parsing versus LLM-based annotations}
+		\scriptsize
+		\imp{Rule-based parsing (on html)}
+		
+		Can process all fields in the \imp{node table}, and \imp{some fields in the edges tables} (\texttt{source\_id}, \texttt{target\_id}, and
+		\texttt{edge\_text}, used for validation).
+		
+		\vspace{0.1cm}
+		
+		\imp{LLM-based annotations}
+		
+		All fields in the \imp{edge table}, in particular :
+		
+		\begin{itemize}
+			\item Transition mechanism:
+			\texttt{transition\_type}, \texttt{realisation\_value};
+			\item Meaning of player choices:
+			\texttt{semantic\_risk}, \texttt{semantic\_morality},
+			\texttt{semantic\_action};
+			\item Ambiguities requiring attention:
+			\texttt{warnings}.
+		\end{itemize}
+		
+		\begin{block}{\scriptsize \de{Methodological choice}}
+			Each explicit player choice is annotated according to \imp{3 independent semantic axes} : 
+			
+			\begin{itemize}
+				\item \imp{Risk}: exposure to danger (cautious, neutral, reckless)
+				\item \imp{Morality} : treatment of others (selfish, neutral, noble)
+				\item \imp{Action} : mode of intervention (physical, neutral, tactical)
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+	%-------------------------------------------%
+	
+	\begin{frame}{From prompt to structured annotation}
+		
+		\centering
+		
+		\begin{tikzpicture}[
+			file/.style={
+				draw=themecolor,
+				line width=0.6pt,
+				rounded corners=2pt,
+				fill=white,
+				align=left,
+				inner sep=4pt,
+				font=\ttfamily\tiny
+			},
+			engine/.style={
+				draw=themecolor,
+				line width=0.9pt,
+				rounded corners=2pt,
+				fill=themecolor!8,
+				align=center,
+				inner sep=6pt,
+				font=\small
+			},
+			flow/.style={
+				->,
+				>=stealth,
+				line width=0.8pt,
+				draw=themecolor
+			}
+			]
+			
+			\useasboundingbox (-6.1,-3.0) rectangle (6.1,3.0);
+			
+			% Prompt
+			\node[file,text width=3.55cm] (prompt) at (-4.4,2.5) {%
+				{\bfseries\rmfamily system\_prompt.txt}\\[1mm]
+				You are an expert data analyst...\\
+				\textbf{[CRITICAL RULES]}\\
+				Extract all outgoing transitions.\\
+				\texttt{transition\_type}: forced,\\
+				explicit\_choice, stochastic...
+			};
+			
+			% Schema
+			\node[file,text width=3.55cm] (schema) at (-4.4,0) {%
+				{\bfseries\rmfamily schemas.py}\\[1mm]
+				class Edge(BaseModel):\\
+				\quad source\_id: str\\
+				\quad target\_id: str\\
+				\quad transition\_type: Literal[...]\\
+				\quad semantic\_risk: Optional[...]\\
+				\quad warnings: Optional[str]
+			};
+			
+			% Input corpus
+			\node[file,text width=3.55cm] (corpus) at (-4.4,-2.55) {%
+				{\bfseries\rmfamily LW01\_nodes\_for\_LLM.json}\\[1mm]
+				[\\
+				\quad \{\\
+				\qquad \char34 id\char34: \char34 1\char34,\\
+				\qquad \char34 text\char34: \char34 Narrative...\\
+				\qquad \textless choice\textgreater If you wish... \char34\\
+				\quad \}\\
+				]
+			};
+			
+			
+			% Python + LLM
+			\node[engine,text width=2.45cm] (engine) at (-0.4,0) {%
+				\textbf{\texttt{extract.py}}\\[2mm]
+				Python + vLLM\\[1mm]
+				\textbf{Qwen3.6-27B}\\[2mm]
+				\scriptsize
+				temperature = 0\\
+				structured output
+			};
+			
+			% JSON response
+			\node[file,text width=3.55cm] (json) at (3.3,0) {%
+				{\bfseries\rmfamily LW01\_edges.json}\\[1mm]
+				\{ \char34 edges\char34: [\\
+				\quad \{\\
+				\qquad \char34 source\_id\char34: \char34 1\char34,\\
+				\qquad \char34 target\_id\char34: \char34 141\char34,\\
+				\qquad \char34 transition\_type\char34:\\
+				\qquad \quad \char34 conditional\char34,\\
+				\qquad \char34 semantic\_risk\char34: null\\
+				\quad \}\\
+				] \}
+			};
+			
+			% Final CSV
+			\node[file,text width=3.55cm] (csv) at (3.3,-2.75) {%
+				{\bfseries\rmfamily LW01\_edges.csv}\\[1mm]
+				source\_id, target\_id, ...\\
+				1, 141, ..., conditional, ...\\
+				1, 85, ..., explicit\_choice,\\
+				\quad neutral, neutral, neutral
+			};
+			
+			% Input arrows
+			\draw[flow]
+			(prompt.east) -- ++(0.35,0)
+			|- ([yshift=5mm]engine.west);
+			
+			\draw[flow]
+			(schema.east) -- (engine.west);
+			
+			\draw[flow]
+			(corpus.east) -- ++(0.35,0)
+			|- ([yshift=-5mm]engine.west);
+			
+			% Output arrows
+			\draw[flow]
+			(engine.east) -- (json.west);
+			
+			\draw[flow]
+			(json.south) -- (csv.north);
+			
+		\end{tikzpicture}
+		
+	\end{frame}
 	
 \end{document}
 
