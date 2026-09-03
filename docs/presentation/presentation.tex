@@ -81,20 +81,19 @@ Formalism and LLMs}
   	%-------------------------------------------%
   	
   	\begin{frame}{The classical representation: a graph}
-  	\begin{columns}[T,onlytextwidth]
-  		\begin{column}{0.50\textwidth}			
-  			Interactive fiction is traditionally modeled as a
-  			\imp{directed graph}:
-  			
+  		Interactive fiction is traditionally modeled as a
+  		\imp{directed graph}.
+  	\begin{columns}[T]
+  		\begin{column}{0.55\textwidth}			 			
   			\vspace{0.4cm}
   			
   			\begin{itemize}
-  				\item \imp{Nodes} represent passages or narrative sections;
-  				\item \imp{Edges} represent the choices available to the player.
+  				\item \imp{Nodes} represent \emph{paragraphs}, i.e. numbered narrative sections.
+  				\item \imp{Edges} represent \emph{transitions}, i.e. the choices available to the player.
   			\end{itemize}
   		\end{column}
   		
-  		\begin{column}{0.50\textwidth}
+  		\begin{column}{0.45\textwidth}
   			\centering
   			\begin{tikzpicture}[
   				node/.style={
@@ -712,6 +711,276 @@ Formalism and LLMs}
 			(json.south) -- (csv.north);
 			
 		\end{tikzpicture}
+		
+	\end{frame}
+	
+	%-------------------------------------------%
+	
+	\begin{frame}{Iterative prompt refinement}
+		\footnotesize
+		\centering
+		
+		\begin{tikzpicture}[
+			calbox/.style={
+				draw=themecolor,
+				rounded corners=2pt,
+				line width=0.7pt,
+				fill=white,
+				align=center,
+				text width=2.6cm,
+				minimum height=1.5cm,
+				inner sep=4pt,
+				font=\scriptsize
+			},
+			calarrow/.style={
+				->,
+				>=stealth,
+				draw=themecolor,
+				line width=0.8pt
+			}
+			]
+			
+			% First line
+			\node[calbox] (human) at (-4.1,1.5) {
+				\textbf{Calibration dataset}\\[1mm]
+				50/350 paragraphs\\
+				102/556 transitions
+			};
+			
+			\node[calbox,fill=themecolor!8] (llm) at (0,1.5) {
+				\textbf{LLM annotation}\\[1mm]
+				Qwen3.6-27B\\
+				Structured output
+			};
+			
+			\node[calbox] (errors) at (4.1,1.5) {
+				\textbf{Error analysis}\\[1mm]
+				Comparison with human annotations\\
+				Recurrent failures
+			};
+			
+			% Second line
+			\node[calbox,text width=3.2cm] (prompt) at (0,-1.25) {
+				\textbf{Prompt}\\[1mm]
+				Generic annotation rules\\
+				+ few-shot examples
+			};
+			
+			% Main sequence
+			\draw[calarrow]
+			(human.east) --
+			(llm.west);
+			
+			\draw[calarrow]
+			(llm.east) --
+			(errors.west);
+			
+			% Prompt injection
+			\draw[calarrow]
+			(prompt.north) --
+			(llm.south);
+			
+			% Refinement loop
+			\draw[calarrow]
+			(errors.south) |-
+			node[pos=0.72,above,font=\tiny]{refine}
+			(prompt.east);
+			
+		\end{tikzpicture}
+		
+		\vspace{0.4cm}
+		
+		\begin{itemize}
+			\item Errors lead to revisions of \imp{general annotation rules},
+			not paragraph-specific corrections.
+			\item This iterative process is a \imp{calibration}, not an
+			independent evaluation.
+			\item No held-out validation set was used because of limited time;
+			generalization to another book is therefore not measured.
+		\end{itemize}
+		
+	\end{frame}
+	
+	%-------------------------------------------%
+	
+	\begin{frame}{Annotation results}
+		\footnotesize
+		
+		\imp{Calibration} : On 50 paragraphs and 102 transitions, the final prompt produced no
+		missing or invented transition and no transition-type disagreement. Only 3 (on 177 annotations) semantic disagreements : two for risk and one for action.
+		
+		\begin{center}
+			\imp{Paragraph statistics}
+			
+			
+			\scalebox{0.7}{
+				\begin{tabular}{|l|c|}
+					
+					\hline
+					Total & 350 \\
+					Terminal & 16 deaths / 1 victory \\
+					One outgoing transitions & 157 \\
+					Two outgoing transitions & 134 \\
+					Three or more outgoing transitions & 42 \\
+					Paragraphs with enemies & 29 \\
+					\hline
+				\end{tabular}
+			}
+			
+			\vspace{0.3cm}
+			\imp{Transition statistics}
+			\vspace{-0.3cm}
+		\end{center}
+		
+		\begin{columns}[T,onlytextwidth]
+			
+			\begin{column}{0.32\textwidth}
+				\centering
+				\scalebox{0.7}{
+				\begin{tabular}{|l|r|r|}
+					\hline
+					\textbf{Transition type} & \textbf{N} & \textbf{\%} \\
+					\hline
+					Explicit choice & 291 & 52.3 \\
+					Forced          & 157 & 28.2 \\
+					Conditional     & 66  & 11.9 \\
+					Stochastic      & 42  & 7.6 \\
+					\hline
+					\textbf{Total}  & \textbf{556} & \textbf{100.0} \\
+					\hline
+				\end{tabular}
+				}
+			\end{column}
+			
+			\begin{column}{0.64\textwidth}
+				\centering
+				\scalebox{0.7}{
+				\begin{tabular}{|l|l|l|l|}
+					\hline
+					\textbf{Axis} & \textbf{First pole}
+					& \textbf{Neutral} & \textbf{Opposite pole} \\
+					\hline
+					Risk
+					& cautious: 95 (32.6\%)
+					& 84 (28.9\%)
+					& reckless: 112 (38.5\%) \\
+					Morality
+					& selfish: 18 (6.2\%)
+					& 262 (90.0\%)
+					& noble: 11 (3.8\%) \\
+					Action
+					& physical: 101 (34.7\%)
+					& 126 (43.3\%)
+					& tactical: 64 (22.0\%) \\
+					\hline
+				\end{tabular} 
+				}
+				
+				\vspace{0.2cm}
+				
+				\scalebox{0.7}{
+				\begin{tabular}{|l|l|}
+					\hline
+					Warnings & 53 (9.5\%)  \\
+					\hline
+				\end{tabular}
+				}
+			\end{column}
+				
+		\end{columns}
+		
+	\end{frame}
+	
+	%-------------------------------------------%
+	
+	\section{Graph construction and Bag-of-Paths analysis}
+	
+	%-------------------------------------------%
+	
+	\begin{frame}{Objective: from annotations to structural measures}
+		
+		\scriptsize
+		
+		The objectives here are to : 
+		\begin{itemize}
+			\item Transform annotations into
+			\imp{weighted directed graphs (i.e. a Markov chain matrix)} which depend on \imp{player profiles}.
+			\item Compute \imp{various indices with the Bag-of-Path formalism}.
+		\end{itemize}
+		
+		
+		\vspace{0.35cm}
+		
+		\centering
+		
+		\scalebox{0.7}{
+		\begin{tikzpicture}[
+			graphbox/.style={
+				draw=themecolor,
+				rounded corners=2pt,
+				line width=0.7pt,
+				fill=white,
+				align=center,
+				text width=2.35cm,
+				minimum height=1.45cm,
+				inner sep=4pt,
+				font=\scriptsize
+			},
+			grapharrow/.style={
+				->,
+				>=stealth,
+				draw=themecolor,
+				line width=0.8pt
+			}
+			]
+			
+			\node[graphbox] (annotations) at (-4.5,1) {
+				\textbf{Annotated transitions}\\[1mm]
+				Types, conditions and semantic axes
+			};
+			
+			\node[graphbox] (pregraph) at (-1.5,1) {
+				\textbf{Symbolic pregraph}\\[1mm]
+				Profile-independent transition rules
+			};
+			
+			\node[graphbox,fill=themecolor!8] (matrix) at (1.5,1) {
+				\textbf{Weighted graph}\\[1mm]
+				Transition matrix\\
+				$W(\mathrm{profile})$
+			};
+			
+			\node[graphbox] (bop) at (4.5,1) {
+				\textbf{Bag-of-Paths}\\[1mm]
+				Local and global structural indices
+			};
+			
+			\node[graphbox,text width=2.8cm,minimum height=1.1cm]
+			(parameters) at (1.5,-1.15) {
+				\textbf{Profile and fixed parameters}\\
+				Risk, morality, action,\\
+				combat, escape and conditions
+			};
+			
+			\draw[grapharrow] (annotations.east) -- (pregraph.west);
+			\draw[grapharrow] (pregraph.east) -- (matrix.west);
+			\draw[grapharrow] (matrix.east) -- (bop.west);
+			\draw[grapharrow] (parameters.north) -- (matrix.south);
+			
+		\end{tikzpicture}
+		}
+		
+		\vspace{0.1cm}
+		
+		\raggedright
+		
+		This section addresses three questions:
+		
+		\begin{itemize}
+			\item How can heterogeneous game mechanics be converted into transition probabilities?
+			\item How does the resulting graph vary across player profiles?
+			\item Which paragraphs and structural properties are most important across all possible trajectories?
+		\end{itemize}
 		
 	\end{frame}
 	

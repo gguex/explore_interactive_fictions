@@ -1,0 +1,259 @@
+{
+  "book_id": "LW01",
+  "calibration": {
+    "paragraphs": 50,
+    "reference_transitions": 102,
+    "model_transitions": 102,
+    "matched_transition_records": 102,
+    "missing_transition_records": 0,
+    "extra_transition_records": 0,
+    "field_agreement": {
+      "transition_type": {
+        "evaluated": 102,
+        "agreements": 102,
+        "disagreements": 0,
+        "agreement_percent": 100.0,
+        "details": []
+      },
+      "semantic_risk": {
+        "evaluated": 59,
+        "agreements": 57,
+        "disagreements": 2,
+        "agreement_percent": 96.6,
+        "details": [
+          {
+            "source_id": "23",
+            "target_id": "337",
+            "gold": "reckless",
+            "model": "neutral"
+          },
+          {
+            "source_id": "334",
+            "target_id": "162",
+            "gold": "neutral",
+            "model": "reckless"
+          }
+        ]
+      },
+      "semantic_morality": {
+        "evaluated": 59,
+        "agreements": 59,
+        "disagreements": 0,
+        "agreement_percent": 100.0,
+        "details": []
+      },
+      "semantic_action": {
+        "evaluated": 59,
+        "agreements": 58,
+        "disagreements": 1,
+        "agreement_percent": 98.3,
+        "details": [
+          {
+            "source_id": "129",
+            "target_id": "144",
+            "gold": "neutral",
+            "model": "tactical"
+          }
+        ]
+      }
+    },
+    "scored_disagreements_total": 3,
+    "unscored_text_fields": {
+      "realisation_value": {
+        "evaluated": 102,
+        "agreements": 98,
+        "disagreements": 4,
+        "agreement_percent": 96.1,
+        "details": [
+          {
+            "source_id": "125",
+            "target_id": "301",
+            "gold": "",
+            "model": "If you have the Kai Discipline of Tracking"
+          },
+          {
+            "source_id": "128",
+            "target_id": "336",
+            "gold": "If you do not",
+            "model": "If you do not [have the Kai Discipline of Hunting]"
+          },
+          {
+            "source_id": "334",
+            "target_id": "73",
+            "gold": "If you wish to use the Kai Discipline of Camouflage and wait for them to pass",
+            "model": "If you wish to use the Kai Discipline of Camouflage"
+          },
+          {
+            "source_id": "83",
+            "target_id": "45",
+            "gold": "",
+            "model": "If you possess the Kai Discipline of Sixth Sense"
+          }
+        ]
+      },
+      "warnings": {
+        "evaluated": 102,
+        "agreements": 99,
+        "disagreements": 3,
+        "agreement_percent": 97.1,
+        "details": [
+          {
+            "source_id": "253",
+            "target_id": "278",
+            "gold": "",
+            "model": "Implicit dead end (death) if combat is lost, as there is no alternative choice provided."
+          },
+          {
+            "source_id": "260",
+            "target_id": "156",
+            "gold": "",
+            "model": "Combat with a penalty (-4 COMBAT SKILL) and only one outcome provided"
+          },
+          {
+            "source_id": "87",
+            "target_id": "61",
+            "gold": "",
+            "model": "Narrative describes suffering small cuts to face and hands during the transition"
+          }
+        ]
+      }
+    },
+    "scope_note": "Only topology, transition_type, and the three semantic axes are scored. Free-text realisation_value and warnings are reported separately because literal equality is not a reliable quality score."
+  },
+  "full_annotation": {
+    "paragraph_structure": {
+      "paragraphs": 350,
+      "paragraph_statuses": {
+        "death": {
+          "count": 16,
+          "percent": 4.6
+        },
+        "none": {
+          "count": 297,
+          "percent": 84.9
+        },
+        "potential_death": {
+          "count": 36,
+          "percent": 10.3
+        },
+        "win": {
+          "count": 1,
+          "percent": 0.3
+        }
+      },
+      "paragraphs_with_outgoing_transitions": 333,
+      "terminal_paragraphs": 17,
+      "single_transition_paragraphs": 157,
+      "branching_paragraphs": 176,
+      "outgoing_transition_count": {
+        "0": {
+          "count": 17,
+          "percent": 4.9
+        },
+        "1": {
+          "count": 157,
+          "percent": 44.9
+        },
+        "2": {
+          "count": 134,
+          "percent": 38.3
+        },
+        "3": {
+          "count": 37,
+          "percent": 10.6
+        },
+        "4": {
+          "count": 5,
+          "percent": 1.4
+        }
+      },
+      "mean_transitions_per_nonterminal_paragraph": 1.67,
+      "median_transitions_per_nonterminal_paragraph": 2,
+      "maximum_transitions_from_one_paragraph": 4,
+      "paragraphs_with_enemies": 29
+    },
+    "edge_annotations": {
+      "transitions": 556,
+      "transition_types": {
+        "conditional": {
+          "count": 66,
+          "percent": 11.9
+        },
+        "explicit_choice": {
+          "count": 291,
+          "percent": 52.3
+        },
+        "forced": {
+          "count": 157,
+          "percent": 28.2
+        },
+        "stochastic": {
+          "count": 42,
+          "percent": 7.6
+        }
+      },
+      "paragraphs_containing_each_type": {
+        "conditional": 47,
+        "explicit_choice": 142,
+        "forced": 157,
+        "stochastic": 19
+      },
+      "explicit_choices": 291,
+      "semantic_axes_among_explicit_choices": {
+        "semantic_risk": {
+          "cautious": {
+            "count": 95,
+            "percent": 32.6
+          },
+          "neutral": {
+            "count": 84,
+            "percent": 28.9
+          },
+          "reckless": {
+            "count": 112,
+            "percent": 38.5
+          }
+        },
+        "semantic_morality": {
+          "neutral": {
+            "count": 262,
+            "percent": 90.0
+          },
+          "noble": {
+            "count": 11,
+            "percent": 3.8
+          },
+          "selfish": {
+            "count": 18,
+            "percent": 6.2
+          }
+        },
+        "semantic_action": {
+          "neutral": {
+            "count": 126,
+            "percent": 43.3
+          },
+          "physical": {
+            "count": 101,
+            "percent": 34.7
+          },
+          "tactical": {
+            "count": 64,
+            "percent": 22.0
+          }
+        }
+      },
+      "warnings": {
+        "count": 53,
+        "percent": 9.5
+      },
+      "paragraph_type_note": "Paragraph counts by transition type are not mutually exclusive."
+    }
+  },
+  "inputs": {
+    "gold": "data/for_edge_extraction/LW01_calibration_edges_gold.csv",
+    "calibration_output": "results/curnagl_results/csv/LW01_calibration_edges_final.csv",
+    "full_edges": "data/processed/nodes_edges/LW01/LW01_edges.csv",
+    "nodes": "data/processed/nodes_edges/LW01/LW01_nodes.csv"
+  }
+}
