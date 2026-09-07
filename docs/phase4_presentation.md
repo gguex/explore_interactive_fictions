@@ -38,7 +38,7 @@ sur les neuf combinaisons des deux autres axes.
 
 Message à dire en une phrase :
 
-> Risk is the dominant behavioural axis: cautious choices raise win probability by 9.23
+> Risk is the dominant behavioral axis: cautious choices raise win probability by 9.23
 > percentage points, whereas reckless choices lower it by 5.24 points and strongly
 > reduce trajectory entropy.
 

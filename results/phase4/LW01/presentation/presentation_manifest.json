@@ -1,40 +1,40 @@
 {
   "artifacts": {
     "01_profile_landscape.png": {
-      "bytes": 132301,
-      "sha256": "5c4700fd95081b518a55b9bda6dea916652ac2651d4d0c439f92e69259813de4"
+      "bytes": 132210,
+      "sha256": "2416fadf80180b76331a025caaea4653233b0ef28f2ef9a9867bf7dbf3bd94fe"
     },
     "01_profile_landscape.svg": {
-      "bytes": 32012,
-      "sha256": "0e4afade9a41fd19c653e907b21153a9681e35b49e39578c469ba832504a9b98"
+      "bytes": 32011,
+      "sha256": "7aa499edbd577e6dc769a60a1b77cf21b873ef3c73489c4db037a5ae1eae5644"
     },
     "02_axis_effects.png": {
-      "bytes": 133098,
-      "sha256": "72d8a683144a90dd114160e1a1f966b34d2687ff042159e3812f4c8b237a324c"
+      "bytes": 132856,
+      "sha256": "6cef9a011417982e8e3d72c55511e16decae40102f84b35b0d5cbb49ba8f7162"
     },
     "02_axis_effects.svg": {
-      "bytes": 49983,
-      "sha256": "4a64d61abe2fd259d8521625787c133790753288f1401cbb846cbe36183597cb"
+      "bytes": 49982,
+      "sha256": "403b25b51171dc8d269f12f9e6bb1009bb788dd8ac9a857d0129bcb1d20b840d"
     },
     "03_local_index_maps.png": {
-      "bytes": 458202,
-      "sha256": "26a822b90eae7766e3c602b33653dd849a9244d2db6179943d1d322a9177a810"
+      "bytes": 457777,
+      "sha256": "b3bfdc27ad4e123d1b30a04dd6c59f09bcceb674360cc411e2a31a4738c08e4a"
     },
     "03_local_index_maps.svg": {
-      "bytes": 991004,
-      "sha256": "05a68945650d5c0ca0998d969acfe0cdf8b0851aa90958e64e84272d1cb47523"
+      "bytes": 991003,
+      "sha256": "88d45214e1f82eb69f163dadfa2426f5254f12088fad6bfcfbc524d8039b9001"
     },
     "04_key_numbers.csv": {
       "bytes": 261,
       "sha256": "ef9bd7de8b74c97d65a84c16367c5c114fb46785b39b6907b072bb3b42e95238"
     },
     "04_key_numbers.png": {
-      "bytes": 111229,
-      "sha256": "7706f11b876f1f7e84f756c524d0143162b9c12101603d644e27abcd52f2a571"
+      "bytes": 111830,
+      "sha256": "d7d204e06648a96a76dadf89d49f783f2f85ec8c9121028d0f77c7037aa9093f"
     },
     "04_key_numbers.svg": {
-      "bytes": 16221,
-      "sha256": "bda4cb8880de7ad608102199069548bb0c23674a82d5099e79803637bf1deb8f"
+      "bytes": 16220,
+      "sha256": "76260cbdc23a69ebd080dc8d6e3f8da01c2289c9c4516e9bc0faddbdfb95c36d"
     }
   },
   "book_id": "LW01",
@@ -48,7 +48,7 @@
     },
     {
       "figure": "02_axis_effects",
-      "message": "Risk is the dominant behavioural axis."
+      "message": "Risk is the dominant behavioral axis."
     },
     {
       "figure": "03_local_index_maps",

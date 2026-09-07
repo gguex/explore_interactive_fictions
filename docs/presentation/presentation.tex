@@ -893,6 +893,26 @@ Formalism and LLMs}
 	
 	%-------------------------------------------%
 	
+	\begin{frame}{Result of paragraph annotation}
+		
+		\centering
+		
+		\includegraphics[
+		width=\textwidth,
+		height=0.78\textheight,
+		keepaspectratio
+		]{fig/LW01_phase1_unweighted_graph.png}
+		
+		\vspace{-0.15cm}
+		
+		{\small
+			The topology and transition types are now available, but \imp{transition probabilities depends on player profiles} (next section).
+		}
+		
+	\end{frame}
+	
+	%-------------------------------------------%
+	
 	\section{Graph construction and Bag-of-Paths analysis}
 	
 	%-------------------------------------------%
@@ -984,5 +1004,300 @@ Formalism and LLMs}
 		
 	\end{frame}
 	
-\end{document}
+	%-------------------------------------------%
+	
+	\begin{frame}{One Markov chain per player profile}
+		
+		\footnotesize
+		
+		The matrix \imp{$\mathbf{W}^{(p)}$ describes the behavior of one fixed player profile}.
+		Once the profile and the experimental parameters are fixed, the next
+		transition depends only on the current paragraph.
+		
+		\vspace{0.2cm}
+		
+		\begin{columns}[T,onlytextwidth]
+			
+			\begin{column}{0.47\textwidth}
+				\textbf{Player profile}
+				
+				\vspace{-0.3cm}
+				$$
+				p=(\text{risk},\text{morality},\text{action})
+				$$
+				
+				{\scriptsize
+					\begin{itemize}
+						\item Risk: cautious, neutral, reckless
+						\item Morality: selfish, neutral, noble
+						\item Action: physical, neutral, tactical
+					\end{itemize}
+				}
+				
+				\centering
+				\imp{$3^3=27$ player profiles}
+				
+				\vspace{0.25cm}
+				
+				\raggedright
+				\textbf{Fixed parameters (all profiles)}
+				
+				\vspace{0.05cm}
+				
+				{\tiny
+					\begin{itemize}
+						\item Combat victory: $P(\mathrm{win})=0.833$
+						\item Combat evasion: $P(\mathrm{escape})=0.5$
+						\item Required Kai Discipline available: $P(\mathrm{Kai})=0.5$
+						\item Item, gold, or Endurance condition satisfied:
+						$P(\mathrm{has\_condition})=0.5$
+					\end{itemize}
+				}
+			\end{column}
+			
+			\begin{column}{0.49\textwidth}
+				\textbf{From profile to probability}
+				
+				{\scriptsize
+					Each choice annotation is compared with the profile:
+					\vspace{-0.3cm}
+					\begin{center}
+						\begin{tabular}{lc}
+							\hline
+							\textbf{Relation} & \textbf{Affinity} \\
+							\hline
+							Matching non-neutral values & $2$ \\
+							Neutral profile or annotation & $1$ \\
+							Opposed non-neutral values & $0.5$ \\
+							\hline
+						\end{tabular}
+					\end{center}
+					
+					Affinities are multiplied and normalized among the
+					available outgoing choices. \\
+					\vspace*{0.1cm}
+					For a reckless profile facing one reckless and one cautious choice:
+					\begin{align*}
+						P(\mathrm{reckless})&=\tfrac{2}{2+0.5}=0.8 \\
+						P(\mathrm{cautious})&=0.2.
+					\end{align*}
+				}
+			\end{column}
+			
+		\end{columns}
+		
+	\end{frame}
+	
+	%-------------------------------------------%
+	
+	\begin{frame}{Bag-of-Paths at the Random-Walk limit}
+		
+		\footnotesize
+		
+		For each player profile, $\mathbf{W}^{(p)}$ represents the corresponding Markov
+		chain. For the BoP calculation, absorbing states have no outgoing
+		transitions: $W^{(p)}$ is therefore \imp{substochastic}, and we can compute: 
+		$$
+		\boxed{
+			\mathbf{Z}^{(p)}
+			=
+			\left(I-\mathbf{W}^{(p)}\right)^{-1}
+			=
+			I+\mathbf{W}^{(p)}+\left(\mathbf{W}^{(p)}\right)^2+\cdots
+		}
+		$$
+		$z^{(p)}_{si}$ is the \imp{expected number of visits to paragraph $i$
+		when starting from paragraph $s$}. Many indices can be derived from the same fundamental matrix : 
+		
+		\vspace{0.2cm}
+		
+		\begin{columns}[T,onlytextwidth]
+			
+			\begin{column}{0.48\textwidth}
+				\textbf{Local indices}
+				
+				{\scriptsize
+					Computed for individual paragraphs or transitions:
+					
+					\begin{itemize}
+						\item Probability of visiting a paragraph
+						\item Expected visits and edge flows
+						\item Contribution to mortality
+						\item Impact of a choice on the final outcome
+						\item Sensitivity to the player profile
+					\end{itemize}
+				}
+			\end{column}
+			
+			\begin{column}{0.48\textwidth}
+				\textbf{Global indices}
+				
+				{\scriptsize
+					Computed for the complete book and one profile:
+					
+					\begin{itemize}
+						\item Probabilities of victory and death
+						\item Expected trajectory length
+						\item Total trajectory entropy
+						\item Expected coverage and replayability
+						\item Divergence between player profiles
+					\end{itemize}
+				}
+			\end{column}
+			
+		\end{columns}
+	\end{frame}
+	
+	%-------------------------------------------%
 
+	\begin{frame}{Player profiles change survival and narrative freedom}
+		
+		\centering
+		
+		\includegraphics[width=\textwidth]{fig/01_profile_landscape.png}
+		
+		\vspace{-0.05cm}
+		
+		\begin{minipage}{0.94\textwidth}
+			\scriptsize
+			Across the \imp{27 configured profiles}, win probability ranges from
+			\imp{5.4\% to 25.8\%}. Survival and trajectory entropy rise together
+			($r=0.83$): profiles that survive longer also access a wider range of paths.
+		\end{minipage}
+		
+	\end{frame}
+
+	%-------------------------------------------%
+
+	\begin{frame}{Risk is the dominant behavioral axis}
+		
+		\centering
+		
+		\includegraphics[width=\textwidth]{fig/02_axis_effects.png}
+		
+		\vspace{-0.05cm}
+		
+		\begin{minipage}{0.94\textwidth}
+			\scriptsize
+			Moving from neutral to cautious choices increases win probability by
+			\imp{9.23 percentage points}; moving to reckless choices reduces it by
+			\imp{5.24 points}. Morality and action have smaller, but non-zero, effects.
+		\end{minipage}
+		
+	\end{frame}
+
+	%-------------------------------------------%
+
+	\begin{frame}{Different indices reveal different key paragraphs}
+		
+		\centering
+		
+		\includegraphics[width=\textwidth]{fig/03_local_index_maps.png}
+		
+		\vspace{-0.05cm}
+		
+		\begin{minipage}{0.94\textwidth}
+			\scriptsize
+			The common narrative backbone, the main mortality bottlenecks, and the
+			regions where player profiles diverge \imp{do not coincide}. Local importance
+			therefore depends on the structural question being asked.
+		\end{minipage}
+		
+	\end{frame}
+
+	%-------------------------------------------%
+
+	\section{Trajectory annotation}
+
+	%-------------------------------------------%
+
+	\begin{frame}{Objective: from probabilistic paths to complete stories}
+		
+		\footnotesize
+		
+		This section asks whether the structural differences produced by player
+		profiles become \imp{perceptible differences in complete stories}.
+		
+		\vspace{0.45cm}
+		
+		\centering
+		
+		\begin{tikzpicture}[
+			phasebox/.style={
+				draw=themecolor,
+				rounded corners=2pt,
+				line width=0.7pt,
+				fill=white,
+				align=center,
+				text width=2.10cm,
+				minimum height=2.25cm,
+				inner sep=4pt,
+				font=\tiny
+			},
+			phasearrow/.style={
+				->,
+				>=stealth,
+				draw=themecolor,
+				line width=0.9pt
+			}
+		]
+			
+			\node[phasebox] (paths) at (-4.05,0) {
+				\textbf{1. Path selection}\\[1.5mm]
+				$7$ profiles $\times$ Win/Death\\
+				2,000 paths per cell\\
+				\imp{14 empirical medoids}
+			};
+			
+			\node[phasebox] (corpus) at (-1.35,0) {
+				\textbf{2. Blind corpus}\\[1.5mm]
+				Complete story text\\
+				Choices encountered\\
+				No player profile\\
+				\imp{14 texts}
+			};
+			
+			\node[phasebox,fill=themecolor!7] (annotation) at (1.35,0) {
+				\textbf{3. LLM annotation}\\[1.5mm]
+				Local Qwen3.6-27B\\
+				Individual annotations\\
+				Pairwise annotations\\
+				\imp{Constrained JSON}
+			};
+			
+			\node[phasebox] (analysis) at (4.05,0) {
+				\textbf{4. Analysis}\\[1.5mm]
+				Profile manifestation\\
+				Causal continuity\\
+				Profile coherence\\
+				Controlled contrasts
+			};
+			
+			\draw[phasearrow] (paths.east) -- (corpus.west);
+			\draw[phasearrow] (corpus.east) -- (annotation.west);
+			\draw[phasearrow] (annotation.east) -- (analysis.west);
+			
+		\end{tikzpicture}
+		
+		\vspace{0.45cm}
+		
+		\raggedright
+		The model infers whether the intended profile becomes perceptible from the
+		story itself; the hidden metadata and BoP measures are reintroduced only for
+		the final comparison.
+		
+	\end{frame}
+
+	%-------------------------------------------%
+	
+	%-------------------------------------------%
+	
+	%-------------------------------------------%
+	
+	%-------------------------------------------%
+	
+	%-------------------------------------------%
+	
+	%-------------------------------------------%
+	
+\end{document}

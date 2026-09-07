@@ -207,7 +207,7 @@ def render_profile_landscape(
     ]
     first_legend = axis.legend(
         handles=risk_legend,
-        title="Risk axis (colour)",
+        title="Risk axis (color)",
         loc="upper left",
         bbox_to_anchor=(1.02, 1.0),
         frameon=False,
@@ -331,7 +331,7 @@ def render_axis_effects(
     figure.text(
         0.06,
         0.93,
-        f"{book_id} — risk is the dominant behavioural axis",
+        f"{book_id} — risk is the dominant behavioral axis",
         fontsize=21,
         fontweight="bold",
         color=INK,
@@ -560,7 +560,7 @@ def render_local_maps(
     figure.text(
         0.035,
         0.025,
-        "Node size and colour encode the panel metric. Faint edges are scaled by "
+        "Node size and color encode the panel metric. Faint edges are scaled by "
         "neutral expected flow. Labels identify each panel’s five largest values plus "
         "§1 and §350.",
         fontsize=8.2,
@@ -635,7 +635,7 @@ def render_key_numbers(
     figure.text(
         0.06,
         0.845,
-        "Neutral is a defined behavioural profile; the balanced mean weights all 27 "
+        "Neutral is a defined behavioral profile; the balanced mean weights all 27 "
         "configured profiles equally.",
         fontsize=11.2,
         color=MUTED,
@@ -754,7 +754,7 @@ def main() -> None:
             },
             {
                 "figure": "02_axis_effects",
-                "message": "Risk is the dominant behavioural axis.",
+                "message": "Risk is the dominant behavioral axis.",
             },
             {
                 "figure": "03_local_index_maps",

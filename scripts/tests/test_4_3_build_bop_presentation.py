@@ -15,7 +15,7 @@ import numpy as np
 DEFAULT_BOOK_ID = "LW01"
 EXPECTED_FIGURES = {
     "01_profile_landscape": "player profiles change both survival",
-    "02_axis_effects": "risk is the dominant behavioural axis",
+    "02_axis_effects": "risk is the dominant behavioral axis",
     "03_local_index_maps": "three local views of the same narrative graph",
     "04_key_numbers": "five numbers that summarise the reading experience",
 }

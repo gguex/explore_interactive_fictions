@@ -16914,7 +16914,7 @@ iVBORw0KGgoAAAANSUhEUgAAAAwAAADaCAYAAACSEqPVAAABMUlEQVR4nOWYW27EUAxC6Sj733AbTtfA
    <text style="font-size: 10.8px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start; fill: #64717d" x="33.6" y="62.1" transform="rotate(-0 33.6 62.1)">The Project Aon layout is fixed across panels; only the BoP node metric changes.</text>
   </g>
   <g id="text_45">
-   <text style="font-size: 8.2px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start; fill: #64717d" x="33.6" y="526.5" transform="rotate(-0 33.6 526.5)">Node size and colour encode the panel metric. Faint edges are scaled by neutral expected flow. Labels identify each panel’s five largest values plus §1 and §350.</text>
+   <text style="font-size: 8.2px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start; fill: #64717d" x="33.6" y="526.5" transform="rotate(-0 33.6 526.5)">Node size and color encode the panel metric. Faint edges are scaled by neutral expected flow. Labels identify each panel’s five largest values plus §1 and §350.</text>
   </g>
   <g id="legend_1">
    <g id="line2d_17">
