@@ -37,9 +37,9 @@ Produire, à partir des HTML de Project Aon, les tables `LW01_nodes.csv` et
 - [x] Jeu de calibration manuel (gold) : `data/for_edge_extraction/LW01_calibration*.{json,csv}`.
 - [x] Calibration du prompt d'extraction sur le cluster (Qwen3.6-27B + vLLM, sorties structurées) :
       6 itérations, de ~35 divergences à **4 divergences "douces"** (axes sémantiques uniquement,
-      aucune erreur structurelle). Historique dans `results/curnagl_results/`.
+      aucune erreur structurelle). Historique dans `results/phase1/LW01/curnagl/`.
 - [x] **Extraction complète** des 350 sections de LW01 sur le cluster → 556 arêtes,
-      `LW01_edges.csv` (brut dans `results/curnagl_results/csv/LW01_edges_extraction.csv`).
+      `LW01_edges.csv` (brut dans `results/phase1/LW01/curnagl/csv/LW01_edges_extraction.csv`).
 - [x] **Contrôle qualité** (14.07.2026) : zéro écart balises `<choice>` ↔ arêtes, IDs valides,
       graphe entièrement atteignable depuis la section 1, 17 nœuds absorbants cohérents avec
       `LW01_nodes.csv`, zéro violation des règles du schéma. Notes pour la phase 2 : la

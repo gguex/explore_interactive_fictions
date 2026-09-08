@@ -285,7 +285,9 @@ def main() -> None:
         Path("data/processed/nodes_edges") / book_id / f"{book_id}_edges.csv"
     )
     layout_path = args.layout or graph_root / "project_aon_layout.csv"
-    output_dir = args.output_dir or Path("results/presentation")
+    output_dir = (
+        args.output_dir or Path("results/phase1") / book_id / "presentation"
+    )
 
     nodes = read_csv(nodes_path)
     edges = read_csv(edges_path)

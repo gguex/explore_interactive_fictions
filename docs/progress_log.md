@@ -33,7 +33,7 @@
 - Mise en place de l'extraction structurée sur le cluster Curnagl avec vLLM.
 - Itérations du prompt et comparaison systématique avec le gold standard.
 - Conservation des sorties intermédiaires et des rapports d'erreurs dans
-  `results/curnagl_results/`.
+  `results/phase1/LW01/curnagl/`.
 - Stabilisation du prompt final sur Qwen3.6-27B.
 
 ### 14.07.2026 — Nettoyage et finalisation de la phase 1

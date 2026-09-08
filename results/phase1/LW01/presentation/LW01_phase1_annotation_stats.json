@@ -252,7 +252,7 @@
   },
   "inputs": {
     "gold": "data/for_edge_extraction/LW01_calibration_edges_gold.csv",
-    "calibration_output": "results/curnagl_results/csv/LW01_calibration_edges_final.csv",
+    "calibration_output": "results/phase1/LW01/curnagl/csv/LW01_calibration_edges_final.csv",
     "full_edges": "data/processed/nodes_edges/LW01/LW01_edges.csv",
     "nodes": "data/processed/nodes_edges/LW01/LW01_nodes.csv"
   }

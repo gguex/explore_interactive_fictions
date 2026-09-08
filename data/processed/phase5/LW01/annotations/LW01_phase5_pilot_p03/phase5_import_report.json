@@ -25,7 +25,7 @@
     "quarantine.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "run_manifest.json": "34efff7b9bfd66a02c326a4d09cb1662decf3d98edf933312d1961a62231c24f"
   },
-  "source_run_dir": "results/phase5/LW01/cluster_runs/LW01_phase5_pilot_v2/pilot_p03",
+  "source_run_dir": "results/phase5/LW01/curnagl/LW01_phase5_pilot_v2/pilot_p03",
   "stage": "pilot",
   "status": "valid",
   "vllm_version": "0.28.0"

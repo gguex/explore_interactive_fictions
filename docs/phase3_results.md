@@ -101,9 +101,9 @@ l'itération actuelle.
   extraites du SVG Project Aon ;
 - `data/processed/graph/LW01/project_aon_layout_manifest.json` : URL, transformation et
   empreinte SHA-256 de la source ;
-- `results/phase4/LW01/graph_neutral_neutral_neutral_full.svg` : graphe complet et
+- `results/phase4/LW01/presentation/graph_neutral_neutral_neutral_full.svg` : graphe complet et
   zoomable du profil neutre ;
-- `results/phase4/LW01/graph_neutral_neutral_neutral_slide.svg` et `.png` : rendu 16:9
+- `results/phase4/LW01/presentation/graph_neutral_neutral_neutral_slide.svg` et `.png` : rendu 16:9
   destiné à la présentation.
 
 Ces fichiers terminent la compilation de la phase 3. Ils constituent les entrées de la

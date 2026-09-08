@@ -41,7 +41,7 @@ cluster_scripts/ LLM edge extraction on the cluster (vLLM + structured outputs)
 data/raw/        Project Aon HTML sections
 data/processed/  extracted nodes/edges tables
 data/for_edge_extraction/  manual calibration set (paragraphs + gold edges)
-results/         cluster outputs and calibration history
+results/         generated artifacts, organized by phase and book (see results/README.md)
 */archives/      inactive material kept for history
 ```
 

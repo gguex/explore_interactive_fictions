@@ -2,7 +2,7 @@
 
 > **Statut : remplacé (juillet 2026).** Ce document décrit le workflow avec l'outil
 > `dcsr-llm`, utilisé pour les premières itérations de calibration (résultats dans
-> `results/curnagl_results/dscr-llm_json/`). Le pipeline actuel utilise directement
+> `results/phase1/LW01/curnagl/dcsr_llm_json/`). Le pipeline actuel utilise directement
 > vLLM avec sorties structurées : voir `cluster_scripts/` (`extract.py`, `schemas.py`,
 > `system_prompt_final.txt`). Les prompts et schémas ci-dessous sont périmés
 > (`parsing_confidence` a été remplacé par `warnings`, et la logique de catégorisation

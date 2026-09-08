@@ -168,7 +168,8 @@ P(\pi \mid \text{profile}) = \prod_{(i,j)\in\pi} W_{ij}(\text{profile}).
   absorbants `Win` et `Death`.
 - Utiliser cette slide comme transition visuelle vers l'analyse BoP.
 
-**Visuel existant :** `results/phase4/LW01/graph_neutral_neutral_neutral_slide.png`.
+**Visuel existant :**
+`results/phase4/LW01/presentation/graph_neutral_neutral_neutral_slide.png`.
 
 **Temps maximal :** 40–50 secondes.
 

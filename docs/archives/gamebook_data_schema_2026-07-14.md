@@ -92,7 +92,7 @@ The semantic axes feed the player profiles defined in
 ## 4. Calibration Files (`data/for_edge_extraction/`)
 
 Used to calibrate the LLM extraction prompt against a manually annotated gold standard
-(see the calibration history in `results/curnagl_results/`).
+(see the calibration history in `results/phase1/LW01/curnagl/`).
 
 | File | Content |
 | :--- | :--- |

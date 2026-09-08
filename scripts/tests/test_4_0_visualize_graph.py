@@ -107,7 +107,7 @@ def main() -> None:
     book_id = str(args.book)
     profile_id = str(args.profile)
     graph_root = Path("data/processed/graph") / book_id
-    results_root = Path("results/phase4") / book_id
+    results_root = Path("results/phase4") / book_id / "presentation"
     nodes_path = Path("data/processed/pregraph") / book_id / "pregraph_nodes.csv"
     edges_path = graph_root / profile_id / "compiled_edges.csv"
     project_aon_layout = graph_root / "project_aon_layout.csv"

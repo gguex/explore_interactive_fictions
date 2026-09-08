@@ -162,7 +162,7 @@ def main() -> None:
     book_id = str(args.book)
     run_id = str(args.run_id)
     transfer_dir = args.run_dir or (
-        Path("results/phase5") / book_id / "cluster_runs" / run_id
+        Path("results/phase5") / book_id / "curnagl" / run_id
     )
     run_dir = resolve_run_dir(transfer_dir, run_id)
     bundle_dir = args.bundle_dir or (

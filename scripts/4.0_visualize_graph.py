@@ -759,7 +759,9 @@ def main() -> None:
         layout_path = project_aon_layout
     else:
         layout_path = graph_root / "graph_layout.csv"
-    output_dir = args.output_dir or Path("results/phase4") / book_id
+    output_dir = (
+        args.output_dir or Path("results/phase4") / book_id / "presentation"
+    )
 
     combat_ids = load_combat_node_ids(source_nodes_path)
     nodes = load_nodes(nodes_path, combat_ids)

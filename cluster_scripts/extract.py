@@ -14,7 +14,7 @@ from vllm.sampling_params import StructuredOutputsParams
 # Variable des fichiers
 SYSTEM_PROMPT_FILE = "system_prompt_final.txt"
 CORPUS_FILE = "data/LW01_edge_extraction.json"
-OUTPUT_CSV_FILE = "results/LW01_edge_extraction.csv"
+OUTPUT_CSV_FILE = "results/phase1/LW01/curnagl/csv/LW01_edges_extraction.csv"
 BATCH_SIZE = 50
 
 # Fonction utilitaire pour découper le corpus en sous-lots
@@ -28,6 +28,7 @@ if __name__ == "__main__":
     # A. CONFIGURATION DES CHEMINS ET DU CSV
     # ==========================================
     fichier_csv = OUTPUT_CSV_FILE
+    os.makedirs(os.path.dirname(fichier_csv), exist_ok=True)
     
     # Définition des colonnes du CSV
     # (doivent correspondre aux clés de ton Edge Pydantic)

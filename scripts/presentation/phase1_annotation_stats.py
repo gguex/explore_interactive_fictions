@@ -249,7 +249,8 @@ def main() -> None:
         f"data/for_edge_extraction/{book_id}_calibration_edges_gold.csv"
     )
     model_path = args.calibration_output or Path(
-        f"results/curnagl_results/csv/{book_id}_calibration_edges_final.csv"
+        f"results/phase1/{book_id}/curnagl/csv/"
+        f"{book_id}_calibration_edges_final.csv"
     )
     full_path = args.full_edges or Path(
         f"data/processed/nodes_edges/{book_id}/{book_id}_edges.csv"
@@ -258,7 +259,8 @@ def main() -> None:
         f"data/processed/nodes_edges/{book_id}/{book_id}_nodes.csv"
     )
     output_path = args.output or Path(
-        f"results/presentation/{book_id}_phase1_annotation_stats.json"
+        f"results/phase1/{book_id}/presentation/"
+        f"{book_id}_phase1_annotation_stats.json"
     )
 
     result = {
