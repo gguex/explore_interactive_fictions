@@ -1,12 +1,12 @@
 # Phase 5 — Sélection pour la présentation
 
-La phase 5 occupera **trois ou quatre diapositives** au total. Les figures sont en anglais,
-au format 16:9. Les deux diapositives de résultats sont produites ; les une ou deux
-diapositives de procédure et de calibration seront construites plus tard.
+La phase 5 occupe **quatre diapositives** au total : procédure, calibration et deux
+diapositives de résultats. Les figures analytiques sont générées en anglais puis composées
+dans les slides LaTeX ; elles ne contiennent plus de cartes de chiffres clés.
 
 ## Ordre prévu
 
-### 1–2. Procédure et calibration — à produire
+### 1–2. Procédure et calibration — composées en LaTeX
 
 Cette partie devra rester courte et expliquer :
 
@@ -23,10 +23,10 @@ calibration, et non une accuracy ou une validation hors échantillon.
 
 Fichier : `01_individual_trajectories.png` ou sa version SVG.
 
-La figure montre l'adéquation exacte entre niveau générateur et profil perçu sur les 14
-médoïdes : `risk` 9/14, `morality` 6/14 et `action` 2/14. Elle montre aussi les deux
-résultats complémentaires suffisamment lisibles : 14/14 histoires `continuous` et 9/14
-profils perçus `coherent`.
+La figure contient uniquement le graphique d'adéquation exacte entre niveau générateur et
+profil perçu sur les 14 médoïdes : `risk` 9/14, `morality` 6/14 et `action` 2/14. Les
+résultats complémentaires — 14/14 histoires `continuous`, 9/14 profils perçus `coherent`
+et le diagnostic détaillé de l'axe d'action — sont composés directement en LaTeX.
 
 Le diagnostic de l'axe d'action est affiché pour ne pas laisser le score 2/14 sans
 explication : 0/10 niveaux neutres, 0/2 physiques et 2/2 tactiques sont retrouvés
@@ -45,20 +45,53 @@ Temps conseillé : **45–60 secondes**.
 
 Fichier : `02_trajectory_comparisons.png` ou sa version SVG.
 
-La figure conserve les six paires, leur axe et issue contrôlés, leur distance
-structurelle, les deux jugements de différence narrative et le résultat sur l'axe
-contrôlé. Les trois chiffres supérieurs résument :
+La figure est centrée sur la question de recherche : les profils opposés sont-ils
+perceptibles dans les histoires complètes ? Chaque ligne montre le contraste attendu,
+l'issue (`Win` ou `Death`), la différence entre les deux chemins, puis ce que devient A
+par rapport à B sur les trois axes. L'axe expérimentalement manipulé est en gras. La
+dernière colonne donne la différence narrative globale. Les identifiants de paires et les
+deux sorties directionnelles détaillées ne sont pas affichés.
 
-- 5/6 contrastes contrôlés retrouvés de manière stable ;
-- 18/24 labels stables après inversion canonique B/A ;
-- 9/9 axes non contrôlés mais stables également perçus comme différents, trois autres
-  étant sensibles à l'ordre.
+Une cellule rouge signale que les ordres A/B et B/A ne concordent pas. La valeur affichée
+les résume : deux directions opposées s'annulent en `even`, tandis que `even` associé à
+une direction conserve cette direction. Pour `narrative distinctness`, la moyenne entre
+`medium` et `high` est affichée `Medium-high`. Cette agrégation est une aide de lecture et
+ne transforme pas les catégories ordinales en mesures continues.
+
+Le résultat principal est que **5/6 contrastes contrôlés sont retrouvés de manière stable**.
+Les contrastes de risque et de moralité sont retrouvés pour les deux issues ; sur l'axe
+contrôlé, seul `action / Win` devient `even` après agrégation des deux ordres. Les cellules
+hors axe rendent également visibles les covariations narratives entre profils.
+
+Les six paires sont au moins moyennement distinctes. Quatre niveaux de
+`narrative distinctness` sont stables ; `morality / Death` et `action / Win` oscillent
+entre `medium` et `high` et sont donc affichés `Medium-high` en rouge.
+
+La colonne `Path difference (LCS)` vaut `1 - similarité LCS normalisée`. Elle mesure la
+différence séquentielle entre les deux médoïdes sélectionnés et ne constitue pas elle-même
+un indice BoP. L'appui BoP est donné séparément par la divergence de Jensen--Shannon des
+flux d'arêtes : risque `0.163`, action `0.052`, moralité `0.037`. Le risque est donc à la
+fois le contraste structurel le plus fort et un contraste constamment perceptible dans
+les histoires.
+
+Trois lectures concises du tableau sont défendables :
+
+- le risque est retrouvé pour `Win` et `Death` et possède aussi la plus forte divergence
+  BoP ;
+- la moralité reste retrouvée dans la paire `Death` malgré une faible distance LCS
+  (`0.21`), ce qui montre que la perception du profil ne se réduit pas au nombre de
+  paragraphes différents ;
+- l'action est retrouvée pour `Death`, mais la paire `Win` est sensible à l'ordre et doit
+  être présentée comme le seul résultat non robuste.
+
+Ces six paires sont des contrastes conçus, et non un échantillon aléatoire : les résultats
+sont descriptifs et ne permettent pas d'estimer un taux général de récupération.
 
 Message à dire en une phrase :
 
-> Relative profile contrasts are visible in five of the six designed pairs, but the
-> off-axis shifts show that risk, morality and action do not remain narratively
-> independent.
+> The intended relative profile is recovered in five of six controlled comparisons;
+> risk is both the strongest BoP contrast and consistently perceptible in complete
+> stories.
 
 Temps conseillé : **55–70 secondes**.
 
@@ -70,11 +103,8 @@ si deux extrêmes conçus pour différer sur un axe produisent une différence g
 perceptible. Il n'est donc pas contradictoire d'obtenir seulement 2/14 correspondances
 exactes sur `action`, mais de récupérer le contraste contrôlé de cinq paires sur six.
 
-La fuite entre axes est un résultat substantiel : le contrôle probabiliste d'un seul axe
-ne crée pas nécessairement un personnage qui ne diffère que sur cet axe. Elle peut aussi
-refléter des associations narratives du livre — aider implique souvent de prendre un
-risque et d'agir physiquement. Elle ne doit pas être présentée comme une erreur certaine
-de la phase 1 ou du LLM.
+L'inversion reste un contrôle de robustesse, pas un résultat principal : elle est encodée
+par la couleur des cellules plutôt que résumée dans une colonne ou un score autonome.
 
 ## Génération et validation
 
@@ -85,9 +115,9 @@ uv run python scripts/tests/test_5_5_build_phase5_presentation.py --book LW01
 
 Les fichiers sont écrits dans `results/phase5/LW01/presentation/`. Les PNG mesurent
 exactement 1920 × 1080 pixels et les SVG conservent du texte éditable. Le manifeste fixe
-le plan des quatre positions, marque les slides de procédure comme encore à produire et
+le plan des quatre positions, signale que les slides sont composées séparément en LaTeX et
 archive les empreintes de toutes les sources et sorties.
 
-Le validateur contrôle les dimensions, les titres anglais, les six chiffres affichés, les
+Le validateur contrôle les dimensions, les titres anglais, les quatre chiffres clés, les
 diagnostics individuels, les six comparaisons et toutes les empreintes. Les deux slides ont
 également été inspectées visuellement après leur génération.

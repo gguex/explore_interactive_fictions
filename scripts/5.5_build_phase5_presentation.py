@@ -1,4 +1,4 @@
-"""Build the two slide-ready phase-5 result figures."""
+"""Build plot-only phase-5 figures for composition in LaTeX slides."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ matplotlib.rcParams["svg.fonttype"] = "none"
 matplotlib.rcParams["svg.hashsalt"] = "explore-interactive-fictions-phase-5"
 
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.patches import FancyBboxPatch  # noqa: E402
+from matplotlib.patches import Rectangle  # noqa: E402
 
 DEFAULT_BOOK_ID = "LW01"
 SLIDE_SIZE = (40 / 3, 7.5)
@@ -30,15 +30,26 @@ BACKGROUND = "#FFFFFF"
 INK = "#243447"
 MUTED = "#64717D"
 LIGHT = "#E5E0D5"
-WHITE = "#FFFEFA"
 AXIS_COLORS = {
     "risk": "#2878A8",
     "morality": "#5B8C5A",
     "action": "#9467A8",
 }
-RESULT_COLORS = {
-    "recovered": "#397A58",
-    "order_sensitive": "#C26B39",
+ORDER_SENSITIVE = "#C23B22"
+CONTRAST_LABELS = {
+    "risk": "Cautious (A) vs reckless (B)",
+    "morality": "Selfish (A) vs noble (B)",
+    "action": "Physical (A) vs tactical (B)",
+}
+DIRECTION_LABELS = {
+    "A_more_cautious": "cautious",
+    "A_more_reckless": "reckless",
+    "A_more_selfish": "selfish",
+    "A_more_noble": "noble",
+    "A_more_physical": "physical",
+    "A_more_tactical": "tactical",
+    "similar": "even",
+    "unclear": "unclear",
 }
 KEY_FIELDS = [
     "slide",
@@ -91,63 +102,10 @@ def save_figure(figure: plt.Figure, output_base: Path) -> list[Path]:
 
 
 def apply_slide_style(figure: plt.Figure) -> None:
-    """Apply shared colours and background."""
+    """Apply shared colors and background."""
     figure.patch.set_facecolor(BACKGROUND)
     for axis in figure.axes:
         axis.set_facecolor(BACKGROUND)
-
-
-def add_card(
-    figure: plt.Figure,
-    x: float,
-    y: float,
-    width: float,
-    height: float,
-    *,
-    value: str,
-    label: str,
-    color: str,
-    detail: str = "",
-) -> None:
-    """Draw one rounded result card in figure coordinates."""
-    patch = FancyBboxPatch(
-        (x, y),
-        width,
-        height,
-        transform=figure.transFigure,
-        boxstyle="round,pad=0.012,rounding_size=0.015",
-        facecolor=WHITE,
-        edgecolor="#D8D2C7",
-        linewidth=1.0,
-    )
-    figure.patches.append(patch)
-    figure.text(
-        x + 0.025,
-        y + height * 0.60,
-        value,
-        fontsize=22,
-        fontweight="bold",
-        color=color,
-        va="center",
-    )
-    figure.text(
-        x + 0.025,
-        y + height * 0.34,
-        label,
-        fontsize=9.7,
-        fontweight="bold",
-        color=INK,
-        va="center",
-    )
-    if detail:
-        figure.text(
-            x + 0.025,
-            y + height * 0.13,
-            detail,
-            fontsize=7.8,
-            color=MUTED,
-            va="center",
-        )
 
 
 def indexed_summary(
@@ -160,20 +118,51 @@ def indexed_summary(
     return indexed
 
 
+def aggregate_direction(row: dict[str, str], axis: str) -> tuple[str, bool]:
+    """Summarize one canonical A/B and B/A directional judgment."""
+    forward = row[f"{axis}_shift_ab"]
+    reverse = row[f"{axis}_shift_ba_canonical"]
+    if forward == reverse:
+        return DIRECTION_LABELS[forward], False
+    if "unclear" in {forward, reverse}:
+        return "unclear", True
+    if forward == "similar":
+        return DIRECTION_LABELS[reverse], True
+    if reverse == "similar":
+        return DIRECTION_LABELS[forward], True
+    return "even", True
+
+
+def aggregate_distinctness(row: dict[str, str]) -> tuple[str, bool]:
+    """Summarize narrative distinctness across the two story orders."""
+    forward = row["narrative_distinctness_ab"]
+    reverse = row["narrative_distinctness_ba"]
+    if forward == reverse:
+        return forward.capitalize(), False
+    levels = {"low": 1, "medium": 2, "high": 3}
+    labels = {1: "Low", 2: "Medium", 3: "High"}
+    mean = (levels[forward] + levels[reverse]) / 2
+    if mean.is_integer():
+        return labels[int(mean)], True
+    lower = labels[int(mean)]
+    upper = labels[int(mean) + 1].lower()
+    return f"{lower}-{upper}", True
+
+
 def render_individual_results(
     book_id: str,
     summary: dict[tuple[str, str], dict[str, str]],
     trajectories: list[dict[str, str]],
     output_dir: Path,
 ) -> list[Path]:
-    """Render absolute profile manifestation and individual-story diagnostics."""
+    """Render profile manifestation as one plot-only chart."""
     axes = ("risk", "morality", "action")
     counts = [
         int(summary[("profile_manifestation", axis)]["numerator"]) for axis in axes
     ]
     figure = plt.figure(figsize=SLIDE_SIZE, dpi=SLIDE_DPI)
     apply_slide_style(figure)
-    chart = figure.add_axes((0.08, 0.22, 0.49, 0.56))
+    chart = figure.add_axes((0.10, 0.16, 0.82, 0.70))
     y_positions = [2, 1, 0]
     chart.barh(y_positions, [14, 14, 14], color=LIGHT, height=0.56)
     chart.barh(
@@ -189,7 +178,7 @@ def render_individual_results(
             f"{count}/14  ({100 * count / 14:.0f}%)",
             va="center",
             ha="left",
-            fontsize=12,
+            fontsize=18,
             fontweight="bold",
             color=INK,
         )
@@ -197,104 +186,20 @@ def render_individual_results(
     chart.set_yticks(y_positions, [axis.capitalize() for axis in axes])
     chart.set_xticks([0, 2, 4, 6, 8, 10, 12, 14])
     chart.set_xlabel(
-        "Exact matches among 14 conditional medoids", fontsize=10, color=MUTED
+        "Exact matches among 14 conditional medoids", fontsize=13, color=MUTED
+    )
+    chart.set_title(
+        "Generated versus perceived profile",
+        fontsize=20,
+        fontweight="bold",
+        color=INK,
+        pad=14,
     )
     chart.grid(axis="x", color="#D8D2C7", linewidth=0.7, alpha=0.8)
     chart.spines[["top", "right", "left"]].set_visible(False)
     chart.spines["bottom"].set_color("#B9B3A9")
-    chart.tick_params(axis="y", length=0, colors=INK, labelsize=11)
-    chart.tick_params(axis="x", colors=MUTED, labelsize=9)
-
-    continuity = sum(row["causal_continuity"] == "continuous" for row in trajectories)
-    coherent = sum(row["profile_coherence"] == "coherent" for row in trajectories)
-    add_card(
-        figure,
-        0.63,
-        0.58,
-        0.29,
-        0.16,
-        value=f"{continuity}/14",
-        label="Causally continuous stories",
-        color="#397A58",
-        detail="No explicit unsupported dependency was detected.",
-    )
-    add_card(
-        figure,
-        0.63,
-        0.36,
-        0.29,
-        0.16,
-        value=f"{coherent}/14",
-        label="Coherent perceived profiles",
-        color="#397A58",
-        detail=f"The remaining {14 - coherent} stories were labelled mixed.",
-    )
-    action_expected = {
-        level: [row for row in trajectories if row["expected_action"] == level]
-        for level in ("neutral", "physical", "tactical")
-    }
-    action_matches = {
-        level: sum(row["action_status"] == "match" for row in rows)
-        for level, rows in action_expected.items()
-    }
-    figure.text(
-        0.63,
-        0.285,
-        "Why is the action score low?",
-        fontsize=11.5,
-        fontweight="bold",
-        color=INK,
-    )
-    figure.text(
-        0.63,
-        0.245,
-        "Exact recovery by generated action level",
-        fontsize=8.8,
-        color=MUTED,
-    )
-    diagnostic = [
-        ("Neutral", "neutral"),
-        ("Physical", "physical"),
-        ("Tactical", "tactical"),
-    ]
-    for index, (label, level) in enumerate(diagnostic):
-        x = 0.63 + index * 0.105
-        total = len(action_expected[level])
-        figure.text(x, 0.185, label, fontsize=8.5, color=MUTED, ha="left")
-        figure.text(
-            x,
-            0.145,
-            f"{action_matches[level]}/{total}",
-            fontsize=15,
-            fontweight="bold",
-            color=AXIS_COLORS["action"],
-            ha="left",
-        )
-
-    figure.text(
-        0.055,
-        0.925,
-        f"{book_id} — player profiles leave uneven traces in complete stories",
-        fontsize=20.5,
-        fontweight="bold",
-        color=INK,
-    )
-    figure.text(
-        0.055,
-        0.858,
-        "Qwen inferred the three axes from 14 blinded conditional medoids, without "
-        "profiles, edge labels or BoP indices.",
-        fontsize=10.8,
-        color=MUTED,
-    )
-    figure.text(
-        0.055,
-        0.075,
-        "Absolute agreement includes neutral levels. It describes these selected "
-        "central trajectories—not model accuracy or all possible playthroughs.",
-        fontsize=8.6,
-        color=MUTED,
-    )
+    chart.tick_params(axis="y", length=0, colors=INK, labelsize=17)
+    chart.tick_params(axis="x", colors=MUTED, labelsize=14)
     return save_figure(figure, output_dir / "01_individual_trajectories")
 
 
@@ -304,76 +209,41 @@ def render_comparison_results(
     pairs: list[dict[str, str]],
     output_dir: Path,
 ) -> list[Path]:
-    """Render pairwise recovery, order stability and all six designed comparisons."""
-    controlled = summary[("controlled_contrast_recovery", "all")]
-    stability = summary[("ab_ba_order_stability", "all_pairwise_labels")]
-    leakage = summary[("cross_axis_leakage", "non_controlled_axes")]
+    """Render the six designed pairwise comparisons without result cards."""
     figure = plt.figure(figsize=SLIDE_SIZE, dpi=SLIDE_DPI)
     apply_slide_style(figure)
-    add_card(
-        figure,
-        0.055,
-        0.67,
-        0.265,
-        0.14,
-        value=f"{controlled['numerator']}/{controlled['denominator']}",
-        label="Controlled contrasts recovered",
-        color="#397A58",
-        detail="Only order-stable controlled-axis labels count.",
-    )
-    add_card(
-        figure,
-        0.365,
-        0.67,
-        0.265,
-        0.14,
-        value=f"{stability['numerator']}/{stability['denominator']}",
-        label="Labels stable under A/B reversal",
-        color="#397A58",
-        detail="Narrative distinctness plus three profile shifts.",
-    )
-    add_card(
-        figure,
-        0.675,
-        0.67,
-        0.265,
-        0.14,
-        value=f"{leakage['numerator']}/{leakage['denominator']}",
-        label="Stable off-axis labels shifted",
-        color="#C26B39",
-        detail=f"{leakage['order_sensitive']} more were order-sensitive.",
-    )
-
-    table_axis = figure.add_axes((0.055, 0.16, 0.89, 0.43))
+    table_axis = figure.add_axes((0.025, 0.08, 0.95, 0.84))
     table_axis.axis("off")
     headers = [
-        ("Pair", 0.01),
-        ("Controlled design", 0.11),
-        ("Structural distance", 0.34),
-        ("Narrative A/B → B/A", 0.55),
-        ("Controlled contrast", 0.79),
+        ("Profile contrast", 0.01),
+        ("Outcome", 0.27),
+        ("Path\ndifference\n(LCS)", 0.36),
+        ("A on Risk", 0.48),
+        ("A on Morality", 0.62),
+        ("A on Action", 0.76),
+        ("Narrative\ndistinctness", 0.89),
     ]
     for label, x in headers:
         table_axis.text(
             x,
-            1.03,
+            0.96,
             label,
             transform=table_axis.transAxes,
-            fontsize=9.2,
+            fontsize=13,
             fontweight="bold",
             color=MUTED,
             va="bottom",
+            linespacing=1.1,
         )
     for index, row in enumerate(pairs):
-        y = 0.91 - index * 0.155
+        y = 0.82 - index * 0.135
         if index % 2 == 0:
             table_axis.add_patch(
-                FancyBboxPatch(
-                    (0.0, y - 0.055),
+                Rectangle(
+                    (0.0, y - 0.052),
                     1.0,
-                    0.12,
+                    0.105,
                     transform=table_axis.transAxes,
-                    boxstyle="round,pad=0.006,rounding_size=0.006",
                     facecolor="#EEE9DF",
                     edgecolor="none",
                 )
@@ -382,85 +252,57 @@ def render_comparison_results(
         table_axis.text(
             0.01,
             y,
-            row["comparison_id"],
+            CONTRAST_LABELS[axis_name],
             transform=table_axis.transAxes,
-            fontsize=10,
-            fontweight="bold",
-            color=INK,
-            va="center",
-        )
-        table_axis.text(
-            0.11,
-            y,
-            f"{axis_name.capitalize()} · {row['outcome']}",
-            transform=table_axis.transAxes,
-            fontsize=9.5,
+            fontsize=13,
             fontweight="bold",
             color=AXIS_COLORS[axis_name],
             va="center",
         )
-        distance = 1 - float(row["normalized_node_lcs_similarity"])
         table_axis.text(
-            0.34,
+            0.27,
             y,
-            f"{distance:.2f}",
+            row["outcome"],
             transform=table_axis.transAxes,
-            fontsize=10,
+            fontsize=14,
             color=INK,
             va="center",
         )
-        distinct_ab = row["narrative_distinctness_ab"].capitalize()
-        distinct_ba = row["narrative_distinctness_ba"].capitalize()
-        distinct_color = (
-            INK if row["narrative_distinctness_stable"] == "True" else "#C26B39"
-        )
+        distance = 1 - float(row["normalized_node_lcs_similarity"])
         table_axis.text(
-            0.55,
+            0.36,
             y,
-            f"{distinct_ab} → {distinct_ba}",
+            f"{distance:.2f}",
             transform=table_axis.transAxes,
-            fontsize=10,
-            color=distinct_color,
-            fontweight="bold",
+            fontsize=14,
+            color=INK,
             va="center",
         )
-        result = row["controlled_axis_result"]
-        display = "Recovered" if result == "recovered" else "Order-sensitive"
+        for profile_axis, x in zip(
+            ("risk", "morality", "action"), (0.48, 0.62, 0.76), strict=True
+        ):
+            label, order_sensitive = aggregate_direction(row, profile_axis)
+            table_axis.text(
+                x,
+                y,
+                label,
+                transform=table_axis.transAxes,
+                fontsize=12.5,
+                color=ORDER_SENSITIVE if order_sensitive else INK,
+                fontweight="bold" if profile_axis == axis_name else "normal",
+                va="center",
+            )
+        distinctness, distinctness_order_sensitive = aggregate_distinctness(row)
         table_axis.text(
-            0.79,
+            0.89,
             y,
-            display,
+            distinctness,
             transform=table_axis.transAxes,
-            fontsize=10,
-            color=RESULT_COLORS[result],
-            fontweight="bold",
+            fontsize=12.5,
+            color=ORDER_SENSITIVE if distinctness_order_sensitive else INK,
             va="center",
         )
 
-    figure.text(
-        0.055,
-        0.925,
-        f"{book_id} — profile contrasts are visible, but axes co-vary",
-        fontsize=20.5,
-        fontweight="bold",
-        color=INK,
-    )
-    figure.text(
-        0.055,
-        0.858,
-        "Six extreme-profile pairs were judged in both orders; B/A directions were "
-        "inverted before exact stability checks.",
-        fontsize=10.8,
-        color=MUTED,
-    )
-    figure.text(
-        0.055,
-        0.075,
-        "Structural distance = 1 − normalized paragraph-sequence LCS. Off-axis shifts "
-        "show that the generated axes are not narratively orthogonal.",
-        fontsize=8.6,
-        color=MUTED,
-    )
     return save_figure(figure, output_dir / "02_trajectory_comparisons")
 
 
@@ -492,18 +334,6 @@ def build_key_rows(
             "controlled_contrast_recovery",
             "all",
             "Order-stable recovery of the controlled axis",
-        ),
-        (
-            "comparison",
-            "ab_ba_order_stability",
-            "all_pairwise_labels",
-            "Exact A/B–B/A agreement after inversion",
-        ),
-        (
-            "comparison",
-            "cross_axis_leakage",
-            "non_controlled_axes",
-            "Directional shifts among stable off-axis labels",
         ),
     ]
     rows: list[dict[str, str]] = []
@@ -580,18 +410,18 @@ def main() -> None:
             {
                 "position": "1–2",
                 "content": "Procedure and prompt calibration",
-                "status": "to be produced later",
+                "status": "composed separately in LaTeX",
             },
             {
                 "position": "3",
                 "figure": "01_individual_trajectories",
-                "content": "Individual-trajectory results",
+                "content": "Plot-only individual-trajectory results",
                 "status": "produced",
             },
             {
                 "position": "4",
                 "figure": "02_trajectory_comparisons",
-                "content": "Pairwise trajectory-comparison results",
+                "content": "Table-only pairwise trajectory-comparison results",
                 "status": "produced",
             },
         ],
@@ -601,8 +431,8 @@ def main() -> None:
                 "selected stories remain causally continuous."
             ),
             "02_trajectory_comparisons": (
-                "Relative contrasts are usually recovered, but profile axes co-vary "
-                "and some judgments remain order-sensitive."
+                "The intended relative profile is recovered in five of six "
+                "controlled comparisons; reversal is only a robustness check."
             ),
         },
         "scope": (
@@ -620,7 +450,7 @@ def main() -> None:
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    print(f"OK: built two phase-5 result slides for {book_id}")
+    print(f"OK: built two plot-only phase-5 result figures for {book_id}")
     print(f"Output: {output_dir}")
 
 

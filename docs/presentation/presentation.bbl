@@ -1,0 +1,53 @@
+\begin{thebibliography}{}
+
+\bibitem[Aarseth, 1997]{aarseth_cybertext_1997}
+Aarseth, E.~J. (1997).
+\newblock {\em Cybertext: perspectives on ergodic literature}.
+\newblock Johns Hopkins University Press, Baltimore, Md. London.
+
+\bibitem[Dever and Chalk, 1991]{dever_flight_1991}
+Dever, J. and Chalk, G. (1991).
+\newblock {\em Flight from the dark}.
+\newblock Red Fox, London.
+\newblock OCLC: 226242649.
+
+\bibitem[Françoisse et~al., 2017]{francoisse_bag--paths_2017}
+Françoisse, K., Kivimäki, I., Mantrach, A., Rossi, F., and Saerens, M.
+  (2017).
+\newblock A bag-of-paths framework for network data analysis.
+\newblock {\em Neural Networks}, 90:90--111.
+
+\bibitem[Guex et~al., 2021]{guex_covariance_2021}
+Guex, G., Courtain, S., and Saerens, M. (2021).
+\newblock Covariance and correlation measures on a graph in a generalized
+  bag-of-paths formalism.
+\newblock {\em Journal of Complex Networks}, 8(6):cnaa026.
+
+\bibitem[Guex et~al., 2019]{guex_randomized_2019}
+Guex, G., Kivimäki, I., and Saerens, M. (2019).
+\newblock Randomized optimal transport on a graph: framework and new distance
+  measures.
+\newblock {\em Network Science}, 7(1):88--122.
+
+\bibitem[Montfort, 2005]{montfort_twisty_2005}
+Montfort, N. (2005).
+\newblock {\em Twisty little passages: an approach to interactive fiction}.
+\newblock MIT Press, Cambridge, Mass. London.
+
+\bibitem[Métrailler, 2025]{metrailler_etude_2025}
+Métrailler, C.~E. (2025).
+\newblock {\em Une étude plurielle des réseaux de personnages : narrations
+  interactives, jeux vidéo et adaptations}.
+\newblock PhD thesis.
+
+\bibitem[Riedl and Bulitko, 2013]{riedl_interactive_2013}
+Riedl, M.~O. and Bulitko, V. (2013).
+\newblock Interactive {Narrative}: {An} {Intelligent} {Systems} {Approach}.
+\newblock {\em AI Magazine}, 34(1):67--77.
+
+\bibitem[Wang et~al., 2025]{wang_slot_2025}
+Wang, D. Y.-B., Shen, Z., Mishra, S.~S., Xu, Z., Teng, Y., and Ding, H. (2025).
+\newblock {SLOT}: {Structuring} the {Output} of {Large} {Language} {Models}.
+\newblock Version Number: 1.
+
+\end{thebibliography}

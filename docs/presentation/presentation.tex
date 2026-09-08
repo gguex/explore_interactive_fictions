@@ -64,7 +64,7 @@ Formalism and LLMs}
   	
   	%-------------------------------------------%
   	
-	\begin{frame}{Interactive Fictions and Gamebooks}
+	\begin{frame}{Interactive Fiction and Gamebook}
 		\footnotesize
 		An \imp{interactive fiction} is a form of narrative in which the reader’s or player’s choices influence the sequence of events, the accessible content, or the story’s outcome. \\
 		\vspace{0.1cm}
@@ -131,7 +131,7 @@ Formalism and LLMs}
   		
   		\vfill
   		
-  		The \imp{Main limitation} of this representation : 
+  		The \imp{Main limitation} of this representation: 
   		\begin{itemize}
   			\item The \imp{structure} or the \imp{topology} of the work can be studied. 
   			\item The text itself, therefore the \imp{narrative meaning}, is no longer taken into account.
@@ -143,8 +143,8 @@ Formalism and LLMs}
   	
   	\begin{frame}{A hybrid solution: graphs and LLMs}
   		\scriptsize
-  		\imp{Large Language Models (LLM)} make it possible to reintroduce the semantic content discarded by graph modeling. 
-  		\begin{block}{\scriptsize \de{Our approach : both methods}}
+  		\imp{Large Language Models (LLMs)} make it possible to reintroduce the semantic content discarded by graph modeling. 
+  		\begin{block}{\scriptsize \de{Our approach: both methods}}
   			\begin{itemize}
   				\item The \imp{graph} models the \imp{structure} of the work
   				\item The \imp{LLM} interprets the \imp{narrative content}
@@ -220,7 +220,7 @@ Formalism and LLMs}
   	
   	%-------------------------------------------%
   	
-  	\begin{frame}{Methodogical choice : local LLM}
+  	\begin{frame}{Methodological choice: local LLM}
   		
   		\scriptsize
   		
@@ -273,9 +273,9 @@ Formalism and LLMs}
   		\footnotesize
   		The studied corpus is the \imp{Lone Wolf series} created by Joe Dever. 
   		
-  		The \imp{project Aon} (\href{www.projectaon.org}{www.projectaon.org}) provides authorized digital editions of the books. It is already structured with html. 
+  		The \imp{Project Aon} (\href{www.projectaon.org}{www.projectaon.org}) provides authorized digital editions of the books. It is already structured with html. 
   		
-  		There are \imp{several mechanics} in these gamebooks : 
+  		There are \imp{several mechanics} in these gamebooks: 
   		\begin{columns}
   			\begin{column}[T]{0.48\textwidth}
   				\begin{itemize}
@@ -353,7 +353,7 @@ Formalism and LLMs}
 	  		\end{tabular}
   		\end{center}
   		
-  		\imp{L2 simplifications} :
+  		\imp{L2 simplifications}:
   		\begin{itemize}
   			\item One global combat-win probability
   			\item One global escape probability
@@ -368,16 +368,16 @@ Formalism and LLMs}
   		\scriptsize
   		\imp{1. Paragraph parsing and transition annotation}
   		
-  		A local LLM reads the choices offered at each paragraph and outputs :
+  		A local LLM reads the choices offered at each paragraph and outputs:
   		\begin{itemize}
   			\item Transition types
   			\item Game mechanics
   			\item Risk, morality and action labels
   		\end{itemize}
   		
-  		\imp{2. Graph modeling and Bag-of-Path formalism}
+  		\imp{2. Graph modeling and Bag-of-Paths formalism}
   		
-  		The annotations are compiled into weighted graphs for different player profiles, and various objects are computed : 
+  		The annotations are compiled into weighted graphs for different player profiles, and various objects are computed: 
   		\begin{itemize}
   			\item Bag-of-Paths indices
   			\item Local and global measures
@@ -387,7 +387,7 @@ Formalism and LLMs}
   		\imp{3. Trajectory annotation}
   		
   		A local LLM reads the stories associated with selected
-  		trajectories and produce : 
+  		trajectories and produces: 
   		\begin{itemize}
   			\item Whole-story annotations
   			\item Profile manifestation
@@ -566,7 +566,7 @@ Formalism and LLMs}
 		
 		\imp{LLM-based annotations}
 		
-		All fields in the \imp{edge table}, in particular :
+		All remaining fields in the \imp{edge table}, in particular:
 		
 		\begin{itemize}
 			\item Transition mechanism:
@@ -579,12 +579,12 @@ Formalism and LLMs}
 		\end{itemize}
 		
 		\begin{block}{\scriptsize \de{Methodological choice}}
-			Each explicit player choice is annotated according to \imp{3 independent semantic axes} : 
+			Each explicit player choice is annotated according to \imp{3 separate semantic axes}: 
 			
 			\begin{itemize}
 				\item \imp{Risk}: exposure to danger (cautious, neutral, reckless)
-				\item \imp{Morality} : treatment of others (selfish, neutral, noble)
-				\item \imp{Action} : mode of intervention (physical, neutral, tactical)
+				\item \imp{Morality}: treatment of others (selfish, neutral, noble)
+				\item \imp{Action}: mode of intervention (physical, neutral, tactical)
 			\end{itemize}
 		\end{block}
 	\end{frame}
@@ -806,8 +806,8 @@ Formalism and LLMs}
 	\begin{frame}{Annotation results}
 		\footnotesize
 		
-		\imp{Calibration} : On 50 paragraphs and 102 transitions, the final prompt produced no
-		missing or invented transition and no transition-type disagreement. Only 3 (on 177 annotations) semantic disagreements : two for risk and one for action.
+		\imp{Calibration}: On 50 paragraphs and 102 transitions, the final prompt produced no
+		missing or invented transition and no transition-type disagreement. Only 3 (of 177 annotations) semantic disagreements: two for risk and one for action.
 		
 		\begin{center}
 			\imp{Paragraph statistics}
@@ -819,7 +819,7 @@ Formalism and LLMs}
 					\hline
 					Total & 350 \\
 					Terminal & 16 deaths / 1 victory \\
-					One outgoing transitions & 157 \\
+					One outgoing transition & 157 \\
 					Two outgoing transitions & 134 \\
 					Three or more outgoing transitions & 42 \\
 					Paragraphs with enemies & 29 \\
@@ -834,7 +834,7 @@ Formalism and LLMs}
 		
 		\begin{columns}[T,onlytextwidth]
 			
-			\begin{column}{0.32\textwidth}
+			\begin{column}{0.31\textwidth}
 				\centering
 				\scalebox{0.7}{
 				\begin{tabular}{|l|r|r|}
@@ -906,7 +906,7 @@ Formalism and LLMs}
 		\vspace{-0.15cm}
 		
 		{\small
-			The topology and transition types are now available, but \imp{transition probabilities depends on player profiles} (next section).
+			The topology and transition types are now available, but \imp{transition probabilities depend on player profiles} (next section).
 		}
 		
 	\end{frame}
@@ -921,11 +921,11 @@ Formalism and LLMs}
 		
 		\scriptsize
 		
-		The objectives here are to : 
+		The objectives here are to: 
 		\begin{itemize}
 			\item Transform annotations into
 			\imp{weighted directed graphs (i.e. a Markov chain matrix)} which depend on \imp{player profiles}.
-			\item Compute \imp{various indices with the Bag-of-Path formalism}.
+			\item Compute \imp{various indices with the Bag-of-Paths formalism}.
 		\end{itemize}
 		
 		
@@ -1107,7 +1107,7 @@ Formalism and LLMs}
 		}
 		$$
 		$z^{(p)}_{si}$ is the \imp{expected number of visits to paragraph $i$
-		when starting from paragraph $s$}. Many indices can be derived from the same fundamental matrix : 
+		when starting from paragraph $s$}. Many indices can be derived from the same fundamental matrix: 
 		
 		\vspace{0.2cm}
 		
@@ -1282,21 +1282,233 @@ Formalism and LLMs}
 		\vspace{0.45cm}
 		
 		\raggedright
+		A \imp{medoid} is an observed trajectory that minimizes its average distance to all other sampled trajectories, making it the most central representative path.
+	
 		The model infers whether the intended profile becomes perceptible from the
-		story itself; the hidden metadata and BoP measures are reintroduced only for
-		the final comparison.
+		\imp{story and choices only}. The hidden metadata and BoP measures are reintroduced only for the final comparison.
+		
 		
 	\end{frame}
 
 	%-------------------------------------------%
+
+	\begin{frame}{LLM annotation: calibration and output fields}
+		
+		\scriptsize
+		
+		Same iterative procedure as in paragraph annotation, now applied to
+		\imp{complete trajectories}.
+		
+		\vspace{-0.2cm}
+		
+		\begin{center}
+		\scalebox{0.9}{
+		\begin{tikzpicture}[
+			calbox/.style={
+				draw=themecolor,
+				rounded corners=2pt,
+				line width=0.7pt,
+				fill=white,
+				align=center,
+				text width=2.25cm,
+				minimum height=0.90cm,
+				inner sep=3pt,
+				font=\tiny
+			},
+			calarrow/.style={
+				->,
+				>=stealth,
+				draw=themecolor,
+				line width=0.8pt
+			}
+		]
+			\node[calbox] (human) at (-3.7,0.55) {
+				\textbf{Calibration dataset}\\[0.5mm]
+				4/14 stories\\ 3/6 pairs (semantic axes $\times$ outcomes)
+			};
+			\node[calbox,fill=themecolor!7] (qwen) at (0,0.55) {
+				\textbf{LLM annotation}\\[0.5mm]
+				Qwen3.6-27B\\ Structured JSON
+			};
+			\node[calbox] (audit) at (3.7,0.55) {
+				\textbf{Error analysis}\\[0.5mm]
+				Comparison with human annotations\\
+				Recurrent failures
+			};
+			\node[calbox,text width=2.9cm] (prompt) at (0,-0.95) {
+				\textbf{Prompt}\\[0.5mm]
+				Generic annotation rules
+			};
+			
+			\draw[calarrow] (human.east) -- (qwen.west);
+			\draw[calarrow] (qwen.east) -- (audit.west);
+			\draw[calarrow] (prompt.north) -- (qwen.south);
+			\draw[calarrow] (audit.south) |-
+				node[pos=0.72,above,font=\tiny]{refine}
+				(prompt.east);
+		\end{tikzpicture}
+		}
+		\end{center}
+		
+		The 3rd prompt was frozen: 7/7 valid outputs, no inadmissible evidence, and 32/44 concordances. 
+		
+		\vspace{0.2cm}
+		
+		\raggedright
+		\begin{columns}[T,onlytextwidth]
+			
+			\begin{column}{0.48\textwidth}
+				\textbf{Individual trajectory}
+				
+				\begin{itemize}
+					\setlength{\itemsep}{1pt}
+					\item Perceived profile: levels of \texttt{risk}, \texttt{morality}, and
+					      \texttt{action}.
+					\item \texttt{profile\_coherence}
+					\item \texttt{causal\_continuity}
+					\item Choice references and short justifications
+				\end{itemize}
+			\end{column}
+			
+			\begin{column}{0.48\textwidth}
+				\textbf{Pairwise comparison}
+				
+				\begin{itemize}
+					\setlength{\itemsep}{1pt}
+					\item Relative profile shift on \texttt{risk},
+					      \texttt{morality}, and \texttt{action}
+					\item \texttt{narrative\_distinctness}
+					\item Evidence from stories A and B, with justification
+					\item A/B and B/A orders used only to check order sensitivity.
+				\end{itemize}
+			\end{column}
+			
+		\end{columns}
+		
+	\end{frame}
+
+	%-------------------------------------------%
+
+	\begin{frame}{Individual annotation results}
+		
+		\begin{center}
+			\includegraphics[width=\textwidth]{fig/01_individual_trajectories.png}
+			
+			\vspace{0.10cm}
+			
+			{\scriptsize
+				\setlength{\tabcolsep}{4pt}
+				\begin{tabular}{ccc}
+					\hline
+					\textbf{Causal continuity} & \textbf{Profile coherence} &
+					\textbf{Action recovery by level} \\
+					\hline
+					14/14 & 9/14 &
+					Neutral 0/10; Physical 0/2; Tactical 2/2 \\
+					\hline
+				\end{tabular}
+			}
+		\end{center}
+		
+	\end{frame}
+
+	%-------------------------------------------%
+
+	\begin{frame}{Pairwise annotation results}
+		
+		\small
+		
+		\begin{center}
+			\includegraphics[width=0.96\textwidth]{fig/02_trajectory_comparisons.png}
+		\end{center}
+		 
+		\vspace{-1.3cm}
+		
+		{\scriptsize \textbf{Reading:} bold = controlled axis; red = A/B--B/A disagreement averaged across orders, "main tendency" output displayed.}
+		
+		\vspace{0.3cm}
+		
+		Intended profile contrast recovered in \imp{5 of 6} comparisons.
+		
+	\end{frame}
 	
 	%-------------------------------------------%
 	
-	%-------------------------------------------%
+	\section{Conclusion}
 	
 	%-------------------------------------------%
 	
+	\begin{frame}{Conclusion}
+		
+		\begin{columns}[T,onlytextwidth]
+			
+			\begin{column}{0.32\textwidth}
+				\begin{block}{What we learned}
+					\scriptsize
+					\begin{itemize}
+						\setlength{\itemsep}{1pt}
+						\item Profiles reshape the probabilistic structure.
+						\item Risk dominates the other axes.
+						\item 5/6 relative story contrasts are recovered; absolute profiles
+						      remain unevenly visible.
+					\end{itemize}
+				\end{block}
+			\end{column}
+			
+			\begin{column}{0.32\textwidth}
+				\begin{alertblock}{Current limits}
+					\scriptsize
+					\begin{itemize}
+						\setlength{\itemsep}{1pt}
+						\item One gamebook only.
+						\item Simplified mechanics and state for the Markov model.
+						\item Limited human calibration; no held-out validation.
+					\end{itemize}
+				\end{alertblock}
+			\end{column}
+			
+			\begin{column}{0.33\textwidth}
+				\begin{exampleblock}{Next}
+					\scriptsize
+					\begin{itemize}
+						\setlength{\itemsep}{1pt}
+						\item Refine the LLM annotation pipeline.
+						\item Compare the results with a more powerful LLM.
+						\item Make a contrastive study on different books.
+						\item Refine modeling of the game mechanics (e.g. combat)
+					\end{itemize}
+					
+				\end{exampleblock}
+			\end{column}
+			
+		\end{columns}
+		
+		\vspace{0.15cm}
+		{		\footnotesize
+			This contribution is a \imp{proof of concept for an auditable hybrid workflow} for analyzing gamebooks.  \\
+			The LLM is used as a \imp{controlled annotator, not a literary critic}. \\
+			BoP formalism provides \imp{several indices on gamebooks}.
+		}	
+		
+	\end{frame}
+	
 	%-------------------------------------------%
+	
+	\begin{frame}[shrink=20]{References}
+		\tiny
+		\nocite{*}
+		\bibliographystyle{apalike}
+		\bibliography{infict_llm}
+	\end{frame}
+	
+	%-------------------------------------------%
+	
+	\begin{frame}[plain]
+		\centering
+		\vfill
+		{\Huge\bfseries\color{themecolor}Thank you for your attention!}
+		\vfill
+	\end{frame}
 	
 	%-------------------------------------------%
 	

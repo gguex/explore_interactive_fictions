@@ -3,3 +3,4 @@
 \beamer@sectionintoc {2}{Paragraph parsing and transition annotation}{10}{0}{2}
 \beamer@sectionintoc {3}{Graph construction and Bag-of-Paths analysis}{17}{0}{3}
 \beamer@sectionintoc {4}{Trajectory annotation}{24}{0}{4}
+\beamer@sectionintoc {5}{Conclusion}{29}{0}{5}

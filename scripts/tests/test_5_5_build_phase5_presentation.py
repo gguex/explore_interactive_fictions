@@ -1,4 +1,4 @@
-"""Validate the two slide-ready phase-5 result figures."""
+"""Validate the two plot-only phase-5 result figures."""
 
 from __future__ import annotations
 
@@ -11,20 +11,33 @@ from pathlib import Path
 from typing import Any
 
 FIGURES = {
-    "01_individual_trajectories": "player profiles leave uneven traces",
-    "02_trajectory_comparisons": "profile contrasts are visible",
+    "01_individual_trajectories": (
+        "Generated versus perceived profile",
+    ),
+    "02_trajectory_comparisons": (
+        "Profile contrast",
+        "Outcome",
+        "Path",
+        "difference",
+        "A on Risk",
+        "A on Morality",
+        "A on Action",
+        "Narrative",
+        "distinctness",
+    ),
 }
+FORBIDDEN_RESULT_CARDS = (
+    "Causally continuous stories",
+    "Coherent perceived profiles",
+    "Controlled contrasts recovered",
+    "Labels stable under A/B reversal",
+    "Stable off-axis labels shifted",
+)
 EXPECTED_KEYS = {
     ("profile_manifestation", "risk"): ("9", "14", "9/14 (64%)"),
     ("profile_manifestation", "morality"): ("6", "14", "6/14 (43%)"),
     ("profile_manifestation", "action"): ("2", "14", "2/14 (14%)"),
     ("controlled_contrast_recovery", "all"): ("5", "6", "5/6 (83%)"),
-    ("ab_ba_order_stability", "all_pairwise_labels"): (
-        "18",
-        "24",
-        "18/24 (75%)",
-    ),
-    ("cross_axis_leakage", "non_controlled_axes"): ("9", "9", "9/9 (100%)"),
 }
 
 
@@ -81,7 +94,7 @@ def main() -> None:
         raise ValueError("Source result populations differ")
 
     artifacts: list[Path] = []
-    for figure, title_fragment in FIGURES.items():
+    for figure, required_fragments in FIGURES.items():
         png_path = output_dir / f"{figure}.png"
         svg_path = output_dir / f"{figure}.svg"
         for path in (png_path, svg_path):
@@ -91,8 +104,22 @@ def main() -> None:
         if png_dimensions(png_path) != (1920, 1080):
             raise ValueError(f"Wrong PNG dimensions: {png_path}")
         svg = svg_path.read_text(encoding="utf-8")
-        if "<svg" not in svg or book not in svg or title_fragment not in svg:
-            raise ValueError(f"SVG title or identity differs: {svg_path}")
+        if "<svg" not in svg or any(
+            fragment not in svg for fragment in required_fragments
+        ):
+            raise ValueError(f"SVG analytical content differs: {svg_path}")
+        if any(card_text in svg for card_text in FORBIDDEN_RESULT_CARDS):
+            raise ValueError(f"SVG still contains a result card: {svg_path}")
+        if figure == "02_trajectory_comparisons" and "C001" in svg:
+            raise ValueError("Pair identifiers should not compete with the result")
+        if figure == "02_trajectory_comparisons" and (
+            "even" not in svg or "Medium-high" not in svg
+        ):
+            raise ValueError("Order-sensitive judgments must be averaged")
+        if figure == "02_trajectory_comparisons" and "Stable if" in svg:
+            raise ValueError(
+                "Order stability must be encoded in the cells, not a column"
+            )
 
     key_path = output_dir / "key_results.csv"
     key_rows = read_csv(key_path)
@@ -133,8 +160,8 @@ def main() -> None:
     deck_plan = manifest.get("deck_plan")
     if not isinstance(deck_plan, list) or len(deck_plan) != 3:
         raise ValueError("Deck plan differs")
-    if deck_plan[0].get("status") != "to be produced later":
-        raise ValueError("Procedure/calibration slides are not marked as pending")
+    if deck_plan[0].get("status") != "composed separately in LaTeX":
+        raise ValueError("Procedure/calibration slide status differs")
     if [row.get("figure") for row in deck_plan[1:]] != list(FIGURES):
         raise ValueError("Produced slide order differs")
 
@@ -150,8 +177,8 @@ def main() -> None:
         ) != sha256(path):
             raise ValueError(f"Manifest artifact metadata differs: {path.name}")
     print(
-        "OK: phase 5.5 presentation package — two English 1920x1080 result "
-        "slides and six checked key results"
+        "OK: phase 5.5 presentation package — two English 1920x1080 plot-only "
+        "figures and four checked key results"
     )
 
 

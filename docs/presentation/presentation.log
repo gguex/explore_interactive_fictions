@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.4.21)  7 SEP 2026 11:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.4.21)  8 SEP 2026 14:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1157,7 +1157,7 @@ thkerncmss.
 ) [2
 
 ]
-<fig/LW01_112.png, id=46, 845.1575pt x 544.0325pt>
+<fig/LW01_112.png, id=50, 845.1575pt x 544.0325pt>
 File: fig/LW01_112.png Graphic file (type png)
 <use fig/LW01_112.png>
 Package pdftex.def Info: fig/LW01_112.png  used on input line 79.
@@ -1269,7 +1269,7 @@ Overfull \vbox (2.98206pt too high) detected at line 802
 [14
 
 ]
-Overfull \hbox (1.89551pt too wide) in paragraph at lines 892--892
+Overfull \hbox (4.9714pt too wide) in paragraph at lines 892--892
  [][] 
  []
 
@@ -1281,7 +1281,7 @@ Overfull \hbox (17.47313pt too wide) in paragraph at lines 892--892
 [15
 
 ]
-<fig/LW01_phase1_unweighted_graph.png, id=134, 1156.32pt x 650.43pt>
+<fig/LW01_phase1_unweighted_graph.png, id=138, 1156.32pt x 650.43pt>
 File: fig/LW01_phase1_unweighted_graph.png Graphic file (type png)
 <use fig/LW01_phase1_unweighted_graph.png>
 Package pdftex.def Info: fig/LW01_phase1_unweighted_graph.png  used on input li
@@ -1328,7 +1328,7 @@ Overfull \vbox (12.71472pt too high) detected at line 1149
 [20
 
 ]
-<fig/01_profile_landscape.png, id=173, 963.6pt x 542.025pt>
+<fig/01_profile_landscape.png, id=177, 963.6pt x 542.025pt>
 File: fig/01_profile_landscape.png Graphic file (type png)
 <use fig/01_profile_landscape.png>
 Package pdftex.def Info: fig/01_profile_landscape.png  used on input line 1168.
@@ -1340,7 +1340,7 @@ LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <10.95> not available
  [21
 
  <./fig/01_profile_landscape.png>]
-<fig/02_axis_effects.png, id=180, 963.6pt x 542.025pt>
+<fig/02_axis_effects.png, id=184, 963.6pt x 542.025pt>
 File: fig/02_axis_effects.png Graphic file (type png)
 <use fig/02_axis_effects.png>
 Package pdftex.def Info: fig/02_axis_effects.png  used on input line 1187.
@@ -1348,7 +1348,7 @@ Package pdftex.def Info: fig/02_axis_effects.png  used on input line 1187.
  [22
 
  <./fig/02_axis_effects.png>]
-<fig/03_local_index_maps.png, id=187, 963.6pt x 542.025pt>
+<fig/03_local_index_maps.png, id=191, 963.6pt x 542.025pt>
 File: fig/03_local_index_maps.png Graphic file (type png)
 <use fig/03_local_index_maps.png>
 Package pdftex.def Info: fig/03_local_index_maps.png  used on input line 1206.
@@ -1359,6 +1359,47 @@ Package pdftex.def Info: fig/03_local_index_maps.png  used on input line 1206.
  <./fig/03_local_index_maps.png>] [24
 
 ] [25
+
+]
+Overfull \vbox (16.73613pt too high) detected at line 1388
+ []
+
+[26
+
+]
+<fig/01_individual_trajectories.png, id=215, 963.6pt x 542.025pt>
+File: fig/01_individual_trajectories.png Graphic file (type png)
+<use fig/01_individual_trajectories.png>
+Package pdftex.def Info: fig/01_individual_trajectories.png  used on input line
+ 1413.
+(pdftex.def)             Requested size: 307.28987pt x 172.84778pt.
+
+Overfull \vbox (2.58716pt too high) detected at line 1413
+ []
+
+[27
+
+ <./fig/01_individual_trajectories.png>]
+<fig/02_trajectory_comparisons.png, id=222, 963.6pt x 542.025pt>
+File: fig/02_trajectory_comparisons.png Graphic file (type png)
+<use fig/02_trajectory_comparisons.png>
+Package pdftex.def Info: fig/02_trajectory_comparisons.png  used on input line 
+1433.
+(pdftex.def)             Requested size: 295.00034pt x 165.93353pt.
+ [28
+
+ <./fig/02_trajectory_comparisons.png>] [29
+
+]
+Overfull \vbox (8.12975pt too high) detected at line 1493
+ []
+
+[30
+
+] (./presentation.bbl) [31
+
+ </usr/local/texlive/2022/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>] [
+32
 
 ]
 \tf@nav=\write7
@@ -1375,14 +1416,14 @@ Package pdftex.def Info: fig/03_local_index_maps.png  used on input line 1206.
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `presentation.out' has not changed.
-(rerunfilecheck)             Checksum: BE3B6DB7178416E8B3C24761D3A9F4D2;799.
+(rerunfilecheck)             Checksum: 6FCDE1362462185722BAA899CFE0D3A5;892.
  ) 
 Here is how much of TeX's memory you used:
- 28128 strings out of 478268
- 569620 string characters out of 5846347
- 840092 words of memory out of 5000000
- 45676 multiletter control sequences out of 15000+600000
- 490193 words of font info for 103 fonts, out of 8000000 for 9000
+ 28325 strings out of 478268
+ 574814 string characters out of 5846347
+ 842206 words of memory out of 5000000
+ 45843 multiletter control sequences out of 15000+600000
+ 490793 words of font info for 105 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,13n,122p,1811b,1003s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
@@ -1411,10 +1452,10 @@ xmf-dist/fonts/type1/public/cm-super/sfss0600.pfb></usr/local/texlive/2022/texm
 f-dist/fonts/type1/public/cm-super/sfss0800.pfb></usr/local/texlive/2022/texmf-
 dist/fonts/type1/public/cm-super/sfss0900.pfb></usr/local/texlive/2022/texmf-di
 st/fonts/type1/public/cm-super/sfss1095.pfb>
-Output written on presentation.pdf (25 pages, 1445918 bytes).
+Output written on presentation.pdf (32 pages, 1613771 bytes).
 PDF statistics:
- 328 PDF objects out of 1000 (max. 8388607)
- 231 compressed objects within 3 object streams
- 55 named destinations out of 1000 (max. 500000)
- 100 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 394 PDF objects out of 1000 (max. 8388607)
+ 283 compressed objects within 3 object streams
+ 79 named destinations out of 1000 (max. 500000)
+ 118 words of extra memory for PDF output out of 10000 (max. 10000000)
 
