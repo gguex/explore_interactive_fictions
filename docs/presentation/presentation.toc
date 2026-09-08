@@ -1,6 +1,6 @@
 \babel@toc {american}{}\relax 
 \beamer@sectionintoc {1}{Introduction}{2}{0}{1}
-\beamer@sectionintoc {2}{Paragraph parsing and transition annotation}{10}{0}{2}
-\beamer@sectionintoc {3}{Graph construction and Bag-of-Paths analysis}{17}{0}{3}
-\beamer@sectionintoc {4}{Trajectory annotation}{24}{0}{4}
-\beamer@sectionintoc {5}{Conclusion}{29}{0}{5}
+\beamer@sectionintoc {2}{Paragraph parsing and transition annotation}{8}{0}{2}
+\beamer@sectionintoc {3}{Graph construction and Bag-of-Paths analysis}{14}{0}{3}
+\beamer@sectionintoc {4}{Trajectory annotation}{21}{0}{4}
+\beamer@sectionintoc {5}{Conclusion}{25}{0}{5}
